@@ -12,16 +12,7 @@ jobs:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/checkout@v4
-      # - run: 'Y'
-      # - uses: FirebaseExtended/action-hosting-deploy@v0
-      #   with:
-      #     repoToken: '${{ secrets.GITHUB_TOKEN }}'
-      #     firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_UDUPI_DARSHAN }}'
-      #     projectId: udupi-darshan
-
-
-          - name: Checkout Git Repo
+      - name: Checkout Git Repo
         uses: actions/checkout@v3
       - name: Use Node.js 20.1.0
         uses: actions/setup-node@v3
