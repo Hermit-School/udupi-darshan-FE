@@ -44,12 +44,6 @@
 
 <button type="button" class="btn btn-link">Link</button>
 
-	<div ngbDropdownMenu aria-labelledby="dropdownManual">
-		<button ngbDropdownItem>Home</button>
-		<button ngbDropdownItem>About</button>
-		<button ngbDropdownItem>Services</button>
-	</div>
-</div>
 
 
   <!-- Highlight Card -->
@@ -75,6 +69,12 @@
 
   </div>
 
- 
+  <ul>
+    <li><a routerLink="/home">Home</a></li>
+    <li><a routerLink="/about">About</a></li>
+    <li><a routerLink="/contact">Contact</a></li>
+  </ul>
+  
+  
 
 <router-outlet></router-outlet>
