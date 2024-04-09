@@ -1,0 +1,19 @@
+/* Default styles for navbar links */
+.navbar-nav .nav-link {
+  color: #333; /* Default color */
+  
+}
+
+/* Additional styles for all nav links */
+.nav-link {
+  font-size: 20px; /* Default font size */
+  color: #820606; /* Default color */
+}
+
+/* Define custom font size and hover color for smaller screens */
+@media (max-width: 767.98px) {
+  .nav-link {
+      font-size: 18px; /* Font size for smaller screens */
+  }
+  
+}
