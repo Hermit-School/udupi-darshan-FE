@@ -3,5 +3,10 @@
     <h1 class="home-title">Welcome to our website!</h1>
     <p class="home-content">Where you get to know more about Udupi and its beauty.</p>
     <button class="home-button">Learn More</button>
-  </div>
-  
+</div>
+
+<ul>
+  <li *ngFor="let item of dummyData">
+    {{ item.id }} - {{ item.name }}
+  </li>
+</ul>

@@ -6,8 +6,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
-
-
+import { DataService } from './data-service.service'; // Import DataService
 
 @NgModule({
   declarations: [
@@ -15,7 +14,6 @@ import { ContactComponent } from './components/contact/contact.component';
     HomeComponent,
     AboutComponent,
     ContactComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -28,7 +26,7 @@ import { ContactComponent } from './components/contact/contact.component';
       { path: '**', redirectTo: '/home', pathMatch: 'full' }
     ])
   ],
-  providers: [],
+  providers: [DataService], // Provide DataService here
   bootstrap: [AppComponent]
 })
 export class AppModule { }
