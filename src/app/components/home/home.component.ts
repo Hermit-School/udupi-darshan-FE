@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from './data-service.service.';
+import { DataService } from '../../data-service.service';
 
 @Component({
   selector: 'app-home',
