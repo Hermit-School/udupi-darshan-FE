@@ -1,0 +1,35 @@
+/* Add styles to the <app-home> component */
+
+.home-header {
+    text-align: center;
+    padding: 20px;
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .home-title {
+    font-size: 36px;
+    font-weight: bold;
+  }
+  
+  .home-content {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #333;
+  }
+  
+  .home-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #4e8dda;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .home-button:hover {
+    background-color: #c1e8ca;
+  }
+  
