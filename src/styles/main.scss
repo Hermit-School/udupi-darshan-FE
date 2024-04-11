@@ -261,6 +261,7 @@
     z-index: -10;
     width: 1920px;
   }
+  
 
   /* Responsive Styles */
   @media screen and (max-width: 767px) {
@@ -289,6 +290,7 @@
       display: none;
       visibility: hidden;
     }
+    
   }
 
   @import './dashboard.scss';
