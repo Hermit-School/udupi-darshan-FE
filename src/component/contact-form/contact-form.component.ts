@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { NgForm, FormControl, Validators } from '@angular/forms';
-
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-contact-form',
@@ -15,6 +14,7 @@ export class ContactFormComponent {
     subject: '',
     message: ''
   };
+
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
@@ -23,6 +23,5 @@ export class ContactFormComponent {
   submitForm() {
     // Handle form submission logic here
     console.log('Form submitted:', this.formData);
-    this.submitted = true; // Set submitted flag to true after form submission
   }
 }
