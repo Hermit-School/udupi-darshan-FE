@@ -7,6 +7,8 @@ import { HomeComponent } from './components/home/home.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { DataService } from './data-service.service'; // Import DataService
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -30,3 +32,7 @@ import { DataService } from './data-service.service'; // Import DataService
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+
+

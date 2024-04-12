@@ -6,7 +6,8 @@
 </div>
 
 <ul>
-  <li *ngFor="let item of dummyData">
-    {{ item.id }} - {{ item.name }}
+  <li *ngFor="let item of data">
+    <!-- Use item properties here -->
+    {{ item.id }} - {{ item.name }} - {{ item.description }}
   </li>
 </ul>
