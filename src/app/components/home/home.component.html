@@ -1,13 +1,10 @@
-<p>home works!</p>
-<div class="home-header">
-    <h1 class="home-title">Welcome to our website!</h1>
-    <p class="home-content">Where you get to know more about Udupi and its beauty.</p>
-    <button class="home-button">Learn More</button>
+
+
+
+
+<div *ngIf="data">
+  <p>ID: {{ data.id }}</p>
+  <p>Name: {{ data.name }}</p>
+  <p>Age: {{ data.age }}</p>
 </div>
 
-<ul>
-  <li *ngFor="let item of data">
-    <!-- Use item properties here -->
-    {{ item.id }} - {{ item.name }} - {{ item.description }}
-  </li>
-</ul>
