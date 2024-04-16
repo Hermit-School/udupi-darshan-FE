@@ -7,13 +7,14 @@ import { ApicallService } from '../../services/apicall.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  data: any;
+  users: any[] = []; // Initialize users as an empty array
 
-  constructor(private apicallService: ApicallService) { } // Adjust the service name
+  constructor(private dataService: ApicallService) { }
 
   ngOnInit(): void {
-    this.apicallService.getUsers().subscribe((data: any) => { // Call the correct service method
-      this.data = data;
+    this.dataService.getUsers().subscribe((data: any[]) => {
+      console.log(data); // Log the received data to the console for inspection
+      this.users = data;
     });
   }
 }

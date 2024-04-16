@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs'; 
 import { ApicallService } from '../services/apicall.service';
 
 @Component({
@@ -8,11 +7,13 @@ import { ApicallService } from '../services/apicall.service';
   styleUrls: ['./fetchapi.component.scss']
 })
 export class FetchapiComponent implements OnInit {
-  getUsers!: Observable<any[]>; 
+  users: any[] = [];
 
   constructor(private appService: ApicallService) {}
 
   ngOnInit(): void {
-    this.getUsers = this.appService.getUsers();
+    this.appService.getUsers().subscribe((data: any[]) => {
+      this.users = data;
+    });
   }
 }

@@ -1,7 +1,11 @@
 <ul>
-    <li *ngFor="let users of getUsers  async">
-        {{users.username}}
+    <li *ngFor="let user of users">
+      <p>ID: {{ user.id }}</p>
+      <p>Name: {{ user.name }}</p>
+      <p>Age: {{ user.age }}</p>
+      <p>Email: {{ user.email }}</p>
+      <p>Phone: {{ user.phone }}</p>
+      <!-- Add more properties as needed -->
     </li>
-
-    
-</ul>
+  </ul>
+  
