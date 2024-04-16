@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../../data-service.service';
+import { ApicallService } from '../../services/apicall.service';
 
 @Component({
   selector: 'app-home',
@@ -9,10 +9,10 @@ import { DataService } from '../../data-service.service';
 export class HomeComponent implements OnInit {
   data: any;
 
-  constructor(private dataService: DataService) { }
+  constructor(private apicallService: ApicallService) { } // Adjust the service name
 
   ngOnInit(): void {
-    this.dataService.getData().subscribe((data: any) => {
+    this.apicallService.getUsers().subscribe((data: any) => { // Call the correct service method
       this.data = data;
     });
   }
