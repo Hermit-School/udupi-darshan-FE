@@ -1,66 +1,56 @@
-.contact-form-container {
-    width: 40rem;
+/* Form container */
+.form-container {
+  max-width: 40rem; /* Adjust as needed */
+  margin: auto;
 
-    padding: 1.5rem;
-    border: 0.1rem solid black ;
-    border-radius: 0.4rem;
-    background-color:antiquewhite;
-  }
-
-  .contact-form-container h2 {
-    text-align: center;
-    margin-bottom: 0.5rem;
-    color:  blue;
-    font-size: 2.5rem;
-    font-weight: bold;
-  }
-
-  .form-group {
-    margin-bottom: 0.5rem;
-   
-  }
-  .form-group button.form-group-submit {
-    font-size: large;
-    font-weight: bold;
-    color: black; /* Removed 'solid' and added missing '#' for hex color */
-    text-align: center;
-    border-radius: 0.5rem;
-    padding: 1rem 3rem;   
-    border: none;
-    display: block;
-    margin: 0 auto; /* Center the button */
-  }
-
-  .form-group button.form-group-submit:hover {
-    background-color:lightblue; /* Change hover color */
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color:solid black;
-    font-weight: bold;
-    font-size: large;
-  }
-
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 0.02rem solid black;
-    border-radius: 0.1rem;
-    box-sizing:border-box;
-  }
-  .form-group input::placeholder,
-  .form-group textarea::placeholder {
-    color: lightgray; /* Placeholder text color */
-    font-weight:normal;
+  margin-bottom: 3rem;
 }
+
+/* Form input fields */
+.form-control {
+  margin-bottom: 1rem;
+  
+}
+//  Form labels
+.form-label{
+  font-weight: bold;
+  font-size: large;
+}
+
+/* Invalid feedback */
+.invalid-feedback {
+  color:red;
+  font-size: small;
+}
+
+/* Submit button */
+.btn-primary {
+  width: 50%;
+  
+}
+
+/* Error message */
 .error-message {
   color: red;
-  font-size: 0.9em;
+  font-size:large;
+}
+.submit-button {
+  margin-bottom: 0.5rem; /* Add margin below the submit button */
 }
 
 
+.feedback{
+  color:red;
+  font-size:medium;
+  margin-bottom: 1rem;
   
-
+   
+}
+.invalid-input {
+  border: 0.1rem solid red; /* Add red border */
+}
+.hidden-button {
+  justify-content: center;
+  margin-bottom: 4rem;
+  display: flex;
+}

@@ -1,37 +1,56 @@
-<div class="contact-form-container">
-    <h2>Contact Us</h2>
-    <form (ngSubmit)="submitForm()" #contactForm="ngForm" novalidate>
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" placeholder="Enter your name" required [(ngModel)]="formData.name" #name="ngModel">
-            <div *ngIf="name.errors?.['required'] && (name.dirty || name.touched)" class="error-message">
-                <div>Name is required.</div>
-            </div>
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form-container">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label for="firstName" class="form-label">Name</label>
+      <input type="text" class="form-control " id="firstName" formControlName="firstName" [class.invalid-input]="myForm.get('firstName')?.invalid && myForm.get('firstName')?.touched">
+      <div *ngIf="myForm.get('firstName')?.invalid && myForm.get('firstName')?.touched" class="feedback">
+        Please provide a valid name.
+      </div>
+      </div>
+      <div class="col-md-4">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" formControlName="username" [class.invalid-input]="myForm.get('username')?.invalid && myForm.get('username')?.touched">
+        <div *ngIf="myForm.get('username')?.invalid && myForm.get('username')?.touched" class="feedback">
+          Invalid username format.
         </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required [(ngModel)]="formData.email" #email="ngModel">
-            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
-                <div *ngIf="emailFormControl.errors?.['required']">Email is required.</div>
-        <div *ngIf="emailFormControl.errors?.['email']">Invalid email format.</div>
+      </div>
+      <div class="col-md-4">
+        <label for="city" class="form-label">City</label>
+        <input type="text" class="form-control" id="city" formControlName="city" [class.invalid-input]="myForm.get('city')?.invalid && myForm.get('city')?.touched">
+        <div *ngIf="myForm.get('city')?.invalid && myForm.get('city')?.touched" class="feedback">
+          Please provide a valid city.
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label for="state" class="form-label">State</label>
+        <select class="form-select" id="state" formControlName="state" [class.invalid-input]="myForm.get('state')?.invalid && myForm.get('state')?.touched">
+          <option value="" disabled selected>Choose...</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="TRIPURA">Tripura</option>
+          <option value="UP">UP</option>
+          <option value="Kerala">Kerala</option>
+
+          <!-- Add more options as needed -->
+        </select>
+        <div *ngIf="myForm.get('state')?.invalid && myForm.get('state')?.touched" class="feedback">
+          Please select a state.
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label for="zip" class="form-label">Zip</label>
+        <input type="text" class="form-control" id="zip" formControlName="zip" [class.invalid-input]="myForm.get('zip')?.invalid && myForm.get('zip')?.touched">
+        <div *ngIf="myForm.get('zip')?.invalid && myForm.get('zip')?.touched" class="feedback">
+          Please provide a valid zip.
+        </div>
+      </div>
     </div>
-        </div>
-        <div class="form-group">
-            <label for="subject">Subject:</label>
-            <input type="text" id="subject" name="subject" placeholder="Enter your subject" required [(ngModel)]="formData.subject" #subject="ngModel">
-            <div *ngIf="subject.errors?.['required'] && (subject.dirty || subject.touched)" class="error-message">
-                <div>Subject is required.</div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="4" required [(ngModel)]="formData.message" #message="ngModel"></textarea>
-            <div *ngIf="message.errors?.['required'] && (message.dirty || message.touched)" class="error-message">
-                <div>Message is required.</div>
-            </div>
-        </div>
-        <div class="form-group">
-            <button type="submit" [disabled]="contactForm.invalid" class="form-group-submit">Submit</button>
-        </div>
-    </form>
-</div>
+    
+
+  
+    <div class="col-12 mt-4 hidden-button" *ngIf="myForm.valid">
+      <button class="btn btn-primary submit-button" type="submit">Submit form</button>
+    </div>
+  </form>
+  
