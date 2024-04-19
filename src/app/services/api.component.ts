@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import {Config,ApicallService} from './apicall.service';
 
 @Component({
-    selector:'app-config',
+    selector:'app-api',
     templateUrl:'./api.component.html',
-    styleUrls:['./config.component.css']
+    styleUrls:['./api.component.css']
 
 })
 

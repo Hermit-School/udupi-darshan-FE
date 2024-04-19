@@ -1,28 +1,29 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router'; // Import RouterModule and Routes
+import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
-import { FetchapiComponent } from './fetchapi/fetchapi.component';
+import { ApicallService } from './services/apicall.service';
+//import { ApiCommponent } from './services/api.component';
+import { ApiCommponent } from './services/api.component';
 
-// Define your routes
-const routes: Routes = [
-  // Define your routes here, for example:
-  // { path: 'fetchapi', component: FetchapiComponent },
-  // Add more routes as needed
-];
+
+
+const routes: Routes = [];
 
 @NgModule({
   declarations: [
     AppComponent,
-    FetchapiComponent
+    ApiCommponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(routes) // Add RouterModule.forRoot() with your routes
+    RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [
+    ApicallService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
