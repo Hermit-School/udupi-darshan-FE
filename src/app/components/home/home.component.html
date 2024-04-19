@@ -1,0 +1,12 @@
+<!-- home.component.html -->
+<div *ngIf="users && users.length">
+  <ul>
+    <li *ngFor="let user of users">
+      <p>ID: {{ user.id }}</p>
+      <p>Name: {{ user.name }}</p>
+      <p>Email: {{ user.email }}</p>
+      <p>Phone: {{ user.phone }}</p>
+    </li>
+  </ul>
+</div>
+

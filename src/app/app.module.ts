@@ -1,18 +1,19 @@
+// Path: src/app/app.module.ts
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FetchapiComponent } from './fetchapi/fetchapi.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FetchapiComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    NgbModule
+    HttpClientModule // Add HttpClientModule to imports
   ],
   providers: [],
   bootstrap: [AppComponent]
