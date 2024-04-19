@@ -1,0 +1,12 @@
+<h3 style="margin-bottom: 5rem;"></h3>
+<div style="text-align: center;">
+  <button type="button" class="large-button" (click)="clear(); showConfig()">get</button>
+  <span *ngIf="config">
+    <p>Heroes API URL is "{{config.heroesUrl}}"</p>
+    <p>Textfile URL is "{{config.textfile}}"</p>
+    <p>Date is "{{ config.date ? config.date.toDateString() : 'N/A' }}" </p>
+  </span>
+</div>
+
+
+
