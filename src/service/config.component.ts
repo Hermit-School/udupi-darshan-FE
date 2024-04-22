@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { ConfigService } from './config.service';
 import { Config } from './config.interface';
 
@@ -7,12 +7,12 @@ import { Config } from './config.interface';
   templateUrl: './config.component.html',
   styleUrls: ['./config.component.css']
 })
-export class ConfigComponent {
-  config: Config | undefined;
+export class ConfigComponent implements OnInit {
+  public config: Config[] = [];
 
   constructor(private configService: ConfigService) {}
 
-  showConfig() {
+  ngOnInit() {
     this.configService.getConfig()
       .subscribe(data => this.config = data);
   }
