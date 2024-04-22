@@ -2,9 +2,13 @@
 <div style="text-align: center;">
   <button type="button" class="large-button" (click)="clear(); showConfig()">get</button>
   <span *ngIf="config">
-    <p>Heroes API URL is "{{config.heroesUrl}}"</p>
-    <p>Textfile URL is "{{config.textfile}}"</p>
-    <p>Date is "{{ config.date ? config.date.toDateString() : 'N/A' }}" </p>
+    <p>Glossary Title: "{{ config.glossary.title }}"</p>
+    <p>Gloss Div Title: "{{ config.glossary.GlossDiv.title }}"</p>
+    <p>Gloss Entry ID: "{{ config.glossary.GlossDiv.GlossList.GlossEntry.ID }}"</p>
+    <p>Gloss Term: "{{ config.glossary.GlossDiv.GlossList.GlossEntry.GlossTerm }}"</p>
+    <p>Abbrev: "{{ config.glossary.GlossDiv.GlossList.GlossEntry.Abbrev }}"</p>
+    <p>SortAs: "{{ config.glossary.GlossDiv.GlossList.GlossEntry.SortAs }}"</p>
+    <p>GlossSee: "{{ config.glossary.GlossDiv.GlossList.GlossEntry.GlossSee }}"</p>
   </span>
 </div>
 
