@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from './data.service';
+import { ConfigService } from '../service/config.service';
 
 @Component({
   selector: 'app-root',
@@ -8,16 +8,21 @@ import { DataService } from './data.service';
 })
 export class AppComponent implements OnInit {
   data: any;
+  title = 'Udupi Darshan';
+  showOutput = false; 
 
-  constructor(private dataService: DataService) { }
+  constructor(private configService: ConfigService) { }
 
   ngOnInit() {
     this.getData();
   }
 
   getData() {
-    this.dataService.getData().subscribe((response) => {
+    this.configService.getConfig().subscribe((response) => {
       this.data = response;
     });
+  }
+  toggleOutput() {
+    this.showOutput = !this.showOutput; // Toggle the value
   }
 }

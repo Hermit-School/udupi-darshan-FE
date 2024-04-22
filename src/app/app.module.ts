@@ -1,21 +1,17 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
-//import { ApicallService } from './services/apicall.service';
-//import { ApiCommponent } from './services/api.component';
-
-const routes: Routes = [];
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot([]) // Add RouterModule.forRoot() with an empty array for now
   ],
   providers: [],
   bootstrap: [AppComponent]
