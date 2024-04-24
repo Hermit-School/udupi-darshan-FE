@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ConfigService, Data, Glossary, GlossDiv, GlossList, GlossEntry } from './config.service';
+import { ConfigService, Data, Glossary, GlossDiv, GlossList, GlossEntry } from '../service/config.service';
 @Component({
   selector: 'app-config',
   templateUrl: './config.component.html',
@@ -12,6 +12,9 @@ export class ConfigComponent {
   configData: { label: string, value: string }[] = [];
 
   constructor(private configService: ConfigService) {}
+  ngOnInit() {
+    this.fetchConfig();
+  }
 
   clear() {
     this.config = null;
@@ -19,7 +22,7 @@ export class ConfigComponent {
     this.configData = [];
   }
 
-  showConfig() {
+  fetchConfig() {
     this.configService.getConfig()
       .subscribe((data: Data) => {
         console.log(data); // Check the structure and value of the data received

@@ -1,0 +1,31 @@
+.container {
+  border: 0.1rem solid black;
+  border-radius: 1rem;
+  padding: 0.8rem;
+  background-color: aliceblue;
+  width: 50%; /* Adjust container width as needed */
+  margin: 0 auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr {
+  border-bottom: 0.01rem solid black;
+}
+
+td {
+  padding: 1rem;
+  text-align: left;
+}
+
+.label {
+  width: 30%; /* Adjust label column width as needed */
+}
+
+.separator {
+  width: 20%; /* Adjust separator column width as needed */
+  border-right: 0.01rem solid black;
+}
