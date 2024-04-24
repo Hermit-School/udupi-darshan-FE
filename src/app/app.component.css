@@ -1,13 +1,15 @@
-/* Add your CSS styles here */
-/* For example: */
-h1 {
-    color: blue;
-  }
-  
-  p {
-    font-size: 16px;
-    line-height: 1.5;
-  }
-  
-  /* Add more styles as needed */
-  
+/* Add styles for the data table in the AppComponent */
+.app-data-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.app-data-table th,
+.app-data-table td {
+  border: 1px solid #f1ebebe6;
+  padding: 8px;
+}
+
+.app-data-table th {
+  background-color: #ebe6e6e4;
+}

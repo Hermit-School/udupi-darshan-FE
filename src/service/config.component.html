@@ -1,8 +1,23 @@
-<div *ngIf="config">
-    <p>Heroes URL: {{ config.heroesUrl }}</p>
-    <p>Text File: {{ config.textfile }}</p>
-    <p>Date: {{ config.date }}</p>
-  </div>
-  
-
-  
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Username</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="config.length > 0">
+    <tr *ngFor="let item of config">
+      <td>{{ item.id }}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.username }}</td>
+      <td>{{ item.email }}</td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="config.length === 0">
+    <tr>
+      <td colspan="4">No data available</td>
+    </tr>
+  </tfoot>
+</table>

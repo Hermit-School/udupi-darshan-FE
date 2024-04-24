@@ -1,7 +1,63 @@
 [
  {
-   "heroesUrl": "api/heroes",
-   "textfile": "assets/textfile.txt",
-   "date": "2020-01-29"
- }
+   "id": 1,
+   "name": "Leena",
+   "username":"Aneel",
+   "email": "leena@jan.biz"
+ },
+ {
+  "id": 2,
+  "name": "reena",
+  "username":"Aneer",
+  "email": "aneer@jan.tv"
+},
+{
+  "id": 3,
+  "name": "teena",
+  "username":"Aneet",
+  "email": "annet@jan.biz"
+},
+{
+  "id": 4,
+  "name": "peena",
+  "username":"Aneep",
+  "email": "aneep@jan.yt"
+},
+{
+  "id": 5,
+  "name": "seena",
+  "username":"Anees",
+  "email": "anees@jan.sc"
+},
+{
+  "id": 6,
+  "name": "deena",
+  "username":"Aneed",
+  "email": "leend@jan.wa"
+},
+{
+  "id": 7,
+  "name": "heena",
+  "username":"Aneeh",
+  "email": "heena@jan.biz"
+},
+{
+  "id": 8,
+  "name": "jeena",
+  "username":"Aneej",
+  "email": "jeena@jan.biz"
+},
+{
+  "id": 9,
+  "name": "beena",
+  "username":"Aneeb",
+  "email": "beena@jan.biz"
+},
+{
+  "id": 10,
+  "name": "meena",
+  "username":"Aneem",
+  "email": "meena@jan.biz"
+}
+
 ]

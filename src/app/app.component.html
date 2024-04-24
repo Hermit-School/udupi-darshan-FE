@@ -53,13 +53,31 @@
 
   </div>
 
-  <div>
-    <h1>{{ title }}</h1>
-    <div *ngIf="showOutput">
-      <p>Data: {{ data | json }}</p>
-    </div>
-    <button (click)="toggleOutput()">Click</button>
-  </div>
+  <div class="content" role="main">
+    <!-- Table to display JSON data -->
+    <table *ngIf="data" class="app-data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Username</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of data">
+          <td>{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.username }}</td>
+          <td>{{ item.email }}</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Button to fetch JSON file
+    <button (click)="toggleOutput()">Toggle Output</button>
+  </div> -->
+  
   <router-outlet></router-outlet>
   
   

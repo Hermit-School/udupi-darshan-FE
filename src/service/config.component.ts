@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ConfigService } from './config.service';
 import { Config } from './config.interface';
 
@@ -14,6 +14,12 @@ export class ConfigComponent implements OnInit {
 
   ngOnInit() {
     this.configService.getConfig()
-      .subscribe(data => this.config = data);
+      .subscribe(
+        data => {
+          console.log('Data received:', data); // Log the received data
+          this.config = data;
+        },
+        error => console.error('Error fetching data:', error) // Log any errors
+      );
   }
 }

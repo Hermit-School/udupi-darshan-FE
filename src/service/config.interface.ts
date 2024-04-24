@@ -1,6 +1,7 @@
 export interface Config {
-    heroesUrl: string;
-    textfile: string;
-    date: string;
+    id:Number;
+    name:String;
+    username:String;
+    email:String;
   }
   
