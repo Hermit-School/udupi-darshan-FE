@@ -1,0 +1,8 @@
+<div>
+    <label for="cardNumber">Card Number:</label>
+    <input type="text" id="cardNumber" [(ngModel)]="cardNumber" (input)="onCardNumberChange($event)">
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  </div>
+  
+  
+  
