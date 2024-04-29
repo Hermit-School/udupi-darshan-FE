@@ -1,26 +1,40 @@
 /* credit-card.component.css */
 
+input[type="text"].error-input {
+  border: 0.1rem solid red; /* Red border */
+  
+  padding: 0.5rem;
+}
+
+input[type="text"].error-input:focus {
+  border-color: 1rem red;
+  
+}
+
+
+
 input[type="text"] {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 0.1rem solid black; /* 1px equivalent to 0.0625rem */
-    border-radius: 0.25rem;
-    margin-bottom: 1rem; /* 4px equivalent to 0.25rem */
-  }
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 1rem; 
+}
+
+.error-message {
+  color: red;
+  margin-top: 0.3rem;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+   
+}
+
+.container {
+  margin-bottom: 1.5rem; /* 20px equivalent to 1.25rem */
+}
+
+.card-number-label {
+  font-weight: bold;
+}
+.error-input {
+  border: 0.3rem solid red; /* Red border */
   
-  .error-message {
-    color: red;
-    margin-top: 0.3rem;
-    margin-bottom: 5rem;
-    margin-top: 1rem; /* 5px equivalent to 0.3125rem */
-  }
-  
-  .container {
-    margin-bottom: 1.5rem; /* 20px equivalent to 1.25rem */
-  }
-  
-  .card-number-label {
-    font-weight: bold;
-  }
-  
-  
+}
