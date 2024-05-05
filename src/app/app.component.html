@@ -7,10 +7,36 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
+<!-- <div class="horizontal-scroll-container">
+  <div class="image-wrapper" *ngFor="let image of images">
+    <img [src]="image.url" alt="Image">
+  </div>
+</div> -->
+
+  <div class="image-container">
+     <img src="assets/image1.jpg"> 
+     <app-navbar></app-navbar>
+     <div class="small-image-container">
+      <img src="assets/ads.jpeg" class="small-image">
+  </div>
+  <app-heading></app-heading>
+  </div>
+  <!-- <div class="image-container">
+    <img1 src="assets/ads.jpeg"></img1>
+  </div> -->
 
 
-<!-- Toolbar -->
-<div class="toolbar" role="banner">
+<div class="toolbar" >
+
+</div>
+
+
+<!-- Toolbar
+
+
+
+
+ <div class="toolbar" role="banner">
   <img
     width="40"
     alt="Angular Logo"
@@ -34,7 +60,7 @@
 
 <div class="content" role="main">
 
-  <!-- Highlight Card -->
+  Highlight Card
   <div class="card highlight-card card-small">
 
     <svg id="rocket" xmlns="http://www.w3.org/2000/svg" width="101.678" height="101.678" viewBox="0 0 101.678 101.678">
@@ -59,4 +85,4 @@
 
  
 
-<router-outlet></router-outlet>
+<router-outlet></router-outlet> -->

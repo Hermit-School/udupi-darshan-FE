@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
+    "@fortawesome/fontawesome-free": "^6.5.2",
     "@material-design-icons/font": "^0.14.13",
     "@material-design-icons/svg": "^0.14.13",
     "@ng-bootstrap/ng-bootstrap": "^13.0.0",

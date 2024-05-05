@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'udupi-darshan-FE';
+  title = 'UDUPI-DARSHAN'; // Add your app name here
+
+  // images = [
+  //   { url: 'assets/icons/image1.jpg' }, // Adjust the path accordingly
+  //   // Add more image objects as needed
+  // ];
 }

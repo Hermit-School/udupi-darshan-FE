@@ -1,0 +1,32 @@
+/* Style for the hamburger lines */
+.hamburger-lines {
+    width: 3rem;
+    height: 0.2rem;
+    background-color: white;
+    margin: 0.4rem;
+    
+    
+    
+}
+
+/* Additional styling for the hover effect */
+.hamburger-lines:hover {
+    background-color:orange;
+    cursor: pointer;
+}
+
+.navbar {
+    background-color: black;
+    padding: 2rem;
+    
+    
+}
+
+.hamburger-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+    
+    
+}

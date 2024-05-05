@@ -1,0 +1,27 @@
+.toolbar{
+    background-color: black;
+    position:absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    
+}
+
+// .image-container {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     z-index: -1; /* Ensure the image stays behind other content */
+// }
+
+.small-image {
+    width: 95rem; /* Adjust the width as needed */
+    height:20rem; /* Maintain aspect ratio */
+}
+
+.small-image-container {
+    display:grid; /* Ensure the container fits the size of its content */
+    margin-top: 1rem; /* Adjust margin as needed */
+}
