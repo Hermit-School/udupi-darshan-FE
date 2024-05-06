@@ -1,17 +1,11 @@
-.navbar {
+
+    .navbar {
+        background-color: #222831; /* Set navbar background color */
+    }
+
     .nav-link {
-        color:red; // Set link color       
-        &:hover {
-            color: white; // Set hover color
-        }
+        color:#FF6000; /* Set icon color */
+        margin-right: 1.3rem; /* Add margin to separate icons */
     }
-   
-    .icon-container1 {
-        display: flex;
-        // align-items:flex-end;
-        margin-left: 70rem; // Adjust spacing between items
-        margin-right: 0rem;
-        padding-right: 2rem;
-    }
+
     
-}
