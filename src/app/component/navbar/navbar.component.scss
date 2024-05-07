@@ -1,32 +1,59 @@
+.image-container {
+    position: relative; /* Ensure positioning context */
+}
+
+
 /* Style for the hamburger lines */
-.hamburger-lines {
-    width: 3rem;
-    height: 0.2rem;
+/* Style for the hamburger lines */
+/* Style for the hamburger lines */
+/* Style for the hamburger lines */
+/* Style for the hamburger lines */
+.hamburger-line {
+    width: 40px; /* Adjust width as needed */
+    height: 3px; /* Adjust height as needed */
     background-color: white;
-    margin: 0.4rem;
-    
-    
+    margin-bottom: 6px; /* Adjust margin as needed */
     
 }
 
+
+
 /* Additional styling for the hover effect */
-.hamburger-lines:hover {
-    background-color:orange;
+.hamburger-line:hover {
+    background-color:#FF6000;
     cursor: pointer;
 }
 
 .navbar {
+    position:absolute; /* Fixed position to keep it at the bottom */
+    bottom: 200px;
+    top:auto; /* Align at the bottom of the viewport */
+    left: 0;
+    right:0; /* Align to the left edge */
+     width: 100%; /* Take up full width */
     background-color: black;
-    padding: 2rem;
-    
-    
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
 }
+
+.navbar-inner {
+    display: flex;
+    justify-content: center;
+  }
 
 .hamburger-container {
     display: flex;
     justify-content: center;
     align-items: center;
-   
+}
+@media (max-width: 576px) {
+    .navbar {
+        padding: 0.5rem;
+        bottom: 520px; /* Adjust bottom margin for smaller devices */
+    }
     
-    
+    .navbar {
+        flex-direction: column; /* Stack items vertically on smaller devices */
+    }
 }

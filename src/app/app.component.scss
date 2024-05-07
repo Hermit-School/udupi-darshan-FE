@@ -1,3 +1,5 @@
+
+
 .toolbar{
     background-color: black;
     position:absolute;
@@ -17,11 +19,14 @@
 // }
 
 .small-image {
-    width: 95rem; /* Adjust the width as needed */
-    height:20rem; /* Maintain aspect ratio */
+    width: 100%; /* Adjust the width as needed */
+    height:auto; /* Maintain aspect ratio */
 }
 
+/* You don't need the custom CSS for .small-image-container */
+
+/* Adjust margin as needed */
 .small-image-container {
-    display:grid; /* Ensure the container fits the size of its content */
-    margin-top: 1rem; /* Adjust margin as needed */
+    position: absolute;
+    margin-top: 1rem;
 }
