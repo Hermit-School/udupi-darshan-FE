@@ -20,12 +20,12 @@
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
-    
     "@material-design-icons/font": "^0.14.13",
     "@material-design-icons/svg": "^0.14.13",
     "@ng-bootstrap/ng-bootstrap": "^13.0.0",
     "@popperjs/core": "^2.10.2",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "firebase": "^10.9.0",
     "jquery": "^3.7.1",
     "material-icons": "^1.13.12",
