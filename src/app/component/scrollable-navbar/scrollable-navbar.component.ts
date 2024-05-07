@@ -3,7 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 @Component({
   selector: 'app-scrollable-navbar',
   templateUrl: './scrollable-navbar.component.html',
-  styleUrls: ['./scrollable-navbar.component.css']
+  styleUrls: ['./scrollable-navbar.component.scss']
 })
 export class ScrollableNavbarComponent {
 
