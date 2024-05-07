@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 
-import { NavbarComponent } from './component/navbar/navbar.component';
+// import { NavbarComponent } from './component/navbar/navbar.component';
 // import { HeadingComponent } from './component/heading/heading.component';
 import { ScrollableNavbarComponent } from './component/scrollable-navbar/scrollable-navbar.component';
 import { AdvertisementComponent } from './component/advertisement/advertisement.component';
@@ -16,7 +16,7 @@ import { GutterComponent } from './component/gutter/gutter.component';
   declarations: [
     AppComponent,
     
-    NavbarComponent,
+    // NavbarComponent,
     // HeadingComponent,
     ScrollableNavbarComponent,
     AdvertisementComponent,
