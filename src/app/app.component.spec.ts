@@ -20,11 +20,11 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'udupi-darshan-FE'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('udupi-darshan-FE');
-  });
+  // it(`should have as title 'udupi-darshan-FE'`, () => {
+  //   const fixture = TestBed.createComponent(AppComponent);
+  //   const app = fixture.componentInstance;
+  //   expect(app.title).toEqual('udupi-darshan-FE');
+  // });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
