@@ -96,21 +96,34 @@
 //     color: #fff; /* Adjust color as needed */
 //   }
   
+/* navbar.scss */
+
+/* navbar.scss */
+
+/* navbar.scss */
+
+/* navbar.scss */
+
+/* navbar.scss */
+
 .navbar {
     background-color: #333;
     padding: 10px 0;
+    display: flex;
+    justify-content: space-between; /* Align items to the start and end of the container */
+    align-items: center; /* Center items vertically */
 }
 
 .menu-icon {
     cursor: pointer;
     display: inline-block;
-    margin-right: 10px;
+    order: 2;
+    margin-left: auto; /* Set the order to 2 to move it to the right */
 }
 
 .search-icon {
     cursor: pointer;
     display: inline-block;
-    float: right;
 }
 
 .hamburger-line {
@@ -119,3 +132,4 @@
     background-color: #fff;
     margin-bottom: 5px;
 }
+

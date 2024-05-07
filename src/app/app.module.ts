@@ -6,10 +6,11 @@ import { AppComponent } from './app.component';
 
 
 import { NavbarComponent } from './component/navbar/navbar.component';
-import { HeadingComponent } from './component/heading/heading.component';
-import { ScrollableNavbarComponent } from './scrollable-navbar/scrollable-navbar.component';
-import { AdvertisementComponent } from './advertisement/advertisement.component';
-import { GutterComponent } from './gutter/gutter.component';
+// import { HeadingComponent } from './component/heading/heading.component';
+import { ScrollableNavbarComponent } from './component/scrollable-navbar/scrollable-navbar.component';
+// import { ScrollableNavbarComponent } from './component/scrollable-navbar/scrollable-navbar.component';
+import { AdvertisementComponent } from './component/advertisement/advertisement.component';
+import { GutterComponent } from './component/gutter/gutter.component';
 
 
 @NgModule({
@@ -17,7 +18,7 @@ import { GutterComponent } from './gutter/gutter.component';
     AppComponent,
     
     NavbarComponent,
-    HeadingComponent,
+    // HeadingComponent,
     ScrollableNavbarComponent,
     AdvertisementComponent,
     GutterComponent
