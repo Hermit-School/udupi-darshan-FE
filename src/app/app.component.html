@@ -23,7 +23,8 @@
   </div>
 
   <!-- Scrollable Navbar Component -->
-  <app-scrollable-navbar></app-scrollable-navbar>
+  <app-scrollable-navbar (sectionClicked)="showCarousel($event)"></app-scrollable-navbar>
+  <app-carousel *ngIf="selectedSection"></app-carousel>
 
   <!-- Advertisement Component -->
   <div class="row">
@@ -40,7 +41,13 @@
     </div>
   </div>
 
-  <app-carousel></app-carousel>
+  <!-- <div class="row">
+    <div class="col-12">
+      <!-- Include the app-carousel selector here -->
+      <!-- <app-carousel></app-carousel>
+    </div>
+  </div> -->
+   -->
 
 
   <!-- <div class="row">

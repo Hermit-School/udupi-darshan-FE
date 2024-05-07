@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-scrollable-navbar',
   templateUrl: './scrollable-navbar.component.html',
-  styleUrls: ['./scrollable-navbar.component.scss']
+  styleUrls: ['./scrollable-navbar.component.css']
 })
-export class ScrollableNavbarComponent implements OnInit {
+export class ScrollableNavbarComponent {
 
-  constructor() { }
+  @Output() sectionClicked = new EventEmitter<string>();
 
-  ngOnInit(): void {
+  showSection(section: string) {
+    this.sectionClicked.emit(section);
   }
-
 }

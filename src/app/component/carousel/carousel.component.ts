@@ -1,4 +1,3 @@
-// carousel.component.ts
 import { Component } from '@angular/core';
 import { Slide } from 'src/app/slide.interface';
 
@@ -8,10 +7,14 @@ import { Slide } from 'src/app/slide.interface';
   styleUrls: ['./carousel.component.css']
 })
 export class CarouselComponent {
+  selectedSection: string=''; // Define selectedSection property here
+
   slides: Slide[] = [
-    { imageUrl: 'assets/slide1.jpeg' },
-    { imageUrl: 'assets/slide2.jpeg' },
-    { imageUrl: 'assets/slide3.jpeg' },
+    { imageUrl: 'assets/slide1.jpg' },
+    { imageUrl: 'assets/slide2.jpg' },
+    { imageUrl: 'assets/slide3.jpg' },
     // Add more slides as needed
   ];
+
+  // Other component logic
 }

@@ -3,13 +3,17 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'UDUPI-DARSHAN'; // Add your app name here
+  selectedSection: string;
 
-  // images = [
-  //   { url: 'assets/icons/image1.jpg' }, // Adjust the path accordingly
-  //   // Add more image objects as needed
-  // ];
+  constructor() {
+    // Initialize selectedSection to an empty string
+    this.selectedSection = '';
+  }
+
+  showCarousel(section: string) {
+    this.selectedSection = section;
+  }
 }
