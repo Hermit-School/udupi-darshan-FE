@@ -1,59 +1,121 @@
-.image-container {
-    position: relative; /* Ensure positioning context */
-}
+// .image-container {
+//     position: relative; /* Ensure positioning context */
+// }
 
 
-/* Style for the hamburger lines */
-/* Style for the hamburger lines */
-/* Style for the hamburger lines */
-/* Style for the hamburger lines */
-/* Style for the hamburger lines */
-.hamburger-line {
-    width: 40px; /* Adjust width as needed */
-    height: 3px; /* Adjust height as needed */
-    background-color: white;
-    margin-bottom: 6px; /* Adjust margin as needed */
+// /* Style for the hamburger lines */
+// /* Style for the hamburger lines */
+// /* Style for the hamburger lines */
+// /* Style for the hamburger lines */
+// /* Style for the hamburger lines */
+// .hamburger-line {
+//     width: 40px; /* Adjust width as needed */
+//     height: 3px; /* Adjust height as needed */
+//     background-color: white;
+//     margin-bottom: 6px; /* Adjust margin as needed */
     
-}
+// }
 
 
 
-/* Additional styling for the hover effect */
-.hamburger-line:hover {
-    background-color:#FF6000;
-    cursor: pointer;
-}
+// /* Additional styling for the hover effect */
+// .hamburger-line:hover {
+//     background-color:#FF6000;
+//     cursor: pointer;
+// }
 
+// .navbar {
+//     position:absolute; /* Fixed position to keep it at the bottom */
+//     bottom: 200px;
+//     top:auto; /* Align at the bottom of the viewport */
+//     left: 0;
+//     right:0; /* Align to the left edge */
+//      width: 100%; /* Take up full width */
+//     background-color: black;
+//     padding: 1rem;
+//     display: flex;
+//     justify-content: center;
+// }
+
+// .navbar-inner {
+//     display: flex;
+//     justify-content: center;
+//   }
+
+// .hamburger-container {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+// }
+// @media (max-width: 576px) {
+//     .navbar {
+//         padding: 0.5rem;
+//         bottom: 520px; /* Adjust bottom margin for smaller devices */
+//     }
+    
+//     .navbar {
+//         flex-direction: column; /* Stack items vertically on smaller devices */
+//     }
+// }
+
+// .carousel-control-prev,
+// .carousel-control-next {
+//   height: 3px; /* Adjust height as needed */
+//   background-color: white;
+//   opacity: 0.5;
+//   transition: opacity 0.3s;
+// }
+
+// .carousel-control-prev:hover,
+// .carousel-control-next:hover {
+//   opacity: 1;
+// }
+
+// .carousel-inner {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+// }
+
+// .carousel-item {
+//   width: 100%; /* Adjust width as needed */
+// }
+
+/* carousel.component.scss */
+
+/* Custom CSS for carousel navigation */
+// .carousel-control-prev, .carousel-control-next {
+//     background: none; /* Remove default background */
+//     border: none; /* Remove default border */
+//     font-size: 0; /* Hide default arrow icon */
+//   }
+  
+//   .carousel-control-prev::before, .carousel-control-next::before {
+//     content: "—"; /* Add dash line content */
+//     font-size: 36px; /* Adjust size as needed */
+//     color: #fff; /* Adjust color as needed */
+//   }
+  
 .navbar {
-    position:absolute; /* Fixed position to keep it at the bottom */
-    bottom: 200px;
-    top:auto; /* Align at the bottom of the viewport */
-    left: 0;
-    right:0; /* Align to the left edge */
-     width: 100%; /* Take up full width */
-    background-color: black;
-    padding: 1rem;
-    display: flex;
-    justify-content: center;
+    background-color: #333;
+    padding: 10px 0;
 }
 
-.navbar-inner {
-    display: flex;
-    justify-content: center;
-  }
-
-.hamburger-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.menu-icon {
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 10px;
 }
-@media (max-width: 576px) {
-    .navbar {
-        padding: 0.5rem;
-        bottom: 520px; /* Adjust bottom margin for smaller devices */
-    }
-    
-    .navbar {
-        flex-direction: column; /* Stack items vertically on smaller devices */
-    }
+
+.search-icon {
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+}
+
+.hamburger-line {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin-bottom: 5px;
 }

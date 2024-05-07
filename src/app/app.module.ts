@@ -7,6 +7,9 @@ import { AppComponent } from './app.component';
 
 import { NavbarComponent } from './component/navbar/navbar.component';
 import { HeadingComponent } from './component/heading/heading.component';
+import { ScrollableNavbarComponent } from './scrollable-navbar/scrollable-navbar.component';
+import { AdvertisementComponent } from './advertisement/advertisement.component';
+import { GutterComponent } from './gutter/gutter.component';
 
 
 @NgModule({
@@ -14,7 +17,10 @@ import { HeadingComponent } from './component/heading/heading.component';
     AppComponent,
     
     NavbarComponent,
-    HeadingComponent
+    HeadingComponent,
+    ScrollableNavbarComponent,
+    AdvertisementComponent,
+    GutterComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,29 @@
+.scrollable-navbar {
+    background-color: #333; /* Background color of the navbar */
+    padding: 10px; /* Padding around navbar content */
+}
+
+.scrollable-navbar ul {
+    list-style-type: none; /* Remove bullet points from list */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+.scrollable-navbar li {
+    display: inline-block; /* Display list items horizontally */
+    margin-right: 20px; /* Add space between list items */
+}
+
+.scrollable-navbar li:last-child {
+    margin-right: 0; /* Remove margin from the last list item */
+}
+
+.scrollable-navbar a {
+    color: #fff; /* Text color of navbar links */
+    text-decoration: none; /* Remove default underline */
+    font-size: 16px; /* Font size of navbar links */
+}
+
+.scrollable-navbar a:hover {
+    color: #FF6000; /* Text color of navbar links on hover */
+}
