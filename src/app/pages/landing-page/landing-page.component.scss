@@ -1,15 +1,13 @@
-.image-container {
-    position:absolute;
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
-    margin-top:0%;
-    overflow: hidden; /* Hide any overflow to prevent scrollbars */
-  }
+
   
   .image-container img {
     width: 100%;
-    height:auto;
-    display:block;
-    object-fit:cover;
+  }
+
+  .text-align-center-webkit{
+    text-align: -webkit-center;
+  }
+
+  .card{
+    border:none;
   }
