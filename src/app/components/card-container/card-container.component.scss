@@ -1,0 +1,90 @@
+
+.container {
+    width: 100%;
+    overflow-x:hidden; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent cards from wrapping */
+    scrollbar-width: none;
+    // overflow-x: auto; /* Allow horizontal scrolling */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+//   white-space: nowrap;
+    scrollbar-width: none;
+  }
+
+  .container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+  }
+  
+  .cards-wrapper {
+    display: inline-block; /* Ensure container width fits its content */
+  }
+  
+  .cards {
+    display: flex; /* Display cards in a row */
+  }
+  
+  .card {
+    margin-right: 20px;
+    border: 1px solid #eb0a0a;
+    border-radius: 3px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 0 0 auto; /* Allow cards to shrink and grow based on content */
+    max-width: 300px; /* Set maximum width for each card */
+  }
+  
+  .card img {
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .card-body {
+    display: flex; /* Use flexbox to control layout */
+    flex-direction: column; /* Arrange child elements in a column */
+    padding: 20px; 
+    // overflow: hidden;
+    // padding: 20px;
+  }
+  
+  .card-title {
+     font-size: 1.25rem;
+     margin-bottom: 0.75rem;
+//   margin-bottom: 0.75rem;
+//   overflow: hidden; /* Hide overflowing text */
+//   text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
+//   white-space: nowrap; 
+  }
+  
+  .card-text {
+    font-size: 1rem;
+  white-space:normal;  /* Prevent text from wrapping */
+  
+    
+  }
+  
+  .btn {
+    margin-top: auto;
+    align-self: flex; 
+  }
+
+  @media (max-width: 768px) {
+    .card {
+    //   width: 100%; /* Show one card per row */
+    //   max-width: 100%;
+    //   margin-bottom: 20px; /* Add margin between cards */
+    width: calc(100% - 20px); /* Show one card per row */
+    max-width: calc(100% - 20px);
+    margin-bottom: 20px;
+    }
+}
+  
+  
+  /* Adjust layout for larger devices */
+  @media (min-width: 769px) {
+    .cards-wrapper {
+      overflow-x: auto; /* Enable horizontal scrolling */
+      white-space: nowrap; /* Prevent cards from wrapping to the next line */
+    }
+  
+}
