@@ -7,6 +7,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import { BentoComponent } from './components/bento/bento.component';
 
 
 
@@ -16,6 +17,7 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
     NavbarComponent,
     LandingPageComponent,
     CarouselComponent,
+    BentoComponent,
    
   ],
   imports: [

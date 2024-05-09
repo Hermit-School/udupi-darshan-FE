@@ -1,0 +1,65 @@
+.bordered-img {
+    border: 0.08rem solid #FF6000 ;
+    border-radius: 0.5rem; /* Optional: Adds rounded corners */
+    // margin-bottom: 1rem; /* Optional: Adds spacing between images */
+}
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.row > [class^="col-"] {
+    padding: 0rem; /* Remove default padding */
+}
+
+.col-6 img {
+    width: 98%;
+    height: 90%;
+    
+}
+
+.col-12 img{
+    width:80%;
+    height:100%;
+    
+}
+.custom-container{
+    padding: 2rem;
+}
+.container-fluid{
+    background-color:  #222831;
+    
+}
+.btn{
+    border-color: #FF6000;
+   
+}
+.text-color{
+    color: #FF6000;
+}
+
+
+.image-container {
+    position: relative;
+    height: 100%; /* Set a fixed height for the image container */
+    overflow: hidden; /* Hide any overflow from the image */
+}
+
+.image-container img {
+    width: 98%; /* Make the image fill the container horizontally */
+    height: 90%; /* Make the image fill the container vertically */
+    object-fit: cover; /* Scale the image to cover the entire container */
+}
+
+.image-caption {
+    bottom: auto;
+    text-align:left;
+    color:#FFFFFF;
+    width: 98%;
+    background-color: rgba(0, 0, 0, 0.5);;
+    padding: 10px;
+    transform: translateY(-100%);
+}
+h1{
+    font-size: 2.5vw;
+}
