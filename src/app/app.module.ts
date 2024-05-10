@@ -8,6 +8,9 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { BentoComponent } from './components/bento/bento.component';
+import { AdvertisementComponent } from './components/advertisement/advertisement.component';
+import { BlogsComponent } from './components/blogs/blogs.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 
 
@@ -18,6 +21,9 @@ import { BentoComponent } from './components/bento/bento.component';
     LandingPageComponent,
     CarouselComponent,
     BentoComponent,
+    AdvertisementComponent,
+    BlogsComponent,
+    FooterComponent,
    
   ],
   imports: [
