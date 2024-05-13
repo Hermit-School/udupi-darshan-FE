@@ -1,0 +1,28 @@
+.footer {
+    background-color:#222831; 
+    padding: 0.2rem 0; 
+    border-top: 0.01rem solid #ABA3A8;  
+  } 
+  .footer-content {
+    display: flex;
+    justify-content: space-between;   
+  }
+  
+  .left, .right {
+    flex: 1;
+    text-align:start;
+    
+    font-size: medium;
+  }
+  .left{
+    color: #FF6000;
+    font-style: italic;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  
+  .right {
+    text-align: end;
+    color: #d3caca;
+    
+  }
+  

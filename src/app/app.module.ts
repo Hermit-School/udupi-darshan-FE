@@ -9,6 +9,8 @@ import { CarouselComponent } from './components/carousel/carousel.component';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { BentoComponent } from './components/bento/bento.component';
 import { AdvertisementComponent } from './components/advertisement/advertisement.component';
+import { BlogsComponent } from './components/blogs/blogs.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { CardContainerComponent } from './components/card-container/card-container.component';
 
 
@@ -21,6 +23,8 @@ import { CardContainerComponent } from './components/card-container/card-contain
     CarouselComponent,
     BentoComponent,
     AdvertisementComponent,
+    BlogsComponent,
+    FooterComponent,
     CardContainerComponent,
     
    
