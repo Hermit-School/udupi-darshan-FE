@@ -1,0 +1,19 @@
+
+
+   <div class="container">
+    <h2 class="container-title">Create Unforgettable Experiences</h2>
+    <div class="cards-wrapper">
+      <div class="cards">
+        <div class="card" *ngFor="let card of cards">
+          <img [src]="card.imageUrl" class="card-img-top" alt="{{card.alt}}">
+          <div class="card-body">
+            <h5 class="card-title">{{card.title}}</h5>
+            <p class="card-text">{{card.description}}</p>
+            <a href="#" class="btn btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="view-more-button">View More</button>
+  </div>
+  
