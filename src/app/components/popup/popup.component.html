@@ -1,0 +1,15 @@
+<button (click)="openPopup()">Open Popup</button>
+
+
+<div class="popup-overlay" *ngIf="isPopupOpen">
+    <div class="popup-content">
+      <h2>Tell Your Story!</h2>
+      <p>This is a simple popup example.</p>
+      <label for="name">Enter your name:</label>
+      <input type="text" id="name" name="name" #nameInput required>
+      <label for="experience">Your Experience (Max 5 words):</label>
+      <input type="text" id="experience" name="experience" #experienceInput (input)="limitWords(experienceInput)">
+      <button (click)="closePopup()">Close Popup</button>
+    </div>
+  </div>
+  
