@@ -37,42 +37,14 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  onPhotoChange(event: any) {
-    const input = event.target;
-    const files = input.files;
   
-    // Clear previous previews
-    this.photoPreviews = [];
-  
-    // Check if more than 2 files are selected
-    if (files && files.length > 2) {
-      // Clear the input
-      input.value = '';
-      // Set custom error
-      this.form.controls['photo'].setErrors({ 'maxPhotos': true });
-    } else {
-      // Clear any previous errors
-      this.form.controls['photo'].setErrors(null);
-  
-      // Display previews of selected photos
-      for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.photoPreviews.push(e.target.result);
-        };
-        reader.readAsDataURL(files[i]);
-      }
-    }
-  }
   
   
 
   onSubmit(): void {
     if (this.form.valid) {
-      // Form is valid, perform submission or other actions
       console.log(this.form.value);
     } else {
-      // Form is invalid, display error messages or handle accordingly
       console.log("Form is invalid");
     }
   }

@@ -79,27 +79,17 @@
             </div>
           </div>
           </div>
-          <div class="mb-3">
-            <label for="photo" class="form-label">Photos (up to 2)</label>
-            <div class="input-group">
-              <input type="file" class="form-control" id="photo" (change)="onPhotoChange($event)" multiple>
-              <label class="input-group-text" for="photo">
-                Upload File
-              </label>
+          
+          
+          
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-exit" data-bs-dismiss="modal">Exit</button>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="submit" class="btn btn-submit" [disabled]="form.invalid">Submit</button>
             </div>
-            <small class="form-text text-muted" *ngIf="form.controls['photo'].invalid && (form.controls['photo'].dirty || form.controls['photo'].touched)">
-              Maximum 2 photos allowed.
-            </small>
           </div>
           
-          <div *ngFor="let photoPreview of photoPreviews; let i = index" class="mb-3">
-            <img [src]="photoPreview" alt="Uploaded Photo {{i + 1}}" class="uploaded-photo">
-          </div>
-          
-          
-          
-          <button type="submit" class="btn btn-submit">Submit</button>
-          <button type="exit" class="btn btn-exit" data-bs-dismiss="modal">Exit</button>
           
         </form>
       </div>
