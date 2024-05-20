@@ -19,6 +19,33 @@ background-color: #222831;
       
     }
     .btn{
+       
         color: #FF6000;
         border-color: #FF6000;
     }
+    .btn-exit{
+        margin: 1rem;
+       
+    }
+ .btn-submit{
+background-color: #FF6000;
+color:#fffbfb;
+
+    }
+    .error-message{
+        color: #e3350a;
+    }
+    .has-error .form-control {
+        border:0.1rem solid rgb(224, 11, 11);
+        
+      }
+      .modal-footer{
+        border: none;
+      }
+      .required-field {
+        color:#e3350a;
+        font-weight: bold;
+      }
+      .form-label{
+        font-weight: bold;
+      }

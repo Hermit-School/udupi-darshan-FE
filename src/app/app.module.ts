@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -12,6 +12,8 @@ import { AdvertisementComponent } from './components/advertisement/advertisement
 import { BlogsComponent } from './components/blogs/blogs.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CardContainerComponent } from './components/card-container/card-container.component';
+import { ReactiveFormsModule } from '@angular/forms'; // Import ReactiveFormsModule and FormsModule
+
 
 
 
@@ -25,14 +27,17 @@ import { CardContainerComponent } from './components/card-container/card-contain
     AdvertisementComponent,
     BlogsComponent,
     FooterComponent,
-    CardContainerComponent,
+    CardContainerComponent
+   
     
    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbCarouselModule
+    NgbCarouselModule,
+    FormsModule,
+    ReactiveFormsModule
     
   ],
   providers: [],
