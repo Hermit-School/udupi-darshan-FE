@@ -13,7 +13,8 @@
       </div>
     </form>
 
-    <button class="navbar-toggler ms-sm-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler ms-sm-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+      aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-lg-between" id="navbarTogglerDemo02">
@@ -52,45 +53,46 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <div class="mb-3" [class.has-error]="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
+          <div class="mb-3"
+            [class.has-error]="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
             <label for="name" class="form-label">Name <span class="required-field">*</span></label>
             <div class="col-sm-9 col-lg-7">
-            <input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter your name">
-            <div *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)" class="error-message">
-              <div *ngIf="form.controls['name'].errors?.['required']">Name is required.</div>
-              <div *ngIf="form.controls['name'].errors?.['pattern']">Invalid Name.</div>
-            </div>
+              <input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter your name">
+              <div
+                *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)"
+                class="error-message">
+                <div *ngIf="form.controls['name'].errors?.['required']">Name is required.</div>
+                <div *ngIf="form.controls['name'].errors?.['pattern']">Invalid Name.</div>
+              </div>
             </div>
           </div>
           <div class="mb-3">
             <label for="message" class="form-label">Your Experience <span class="required-field">*</span></label>
             <div class="col-sm-9 col-lg-7">
-            <textarea class="form-control" id="message" rows="3" required></textarea>
-            <small id="messageHelp" class="form-text text-muted">0/500</small>
-          </div>
-          </div>
-          <div class="mb-3" [class.has-error]="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
-            <label for="email" class="form-label">Email <span class="required-field">*</span></label>
-            <div class="col-sm-9 col-lg-7">
-            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Enter your email">
-            <div *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)" class="error-message">
-              <div *ngIf="form.controls['email'].errors?.['required']">Email is required.</div>
-              <div *ngIf="form.controls['email'].errors?.['pattern']">Invalid email format.</div>
+              <textarea class="form-control" id="message" rows="3" required></textarea>
+              <small id="messageHelp" class="form-text text-muted">0/500</small>
             </div>
           </div>
+          <div class="mb-3"
+            [class.has-error]="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
+            <label for="email" class="form-label">Email <span class="required-field">*</span></label>
+            <div class="col-sm-9 col-lg-7">
+              <input type="email" class="form-control" id="email" formControlName="email"
+                placeholder="Enter your email">
+              <div
+                *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
+                class="error-message">
+                <div *ngIf="form.controls['email'].errors?.['required']">Email is required.</div>
+                <div *ngIf="form.controls['email'].errors?.['pattern']">Invalid email format.</div>
+              </div>
+            </div>
           </div>
-          
-          
-          
-          
           <div class="modal-footer">
             <button type="button" class="btn btn-exit" data-bs-dismiss="modal">Exit</button>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button type="submit" class="btn btn-submit" [disabled]="form.invalid">Submit</button>
             </div>
           </div>
-          
-          
         </form>
       </div>
     </div>
