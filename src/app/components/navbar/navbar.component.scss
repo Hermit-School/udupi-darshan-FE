@@ -1,24 +1,61 @@
+.icon {
+    margin-left: 0.5rem;
+    color: #FF6000;
+    /* Set icon color */
+    margin-right: 0.5rem;
+    /* Add margin to separate icons */
+}
 
-    .icon {
-        margin-left: 0.5rem;
-        color:#FF6000; /* Set icon color */
-        margin-right: 0.5rem; /* Add margin to separate icons */
-    }
+.nav-link {
+    color: #FF6000;
+    font-weight: bold;
+}
 
-    .nav-link{
-        color: #FF6000;
-        font-weight: bold;
-    }
-    
-    .container-fluid{
-background-color: #222831;
+.container-fluid {
+    background-color: #222831;
 
-    }
-    .navbar-toggler{
-        color: #FF6000;
-      
-    }
-    .btn{
-        color: #FF6000;
-        border-color: #FF6000;
-    }
+}
+
+.navbar-toggler {
+    color: #FF6000;
+
+}
+
+.btn {
+
+    color: #FF6000;
+    border-color: #FF6000;
+}
+
+.btn-exit {
+    margin: 1rem;
+
+}
+
+.btn-submit {
+    background-color: #FF6000;
+    color: #fffbfb;
+
+}
+
+.error-message {
+    color: #e3350a;
+}
+
+.has-error .form-control {
+    border: 0.1rem solid rgb(224, 11, 11);
+
+}
+
+.modal-footer {
+    border: none;
+}
+
+.required-field {
+    color: #e3350a;
+    font-weight: bold;
+}
+
+.form-label {
+    font-weight: bold;
+}
