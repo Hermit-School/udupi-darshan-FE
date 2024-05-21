@@ -11,7 +11,8 @@
           <input class="form-control me-2 d-none d-lg-flex" type="search" placeholder="Search" aria-label="Search">
         </div>
       </div>
-    </form>
+      </form>
+    
 
     <button class="navbar-toggler ms-sm-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
       aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +87,7 @@
                 <div *ngIf="form.controls['email'].errors?.['pattern']">Invalid email format.</div>
               </div>
             </div>
+            </div>
             <div class="mb-3">
               <label for="photos" class="form-label">Photos</label>
               <div class="upload-container">
@@ -107,17 +109,17 @@
                 </div>
               </div>
             </div>
-            
-              
-              
-              
-            
-            
-            <button type="exit" class="btn btn-exit" data-bs-dismiss="modal">Exit</button>
-            <button type="submit" class="btn btn-submit">Submit</button>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-exit" data-bs-dismiss="modal">Exit</button>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-submit" [disabled]="form.invalid">Submit</button>
+              </div>
+            </div>
           </form>
         </div>
       </div>
     </div>
   </div>
+  
+            
   
