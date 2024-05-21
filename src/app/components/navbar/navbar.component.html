@@ -1,74 +1,87 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Udupi Darshan</a>
-  
-      <form class="d-flex d-lg-auto ms-auto ms-lg-5">
-        <div class="position-relative ms-lg-5">
-          <div class="input-group">
-            <span class="input-group-text">
-              <i class="bi bi-search icon"></i>
-            </span>
-            <input class="form-control me-2 d-none d-lg-flex" type="search" placeholder="Search" aria-label="Search">
-          </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Udupi Darshan</a>
+
+    <form class="d-flex d-lg-auto ms-auto ms-lg-5">
+      <div class="position-relative ms-lg-5">
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-search icon"></i>
+          </span>
+          <input class="form-control me-2 d-none d-lg-flex" type="search" placeholder="Search" aria-label="Search">
         </div>
-      </form>
-  
-      <button class="navbar-toggler ms-sm-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-lg-between" id="navbarTogglerDemo02">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-5">
-          <li class="nav-item">
-            <a class="nav-link ms-lg-3" aria-current="page" href="#">Nature</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link ms-lg-3" href="#">Culture</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link ms-lg-3" href="#">Food</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link ms-lg-3" href="#">Stories</a>
-          </li>
-          <li class="nav-item">
-            <!-- Button trigger modal -->
-            <button class="btn ms-lg-3" data-bs-toggle="modal" data-bs-target="#writeToUsModal">Write to us</button>
-          </li>
-        </ul>
       </div>
-      <div class="d-none d-lg-block">
-        <button class="btn ms-auto" type="button">Advertisement</button>
-      </div>
+    </form>
+
+    <button class="navbar-toggler ms-sm-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+      aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-lg-between" id="navbarTogglerDemo02">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-5">
+        <li class="nav-item">
+          <a class="nav-link ms-lg-3" aria-current="page" href="#">Nature</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link ms-lg-3" href="#">Culture</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link ms-lg-3" href="#">Food</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link ms-lg-3" href="#">Stories</a>
+        </li>
+        <li class="nav-item">
+          <!-- Button trigger modal -->
+          <button class="btn ms-lg-3" data-bs-toggle="modal" data-bs-target="#writeToUsModal">Write to us</button>
+        </li>
+      </ul>
     </div>
-  </nav>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="writeToUsModal" tabindex="-1" aria-labelledby="writeToUsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg ">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="writeToUsModalLabel">Tell us your story!</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="mb-3" [class.has-error]="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
-              <label for="name" class="form-label">*Name</label>
+    <div class="d-none d-lg-block">
+      <button class="btn ms-auto" type="button">Advertisement</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal fade" id="writeToUsModal" tabindex="-1" aria-labelledby="writeToUsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="writeToUsModalLabel">Tell us your story!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="mb-3"
+            [class.has-error]="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
+            <label for="name" class="form-label">Name <span class="required-field">*</span></label>
+            <div class="col-sm-9 col-lg-7">
               <input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter your name">
-              <div *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)" class="error-message">
+              <div
+                *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)"
+                class="error-message">
                 <div *ngIf="form.controls['name'].errors?.['required']">Name is required.</div>
                 <div *ngIf="form.controls['name'].errors?.['pattern']">Invalid Name.</div>
               </div>
             </div>
-            <div class="mb-3">
-              <label for="message" class="form-label">*Your Experience</label>
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label">Your Experience <span class="required-field">*</span></label>
+            <div class="col-sm-9 col-lg-7">
               <textarea class="form-control" id="message" rows="3" required></textarea>
               <small id="messageHelp" class="form-text text-muted">0/500</small>
             </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">*Email</label>
-              <input type="email" class="form-control" id="email" formControlName="email" placeholder="Enter your email">
-              <div *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)" class="error-message">
+          </div>
+          <div class="mb-3"
+            [class.has-error]="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
+            <label for="email" class="form-label">Email <span class="required-field">*</span></label>
+            <div class="col-sm-9 col-lg-7">
+              <input type="email" class="form-control" id="email" formControlName="email"
+                placeholder="Enter your email">
+              <div
+                *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
+                class="error-message">
                 <div *ngIf="form.controls['email'].errors?.['required']">Email is required.</div>
                 <div *ngIf="form.controls['email'].errors?.['pattern']">Invalid email format.</div>
               </div>

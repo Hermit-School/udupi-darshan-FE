@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // JavaScript logic for character count
     const messageInput = document.getElementById("message") as HTMLTextAreaElement;
     const messageHelp = document.getElementById("messageHelp")!;
 
@@ -27,12 +28,17 @@ export class NavbarComponent implements OnInit {
       const messageLength = messageInput.value.length;
       messageHelp.textContent = messageLength + "/500";
 
+      // Enforce the character limit
       if (messageLength > 500) {
         messageInput.value = messageInput.value.substring(0, 500);
         messageHelp.textContent = "500/500";
       }
     });
   }
+
+  
+  
+  
 
   onSubmit(): void {
     if (this.form.valid) {
