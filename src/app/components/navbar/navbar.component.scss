@@ -1,24 +1,122 @@
 
-    .icon {
-        margin-left: 0.5rem;
-        color:#FF6000; /* Set icon color */
-        margin-right: 0.5rem; /* Add margin to separate icons */
-    }
+.icon {
+    margin-left: 0.5rem;
+    color:#FF6000; /* Set icon color */
+    margin-right: 0.5rem; /* Add margin to separate icons */
+}
 
-    .nav-link{
-        color: #FF6000;
-        font-weight: bold;
-    }
-    
-    .container-fluid{
+.nav-link{
+    color: #FF6000;
+    font-weight: bold;
+}
+
+.container-fluid{
 background-color: #222831;
 
-    }
-    .navbar-toggler{
-        color: #FF6000;
-      
-    }
-    .btn{
-        color: #FF6000;
-        border-color: #FF6000;
-    }
+}
+.navbar-toggler{
+    color: #FF6000;
+  
+}
+.btn{
+   
+    color: #FF6000;
+    border-color: #FF6000;
+}
+.btn-exit{
+    margin: 1rem;
+
+   
+}
+.btn-submit{
+background-color: #FF6000;
+color:#fffbfb;
+}
+.error-message{
+    color: #e3350a;
+}
+.has-error .form-control {
+    border-color: red;
+  }
+
+
+  /* Style the container */
+.mb-3 {
+    position: relative;
+  }
+  
+  /* Style the custom button */
+//   .mb-3 input[type="file"] + label {
+//     display: inline-block;
+//     padding: 8px 20px;
+//     border: 2px solid #ccc;
+//     border-radius: 5px;
+//     background-color: #f9f9f9;
+//     cursor: pointer;
+//   }
+  
+  /* Style the "Click to upload" text */
+//   .mb-3 input[type="file"] + label::after {
+//     content: 'Click to upload';
+//     display: inline-block;
+//     margin-left: 10px;
+//   }
+  
+//   /* Style the label when hovering */
+//   .mb-3 input[type="file"] + label:hover {
+//     background-color: #e0e0e0;
+//   }
+  
+  /* Style uploaded photos */
+  .photo-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+  }
+  
+  .photo-name-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .photo-name-container p {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    flex-grow: 1;
+  }
+  
+  .delete-icon {
+    margin-left: 10px;
+    // color: #0d0d0d;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .delete-icon:hover {
+    color: #cc0000;
+  }
+  
+  .uploaded-photos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .custom-file-upload {
+    border-radius:1rem;
+    font-size: 1.1rem; /* Increase font size */
+    text-align: center; /* Center text horizontally */
+    padding: 0.5rem 10%;
+
+  }
+  .btn1{
+    color: #222831;
+  }
