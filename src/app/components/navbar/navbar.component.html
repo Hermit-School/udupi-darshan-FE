@@ -87,27 +87,6 @@
               </div>
             </div>
           </div>
-          <div class="mb-3">
-            <label for="photos" class="form-label">Photos</label>
-            <div class="upload-container">
-              <!-- Change the input type to "button" -->
-              <button type="button" id="photos" class="btn1 custom-file-upload" (click)="fileInput.click()">
-                <i class="bi bi-upload"></i> Click to upload
-              </button>
-              <!-- Hide the actual file input -->
-              <input type="file" #fileInput accept="image/*" style="display:none" (change)="onFileSelected($event)">
-              <div class="uploaded-photos">
-                <div *ngFor="let file of files" class="photo-item">
-                  <div class="photo-name-container">
-                    <p (click)="openFile(file.url)">{{file.name}}</p>
-                    <!-- <span class="spacer"></span> -->
-        <i class="bi bi-trash delete-icon" (click)="removeFile(file)"></i>
-
-              </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-exit" data-bs-dismiss="modal">Exit</button>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
