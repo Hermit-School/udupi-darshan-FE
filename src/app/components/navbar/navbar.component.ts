@@ -11,7 +11,8 @@ export class NavbarComponent implements OnInit {
   form: FormGroup;
   photoPreviews: string[] = [];
   selectedFiles: File[] = [];
-
+  files: { name: string, url: string }[] = [];
+  maxFiles: number = 2;
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
@@ -37,11 +38,40 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  
-  
-  
+  onFileSelected(event: any) {
+    const selectedFiles = event.target.files;
+    const uploadedPhotosContainer = document.querySelector('.uploaded-photos');
+    if (!uploadedPhotosContainer) {
+      return;
+    }
 
-  onSubmit(): void {
+    if (this.files.length + selectedFiles.length > this.maxFiles) {
+      alert(`You can only upload a maximum of ${this.maxFiles} photos.`);
+      return;
+    }
+
+    for (let file of selectedFiles) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const fileUrl = e.target.result;
+        this.files.push({ name: file.name, url: fileUrl });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeFile(file: { name: string, url: string }) {
+    this.files = this.files.filter(f => f !== file);
+  }
+
+  openFile(url: string): void {
+    window.open(url, '_blank');
+  }
+
+
+  
+  
+onSubmit(): void {
     if (this.form.valid) {
       console.log(this.form.value);
     } else {
