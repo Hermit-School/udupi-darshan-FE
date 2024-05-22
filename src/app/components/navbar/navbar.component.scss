@@ -59,3 +59,53 @@
 .form-label {
     font-weight: bold;
 }
+.photo-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+  }
+
+  .photo-name-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+
+  .photo-name-container p {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    flex-grow: 1;
+  }
+
+  .delete-icon {
+    margin-left: 10px;
+    // color: #0d0d0d;
+    font-size: 16px;
+    font-weight: bold;
+}
+    
+  .delete-icon:hover {
+    color: #cc0000;
+  }
+
+  .uploaded-photos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .custom-file-upload {
+    border-radius:1rem;
+    font-size: 1.1rem; /* Increase font size */
+    text-align: center; /* Center text horizontally */
+    padding: 0.5rem 10%;
+
+  }
+  .btn1{
+    color: #222831;
+  }
