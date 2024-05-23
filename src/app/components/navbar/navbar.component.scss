@@ -1,24 +1,25 @@
 .icon {
-    margin-left: 0.5rem;
+    
     color: #FF6000;
-    /* Set icon color */
-    margin-right: 0.5rem;
-    /* Add margin to separate icons */
+    
 }
 
 .nav-link {
     color: #FF6000;
     font-weight: bold;
+    
 }
 
 .container-fluid {
     background-color: #222831;
 
+
 }
 
 .navbar-toggler {
-    color: #FF6000;
-
+    
+    margin-left: 10px;
+    border: none;
 }
 
 .btn {
@@ -109,3 +110,71 @@
   .btn1{
     color: #222831;
   }
+  .custom-navbar-height{
+    height: 4rem;
+  }
+  .brand-margin{
+    margin-left: 1.5rem;
+    color: #FF6000;
+    margin-right: 2rem;
+  }
+  .position-relative .input-group {
+    position: relative;
+  }
+  
+  .search-icon {
+    background-color: transparent;
+    border: none;
+    z-index: 1;
+  padding: 0rem;
+  position:absolute;
+   left: 0.75rem;// Adjust to align with placeholder text
+  top: 50%;
+  pointer-events: none;
+  transform: translateY(-50%);  
+  }
+  .navbar-brand {
+    margin-right: 1rem; /* 1rem gap between title and search button */
+  }
+  
+  .search-input {
+    padding-left: 2rem; // Adjust padding to make space for icon
+    border-radius: 0 0px 0px 0;
+    //border-top-left-radius: 2rem;
+    position:relative; // Ensure relative positioning for absolute child elements
+}
+.input-group{
+  border-radius:2rem;
+}
+
+
+
+
+.search-form {
+  margin-right: 1rem; /* Add margin to the search form */
+}
+
+
+.custom-ml-inherit {
+  margin-left: inherit;
+}
+
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+.offcanvas{
+  background-color: #222831;
+  box-shadow: none;
+  max-width: 20rem;
+}
+.color{
+  color: #FFFFFFD9;
+}
+.offcanvas-body .nav-link:hover {
+  background-color: #FFFFFF;
+  color:#FF6000;
+}
+.offcanvas-body .nav-item {
+  margin-bottom: 0.8rem; /* Adjust as needed for desired spacing */
+}
