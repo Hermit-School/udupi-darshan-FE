@@ -137,17 +137,21 @@
     margin-right: 1rem; /* 1rem gap between title and search button */
   }
   
-  .search-input {
-    padding-left: 2rem; // Adjust padding to make space for icon
-    border-radius: 0 0px 0px 0;
-    //border-top-left-radius: 2rem;
-    position:relative; // Ensure relative positioning for absolute child elements
-}
+  
 .input-group{
-  border-radius:2rem;
+  display: block;
 }
 
-
+.search-input {
+  padding-left: 2rem; // Adjust padding to make space for icon
+  width: 256px; 
+  position:relative; // Ensure relative positioning for absolute child elements
+}
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  
+  border-radius: 0.7rem;
+  
+}
 
 
 .search-form {
@@ -177,4 +181,14 @@
 }
 .offcanvas-body .nav-item {
   margin-bottom: 0.8rem; /* Adjust as needed for desired spacing */
+}
+textarea {
+ 
+  max-width: 100%; /* Ensure textarea doesn't exceed the width of its parent container */
+  width: 100%; /* Make the textarea take the full width of its parent container */
+  //box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+.modal-lg {
+  
+  max-width: 60vw; /* Ensure the modal doesn't exceed 90% of the viewport width */
 }
