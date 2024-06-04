@@ -43,11 +43,8 @@
   </div>
 </nav>
 
-<div class="offcanvas offcanvas-start d-lg-none d-block" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel"  >
-  <!-- <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div> -->
+<div class="offcanvas offcanvas-end d-lg-none d-block" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel"  >
+  
   <div class="offcanvas-body">
     <ul class="navbar-nav me-auto align-items-lg-center">
       <li class="nav-item">
@@ -73,7 +70,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="writeToUsModal" tabindex="-1" aria-labelledby="writeToUsModalLabel" aria-hidden="true">
+<div class="modal fade" id="writeToUsModal" tabindex="-1" aria-labelledby="writeToUsModalLabel" aria-hidden="true" #writeToUsModal>
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -92,11 +89,14 @@
               </div>
             </div>
           </div>
-          <div class="mb-3">
+          <div class="mb-3" [class.has-error]="form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched)">
             <label for="message" class="form-label">Your Experience <span class="required-field">*</span></label>
-            <div class="col-sm-9 col-lg-7">
-              <textarea class="form-control" id="message" rows="3" required></textarea>
-              <small id="messageHelp" class="form-text text-muted">0/500</small>
+            <div >
+              <textarea class="form-control" id="message" formControlName="message" rows="3" required [ngModel]="form.controls['message'].value" (ngModelChange)="updateWordCount($event)" [disabled]="wordCount >= maxWordCount"></textarea>
+              <small id="messageHelp" class="form-text text-muted">{{ wordCount }}/500 words</small>
+              <div *ngIf="form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched)" class="error-message">
+                <div *ngIf="form.controls['message'].errors?.['required']">Message is required.</div>
+              </div>
             </div>
           </div>
           <div class="mb-3" [class.has-error]="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
@@ -112,11 +112,9 @@
           <div class="mb-3">
             <label for="photos" class="form-label">Photos</label>
             <div class="upload-container">
-              <!-- Change the input type to "button" -->
               <button type="button" id="photos" class="btn1 custom-file-upload" (click)="fileInput.click()">
                 <i class="bi bi-upload"></i> Click to upload
               </button>
-              <!-- Hide the actual file input -->
               <input type="file" #fileInput accept="image/*" style="display:none" (change)="onFileSelected($event)">
               <div class="uploaded-photos">
                 <div *ngFor="let file of files" class="photo-item">
@@ -129,9 +127,9 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-exit" data-bs-dismiss="modal">Exit</button>
+            <button type="button" class="btn btn-exit" data-bs-dismiss="modal" (click)="resetModal()">Exit</button>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button type="submit" class="btn btn-submit" [disabled]="form.invalid">Submit</button>
+              <button type="submit" class="btn btn-submit" [disabled]="form.invalid" data-bs-dismiss="modal">Submit</button>
             </div>
           </div>
         </form>
