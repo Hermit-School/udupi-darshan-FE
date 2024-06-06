@@ -79,7 +79,7 @@
 
   .photo-name-container p {
     margin: 0;
-    padding: 0;
+    // padding: 0;
     cursor: pointer;
     flex-grow: 1;
   }
@@ -126,7 +126,7 @@
     background-color: transparent;
     border: none;
     z-index: 1;
-  padding: 0rem;
+  // padding: 0rem;
   position:absolute;
    left: 0.75rem;// Adjust to align with placeholder text
   top: 50%;
