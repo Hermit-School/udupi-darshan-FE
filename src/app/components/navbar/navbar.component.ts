@@ -89,29 +89,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     window.open(url, '_blank');
   }
 
-  //   if (this.files.length + selectedFiles.length > this.maxFiles) {
-  //     alert(`You can only upload a maximum of ${this.maxFiles} photos.`);
-  //     return;
-  //   }
-
-  //   for (let file of selectedFiles) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       const fileUrl = e.target.result;
-  //       this.files.push({ name: file.name, url: fileUrl });
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // removeFile(file: { name: string, url: string }) {
-  //   this.files = this.files.filter(f => f !== file);
-  // }
-
-  // openFile(url: string): void {
-  //   window.open(url, '_blank');
-  // }
-
+ 
 
   
   
