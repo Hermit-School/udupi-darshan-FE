@@ -55,6 +55,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFileSelected(event: any): void {
     const selectedFiles = event.target.files;
+    const maxSize =  6291456;
 
     if (this.files.length + selectedFiles.length > this.maxFiles) {
       alert(`You can only upload a maximum of ${this.maxFiles} photos.`);
@@ -62,11 +63,20 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     for (let file of selectedFiles) {
+      if (file.size > maxSize) {
+        alert(`The file "${file.name}" exceeds the maximum size of 1 MB.`);
+        continue;
+      }
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const fileUrl = e.target.result;
         this.files.push({ name: file.name, url: fileUrl });
       };
+
+      
+
+
+
       reader.readAsDataURL(file);
     }
   }

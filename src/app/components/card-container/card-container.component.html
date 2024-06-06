@@ -1,19 +1,108 @@
-
-
-   <div class="container">
-    <h2 class="container-title">Create Unforgettable Experiences</h2>
-    <div class="cards-wrapper">
-      <div class="cards">
-        <div class="card" *ngFor="let card of cards">
-          <img [src]="card.imageUrl" class="card-img-top" alt="{{card.alt}}">
-          <div class="card-body">
-            <h5 class="card-title">{{card.title}}</h5>
-            <p class="card-text">{{card.description}}</p>
-            <a href="#" class="btn btn-primary">View Details</a>
-          </div>
+<div class="navbar bg-dark">
+  <h1 class="text-white fw-bold">Create Unforgettable Experiences</h1>
+</div>
+<div class="container-fluid">
+  <div class="row card-container">
+    <!-- Existing Cards -->
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/b1.jpeg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">Kaup Light house</h5>
+          <hr>
+          <p class="card-text text-color">Quite evident by the name, there is a lighthouse on the beach which promises panoramic views of the sea, the beach and the neighbouring areas.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details--></small>
         </div>
       </div>
     </div>
-    <button class="view-more-button">View More</button>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/bl2.webp" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">Malpe Beach</h5>
+          <hr>
+          <p class="card-text text-color">Malpe is one of the exquisite unexplored beaches of the Indian West Coast. Located at the mouth of the Udayavar River, the most famous being St. Mary’s Island.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details--></small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/bl4.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">Krishna Matta</h5>
+          <hr>
+          <p class="card-text text-color">The story of this temple starts with the birth of a child to a couple called Narayana Bhatta and his wife Vedavati in a village called Pajakakshetra near Udupi.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details--></small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/bl5.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">Maravante Beach</h5>
+          <hr>
+          <p class="card-text text-color">Maravanthe is a uniquely positioned beach in Coastal Karnataka with Arabian Sea on one side and Souparnika river on the other.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details--></small>
+        </div>
+      </div>
+    </div>
+
+    <!-- New Cards -->
+    <!-- <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/c3.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">New Beach 1</h5>
+          <hr>
+          <p class="card-text text-color">Description of the new beach 1.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details-->
+        <!-- </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/b1.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">New Beach 2</h5>
+          <hr>
+          <p class="card-text text-color">Description of the new beach 2.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details-->
+        <!-- </div> -->
+      <!-- </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/c2.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">New Beach 3</h5>
+          <hr>
+          <p class="card-text text-color">Description of the new beach 3.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details-->
+        <!-- </div>
+      </div>
+    </div> --> 
   </div>
-  
+</div>
+<div class="footer">
+  <div class="row">
+    <div class="col text-center">
+      <button type="button" class="btn">View All</button>
+    </div>
+  </div>
+</div>
