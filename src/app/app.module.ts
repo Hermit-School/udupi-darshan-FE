@@ -13,10 +13,6 @@ import { BlogsComponent } from './components/blogs/blogs.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CardContainerComponent } from './components/card-container/card-container.component';
 import { ReactiveFormsModule } from '@angular/forms';
-
-
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,10 +24,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     BlogsComponent,
     FooterComponent,
     CardContainerComponent,
-    
-   
-    
-   
   ],
   imports: [
     BrowserModule,
@@ -39,7 +31,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     NgbCarouselModule,
     FormsModule,
     ReactiveFormsModule
-    
   ],
   providers: [],
   bootstrap: [AppComponent]

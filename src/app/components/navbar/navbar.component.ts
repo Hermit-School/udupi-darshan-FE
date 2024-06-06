@@ -72,11 +72,6 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
         const fileUrl = e.target.result;
         this.files.push({ name: file.name, url: fileUrl });
       };
-
-      
-
-
-
       reader.readAsDataURL(file);
     }
   }
@@ -88,25 +83,20 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   openFile(url: string): void {
     window.open(url, '_blank');
   }
-
- 
-
-  
-  
-onSubmit(): void {
+  onSubmit(): void {
     if (this.form.valid) {
       console.log(this.form.value);
-      this.resetForm(); // Reset form after submission
+      this.resetForm(); 
     } else {
       console.log('Form is invalid');
     }
   }
 
   resetForm(): void {
-    this.form.reset(); // Reset form controls
-    this.files = []; // Clear uploaded files
-    this.wordCount = 0; // Reset word count
-    this.form.controls['message'].enable(); // Ensure the textarea is enabled
+    this.form.reset(); 
+    this.files = []; 
+    this.wordCount = 0; 
+    this.form.controls['message'].enable(); 
   }
 
   resetModal(): void {

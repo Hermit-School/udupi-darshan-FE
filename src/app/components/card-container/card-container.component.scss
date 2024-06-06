@@ -1,53 +1,40 @@
-/* Navbar Styling */
 .navbar {
-  background-color: #343a40; /* Dark grey background */
-  padding: 10px 0; /* Add some padding */
-  text-align: center; /* Center align text */
+  background-color: #343a40; 
+  padding: 10px 0; 
+  text-align: center; 
 }
-
 .navbar h1 {
-  margin: 0; /* Remove default margin */
+  margin: 0; 
 }
-
-/* Card Styling */
 .card {
-  background-color: #222831; /* White background */
-  border: 0.1rem solid#ff6000; /* Add border */
-  border-radius: 8px; /* Add border radius */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add box shadow */
+  background-color: #222831; 
+  border: 0.1rem solid#ff6000;
+  border-radius: 8px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   width: 17rem;
-  
-
-}
+  }
 
 .card-title {
-  font-size: 1.25rem; /* Larger font size for title */
+  font-size: 1.25rem; 
 }
 
 .card-footer {
-  background-color: #f8f9fa; /* Light grey background for footer */
-  border-top: 1px solid rgba(0, 0, 0, 0.125); /* Add border on top */
+  background-color: #f8f9fa; 
+  border-top: 1px solid rgba(0, 0, 0, 0.125); 
 }
-
-
 .container-fluid{
   background-color: #222831;
-  
-  // flex-wrap: nowrap;
-  // display: flex;
- 
-
-}
+  }
 .text-color{
   color: #fff;
 }
 .card-container {
   
     display: flex;
-    flex-wrap: nowrap; /* Prevent wrapping */
-    overflow-x: auto; /* Enable horizontal scrolling */
+    flex-wrap: nowrap; 
+    overflow-x: auto; 
 
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch; 
   scrollbar-width: none;
   -ms-overflow-style: none;
   max-height: 100%;
@@ -55,8 +42,7 @@
   
 
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 0.2rem; /* Add gap between cards */
-  
+  gap: 0.2rem;
 }
 .row > * {
   flex-shrink: inherit;
