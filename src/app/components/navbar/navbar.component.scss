@@ -1,51 +1,36 @@
 .icon {
-    
-    color: #FF6000;
-    
+     color: #FF6000;
 }
-
 .nav-link {
     color: #FF6000;
     font-weight: bold;
-    
 }
 
 .container-fluid {
     background-color: #222831;
-
-
 }
-
 .navbar-toggler {
     
     margin-left: 10px;
     border: none;
 }
-
 .btn {
 
     color: #FF6000;
     border-color: #FF6000;
 }
-
 .btn-exit {
     margin: 1rem;
-
 }
-
 .btn-submit {
     background-color: #FF6000;
     color: #fffbfb;
-
 }
-
 .error-message {
     color: #e3350a;
 }
-
 .has-error .form-control {
     border: 0.1rem solid rgb(224, 11, 11);
-
 }
 
 .modal-footer {
@@ -79,14 +64,12 @@
 
   .photo-name-container p {
     margin: 0;
-    padding: 0;
     cursor: pointer;
     flex-grow: 1;
   }
 
   .delete-icon {
     margin-left: 10px;
-    // color: #0d0d0d;
     font-size: 16px;
     font-weight: bold;
 }
@@ -102,8 +85,8 @@
   }
   .custom-file-upload {
     border-radius:1rem;
-    font-size: 1.1rem; /* Increase font size */
-    text-align: center; /* Center text horizontally */
+    font-size: 1.1rem;
+    text-align: center; 
     padding: 0.5rem 10%;
 
   }
@@ -126,15 +109,13 @@
     background-color: transparent;
     border: none;
     z-index: 1;
-  padding: 0rem;
   position:absolute;
-   left: 0.75rem;// Adjust to align with placeholder text
-  top: 50%;
+   left: 0.75rem;
   pointer-events: none;
   transform: translateY(-50%);  
   }
   .navbar-brand {
-    margin-right: 1rem; /* 1rem gap between title and search button */
+    margin-right: 1rem; 
   }
   
   
@@ -143,26 +124,21 @@
 }
 
 .search-input {
-  padding-left: 2rem; // Adjust padding to make space for icon
+  padding-left: 2rem; 
   width: 256px; 
-  position:relative; // Ensure relative positioning for absolute child elements
+  position:relative;
 }
 .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
   
   border-radius: 0.7rem;
   
 }
-
-
 .search-form {
-  margin-right: 1rem; /* Add margin to the search form */
+  margin-right: 1rem; 
 }
-
-
 .custom-ml-inherit {
   margin-left: inherit;
 }
-
 .navbar-toggler:focus {
   outline: none;
   box-shadow: none;
@@ -180,15 +156,14 @@
   color:#FF6000;
 }
 .offcanvas-body .nav-item {
-  margin-bottom: 0.8rem; /* Adjust as needed for desired spacing */
+  margin-bottom: 0.8rem; 
 }
 textarea {
  
-  max-width: 100%; /* Ensure textarea doesn't exceed the width of its parent container */
-  width: 100%; /* Make the textarea take the full width of its parent container */
-  //box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  max-width: 100%;
+  width: 100%; 
 }
 .modal-lg {
   
-  max-width: 60vw; /* Ensure the modal doesn't exceed 90% of the viewport width */
+  max-width: 60vw;
 }

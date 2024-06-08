@@ -56,6 +56,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFileSelected(event: any): void {
     const selectedFiles = event.target.files;
+    const maxSize =  6291456;
 
     if (this.files.length + selectedFiles.length > this.maxFiles) {
       alert(`You can only upload a maximum of ${this.maxFiles} photos.`);
@@ -63,6 +64,10 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     for (let file of selectedFiles) {
+      if (file.size > maxSize) {
+        alert(`The file "${file.name}" exceeds the maximum size of 1 MB.`);
+        continue;
+      }
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const fileUrl = e.target.result;
@@ -79,21 +84,20 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   openFile(url: string): void {
     window.open(url, '_blank');
   }
-
   onSubmit(): void {
     if (this.form.valid) {
       console.log(this.form.value);
-      this.resetForm(); // Reset form after submission
+      this.resetForm(); 
     } else {
       console.log('Form is invalid');
     }
   }
 
   resetForm(): void {
-    this.form.reset(); // Reset form controls
-    this.files = []; // Clear uploaded files
-    this.wordCount = 0; // Reset word count
-    this.form.controls['message'].enable(); // Ensure the textarea is enabled
+    this.form.reset(); 
+    this.files = []; 
+    this.wordCount = 0; 
+    this.form.controls['message'].enable(); 
   }
 
   resetModal(): void {

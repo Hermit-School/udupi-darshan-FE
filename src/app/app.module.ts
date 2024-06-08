@@ -40,7 +40,6 @@ import { NatureComponent } from './pages/nature/nature.component'; // Import Rea
     NgbCarouselModule,
     FormsModule,
     ReactiveFormsModule
-    
   ],
   providers: [],
   bootstrap: [AppComponent]
