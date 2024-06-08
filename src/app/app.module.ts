@@ -13,6 +13,11 @@ import { BlogsComponent } from './components/blogs/blogs.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CardContainerComponent } from './components/card-container/card-container.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NatureComponent } from './pages/nature/nature.component'; // Import ReactiveFormsModule and FormsModule
+
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +29,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     BlogsComponent,
     FooterComponent,
     CardContainerComponent,
+    NatureComponent
+   
+    
+   
   ],
   imports: [
     BrowserModule,
