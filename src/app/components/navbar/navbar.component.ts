@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy , Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +17,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   maxWordCount: number = 500;
   @ViewChild('writeToUsModal') writeToUsModal!: ElementRef;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router,private renderer: Renderer2) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
@@ -97,5 +98,22 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   resetModal(): void {
     this.resetForm();
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+  closeOffcanvas() {
+    const offcanvas = document.getElementById('offcanvasNavbar');
+    if (offcanvas) {
+      this.renderer.removeClass(offcanvas, 'show');
+      const backdrop = document.querySelector('.offcanvas-backdrop');
+      if (backdrop) {
+        backdrop.remove();
+      }
+      document.body.classList.remove('offcanvas-backdrop');
+      this.renderer.setStyle(document.body, 'overflow', 'auto');
+      this.renderer.removeClass(document.body, 'offcanvas-open');
+    }
   }
 }
