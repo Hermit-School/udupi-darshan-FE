@@ -1,0 +1,124 @@
+
+
+<div class="container-fluid p-0" >
+<div class="heading-container">
+    <h1 class="heading-text text-white fw-bold">Experience the joy of being with nature</h1>
+    <img src="assets/images/Vectorblob.svg" alt="Design Blob" class="design-blob">     
+</div>
+<div class="navbar">
+    <h1 class="text-white fw-bold">Best Of Nature</h1>
+  </div>
+  <!-- Card Section -->
+  <div class="container-fluid mt-4">
+    <div class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-4 g-4">
+      <div class="col">
+        <div class="card h-100">
+          <img src="assets/images/b1.jpeg" class="card-img-top" alt="Card Image 1">
+          <div class="card-body">
+            <h5 class="card-title">Kaup Light House</h5>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="assets/images/endpoint.jpg" class="card-img-top" alt="Card Image 2">
+          <div class="card-body">
+            <h5 class="card-title">Manipal End Point</h5>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="assets/images/n1.webp" class="card-img-top" alt="Card Image 3">
+          <div class="card-body">
+            <h5 class="card-title">Arbi Falls</h5>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="assets/images/n2.jpg" class="card-img-top" alt="Card Image 4">
+          <div class="card-body">
+            <h5 class="card-title">Tree Park</h5>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+  <!-- Activity List Heading -->
+  <div class="activity-heading mt-4">
+    <h2 class="text-white fw-bold">Activity List</h2>
+  </div>
+
+  <!-- Activity Cards Section -->
+   <div class="container-fluid mt-4" >
+    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
+      <div class="col" *ngFor="let card of visibleActivityCards">
+        <div class="card h-100">
+          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <div class="card-body">
+            <h5 class="card-title">{{ card.title }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-3">
+    <button class="btn btn-view-all mt-4" (click)="toggleViewAll()">
+      {{ viewAll ? 'View Less' : 'View All' }}
+    </button>
+  </div>
+  </div>
+  <div class="activity-heading mt-4">
+    <h2 class="text-white fw-bold">Wildlife</h2>
+  </div>
+  
+  
+  <div class="container-fluid mt-4">
+    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
+      <div class="col" *ngFor="let card of visibleWildlifeCards">
+        <div class="card h-100">
+          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <div class="card-body">
+            <h5 class="card-title">{{ card.title }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
+    <div class="text-center mt-3">
+      <button class="btn btn-view-all" (click)="toggleViewAllWildlife()">
+        {{ viewAllWildlife ? 'View Less' : 'View All' }}
+      </button>
+    </div>
+    
+  </div> 
+  <div class="activity-heading mt-4">
+    <h2 class="text-white fw-bold">Beache List</h2>
+  </div>
+  <!-- Beaches Cards Section -->
+  <div class="container-fluid mt-4">
+    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
+      <div class="col" *ngFor="let card of visibleBeachCards">
+        <div class="card h-100">
+          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <div class="card-body">
+            <h5 class="card-title">{{ card.title }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-3" style="margin-bottom: 1px;">
+      <button class="btn btn-view-all mt-4" (click)="toggleViewAllBeaches()">
+        {{ viewAllBeaches ? 'View Less' : 'View All' }}
+      </button>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,99 @@
+/* Styles for the heading container */
+.heading-container {
+    background-color: #222831; /* Light black background */
+    height: 25vh; /* Fix the height to 50% of the viewport height */
+    width: 100%; /* Full width */
+     position: relative; /* Fix the container */    
+    left: 0;
+    right: 0;
+    overflow: hidden; /* Prevent scrolling */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Styles for the heading text */
+.heading-text {
+    color: #FFF; /* White text color */
+    margin: 0; /* Remove default margin */
+    
+    z-index: 1; /* Ensure it is above other elements */
+    text-align: center;
+}
+
+/* Styles for the design blob */
+.design-blob {
+  position: absolute; 
+  top: 40%;
+  left: 70%;
+  transform: translateX(-50%); /* Offset to the left by 50% of its own width for true centering */
+  width: 220vw; /* Scale width relative to viewport width */
+  z-index: 0;
+}
+
+.navbar {  
+    background-color: #222831; /* Orange color */
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .container-fluid{
+    background-color: #222831;
+  }
+  .card{
+    border: 2px solid #FFF;
+     
+  }
+  .card img {
+    width: 100%; /* Full width */
+    height: 100%; /* Maintain aspect ratio */
+    object-fit: cover; /* Ensures image covers the card area */
+  }
+  .card-body{
+    background-color:#222831;
+  }
+  .card-title{
+    color:#FFF
+  }
+  .activity-heading {  
+    text-align:left;
+    padding: 20px;
+    background-color: #222831;
+    color: #FFF; /* Orange color */
+     font-size: 2rem; /* Adjust font size as needed */
+  }
+  h2{
+    margin-bottom: 0rem;
+    font-size: xx-large;
+  }
+  h1{
+    font-size: xx-large;
+  }
+  .more-cards {
+    display: none;
+  }
+
+  .btn-view-all {
+    display: block;
+    margin: 20px auto;
+    margin-top: 2rem;
+  }
+  .mt-4 {
+    margin-top: 0rem !important;
+    margin-bottom: 0rem !important;
+
+}
+.wildlife-heading {
+    
+  text-align:left;
+  padding: 20px;
+  background-color: #222831;
+  color: #FFF; 
+   font-size: 2rem; /* Adjust font size as needed */
+}
+.btn {
+
+  color: #FF6000;
+  border-color: #FF6000;
+}
