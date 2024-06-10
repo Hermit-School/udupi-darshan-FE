@@ -13,8 +13,7 @@
       </div>
     </form>
 
-    <button class="navbar-toggler ms-sm-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-      aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+    <button class="navbar-toggler ms-sm-3 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
       <i class="bi bi-list icon"></i>
     </button>
 
@@ -24,7 +23,7 @@
           <a class="nav-link" routerLink="/nature" aria-current="page" href="#">Nature</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" href="#">Culture</a>
+          <a class="nav-link" routerLink="/culture" aria-current="page" href="#">Culture</a>
         </li>
         <li class="nav-item">
           <a class="nav-link ms-lg-3 ms-xl-5" href="#">Food</a>
@@ -37,6 +36,31 @@
         </li>
         <li class="nav-item">
           <button class="btn ms-lg-3 ms-xl-5" data-bs-toggle="modal" data-bs-target="#writeToUsModal">Write to us</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="offcanvas offcanvas-end d-lg-none d-block" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-body">
+      <ul class="navbar-nav me-auto align-items-lg-center">
+        <li class="nav-item">
+          <a class="nav-link color" aria-current="page" href="#">Nature</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link color" routerLink="/nature" href="#">Culture</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link color" href="#">Food</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link color" href="#">Stories</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link color" href="#">Advertisement</a>
+        </li>
+        <li class="nav-item">
+          <button class="btn" data-bs-toggle="modal" data-bs-target="#writeToUsModal">Write to us</button>
         </li>
       </ul>
     </div>
