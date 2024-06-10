@@ -15,6 +15,7 @@ import { CardContainerComponent } from './components/card-container/card-contain
 import { ReactiveFormsModule } from '@angular/forms';
 import { NatureComponent } from './pages/nature/nature.component';
 import { CultureComponent } from './pages/culture/culture.component';
+import { AdminComponent } from './pages/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { CultureComponent } from './pages/culture/culture.component';
     FooterComponent,
     CardContainerComponent,
     NatureComponent,
-    CultureComponent
+    CultureComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
