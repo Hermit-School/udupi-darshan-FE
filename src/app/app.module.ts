@@ -14,7 +14,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { CardContainerComponent } from './components/card-container/card-container.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NatureComponent } from './pages/nature/nature.component';
-import { CultureComponent } from './pages/culture/culture.component';
+import { CultureComponent } from './components/culture/culture.component';
 
 @NgModule({
   declarations: [
