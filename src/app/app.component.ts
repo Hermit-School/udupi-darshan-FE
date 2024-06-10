@@ -10,8 +10,6 @@ export class AppComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
-    // Navigate to the landing page on initialization
-    this.router.navigate(['/landing']);
- // title = 'udupi-darshan-FE';
+
 }
 }
