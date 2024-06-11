@@ -109,6 +109,8 @@
     background-color: transparent;
     border: none;
     z-index: 1;
+    top:50%;
+    padding: 0rem;
   position:absolute;
    left: 0.75rem;
   pointer-events: none;
@@ -167,3 +169,15 @@ textarea {
   
   max-width: 60vw;
 }
+
+
+.modal-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 60vw;
+  margin: auto;
+}
+
+
