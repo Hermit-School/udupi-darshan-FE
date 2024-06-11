@@ -9,10 +9,11 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
   
 const routes: Routes = [
     // Default route
+    { path: '', component: LandingPageComponent },
     { path: 'nature', component: NatureComponent },
     { path: 'culture', component: CultureComponent },
     { path: 'admin', component: AdminComponent },
-    { path: 'landing', component: LandingPageComponent },
+    { path: 'home', component: LandingPageComponent },
     { path: '404', component: PagenotfoundComponent },
     { path: '**', redirectTo: '404', pathMatch: 'full' },
   ];
