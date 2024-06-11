@@ -1,13 +1,27 @@
+// file changes made by rashmi on 10-06-2024
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-  
-  .image-container img {
-    width: 100%;
-  }
+.row {
+  flex-grow: 1;
+}
 
-  .text-align-center-webkit{
-    text-align: -webkit-center;
-  }
+.carousel-container {
+  flex-grow: 1;
+}
 
-  .card{
-    border:none;
-  }
+
+.image-container img {
+  width: 100%;
+}
+
+.text-align-center-webkit {
+  text-align: -webkit-center;
+}
+
+.card {
+  border: none;
+}

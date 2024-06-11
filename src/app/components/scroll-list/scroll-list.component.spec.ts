@@ -1,19 +1,19 @@
 // file changes made by rashmi on 10-06-2024
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BlogsComponent } from './blogs.component';
+import { ScrollListComponent } from './scroll-list.component';
 
 describe('BlogsComponent', () => {
-  let component: BlogsComponent;
-  let fixture: ComponentFixture<BlogsComponent>;
+  let component: ScrollListComponent;
+  let fixture: ComponentFixture<ScrollListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BlogsComponent]
+      declarations: [ScrollListComponent]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(BlogsComponent);
+    fixture = TestBed.createComponent(ScrollListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

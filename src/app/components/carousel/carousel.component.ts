@@ -1,3 +1,4 @@
+// file changes made by rashmi on 10-06-2024
 import { Component, OnInit } from '@angular/core';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -8,11 +9,16 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 })
 export class CarouselComponent implements OnInit {
 
-  images:any = [];
+  images: string[] = [];
+
   constructor() { }
 
   ngOnInit(): void {
-    this.images = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/900/500`);
+    this.images = [
+      'assets/images/stmarys1.jpg',
+      'assets/images/food4.jpg',
+      'assets/images/madhwasarovar1.jpg'
+    ];
   }
 
 }

@@ -1,3 +1,4 @@
+// file changes made by rashmi on 10-06-2024
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BentoComponent } from './bento.component';
@@ -8,9 +9,9 @@ describe('BentoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BentoComponent ]
+      declarations: [BentoComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(BentoComponent);
     component = fixture.componentInstance;

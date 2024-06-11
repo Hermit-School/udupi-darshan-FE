@@ -1,0 +1,31 @@
+// file changes made by rashmi on 10-06-2024
+.carousel {
+    height: 100%;
+    // height: 697px;
+    // width: 1239px;
+  }
+  
+  // .carousel-inner {
+  //   height: 100%;
+  // }
+  
+  // .carousel-item {
+  //   height: 100%;
+  // }
+  
+  .picsum-img-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Ensure no overflow */
+  }
+  
+  .picsum-img-wrapper img {
+    height: auto; 
+    max-height: 100%;/* Ensures the image fills the height */
+    width: auto;
+    max-width: 100%;  /* Fills the width of the container */
+    object-fit: cover; /* Ensures the image covers the area without stretching */
+    margin: auto; /* Center the image horizontally */
+  }
