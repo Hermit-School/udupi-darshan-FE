@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-interface Card {
-  image: string;
-  title: string;
-}
+import Card from 'src/app/models/interfacename';
 
 @Component({
   selector: 'app-culture',
@@ -103,22 +100,4 @@ export class CultureComponent implements OnInit {
       this.visibleBeachCards = this.beachCards.slice(0, isMobile ? 2 : 4);
     }
   }
-  
 }
-
-
-
-
-
-
-  
-  
-
-  
-
-  
-
-  
-  
-  
-  
