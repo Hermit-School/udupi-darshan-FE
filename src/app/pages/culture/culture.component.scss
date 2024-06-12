@@ -1,29 +1,23 @@
-/* Styles for the heading container */
 .heading-container {
-    background-color: #222831; /* Light black background */
-    height: 25vh; /* Fix the height to 25% of the viewport height */
-    width: 100%; /* Full width */
-    position: relative; /* Change from absolute to relative */
-    left: 0;
+    background-color: #222831; 
+    height: 25vh;
+    width: 100%; 
+    position: relative;
     right: 0;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     margin-bottom: 0;
   }
-  
-  /* Styles for the heading text */
   .heading-text {
-    color: #FFF; /* White text color */
-    margin: 0; /* Remove default margin */
-    z-index: 1; /* Ensure it is above other elements */
+    color: #FFF; 
+    margin: 0;
+    z-index: 1; 
     text-align: center;
   }
-  
-  /* Styles for the design blob */
-  .design-blob {
+.design-blob {
     position: absolute; 
     top: 40%;
     left: 70%;
@@ -31,19 +25,16 @@
     width: 220vw; 
     z-index: 0;
   }
-  
   .navbar {
     background-color: #222831; 
     padding: 10px;
     text-align: center;
 }
-
 .container-fluid{
   background-color: #222831;
 }
 .card{
   border: 2px solid #FFF;
-   
 }
 .card img {
   width: 100%;
@@ -73,7 +64,6 @@ h1{
 .more-cards {
   display: none;
 }
-
 .btn-view-all {
   display: block;
   margin: 20px auto;
@@ -82,7 +72,6 @@ h1{
 .mt-4 {
   margin-top: 0rem !important;
   margin-bottom: 0rem !important;
-
 }
 .wildlife-heading {
   
@@ -93,11 +82,18 @@ color: #FFF;
  font-size: 2rem; 
 }
 .btn {
-
-color: #FF6000;
+  color: #FF6000;
 border-color: #FF6000;
 }
 .gap {
 background-color:#222831;
 padding-bottom: 20px;
 }
+
+
+   
+
+
+
+
+

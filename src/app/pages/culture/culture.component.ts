@@ -25,9 +25,6 @@ export class CultureComponent implements OnInit {
     { image: 'assets/images/matha0.jpg', title: 'Krishna Matha' },
     { image: 'assets/images/matha1.jpg', title: 'kanakana kindi' }
   ];
-
-
-
   wildlifeCards: Card[] = [
     { image: 'assets/images/f1.jpg', title: 'Ashtami' },
     { image: 'assets/images/f2.jpg', title: 'Holi' },
@@ -52,11 +49,9 @@ export class CultureComponent implements OnInit {
     { image: 'assets/images/be9.jpg', title: 'Blue Whale Beach' },
     { image: 'assets/images/be10.jpg', title: 'Kodi Beach' }
   ];
-
   visibleActivityCards: Card[] = [];
   visibleWildlifeCards: Card[] = [];
   visibleBeachCards: Card[] = [];
-
   ngOnInit() {
     this.updateVisibleActivityCards();
     this.updateVisibleWildlifeCards();
@@ -67,38 +62,29 @@ export class CultureComponent implements OnInit {
     document.body.style.overflow = 'auto';
     document.body.style.paddingRight = '0';
   }
-
   ngOnDestroy() {
     window.removeEventListener('resize', this.updateVisibleActivityCards.bind(this));
     window.removeEventListener('resize', this.updateVisibleWildlifeCards.bind(this));
     window.removeEventListener('resize', this.updateVisibleBeachCards.bind(this));
   }
-
-  // Method to toggle the view state for Activity cards
   toggleViewAll() {
     this.viewAll = !this.viewAll;
     this.updateVisibleActivityCards();
   }
-
-  // Method to update the visible Activity cards based on the view state and screen size
   updateVisibleActivityCards() {
-    const isMobile = window.innerWidth < 1000; // Bootstrap's breakpoint for sm
+    const isMobile = window.innerWidth < 1000; 
     if (this.viewAll) {
       this.visibleActivityCards = this.activityCards;
     } else {
       this.visibleActivityCards = this.activityCards.slice(0, isMobile ? 2 : 4);
     }
   }
-
-  // Method to toggle the view state for Wildlife cards
   toggleViewAllWildlife() {
     this.viewAllWildlife = !this.viewAllWildlife;
     this.updateVisibleWildlifeCards();
   }
-
-  // Method to update the visible Wildlife cards based on the view state and screen size
   updateVisibleWildlifeCards() {
-    const isMobile = window.innerWidth < 1000; // Bootstrap's breakpoint for sm
+    const isMobile = window.innerWidth < 1000; 
     if (this.viewAllWildlife) {
       this.visibleWildlifeCards = this.wildlifeCards;
     } else {
@@ -110,7 +96,7 @@ export class CultureComponent implements OnInit {
     this.updateVisibleBeachCards();
   }
   updateVisibleBeachCards() {
-    const isMobile = window.innerWidth < 1000; // Bootstrap's breakpoint for sm
+    const isMobile = window.innerWidth < 1000; 
     if (this.viewAllBeaches) {
       this.visibleBeachCards = this.beachCards;
     } else {
@@ -119,3 +105,20 @@ export class CultureComponent implements OnInit {
   }
   
 }
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  
+  
+  
