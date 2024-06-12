@@ -22,8 +22,8 @@ export class CultureComponent implements OnInit {
     { image: 'assets/images/matha5.jpeg', title: 'Puttige Matha' },
     { image: 'assets/images/matha0.jpg', title: 'Kaniyur Matha' },
     { image: 'assets/images/matha1.jpg', title: 'Adamaru Matha' },
-    { image: 'assets/images/a9.jpg', title: 'Tree Park' },
-    { image: 'assets/images/a10.jfif', title: 'Trigger' }
+    { image: 'assets/images/matha0.jpg', title: 'Krishna Matha' },
+    { image: 'assets/images/matha1.jpg', title: 'kanakana kindi' }
   ];
 
 
@@ -34,11 +34,11 @@ export class CultureComponent implements OnInit {
     { image: 'assets/images/f3.jpg', title: 'Paryaya' },
     { image: 'assets/images/f4.webp', title: 'Dance' },
     { image: 'assets/images/f5.jpg', title: 'Ganesh Chathurthi' },
-    { image: 'assets/images/w6.jpg', title: 'Kaup beach' },
-    { image: 'assets/images/w7.jpg', title: 'Sharavathi' },
-    { image: 'assets/images/w8.jpg', title: 'Shettihalli' },
-    { image: 'assets/images/w9.jpg', title: 'Muthodi' },
-    { image: 'assets/images/w10.jpg', title: 'Malyadi' }
+    { image: 'assets/images/f1.jpg', title: 'Ashtami' },
+    { image: 'assets/images/f2.jpg', title: 'Marnami' },
+    { image: 'assets/images/f4.webp', title: 'Holi' },
+    { image: 'assets/images/f4.webp', title: 'Deepavali' },
+    { image: 'assets/images/f4.webp', title: 'Paryaya' }
   ];
   beachCards: Card[] = [
     { image: 'assets/images/be1.jpg', title: 'Malpe Beach' },
