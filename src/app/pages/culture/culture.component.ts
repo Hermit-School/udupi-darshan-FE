@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import Card from 'src/app/models/interfacename';
+import Card from 'src/app/models/card';
 
 @Component({
   selector: 'app-culture',
