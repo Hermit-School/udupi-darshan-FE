@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbCarouselModule,NgbAlertModule,NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 //Component Imports
 import { BentoComponent } from './components/bento/bento.component';
@@ -19,6 +20,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
+import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,9 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
     NatureComponent,
     CultureComponent,
     AdminComponent,
-    PagenotfoundComponent
+    PagenotfoundComponent,
+    ForgotpasswordComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +48,8 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
     FormsModule,
     ReactiveFormsModule,
     NgbAlertModule,
-    NgbModalModule
+    NgbModalModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
