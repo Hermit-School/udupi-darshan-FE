@@ -7,9 +7,13 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
+  loading = true;
+
   constructor(private router: Router) {}
 
   ngOnInit() {
-
-}
+    setTimeout(() => {
+      this.loading = false;
+    }, 2800);
+  }             
 }
