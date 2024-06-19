@@ -22,6 +22,7 @@ import { CarouselComponent } from './components/carousel/carousel.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { AdvertisementsComponent } from './pages/advertisements/advertisements.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { LoadingComponent } from './components/loading/loading.component';
     AdminComponent,
     PagenotfoundComponent,
     ForgotpasswordComponent,
-    LoadingComponent
+    LoadingComponent,
+    AdvertisementsComponent
   ],
   imports: [
     BrowserModule,
