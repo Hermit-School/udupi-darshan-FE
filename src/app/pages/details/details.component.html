@@ -1,0 +1,610 @@
+<div *ngIf="card" class="card-details">
+  <div class="card-body">
+    <h1>{{ card.title }}</h1>
+
+    <section class="image-gallery" *ngIf="card">
+      <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" (slid.bs.carousel)="onSlideChange($event)">
+        <div class="carousel-inner">
+          <div *ngFor="let image of card.image; let i = index" class="carousel-item" [class.active]="i === 0">
+            <img [src]="image" [alt]="card.title" class="d-block w-100">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" (click)="onPrevClick()" [disabled]="currentSlideIndex === 0">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" (click)="onNextClick()" [disabled]="currentSlideIndex === (card?.image?.length ?? 0) - 1">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    
+      <div class="image-overlay">
+        <div class="image-info">
+          <span>{{ currentSlideIndex + 1 }}/{{ card?.image?.length ?? 0 }}</span>
+        </div>
+      </div>
+    </section>
+    <p>
+      <!-- Main description based on the card id -->
+      <ng-container *ngIf="card.id !== undefined && card.id !== null">
+        <div [ngSwitch]="card.id">
+          <ng-container *ngSwitchCase="1">
+            Hoode Kayakking is an adventurous water sport that involves paddling a kayak on the serene waters of Hoode. It's a thrilling experience for both beginners and experts.
+          </ng-container>
+          <ng-container *ngSwitchCase="2">
+            The Hanging Bridge is a scenic spot offering breathtaking views and a unique walking experience. Perfect for nature lovers and photographers.
+          </ng-container>
+          <ng-container *ngSwitchCase="3">
+            Malpe Sea Walk provides a beautiful path along the coast, offering stunning sea views and a refreshing sea breeze. It's an ideal spot for an evening stroll.
+          </ng-container>
+          <ng-container *ngSwitchCase="4">
+            Malpe Floating Bridge is a unique attraction where you can experience walking on a bridge that floats on water. It's a fun and novel experience for all ages.
+          </ng-container>
+          <ng-container *ngSwitchCase="5">
+            Kaup Light House stands tall on the Kaup Beach, offering panoramic views of the coastline and the Arabian Sea. It's a must-visit for history buffs and photographers.
+          </ng-container>
+          <ng-container *ngSwitchCase="6">
+            Kudlu Falls, also known as Kudlu Theertha Falls, is a majestic waterfall hidden in the Western Ghats. The serene environment and the sound of cascading water make it a perfect spot for nature lovers.
+          </ng-container>
+          <ng-container *ngSwitchCase="7">
+            Manipal Lake is a serene and picturesque spot, perfect for a quiet evening stroll or a relaxing boat ride. The surrounding greenery and calm waters create a peaceful ambiance.
+          </ng-container>
+          <ng-container *ngSwitchCase="8">
+            Ajjarkad Badminton Court is a popular spot for sports enthusiasts. The court is well-maintained and provides a great environment for playing badminton.
+          </ng-container>
+          <ng-container *ngSwitchCase="9">
+            Tree Park is a beautiful, lush park offering a variety of trees and plants. It's an excellent place for a leisurely walk and to enjoy nature.
+          </ng-container>
+          <ng-container *ngSwitchCase="10">
+            Trigger is an adrenaline-pumping adventure activity that offers a range of outdoor experiences. Ideal for thrill-seekers looking for excitement.
+          </ng-container>
+          <ng-container *ngSwitchCase="11">
+            Someshwara Wildlife Sanctuary is a haven for wildlife enthusiasts, offering a chance to see a variety of flora and fauna in their natural habitat.
+          </ng-container>
+          <ng-container *ngSwitchCase="12">
+            Mookambika Wildlife Sanctuary is a biodiverse sanctuary that offers trekking and wildlife spotting opportunities. It's perfect for nature enthusiasts.
+          </ng-container>
+          <ng-container *ngSwitchCase="13">
+            Udupi Goshale is a sanctuary dedicated to the protection and care of cows. It's an educational and serene place to visit.
+          </ng-container>
+          <ng-container *ngSwitchCase="14">
+            Neelavara Goshale is another sanctuary for cows, promoting animal welfare and providing a peaceful environment for visitors.
+          </ng-container>
+          <ng-container *ngSwitchCase="15">
+            Kunjargiri is a hill offering stunning views and a peaceful atmosphere. It's a great spot for meditation and enjoying nature.
+          </ng-container>
+          <ng-container *ngSwitchCase="16">
+            Kaup Beach is known for its beautiful sandy shores and the iconic lighthouse. It's a popular destination for beach lovers.
+          </ng-container>
+          <ng-container *ngSwitchCase="17">
+            Sharavathi Wildlife Sanctuary is a pristine sanctuary that offers trekking and wildlife spotting. It's ideal for those looking to explore untouched nature.
+          </ng-container>
+          <ng-container *ngSwitchCase="18">
+            Shettihalli Wildlife Sanctuary is known for its rich biodiversity and scenic landscapes. It's a perfect spot for wildlife photography and nature walks.
+          </ng-container>
+          <ng-container *ngSwitchCase="19">
+            Muthodi Wildlife Sanctuary, part of the Bhadra Tiger Reserve, offers an opportunity to see tigers and other wildlife in their natural habitat.
+          </ng-container>
+          <ng-container *ngSwitchCase="20">
+            Malyadi Bird Sanctuary is a paradise for bird watchers, offering a chance to see a variety of bird species in their natural environment.
+          </ng-container>
+          <ng-container *ngSwitchCase="21">
+            Malpe Beach is a popular beach known for its golden sands and clear waters. It's a perfect spot for swimming, sunbathing, and beach activities.
+          </ng-container>
+          <ng-container *ngSwitchCase="22">
+            Delta Beach is a serene and lesser-known beach offering a peaceful environment and beautiful views of the confluence of the river and the sea.
+          </ng-container>
+          <ng-container *ngSwitchCase="23">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="31">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="32">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="33">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="34">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="35">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="36">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="37">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="38">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="39">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="40">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="41">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="42">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="43">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="44">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="45">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="46">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="47">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="48">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="49">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="50">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="51">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="52">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="53">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="54">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="55">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="56">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="57">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="58">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="59">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+          <ng-container *ngSwitchCase="60">
+            Manipal End Point offers breathtaking views of the surrounding landscapes and is a popular spot for students and locals to relax and enjoy the scenery.
+          </ng-container>
+
+        <ng-container *ngSwitchDefault>No description available.</ng-container>
+        </div>
+      </ng-container>
+    </p>
+
+    <section class="tips">
+      <h2>Tips</h2>
+      <ul>
+        <!-- Tips content based on the card id -->
+        <li *ngIf="card.id === 1">Wear a life jacket and follow the guide's instructions.</li>
+        <li *ngIf="card.id === 2">Wear comfortable shoes for walking on the bridge.</li>
+        <li *ngIf="card.id === 3">Carry a camera to capture the stunning views.</li>
+        <li *ngIf="card.id === 4">Be cautious while walking on the floating bridge.</li>
+        <li *ngIf="card.id === 5">Visit during the early morning or late afternoon for the best light and fewer crowds.</li>
+        <li *ngIf="card.id === 6">Wear sturdy shoes as the path to the falls can be slippery.</li>
+        <li *ngIf="card.id === 7">Carry water and snacks, and enjoy a peaceful boat ride.</li>
+        <li *ngIf="card.id === 8">Book the court in advance to ensure availability.</li>
+        <li *ngIf="card.id === 9">Visit during the early morning or late afternoon for a peaceful walk.</li>
+        <li *ngIf="card.id === 10">Follow all safety instructions provided by the activity operators.</li>
+        <li *ngIf="card.id === 11">Carry binoculars for better wildlife viewing.</li>
+        <li *ngIf="card.id === 12">Wear comfortable trekking shoes and carry sufficient water.</li>
+        <li *ngIf="card.id === 13">Learn about the importance of animal welfare during your visit.</li>
+        <li *ngIf="card.id === 14">Respect the animals and the environment during your visit.</li>
+        <li *ngIf="card.id === 15">Carry water and snacks, and enjoy the peaceful surroundings.</li>
+        <li *ngIf="card.id === 16">Carry sunscreen and stay hydrated while enjoying the beach.</li>
+        <li *ngIf="card.id === 17">Hire a local guide for the best trekking experience.</li>
+        <li *ngIf="card.id === 18">Wear comfortable shoes and be prepared for a nature walk.</li>
+        <li *ngIf="card.id === 19">Book your visit in advance and follow the sanctuary's guidelines.</li>
+        <li *ngIf="card.id === 20">Carry binoculars and a camera for bird watching.</li>
+        <li *ngIf="card.id === 21">Visit early in the morning or late in the afternoon to avoid crowds.</li>
+        <li *ngIf="card.id === 22">Pack a picnic and enjoy the serene environment.</li>
+        <li *ngIf="card.id === 23">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 31">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 32">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 33">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 34">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 35">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 36">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 37">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 38">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 39">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 40">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 41">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 42">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 43">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 44">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 45">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 46">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 47">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 48">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 49">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 50">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 51">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 52">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 53">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 54">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 55">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 56">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 57">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 58">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 59">Visit during sunset for a spectacular view.</li>
+        <li *ngIf="card.id === 60">Come here to find peace at its best.</li>
+        
+        <!-- Add more tips as needed -->
+      </ul>
+    </section>
+    <section class="best-time">
+      <h2>Best Time to Visit</h2>
+      <p *ngIf="card.id === 1">Early morning or late afternoon for pleasant weather and calm waters.</p>
+      <p *ngIf="card.id === 2">During the monsoon season for the best views of the surrounding greenery.</p>
+      <p *ngIf="card.id === 3">Evenings for a beautiful sunset view.</p>
+      <p *ngIf="card.id === 4">Anytime during the day, but avoid peak hours for a less crowded experience.</p>
+      <p *ngIf="card.id === 5">Early morning or late afternoon for the best light and fewer crowds.</p>
+      <p *ngIf="card.id === 6">During the monsoon season when the falls are at their fullest.</p>
+      <p *ngIf="card.id === 7">Evenings for a peaceful and relaxing experience.</p>
+      <p *ngIf="card.id === 8">Early mornings for a fresh start and less crowded environment.</p>
+      <p *ngIf="card.id === 9">During spring and autumn for the best weather conditions.</p>
+      <p *ngIf="card.id === 10">Anytime during the day, but morning sessions are generally more active.</p>
+      <p *ngIf="card.id === 11">Early morning or late afternoon for optimal wildlife viewing.</p>
+      <p *ngIf="card.id === 12">During the cooler months from November to February.</p>
+      <p *ngIf="card.id === 13">Anytime during the day, but avoid the hottest part of the afternoon.</p>
+      <p *ngIf="card.id === 14">Morning visits are best for a more serene experience.</p>
+      <p *ngIf="card.id === 15">Early morning for the best views and fewer crowds.</p>
+      <p *ngIf="card.id === 16">During the cooler months from November to February.</p>
+      <p *ngIf="card.id === 17">Early morning for the best chance to see wildlife.</p>
+      <p *ngIf="card.id === 18">During the monsoon season for lush greenery and active wildlife.</p>
+      <p *ngIf="card.id === 19">Early morning or late afternoon for optimal wildlife sightings.</p>
+      <p *ngIf="card.id === 20">Early morning for the best bird watching opportunities.</p>
+      <p *ngIf="card.id === 21">Early morning or late afternoon to avoid the heat and crowds.</p>
+      <p *ngIf="card.id === 22">Early morning for a peaceful experience with fewer people.</p>
+      <p *ngIf="card.id === 23">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 31">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 32">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 33">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 34">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 35">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 36">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 37">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 38">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 39">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 40">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 41">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 42">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 43">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 44">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 45">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 46">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 47">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 48">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 49">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 50">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 51">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 52">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 53">Early mornings to hear the melody of bhajans</p>
+      <p *ngIf="card.id === 54">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 55">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 56">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 57">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 58">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 59">Sunset for the most spectacular views.</p>
+      <p *ngIf="card.id === 60">Sunset for the most spectacular views.</p>
+      </section>
+
+<section class="how-to-visit">
+      <h2>How To Visit?</h2>
+      <p *ngIf="card.id === 1"><strong>By Car:</strong> Take a scenic drive to the location.</p>
+  <p *ngIf="card.id === 1"><strong>By Public Transport:</strong> Use local buses or taxis.</p>
+  <p *ngIf="card.id === 1"><strong>By Bike:</strong> Ideal for a bike ride with beautiful views.</p>
+
+  <p *ngIf="card.id === 2"><strong>By Car:</strong> Drive from Bangalore via the Yeshwanthpura-Yelahanka route. The journey takes about an hour, depending on traffic.</p>
+  <p *ngIf="card.id === 2"><strong>By Public Transport:</strong> Take a bus from Bangalore to Hesaraghatta. From Hesaraghatta village, hire an auto-rickshaw or taxi to reach the falls.</p>
+  <p *ngIf="card.id === 2"><strong>By Bike:</strong> The route is scenic and ideal for a bike ride.</p>
+
+  <p *ngIf="card.id === 3"><strong>By Car:</strong> Drive along the coastal road for beautiful sea views.</p>
+  <p *ngIf="card.id === 3"><strong>By Public Transport:</strong> Local buses are available to the seafront area.</p>
+  <p *ngIf="card.id === 3"><strong>By Bike:</strong> Enjoy a scenic bike ride along the coast.</p>
+
+  <p *ngIf="card.id === 4"><strong>By Car:</strong> Drive to the designated parking area near the bridge.</p>
+  <p *ngIf="card.id === 4"><strong>By Public Transport:</strong> Local buses or taxis are available.</p>
+  <p *ngIf="card.id === 4"><strong>By Bike:</strong> The location is accessible by bike.</p>
+    
+      <p *ngIf="card.id === 5"><strong>By Car:</strong> Drive to the designated parking area near the attraction.</p>
+      <p *ngIf="card.id === 5"><strong>By Public Transport:</strong> Take a bus or train to the nearest station. From there, use local transportation to reach the site.</p>
+      <p *ngIf="card.id === 5"><strong>By Bike:</strong> Ride along scenic routes to the destination.</p>
+    
+      <p *ngIf="card.id === 6"><strong>By Car:</strong> Drive to the base of the falls, then follow the marked trail.</p>
+      <p *ngIf="card.id === 6"><strong>By Public Transport:</strong> Take a bus to the nearest stop. From there, walk or hire a taxi to the falls.</p>
+      <p *ngIf="card.id === 6"><strong>By Bike:</strong> Bike along scenic paths to the falls entrance.</p>
+    
+      <p *ngIf="card.id === 7"><strong>By Car:</strong> Drive to the lake's parking area and walk along the designated path.</p>
+      <p *ngIf="card.id === 7"><strong>By Public Transport:</strong> Take a bus to the lake area. From there, walk to the lakefront.</p>
+      <p *ngIf="card.id === 7"><strong>By Bike:</strong> Enjoy a bike ride to the lake entrance.</p>
+    
+      <p *ngIf="card.id === 8"><strong>By Car:</strong> Drive to the designated parking area near the badminton court.</p>
+      <p *ngIf="card.id === 8"><strong>By Public Transport:</strong> Use local buses or taxis to reach the court.</p>
+      <p *ngIf="card.id === 8"><strong>By Bike:</strong> Bike along scenic routes to the court.</p>
+    
+      <p *ngIf="card.id === 9"><strong>By Car:</strong> Drive to the entrance of the tree park.</p>
+      <p *ngIf="card.id === 9"><strong>By Public Transport:</strong> Take a bus to the park entrance.</p>
+      <p *ngIf="card.id === 9"><strong>By Bike:</strong> Bike through scenic trails to the park.</p>
+    
+      <p *ngIf="card.id === 10"><strong>By Car:</strong> Drive to the designated parking area near the trigger site.</p>
+      <p *ngIf="card.id === 10"><strong>By Public Transport:</strong> Take a bus or train to the nearest stop. From there, use local transportation to reach the trigger site.</p>
+      <p *ngIf="card.id === 10"><strong>By Bike:</strong> Ride along scenic routes to the trigger site.</p>
+    
+      <p *ngIf="card.id === 11"><strong>By Car:</strong> Drive to the Someshwara temple's parking area.</p>
+      <p *ngIf="card.id === 11"><strong>By Public Transport:</strong> Take a bus to the temple entrance.</p>
+      <p *ngIf="card.id === 11"><strong>By Bike:</strong> Bike through scenic paths to the temple.</p>
+    
+      <p *ngIf="card.id === 12"><strong>By Car:</strong> Drive to the wildlife sanctuary entrance.</p>
+      <p *ngIf="card.id === 12"><strong>By Public Transport:</strong> Take a bus to the sanctuary.</p>
+      <p *ngIf="card.id === 12"><strong>By Bike:</strong> Bike through the sanctuary trails.</p>
+    
+      <p *ngIf="card.id === 13"><strong>By Car:</strong> Drive to the Goshale entrance.</p>
+      <p *ngIf="card.id === 13"><strong>By Public Transport:</strong> Take a bus to the Goshale area.</p>
+      <p *ngIf="card.id === 13"><strong>By Bike:</strong> Bike through scenic routes to the Goshale.</p>
+    
+      <p *ngIf="card.id === 14"><strong>By Car:</strong> Drive to the Goshale entrance.</p>
+      <p *ngIf="card.id === 14"><strong>By Public Transport:</strong> Take a bus to the Goshale area.</p>
+      <p *ngIf="card.id === 14"><strong>By Bike:</strong> Bike through scenic routes to the Goshale.</p>
+    
+      <p *ngIf="card.id === 15"><strong>By Car:</strong> Drive to the Kunjargiri hill parking area.</p>
+      <p *ngIf="card.id === 15"><strong>By Public Transport:</strong> Take a bus to the hill base.</p>
+      <p *ngIf="card.id === 15"><strong>By Bike:</strong> Bike through scenic routes to the hilltop.</p>
+    
+      <p *ngIf="card.id === 16"><strong>By Car:</strong> Drive to the Kaup beach parking area.</p>
+      <p *ngIf="card.id === 16"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 16"><strong>By Bike:</strong> Bike along coastal routes to the beach.</p>
+    
+      <p *ngIf="card.id === 17"><strong>By Car:</strong> Drive to the Sharavathi river entrance.</p>
+      <p *ngIf="card.id === 17"><strong>By Public Transport:</strong> Take a bus to the river bank.</p>
+      <p *ngIf="card.id === 17"><strong>By Bike:</strong> Bike through scenic paths to the river.</p>
+    
+      <p *ngIf="card.id === 18"><strong>By Car:</strong> Drive to the Shettihalli parking area.</p>
+      <p *ngIf="card.id === 18"><strong>By Public Transport:</strong> Take a bus to the village. From there, walk or hire a taxi to the location.</p>
+      <p *ngIf="card.id === 18"><strong>By Bike:</strong> Bike along scenic routes to Shettihalli.</p>
+    
+      <p *ngIf="card.id === 19"><strong>By Car:</strong> Drive to the Muthodi forest entrance.</p>
+      <p *ngIf="card.id === 19"><strong>By Public Transport:</strong> Take a bus to the forest area.</p>
+      <p *ngIf="card.id === 19"><strong>By Bike:</strong> Bike through the forest trails.</p>
+    
+      <p *ngIf="card.id === 20"><strong>By Car:</strong> Drive to the Malyadi village parking area.</p>
+      <p *ngIf="card.id === 20"><strong>By Public Transport:</strong> Take a bus to the village.</p>
+      <p *ngIf="card.id === 20"><strong>By Bike:</strong> Bike through scenic routes to Malyadi.</p>
+    
+      <p *ngIf="card.id === 21"><strong>By Car:</strong> Drive to the Malpe beach parking area.</p>
+      <p *ngIf="card.id === 21"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 21"><strong>By Bike:</strong> Bike along coastal routes to Malpe beach.</p>
+    
+      <p *ngIf="card.id === 22"><strong>By Car:</strong> Drive to the Kaup beach parking area.</p>
+      <p *ngIf="card.id === 22"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 22"><strong>By Bike:</strong> Bike along coastal routes to Kaup beach.</p>
+    
+      <p *ngIf="card.id === 23"><strong>By Car:</strong> Drive to the Delta beach parking area.</p>
+      <p *ngIf="card.id === 23"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 23"><strong>By Bike:</strong> Bike along coastal routes to Delta beach.</p>
+    
+      <p *ngIf="card.id === 24"><strong>By Car:</strong> Drive to the Padukere beach parking area.</p>
+      <p *ngIf="card.id === 24"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 24"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+    
+      <p *ngIf="card.id === 25"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 25"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 25"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 31"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 31"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 31"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 32"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 32"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 32"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 33"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 33"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 33"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 34"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 34"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 34"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 35"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 35"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 35"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 36"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 36"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 36"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 37"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 37"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 37"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 38"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 38"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 38"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 39"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 39"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 39"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 40"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 40"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 40"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 41"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 41"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 41"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 42"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 42"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 42"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 43"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 43"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 43"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 44"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 44"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 44"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 45"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 45"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 45"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 46"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 46"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 46"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 47"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 47"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 47"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 48"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 48"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 48"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 49"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 49"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 49"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 50"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 50"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 50"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 51"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 51"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 51"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 52"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 52"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 52"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 53"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 53"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 53"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 54"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 54"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 54"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 55"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 55"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 55"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 56"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 56"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 56"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 57"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 57"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 57"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+      <p *ngIf="card.id === 58"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 58"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 58"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+
+      <p *ngIf="card.id === 60"><strong>By Car:</strong> Drive to the Maravante beach parking area.</p>
+      <p *ngIf="card.id === 60"><strong>By Public Transport:</strong> Take a bus to the beach entrance.</p>
+      <p *ngIf="card.id === 60"><strong>By Bike:</strong> Bike along coastal routes to Padukere beach.</p>
+
+</section>
+</div>
+
+<div class="navbar bg-dark">
+  <h1 class="text-white fw-bold">Don't Miss These</h1>
+</div>
+<div class="container-fluid">
+  <div class="row card-container">
+    <!-- Existing Cards -->
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/b1.jpeg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">Kaup Light house</h5>
+          <hr>
+          <p class="card-text text-color">Quite evident by the name, there is a lighthouse on the beach which promises panoramic views of the sea, the beach and the neighbouring areas.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details--></small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/bl2.webp" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">Malpe Beach</h5>
+          <hr>
+          <p class="card-text text-color">Malpe is one of the exquisite unexplored beaches of the Indian West Coast. Located at the mouth of the Udayavar River, the most famous being St. Mary’s Island.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details--></small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/bl4.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">Krishna Matta</h5>
+          <hr>
+          <p class="card-text text-color">The story of this temple starts with the birth of a child to a couple called Narayana Bhatta and his wife Vedavati in a village called Pajakakshetra near Udupi.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details--></small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/bl5.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">Maravante Beach</h5>
+          <hr>
+          <p class="card-text text-color">Maravanthe is a uniquely positioned beach in Coastal Karnataka with Arabian Sea on one side and Souparnika river on the other.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details--></small>
+        </div>
+      </div>
+    </div>
+    <!-- New Card -->
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card h-100">
+        <img src="assets/images/be8.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">Delta Point</h5>
+          <hr>
+          <p class="card-text text-color">The only place where you get to see the sea and the river meet.</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-small">View Details--></small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

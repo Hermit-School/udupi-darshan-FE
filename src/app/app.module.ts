@@ -34,7 +34,7 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
     NatureComponent,
     CultureComponent,
     AdminComponent,
-    PagenotfoundComponent
+    PagenotfoundComponent,
   ],
   imports: [
     BrowserModule,

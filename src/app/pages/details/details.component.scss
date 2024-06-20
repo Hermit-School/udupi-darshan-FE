@@ -1,0 +1,223 @@
+.card-details {
+  background-color: #222831;
+  color: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  width: 100%; 
+  box-sizing: border-box; 
+  border-radius: 0;
+  margin: 0 auto; 
+}
+.card-details img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+.card-details h1 {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  text-align: left; 
+}
+.card-details p {
+  margin-bottom: 1em;
+  line-height: 1.6;
+  text-align: left;   
+}
+.card-details h2 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  text-align: left; 
+}
+.card-details ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+  text-align: left; 
+}
+.card-details li {
+  margin-bottom: 0.5em;
+  text-align: left; 
+}
+.card-details .tips,
+.card-details .best-time,
+.card-details .how-to-visit {
+  margin-bottom: 20px;
+  text-align: left; 
+}
+.card-details .tips h2,
+.card-details .best-time h2,
+.card-details .how-to-visit h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: left; 
+}
+.card-details .tips ul,
+.card-details .best-time ul,
+.card-details .how-to-visit ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  text-align: left; 
+}
+.card-details .tips li,
+.card-details .best-time li,
+.card-details .how-to-visit li {
+  margin-bottom: 0.5em;
+  text-align: left; 
+}
+
+.card-details .tips p,
+.card-details .best-time p,
+.card-details .how-to-visit p {
+  margin-bottom: 1em;
+  text-align: left; 
+}
+.card-details .tips strong,
+.card-details .best-time strong,
+.card-details .how-to-visit strong {
+  font-weight: bold;
+}
+.card-details .how-to-visit p {
+  margin-bottom: 1em;
+  text-align: left; 
+}
+.card-details .how-to-visit p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 768px) {
+  .card-details .card-img-top {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+  }
+}
+.big-image-container {
+  margin-top: 20px;
+}
+.big-image-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+.image-gallery {
+  position: relative;
+  width: 100%;
+  max-width: 600px; 
+  margin: 0 auto;
+}
+.carousel {
+  position: relative;
+  width: 100%;
+}
+.carousel-inner {
+  width: 100%;
+}
+.carousel-item img {
+  width: 100%;
+}
+.image-gallery h2 {
+  text-align: center;
+}
+.image-gallery .image-container {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  height: 400px; 
+  margin-bottom: 20px; 
+}
+.image-gallery .main-image {
+  display: block;
+  max-width: 100%; 
+  max-height: 100%; 
+  object-fit: cover; 
+}
+.image-gallery .image-info {
+  position: absolute;
+  bottom: 10px;
+  right: 10px; 
+  color: white;
+  font-size: 18px;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.5); 
+  border-radius: 5px;
+}
+.image-gallery .arrow-button {
+  position: absolute;
+  top: 20px; 
+  right: 20px; 
+  background: rgba(255, 255, 255, 0.5); 
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%; 
+  z-index: 1; 
+}
+.image-gallery .arrow-button span {
+  font-size: 24px; 
+}
+.carousel-control-prev,
+.carousel-control-next {
+  cursor: pointer;
+}
+.navbar {
+  background-color: #222831;
+  padding: 10px 0;
+  text-align: center;
+}
+.navbar h1 {
+  margin: 0;
+}
+.card {
+  background-color: #222831;
+  border: 0.1rem solid #faf9f8fe;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 17rem;
+}
+.card-title {
+  font-size: 1.25rem;
+  text-decoration: underline;
+  color: #ff6000; 
+}
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+.container-fluid {
+  background-color: #222831;
+}
+.text-color {
+  color: #fff;
+}
+.card-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-height: 100%;
+  height: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.2rem;
+}
+.row > * {
+  flex-shrink: inherit;
+}
+.card-footer {
+  background-color: #222831;
+  border-top: 0.01rem solid rgba(247, 244, 244, 0.753);
+}
+.text-small {
+  color: #ff6000;
+}
+.footer {
+  background-color: #222831;
+}
+.btn {
+  color: #ff6000;
+  border-color: #ff6000;
+  font-size: large;
+}
