@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivityCards } from 'src/app/models/activityCards';
 import Card from 'src/app/models/card';
+import { CultureService } from 'src/app/services/culture-service.service';
 
 @Component({
   selector: 'app-culture',
@@ -49,6 +51,9 @@ export class CultureComponent implements OnInit {
   visibleActivityCards: Card[] = [];
   visibleWildlifeCards: Card[] = [];
   visibleBeachCards: Card[] = [];
+  activityCardsdata :any;
+
+  constructor(private cultureService: CultureService) { }
   ngOnInit() {
     this.updateVisibleActivityCards();
     this.updateVisibleWildlifeCards();
@@ -58,6 +63,13 @@ export class CultureComponent implements OnInit {
     window.addEventListener('resize', this.updateVisibleBeachCards.bind(this));
     document.body.style.overflow = 'auto';
     document.body.style.paddingRight = '0';
+
+    this.loadData();
+  }
+  loadData() {
+    this.cultureService.getCultureData().subscribe(data => {
+      this.activityCardsdata = data.activityCards;
+    })
   }
   ngOnDestroy() {
     window.removeEventListener('resize', this.updateVisibleActivityCards.bind(this));
@@ -69,7 +81,7 @@ export class CultureComponent implements OnInit {
     this.updateVisibleActivityCards();
   }
   updateVisibleActivityCards() {
-    const isMobile = window.innerWidth < 1000; 
+    const isMobile = window.innerWidth < 1000;
     if (this.viewAll) {
       this.visibleActivityCards = this.activityCards;
     } else {
@@ -81,7 +93,7 @@ export class CultureComponent implements OnInit {
     this.updateVisibleWildlifeCards();
   }
   updateVisibleWildlifeCards() {
-    const isMobile = window.innerWidth < 1000; 
+    const isMobile = window.innerWidth < 1000;
     if (this.viewAllWildlife) {
       this.visibleWildlifeCards = this.wildlifeCards;
     } else {
@@ -93,7 +105,7 @@ export class CultureComponent implements OnInit {
     this.updateVisibleBeachCards();
   }
   updateVisibleBeachCards() {
-    const isMobile = window.innerWidth < 1000; 
+    const isMobile = window.innerWidth < 1000;
     if (this.viewAllBeaches) {
       this.visibleBeachCards = this.beachCards;
     } else {

@@ -23,6 +23,7 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { AdvertisementsComponent } from './pages/advertisements/advertisements.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { AdvertisementsComponent } from './pages/advertisements/advertisements.c
     ReactiveFormsModule,
     NgbAlertModule,
     NgbModalModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

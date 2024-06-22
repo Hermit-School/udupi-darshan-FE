@@ -1,0 +1,44 @@
+{
+    "activityCards": [
+        {
+            "image": "assets/images/matha0.jpg",
+            "title": "Palimaru Matha"
+        },
+        {
+            "image": "assets/images/matha1.jpg",
+            "title": "Krishnapura Matha"
+        },
+        {
+            "image": "assets/images/udupi3.jpg",
+            "title": "Shiroor Matha"
+        },
+        {
+            "image": "assets/images/matha3.jpg",
+            "title": "Sode Matha"
+        },
+        {
+            "image": "assets/images/matha5.jpeg",
+            "title": "Pejavara Matha"
+        },
+        {
+            "image": "assets/images/matha5.jpeg",
+            "title": "Puttige Matha"
+        },
+        {
+            "image": "assets/images/matha0.jpg",
+            "title": "Kaniyur Matha"
+        },
+        {
+            "image": "assets/images/matha1.jpg",
+            "title": "Adamaru Matha"
+        },
+        {
+            "image": "assets/images/matha0.jpg",
+            "title": "Krishna Matha"
+        },
+        {
+            "image": "assets/images/matha1.jpg",
+            "title": "kanakana kindi"
+        }
+    ]
+}
