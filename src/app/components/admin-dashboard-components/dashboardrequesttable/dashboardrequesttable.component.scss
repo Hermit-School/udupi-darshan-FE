@@ -1,0 +1,19 @@
+.search-section{
+    background-color: var(--igx-grid-toolbar-background-color, hsla(var(--ig-primary-500), var(--ig-primary-a)));
+}
+
+.dash-card{
+    border:none;
+    box-shadow: 0 0 2rem #2930421a;
+}
+
+.border-none{
+    border:none;
+}
+
+.table-hover {
+    > tbody > tr:hover > * {
+      background-color: rgb(207, 226, 255);
+      color:white;
+    }
+  }

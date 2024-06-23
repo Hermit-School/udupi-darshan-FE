@@ -8,6 +8,7 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { AdminComponent } from './pages/admin/admin.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
+import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
   
 const routes: Routes = [
     // Default route
@@ -19,6 +20,7 @@ const routes: Routes = [
     { path: 'home', component: LandingPageComponent },
     { path: '404', component: PagenotfoundComponent },
     { path: 'forgotpassword', component: ForgotpasswordComponent },
+    { path: 'admindashboard', component: AdmindashboardComponent },
     { path: '**', redirectTo: '404', pathMatch: 'full' },
   ];
 @NgModule({
