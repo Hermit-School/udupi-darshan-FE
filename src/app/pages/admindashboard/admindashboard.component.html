@@ -38,7 +38,9 @@
     </div>
     <div class="row mt-3">
       <div class="container-fluid ">
-        <app-dashboardrequesttable [data]="adminNewEntryListData"></app-dashboardrequesttable>
+        <ng-container *ngIf="adminNewEntryListData$">
+        <app-dashboardrequesttable [data]="adminNewEntryListData$"></app-dashboardrequesttable>
+      </ng-container>
       </div>
     </div>
   </div>

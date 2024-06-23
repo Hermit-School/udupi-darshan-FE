@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AdminNewEntriesInterface } from 'src/app/models/adminnewentrydata';
 import { AdminserviceService } from 'src/app/services/adminservice.service';
 
@@ -9,19 +9,17 @@ import { AdminserviceService } from 'src/app/services/adminservice.service';
 })
 export class AdmindashboardComponent implements OnInit {
 
-  adminNewEntryListData: AdminNewEntriesInterface | undefined;
-  flag = true;
+  adminNewEntryListData$: AdminNewEntriesInterface | undefined;
 
   constructor(private adminService: AdminserviceService) {
     this.onLoadData();
    }
-
   ngOnInit(): void {
   }
   onLoadData() {
     this.adminService.adminEntryData.subscribe((data) => {
       console.log(data);
-      this.adminNewEntryListData = data;
+      this.adminNewEntryListData$ = data;
     })
   }
 
