@@ -4,6 +4,6 @@ export interface AdminNewEntriesInterface{
         name: string,
         postedtime: number,
         location: string,
-        population: string
+        detail: string
     ]
 }

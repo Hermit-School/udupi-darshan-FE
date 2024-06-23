@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgbCarouselModule,NgbAlertModule,NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 //Component Imports
 import { BentoComponent } from './components/bento/bento.component';
@@ -27,6 +28,7 @@ import { AdvertisementsComponent } from './pages/advertisements/advertisements.c
 import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
 import { DashboardnavbarComponent } from './components/admin-dashboard-components/dashboardnavbar/dashboardnavbar.component';
 import { DashboardrequesttableComponent } from './components/admin-dashboard-components/dashboardrequesttable/dashboardrequesttable.component';
+import { ListFilterPipe } from '../app/util/list-filter';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { DashboardrequesttableComponent } from './components/admin-dashboard-com
     AdvertisementsComponent,
     AdmindashboardComponent,
     DashboardnavbarComponent,
-    DashboardrequesttableComponent
+    DashboardrequesttableComponent,
+    ListFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -59,7 +62,8 @@ import { DashboardrequesttableComponent } from './components/admin-dashboard-com
     NgbAlertModule,
     NgbModalModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]

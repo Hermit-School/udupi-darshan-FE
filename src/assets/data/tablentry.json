@@ -4,55 +4,55 @@
             "name": "Fazeel",
             "postedtime": 1719096915,
             "location": "Toronto",
-            "population": "146989754"
+            "detail": "146989754"
         },
         {
             "id": 2,
             "name": "Tejasvi",
             "postedtime": 1719096915,
             "location": "Manipal",
-            "population": "64979548"
+            "detail": "64979548"
         },
         {
             "id": 3,
             "name": "Rashmi",
             "postedtime": 1719096915,
             "location": "KEB",
-            "population": "82114224"
+            "detail": "82114224"
         },
         {
             "id": 4,
             "name": "Sulaxmi",
             "postedtime": 1719096915,
             "location": "Udupi",
-            "population": "10329506"
+            "detail": "10329506"
         },
         {
             "id": 5,
             "name": "Anusha",
             "postedtime": 1719096915,
-            "area": "Malpe",
-            "population": "36624199"
+            "location": "Malpe",
+            "detail": "36624199"
         },
         {
             "id": 6,
             "name": "Varshini",
             "postedtime": 1719096915,
-            "area": "Uknown",
-            "population": "95540800"
+            "location": "Uknown",
+            "detail": "95540800"
         },
         {
             "id": 7,
             "name": "Vishwaguru Pai",
             "postedtime": 1719096915,
-            "area": "Kadiyali",
-            "population": "209288278"
+            "location": "Kadiyali",
+            "detail": "209288278"
         },
         {
             "id": 8,
             "name": "King Statue",
             "postedtime": 1719096915,
-            "area": "Kankanady",
-            "population": "129163276"
+            "location": "Kankanady",
+            "detail": "129163276"
         }
 ]
