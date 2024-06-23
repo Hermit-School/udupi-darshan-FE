@@ -1,0 +1,64 @@
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-9 card border-none bg-white">
+
+            <div class="m-3">
+                <div class="search-section">
+                <form>
+                  <div class="form-group form-inline">
+                    Search entry by name:
+                    <input
+                      class="form-control ml-2"
+                      type="text"
+                      name="searchTerm"
+                      [(ngModel)]="searchTerm"
+                      (input)="search($event)"
+                    />
+                  </div>
+                </form>
+                </div>
+                <table class="table table-borderless table-hover mt-3 caption-top">
+                    <caption>Review List</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col" sortable="name">Name</th>
+                      <th scope="col" sortable="postedtime">Posted Time</th>
+                      <th scope="col" sortable="location">Location</th>
+                      <th scope="col" sortable="detail">Detail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let data of adminNewEntryListData; index as i">
+                      <tr
+                        [style.display]="
+                          i / pageSize >= page || i / pageSize < page - 1 ? 'none' : null
+                        "
+                      >
+                        <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+                        <td>
+                          {{ data.name }}
+                        </td>
+                        <td>{{ unixTimestampToDate(data.postedtime) }}</td>
+                        <td>{{ data.location }}</td>
+                        <td><i class="bi bi-eye-fill"></i></td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              
+                <ngb-pagination
+                  [collectionSize]="collectionSize"
+                  [(page)]="page"
+                  [maxSize]="5"
+                  [boundaryLinks]="true"
+                  [pageSize]="pageSize"
+                  class="d-flex justify-content-center"
+                ></ngb-pagination>
+              </div>
+
+        </div>
+        <div class="col-2"></div>
+    </div>
+</div>
