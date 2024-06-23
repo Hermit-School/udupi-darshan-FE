@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbCarouselModule,NgbAlertModule,NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 //Component Imports
 import { BentoComponent } from './components/bento/bento.component';
@@ -23,6 +24,9 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { AdvertisementsComponent } from './pages/advertisements/advertisements.component';
+import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
+import { DashboardnavbarComponent } from './components/admin-dashboard-components/dashboardnavbar/dashboardnavbar.component';
+import { DashboardrequesttableComponent } from './components/admin-dashboard-components/dashboardrequesttable/dashboardrequesttable.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +45,10 @@ import { AdvertisementsComponent } from './pages/advertisements/advertisements.c
     PagenotfoundComponent,
     ForgotpasswordComponent,
     LoadingComponent,
-    AdvertisementsComponent
+    AdvertisementsComponent,
+    AdmindashboardComponent,
+    DashboardnavbarComponent,
+    DashboardrequesttableComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +58,8 @@ import { AdvertisementsComponent } from './pages/advertisements/advertisements.c
     ReactiveFormsModule,
     NgbAlertModule,
     NgbModalModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
