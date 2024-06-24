@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbCarouselModule,NgbAlertModule,NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 //Component Imports
 import { BentoComponent } from './components/bento/bento.component';
@@ -41,7 +42,7 @@ import { AdvertisementsComponent } from './pages/advertisements/advertisements.c
     PagenotfoundComponent,
     ForgotpasswordComponent,
     LoadingComponent,
-    AdvertisementsComponent
+    AdvertisementsComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +52,9 @@ import { AdvertisementsComponent } from './pages/advertisements/advertisements.c
     ReactiveFormsModule,
     NgbAlertModule,
     NgbModalModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

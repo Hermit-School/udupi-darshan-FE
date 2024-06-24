@@ -17,13 +17,13 @@ const routes: Routes = [
     {path:'advertisements',component:AdvertisementsComponent},
     { path: 'admin', component: AdminComponent },
     { path: 'home', component: LandingPageComponent },
-    { path: 'details/:id', component: DetailsComponent }, 
+    { path: 'details/:category/:id', component: DetailsComponent }, 
     { path: '404', component: PagenotfoundComponent },
     { path: 'forgotpassword', component: ForgotpasswordComponent },
     { path: '**', redirectTo: '404', pathMatch: 'full' },
   ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{useHash: true})],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

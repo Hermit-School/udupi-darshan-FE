@@ -9,9 +9,9 @@
   <!-- Card Section -->
   <div class="container-fluid mt-4">
     <div class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-4 g-4">
-      <div class="col" *ngFor="let card of visibleActivityCards" (click)="goToDetails(card.id)">
+      <div class="col" *ngFor="let card of visibleCultureCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
           <div class="card-body">
             <h5 class="card-title">{{ card.title }}</h5>
           </div>
@@ -28,7 +28,7 @@
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleActivityCards" (click)="goToDetails(card.id)">
         <div class="card h-100" >
-          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
           <div class="card-body">
             <h5 class="card-title">{{ card.title }}</h5>
           </div>
@@ -37,7 +37,7 @@
     </div>
     <div class="text-center mt-3">
       <button class="btn btn-view-all mt-4" (click)="toggleViewAll()">
-        {{ viewAll ? 'View Less' : 'View All' }}
+        {{ viewAllActivity ? 'View Less' : 'View All' }}
       </button>
     </div>
   </div>
@@ -48,7 +48,7 @@
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleWildlifeCards" (click)="goToDetails(card.id)">
         <div class="card h-100" >
-          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
           <div class="card-body">
             <h5 class="card-title">{{ card.title }}</h5>
           </div>
@@ -69,14 +69,14 @@
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleBeachCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
           <div class="card-body">
             <h5 class="card-title">{{ card.title }}</h5>
           </div>
         </div>
       </div>
     </div>
-    <div class="text-center mt-3" style="margin-bottom: 1px;">
+    <div class="text-center mt-3 gap">
       <button class="btn btn-view-all mt-4" (click)="toggleViewAllBeaches()">
         {{ viewAllBeaches ? 'View Less' : 'View All' }}
       </button>

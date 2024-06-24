@@ -221,3 +221,20 @@
   border-color: #ff6000;
   font-size: large;
 }
+.image-gallery {
+  position: relative;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 10px; /* Adjust top position as needed */
+  right: 10px; /* Adjust right position as needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Transparent background with 50% opacity */
+  color: white; /* Text color */
+  padding: 6px 12px; /* Adjust padding as needed */
+  border-radius: 0; /* Ensure no border radius */
+}
+
+.image-info {
+  font-size: 14px; /* Adjust font size as needed */
+}

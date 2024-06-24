@@ -1,0 +1,550 @@
+[
+    {
+        "id" : 1,
+        "category" : "nature",
+        "images" : ["assets/images/a1.jpeg","assets/images/b1.jpeg","assets/images/b1-2.webp"],
+        "thumbnail" : "assets/images/a1.jpeg",
+        "subCategory": "Best Of Nature",
+        "title" : "Hoode Kayaking",
+        "desc" : "Hoode Kayakking is an adventurous water sport that involves paddling a kayak on the serene waters of Hoode. Its a thrilling experience for both beginners and experts.",
+        "tips" : [
+          "Wear a life jacket and follow the guides instructions."
+        ],
+        "best_time_to_visit" : "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit" : {
+          "by_bike" : "Take a scenic drive to the location.",
+          "by_car" : "Use local buses or taxis.",
+          "by_public" : "Ideal for a bike ride with beautiful views."
+        }
+      },
+      {
+        "id": 2,
+        "category": "nature",
+        "images": ["assets/images/a2.jpg","assets/images/a2.jpg","assets/images/a2.jpg"],
+        "thumbnail": "assets/images/a2.jpg",
+        "subCategory": "Best Of Nature",
+        "title": "Hanging Bridge",
+        "desc": "The Hanging Bridge is a scenic spot offering breathtaking views and a unique walking experience. Perfect for nature lovers and photographers.",
+        "tips": [
+          "Wear a life jacket and follow the guide's instructions."
+        ],
+        "best_time_to_visit": "During the monsoon season for the best views of the surrounding greenery.",
+        "how_to_visit": {
+          "by_bike": "Drive from Bangalore via the Yeshwanthpura-Yelahanka route. The journey takes about an hour, depending on traffic",
+          "by_car": "Take a bus from Bangalore to Hesaraghatta. From Hesaraghatta village, hire an auto-rickshaw or taxi to reach the falls.",
+          "by_public": "The route is scenic and ideal for a bike ride."
+        }
+      },
+      
+      {
+        "id": 3,
+        "category": "nature",
+        "images": ["assets/images/a3.jpg", "assets/images/a3.jpg", "assets/images/a3.jpg"],
+        "thumbnail": "assets/images/a3.jpg",
+        "subCategory": "Best Of Nature",
+        "title": "Malpe Sea Walk",
+        "desc": "Malpe Sea Walk provides a beautiful path along the coast, offering stunning sea views and a refreshing sea breeze. It's an ideal spot for an evening stroll.",
+        "tips": [
+          "Carry a camera to capture the stunning views."
+        ],
+        "best_time_to_visit": "Evenings for a beautiful sunset view.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi",
+          "by_car": "Same route as for bike",
+          "by_public": "You will have to walk a bit if you take public transport for this"
+        }
+      },
+      
+      {
+        "id": 4,
+        "category": "nature",
+        "images": ["assets/images/a4.jpg", "assets/images/a4.jpg", "assets/images/a4.jpg"],
+        "thumbnail": "assets/images/a4.jpg",
+        "subCategory": "Best Of Nature",
+        "title": "Malpe Floating Bridge",
+        "desc": "Malpe Sea Walk provides a beautiful path along the coast, offering stunning sea views and a refreshing sea breeze. It's an ideal spot for an evening stroll.",
+        "tips": [
+          "Be cautious while walking on the floating bridge."
+        ],
+        "best_time_to_visit": "Anytime during the day, but avoid peak hours for a less crowded experience.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi",
+          "by_car": "Same route as for bike",
+          "by_public": "You will have to walk a bit if you take public transport for this"
+        }
+      },
+      
+      {
+        "id": 5,
+        "category": "nature",
+        "images": ["assets/images/a5.jpg", "assets/images/a5.jpg", "assets/images/a5.jpg"],
+        "thumbnail": "assets/images/a5.jpg",
+        "subCategory": "Activity List",
+        "title": "Kaup Light House",
+        "desc": "Visit during the early morning or late afternoon for the best light and fewer crowds.",
+        "tips": [
+          "Visit during the early morning or late afternoon for the best light and fewer crowds."
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for the best light and fewer crowds.",
+        "how_to_visit": {
+          "by_bike": "Drive to the designated parking area near the attraction.",
+          "by_car": "Take a bus or train to the nearest station. From there, use local transportation to reach the site.",
+          "by_public": "Ride along scenic routes to the destination."
+        }
+      },
+      
+      {
+        "id": 6,
+        "category": "nature",
+        "images": ["assets/images/a6.jpg", "assets/images/a6.jpg", "assets/images/a6.jpg"],
+        "thumbnail": "assets/images/a6.jpg",
+        "subCategory": "Activity List",
+        "title": "Kudlu Falls",
+        "desc": "Wear sturdy shoes as the path to the falls can be slippery.",
+        "tips": [
+          "Wear sturdy shoes as the path to the falls can be slippery."
+        ],
+        "best_time_to_visit": "During the monsoon season when the falls are at their fullest.",
+        "how_to_visit": {
+          "by_bike": "Drive to the base of the falls, then follow the marked trail.",
+          "by_car": "Take a bus to the nearest stop. From there, walk or hire a taxi to the falls.",
+          "by_public": "Bike along scenic paths to the falls entrance."
+        }
+      },
+      {
+        "id": 7,
+        "category": "nature",
+        "images": ["assets/images/a7.jpg", "assets/images/a7.jpg", "assets/images/a7.jpg"],
+        "thumbnail": "assets/images/a7.jpg",
+        "subCategory": "Activity List",
+        "title": "Manipal Lake",
+        "desc": "Carry water and snacks, and enjoy a peaceful boat ride.",
+        "tips": [
+          "Carry water and snacks, and enjoy a peaceful boat ride."
+        ],
+        "best_time_to_visit": "Evenings for a peaceful and relaxing experience.",
+        "how_to_visit": {
+          "by_bike": "Drive to the lake's parking area and walk along the designated path.",
+          "by_car": "Take a bus to the lake area. From there, walk to the lakefront.",
+          "by_public": "Enjoy a bike ride to the lake entrance."
+        }
+      },
+      
+      {
+        "id": 10,
+        "category": "nature",
+        "images": ["assets/images/a10.jfif", "assets/images/a10.jfif", "assets/images/a10.jfif"],
+        "thumbnail": "assets/images/a10.jfif",
+        "subCategory": "Activity List",
+        "title": "Trigger",
+        "desc": "Trigger is an adrenaline-pumping adventure activity that offers a range of outdoor experiences. Ideal for thrill-seekers looking for excitement.",
+        "tips": [
+          "Follow all safety instructions provided by the activity operators."
+        ],
+        "best_time_to_visit": "Anytime during the day, but morning sessions are generally more active.",
+        "how_to_visit": {
+          "by_bike": "Drive to the designated parking area near the trigger site.",
+          "by_car": "Take a bus or train to the nearest stop. From there, use local transportation to reach the trigger site.",
+          "by_public": "Ride along scenic routes to the trigger site."
+        }
+      },
+      {
+        "id": 8,
+        "category": "nature",
+        "images": ["assets/images/a8.jfif", "assets/images/a8.jfif", "assets/images/a8.jfif"],
+        "thumbnail": "assets/images/a8.jfif",
+        "subCategory": "Activity List",
+        "title": "Ajjarkad Badminton Court",
+        "desc": "Book the court in advance to ensure availability.",
+        "tips": [
+          "Book the court in advance to ensure availability."
+        ],
+        "best_time_to_visit": "Early mornings for a fresh start and less crowded environment.",
+        "how_to_visit": {
+          "by_bike": "Drive to the designated parking area near the badminton court.",
+          "by_car": "Use local buses or taxis to reach the court.",
+          "by_public": "Bike along scenic routes to the court."
+        }
+      },
+      {
+        "id": 9,
+        "category": "nature",
+        "images": ["assets/images/a9.jpg", "assets/images/a9.jpg", "assets/images/a9.jpg"],
+        "thumbnail": "assets/images/a9.jpg",
+        "subCategory": "Activity List",
+        "title": "Tree Park",
+        "desc": "Visit during the early morning or late afternoon for a peaceful walk.",
+        "tips": [
+          "Visit during the early morning or late afternoon for a peaceful walk."
+        ],
+        "best_time_to_visit": "During spring and autumn for the best weather conditions.",
+        "how_to_visit": {
+          "by_bike": "Drive to the entrance of the tree park.",
+          "by_car": "Take a bus to the park entrance.",
+          "by_public": "Bike through scenic trails to the park."
+        }
+      },
+      {
+        "id": 11,
+        "category": "nature",
+        "images": ["assets/images/w1.jpg", "assets/images/w1.jpg", "assets/images/w1.jpg"],
+        "thumbnail": "assets/images/w1.jpg",
+        "subCategory": "Wildlife List",
+        "title": "Someshwara",
+        "desc": "Someshwara Wildlife Sanctuary is a haven for wildlife enthusiasts, offering a chance to see a variety of flora and fauna in their natural habitat.",
+        "tips": [
+          "Carry binoculars for better wildlife viewing."
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for optimal wildlife viewing.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 12,
+        "category": "nature",
+        "images": ["assets/images/w2.jpg", "assets/images/w2.jpg", "assets/images/w2.jpg"],
+        "thumbnail": "assets/images/w2.jpg",
+        "subCategory": "Wildlife List",
+        "title": "Mookambika Wildlife",
+        "desc": "Mookambika Wildlife Sanctuary is a biodiverse sanctuary that offers trekking and wildlife spotting opportunities. It's perfect for nature enthusiasts.",
+        "tips": [
+          "Wear comfortable trekking shoes and carry sufficient water."
+        ],
+        "best_time_to_visit": "During the cooler months from November to February.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      
+      {
+        "id": 13,
+        "category": "nature",
+        "images": ["assets/images/w3.jfif", "assets/images/w3.jfif", "assets/images/w3.jfif"],
+        "thumbnail": "assets/images/w3.jfif",
+        "subCategory": "Wildlife List",
+        "title": "Udupi Goshale",
+        "desc": "Udupi Goshale is a sanctuary dedicated to the protection and care of cows. It's an educational and serene place to visit.",
+        "tips": [
+          "Learn about the importance of animal welfare during your visit."
+        ],
+        "best_time_to_visit": "Anytime during the day, but avoid the hottest part of the afternoon.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 14,
+        "category": "nature",
+        "images": ["assets/images/w4.jfif", "assets/images/w4.jfif", "assets/images/w4.jfif"],
+        "thumbnail": "assets/images/w4.jfif",
+        "subCategory": "Wildlife List",
+        "title": "Neelavara Goshale",
+        "desc": "Neelavara Goshale is another sanctuary for cows, promoting animal welfare and providing a peaceful environment for visitors.",
+        "tips": [
+          "Respect the animals and the environment during your visit."
+        ],
+        "best_time_to_visit": "Morning visits are best for a more serene experience.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 15,
+        "category": "nature",
+        "images": ["assets/images/w5.jfif", "assets/images/w5.jfif", "assets/images/w5.jfif"],
+        "thumbnail": "assets/images/w5.jfif",
+        "subCategory": "Wildlife List",
+        "title": "Kunjargiri",
+        "desc": "Kunjargiri is a hill offering stunning views and a peaceful atmosphere. It's a great spot for meditation and enjoying nature.",
+        "tips": [
+          "Carry water and snacks, and enjoy the peaceful surroundings."
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 17,
+        "category": "nature",
+        "images": ["assets/images/w7.jpg", "assets/images/w7.jpg", "assets/images/w7.jpg"],
+        "thumbnail": "assets/images/w7.jpg",
+        "subCategory": "Wildlife List",
+        "title": "Sharavathi",
+        "desc": "Sharavathi Wildlife Sanctuary is a pristine sanctuary that offers trekking and wildlife spotting. It's ideal for those looking to explore untouched nature.",
+        "tips": [
+          "Hire a local guide for the best trekking experience."
+        ],
+        "best_time_to_visit": "Early morning for the best chance to see wildlife.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 18,
+        "category": "nature",
+        "images": ["assets/images/w8.jpg", "assets/images/w8.jpg", "assets/images/w8.jpg"],
+        "thumbnail": "assets/images/w8.jpg",
+        "subCategory": "Wildlife List",
+        "title": "Shettihalli",
+        "desc": "Shettihalli Wildlife Sanctuary is known for its rich biodiversity and scenic landscapes. It's a perfect spot for wildlife photography and nature walks.",
+        "tips": [
+          "Wear comfortable shoes and be prepared for a nature walk."
+        ],
+        "best_time_to_visit": "During the monsoon season for lush greenery and active wildlife.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 19,
+        "category": "nature",
+        "images": ["assets/images/w9.jpg", "assets/images/w9.jpg", "assets/images/w9.jpg"],
+        "thumbnail": "assets/images/w9.jpg",
+        "subCategory": "Wildlife List",
+        "title": "Muthodi",
+        "desc": "Muthodi Wildlife Sanctuary, part of the Bhadra Tiger Reserve, offers an opportunity to see tigers and other wildlife in their natural habitat.",
+        "tips": [
+          "Book your visit in advance and follow the sanctuary's guidelines."
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for optimal wildlife sightings.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 16,
+        "category": "nature",
+        "images": ["assets/images/w6.jpg", "assets/images/w6.jpg", "assets/images/w6.jpg"],
+        "thumbnail": "assets/images/w6.jpg",
+        "subCategory": "Wildlife List",
+        "title": "Kaup Beach",
+        "desc": "Kaup Beach is known for its beautiful sandy shores and the iconic lighthouse. It's a popular destination for beach lovers.",
+        "tips": [
+          "Carry sunscreen and stay hydrated while enjoying the beach."
+        ],
+        "best_time_to_visit": "During the cooler months from November to February.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 20,
+        "category": "nature",
+        "images": ["assets/images/w10.jpg", "assets/images/w10.jpg", "assets/images/w10.jpg"],
+        "thumbnail": "assets/images/w10.jpg",
+        "subCategory": "Wildlife List",
+        "title": "Malyadi",
+        "desc": "Malyadi Bird Sanctuary is a paradise for bird watchers, offering a chance to see a variety of bird species in their natural environment.",
+        "tips": [
+          "Carry binoculars and a camera for bird watching."
+        ],
+        "best_time_to_visit": "Early morning for the best bird watching opportunities.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      
+      {
+        "id": 21,
+        "category": "nature",
+        "images": ["assets/images/be1.jpg", "assets/images/be1.jpg", "assets/images/be1.jpg"],
+        "thumbnail": "assets/images/be1.jpg",
+        "subCategory": "Beach List",
+        "title": "Malpe Beach",
+        "desc": "Malpe Beach is a popular beach known for its golden sands and clear waters. It's a perfect spot for swimming, sunbathing, and beach activities.",
+        "tips": [
+          "Visit early in the morning or late in the afternoon to avoid crowds."
+        ],
+        "best_time_to_visit": "Early morning or late afternoon to avoid the heat and crowds.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 22,
+        "category": "nature",
+        "images": ["assets/images/be2.jfif", "assets/images/be2.jfif", "assets/images/be2.jfif"],
+        "thumbnail": "assets/images/be2.jfif",
+        "subCategory": "Beach List",
+        "title": "Kaup Beach",
+        "desc": "Another beautiful and fun-loving beach of Udupi known for its cleanliness.",
+        "tips": [
+          "Pack a picnic and enjoy the serene environment."
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 23,
+        "category": "nature",
+        "images": ["assets/images/be3.jpg", "assets/images/be3.jpg", "assets/images/be3.jpg"],
+        "thumbnail": "assets/images/be3.jpg",
+        "subCategory": "Beach List",
+        "title": "Delta Beach",
+        "desc": "Delta Beach is a serene and lesser-known beach offering a peaceful environment and beautiful views of the confluence of the river and the sea.",
+        "tips": [
+          "Visit during sunset for a spectacular view."
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 24,
+        "category": "nature",
+        "images": ["assets/images/be4.jpg", "assets/images/be4.jpg", "assets/images/be4.jpg"],
+        "thumbnail": "assets/images/be4.jpg",
+        "subCategory": "Beach List",
+        "title": "Padukere Beach",
+        "desc": "Padukere Beach is a serene and lesser-known beach offering a peaceful environment and beautiful views of the confluence of the river and the sea.",
+        "tips": [
+          "Carry an umbrella when visiting during mid-day."
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      {
+        "id": 25,
+        "category": "nature",
+        "images": ["assets/images/be5.jpg", "assets/images/be5.jpg", "assets/images/be5.jpg"],
+        "thumbnail": "assets/images/be5.jpg",
+        "subCategory": "Beach List",
+        "title": "Maravanthe Beach",
+        "desc": "Maravanthe Beach is a serene and lesser-known beach offering a peaceful environment and beautiful views of the confluence of the river and the sea.",
+        "tips": [
+          "Carry an umbrella when visiting during mid-day."
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi.",
+          "by_car": "Same route as for bike.",
+          "by_public": "You will have to walk a bit if you take public transport for this."
+        }
+      },
+      
+      {
+        "id": 26,
+        "category": "nature",
+        "images": ["assets/images/be6.jpg", "assets/images/be6.jpg", "assets/images/be6.jpg"],
+        "thumbnail": "assets/images/be6.jpg",
+        "subCategory": "Beach List",
+        "title": "Mattu Beach",
+        "desc": "Mattu Beach is a serene and lesser-known beach offering a peaceful environment and beautiful views of the confluence of the river and the sea.",
+        "tips": [
+          "Carry an umbrella when visiting during mid-day or so"
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi",
+          "by_car": "Same route as for bike",
+          "by_public": "You will have to walk a bit if you take a public transport for this"
+        }
+      },
+      {
+        "id": 27,
+        "category": "nature",
+        "images": ["assets/images/be7.JPG", "assets/images/be7.JPG", "assets/images/be7.JPG"],
+        "thumbnail": "assets/images/be7.JPG",
+        "subCategory": "Beach List",
+        "title": "Bengre Beach",
+        "desc": "Bengre Beach is a serene and lesser-known beach offering a peaceful environment and beautiful views of the confluence of the river and the sea.",
+        "tips": [
+          "Carry an umbrella when visiting during mid-day or so"
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi",
+          "by_car": "Same route as for bike",
+          "by_public": "You will have to walk a bit if you take a public transport for this"
+        }
+      },
+      {
+        "id": 28,
+        "category": "nature",
+        "images": ["assets/images/be8.jpg", "assets/images/be8.jpg", "assets/images/be8.jpg"],
+        "thumbnail": "assets/images/be8.jpg",
+        "subCategory": "Beach List",
+        "title": "Muloor Beach",
+        "desc": "Muloor Beach is a serene and lesser-known beach offering a peaceful environment and beautiful views of the confluence of the river and the sea.",
+        "tips": [
+          "Carry an umbrella when visiting during mid-day or so"
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi",
+          "by_car": "Same route as for bike",
+          "by_public": "You will have to walk a bit if you take a public transport for this"
+        }
+      },
+      {
+        "id": 29,
+        "category": "nature",
+        "images": ["assets/images/be9.jpg", "assets/images/be9.jpg", "assets/images/be9.jpg"],
+        "thumbnail": "assets/images/be9.jpg",
+        "subCategory": "Beach List",
+        "title": "Blue Whale Beach",
+        "desc": "Blue flag Beach is a serene and lesser-known beach offering a peaceful environment and beautiful views of the confluence of the river and the sea.",
+        "tips": [
+          "Carry an umbrella when visiting during mid-day or so"
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi",
+          "by_car": "Same route as for bike",
+          "by_public": "You will have to walk a bit if you take a public transport for this"
+        }
+      },
+      {
+        "id": 30,
+        "category": "nature",
+        "images": ["assets/images/be10.jpg", "assets/images/be10.jpg", "assets/images/be10.jpg"],
+        "thumbnail": "assets/images/be10.jpg",
+        "subCategory": "Beach List",
+        "title": "Kodi Beach",
+        "desc": "Kodi Beach is a serene and lesser-known beach offering a peaceful environment and beautiful views of the confluence of the river and the sea.",
+        "tips": [
+          "Carry an umbrella when visiting during mid-day or so"
+        ],
+        "best_time_to_visit": "Early morning or late afternoon for pleasant weather and calm waters.",
+        "how_to_visit": {
+          "by_bike": "Come along the highway from Udupi",
+          "by_car": "Same route as for bike",
+          "by_public": "You will have to walk a bit if you take a public transport for this"
+        }
+      }
+    ]
