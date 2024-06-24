@@ -1,6 +1,8 @@
 export const MockRoutes = {
     getNatureData: '/assets/data/nature.json',
     geCultureData: '/assets/data/culture.json',
+    getCultureData: '/assets/data/activityCards.json',
+    getAdminEntryData: '/assets/data/tablentry.json'
 }
 
 export const Environment = {

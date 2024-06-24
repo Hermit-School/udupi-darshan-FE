@@ -1,0 +1,47 @@
+<div class="container-fluid d-flex">
+  <div class="col-xs-0 col-sm-0 col-md-2 col-lg-2 sidebar">
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 bg-body-tertiary">
+    <div class="row navbar-row">
+      <app-dashboardnavbar></app-dashboardnavbar>
+    </div>
+    <div class="row mt-5">
+      <div class="container-fluid d-flex">
+        <div class="col-xs-0 col-sm-0 col-md-1 col-lg-1"></div>
+        <div class="col-xs-5 col-sm-5 col-md-4 col-lg-4">
+          <div class="card dash-card">
+            <div class="card-body">
+              <h5 class="card-title">Welcome Back Admin</h5>
+              <div class="card-text">
+                <div class="alert alert-primary" role="alert">
+                  New Activity <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    NEW
+                    <span class="visually-hidden">New Notifications</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-1 col-lg-1"></div>
+        <div class="col-xs-5 col-sm-5 col-md-4 col-lg-4">
+          <div class="card dash-card">
+            <div class="card-body">
+              <h5 class="card-title">New Entries</h5>
+              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-0 col-sm-0 col-md-1 col-lg-1"></div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="container-fluid ">
+        <ng-container *ngIf="adminNewEntryListData$">
+        <app-dashboardrequesttable [data]="adminNewEntryListData$"></app-dashboardrequesttable>
+      </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
