@@ -1,15 +1,10 @@
 import { Component, Input, NgModule, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common'; 
-import { detailsService, details } from 'src/app/services/details-service.service';
+import { natureServiceService } from 'src/app/services/nature.service';
+import { CultureService } from 'src/app/services/culture.service';
+import { Details } from 'src/app/models/card';
 
-
-interface Card {
-  image: string[];
-  title: string;
-  id: number;
-  description?: string; 
-}
 
 
 @Component({
@@ -19,24 +14,24 @@ interface Card {
 })
 export class DetailsComponent implements OnInit {
   @Input() description: string | undefined;
-  card: details | null = null;
+  card: Details | null = null;
   isOverlayActive: boolean = false;
   currentSlideIndex: number = 0;
 
-  constructor(private route: ActivatedRoute, private detailsService: detailsService) {
+  constructor(private route: ActivatedRoute, private natureService: natureServiceService,private cultureservice:CultureService) {
     this.route.params.subscribe(params => {
       const id = Number(params['id']);
       const category = params['category'];
 
       switch (category) {
         case 'nature':
-          this.detailsService.getNatureData().subscribe(data => {
+          this.natureService.getData().subscribe(data => {
               this.card = data.filter(_ => (_.id == id))[0]
             })
           break;
 
           case 'culture':
-          this.detailsService.getCultureData().subscribe(data => {
+          this.cultureservice.getData().subscribe(data => {
               this.card = data.filter(_ => (_.id == id))[0]
             })
           break;

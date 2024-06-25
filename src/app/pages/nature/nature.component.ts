@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { natureServiceService, details } from 'src/app/services/nature-service.service';
+import { natureServiceService } from 'src/app/services/nature.service';
+import { Details } from 'src/app/models/card';
 
 interface Card {
   image: string;
@@ -25,10 +26,10 @@ export class NatureComponent implements OnInit, OnDestroy {
 
   allData : any = []
 
-  visibleNatureCards: details[] = [];
-  visibleActivityCards: details[] = [];
-  visibleWildlifeCards: details[] = [];
-  visibleBeachCards: details[] = [];
+  visibleNatureCards: Details[] = [];
+  visibleActivityCards: Details[] = [];
+  visibleWildlifeCards: Details[] = [];
+  visibleBeachCards: Details[] = [];
 
   constructor(private router: Router , private natureService : natureServiceService) {
   }
@@ -65,9 +66,9 @@ export class NatureComponent implements OnInit, OnDestroy {
   updateVisibleBestOfNatureCard() {
     const isMobile = window.innerWidth < 1000;
     if (this.viewAllNature) {
-      this.visibleNatureCards = this.allData.filter((_ : details) => (_.subCategory == 'Best Of Nature'));
+      this.visibleNatureCards = this.allData.filter((_ : Details) => (_.subCategory == 'Best Of Nature'));
     } else {
-      this.visibleNatureCards = this.allData.filter((_ : details) => (_.subCategory == 'Best Of Nature')).slice(0, isMobile ? 2 : 4);
+      this.visibleNatureCards = this.allData.filter((_ : Details) => (_.subCategory == 'Best Of Nature')).slice(0, isMobile ? 2 : 4);
     }
   }
 
@@ -79,9 +80,9 @@ export class NatureComponent implements OnInit, OnDestroy {
   updateActivityList() {
     const isMobile = window.innerWidth < 1000;
     if (this.viewAllActivity) {
-      this.visibleActivityCards = this.allData.filter((_ : details) => (_.subCategory == 'Activity List'));
+      this.visibleActivityCards = this.allData.filter((_ : Details) => (_.subCategory == 'Activity List'));
     } else {
-      this.visibleActivityCards = this.allData.filter((_ : details) => (_.subCategory == 'Activity List')).slice(0, isMobile ? 2 : 4);
+      this.visibleActivityCards = this.allData.filter((_ : Details) => (_.subCategory == 'Activity List')).slice(0, isMobile ? 2 : 4);
     }
   }
 
@@ -93,9 +94,9 @@ export class NatureComponent implements OnInit, OnDestroy {
 updateWildlifeList(){
   const isMobile=window.innerWidth<1000;
   if(this.viewAllWildlife){
-    this.visibleWildlifeCards=this.allData.filter((_:details)=>(_.subCategory=='Wildlife List'));
+    this.visibleWildlifeCards=this.allData.filter((_:Details)=>(_.subCategory=='Wildlife List'));
   }else{
-    this.visibleWildlifeCards=this.allData.filter((_:details)=>(_.subCategory=='Wildlife List')).slice(0,isMobile? 2:4);
+    this.visibleWildlifeCards=this.allData.filter((_:Details)=>(_.subCategory=='Wildlife List')).slice(0,isMobile? 2:4);
   }
 }
 toggleViewAllWildlife(){

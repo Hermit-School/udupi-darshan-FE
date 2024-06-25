@@ -24,8 +24,8 @@ const routes: Routes = [
     { path: 'admindashboard', component: AdmindashboardComponent },
     { path: '**', redirectTo: '404', pathMatch: 'full' },
   ];
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
+  @NgModule({
+    imports: [RouterModule.forRoot(routes,{useHash: true})],
+    exports: [RouterModule]
+  })
 export class AppRoutingModule { }

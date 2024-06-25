@@ -1,7 +1,8 @@
 import { Component, OnInit,OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import Card from 'src/app/models/card';
-import { CultureService,details } from 'src/app/services/culture-service.service';
+// import Card from 'src/app/models/card';
+import { CultureService } from 'src/app/services/culture.service';
+import { Details } from 'src/app/models/card';
 
 @Component({
   selector: 'app-culture',
@@ -16,10 +17,10 @@ export class CultureComponent implements OnInit,OnDestroy{
 
   allData:any=[]
  
-  visibleCultureCards:details[]=[];
-  visibleActivityCards: details[] = [];
-  visibleWildlifeCards: details[] = [];
-  visibleBeachCards: details[] = [];
+  visibleCultureCards:Details[]=[];
+  visibleActivityCards: Details[] = [];
+  visibleWildlifeCards: Details[] = [];
+  visibleBeachCards: Details[] = [];
   
   constructor(private router:Router,private cultureService:CultureService){
   }
@@ -54,9 +55,9 @@ export class CultureComponent implements OnInit,OnDestroy{
   updateVisibleBestOfCultureCard(){
   const isMobile=window.innerWidth<1000;
   if(this.viewAllCulture){
-    this.visibleCultureCards=this.allData.filter((_:details)=>(_.subCategory=='Rathotsavas'));
+    this.visibleCultureCards=this.allData.filter((_:Details)=>(_.subCategory=='Rathotsavas'));
   }else{
-      this.visibleCultureCards=this.allData.filter((_:details)=>(_.subCategory=='Rathotsavas')).slice(0, isMobile ? 2 : 4);
+      this.visibleCultureCards=this.allData.filter((_:Details)=>(_.subCategory=='Rathotsavas')).slice(0, isMobile ? 2 : 4);
   }
 }
 toggleViewAllCulture(){
@@ -73,9 +74,9 @@ toggleViewAllCulture(){
   updateActivityList() {
     const isMobile = window.innerWidth < 1000; 
     if (this.viewAllActivity) {
-      this.visibleActivityCards = this.allData.filter((_:details)=>(_.subCategory=='Mathas'));
+      this.visibleActivityCards = this.allData.filter((_:Details)=>(_.subCategory=='Mathas'));
     } else {
-      this.visibleActivityCards = this.allData.filter((_:details)=>(_.subCategory=='Mathas')).slice(0, isMobile ? 2 : 4);
+      this.visibleActivityCards = this.allData.filter((_:Details)=>(_.subCategory=='Mathas')).slice(0, isMobile ? 2 : 4);
     }
   }
 
@@ -88,9 +89,9 @@ toggleViewAllCulture(){
   updateWildlifeList() {
     const isMobile = window.innerWidth < 1000; 
     if (this.viewAllWildlife) {
-      this.visibleWildlifeCards = this.allData.filter((_:details)=>(_.subCategory=='Festivals'));
+      this.visibleWildlifeCards = this.allData.filter((_:Details)=>(_.subCategory=='Festivals'));
     } else {
-      this.visibleWildlifeCards = this.allData.filter((_:details)=>(_.subCategory=='Festivals')).slice(0, isMobile ? 2 : 4);
+      this.visibleWildlifeCards = this.allData.filter((_:Details)=>(_.subCategory=='Festivals')).slice(0, isMobile ? 2 : 4);
     }
   }
 
