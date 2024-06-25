@@ -8,21 +8,22 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { StoryDetailsComponent } from './pages/story-details/story-details.component';
+import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
 
 const routes: Routes = [
-  // Default route
-  // { path: '', component: LandingPageComponent },
-  { path: 'nature', component: NatureComponent },
-  { path: 'culture', component: CultureComponent },
-  {path:'advertisements',component:AdvertisementsComponent},
-  { path: 'admin', component: AdminComponent },
-  { path: 'home', component: LandingPageComponent },
-  { path: '404', component: PagenotfoundComponent },
-  { path: 'forgotpassword', component: ForgotpasswordComponent },
-  { path: 'story/:id', component: StoryDetailsComponent },
-  { path: '**', redirectTo: '404', pathMatch: 'full' }
-];
-
+    // Default route
+    { path: '', component: LandingPageComponent },
+    { path: 'nature', component: NatureComponent },
+    { path: 'culture', component: CultureComponent },
+    {path:'advertisements',component:AdvertisementsComponent},
+    { path: 'admin', component: AdminComponent },
+    { path: 'home', component: LandingPageComponent },
+    { path: '404', component: PagenotfoundComponent },
+    { path: 'forgotpassword', component: ForgotpasswordComponent },
+    { path: 'admindashboard', component: AdmindashboardComponent },
+    { path: 'story/:id', component: StoryDetailsComponent },
+    { path: '**', redirectTo: '404', pathMatch: 'full' },
+  ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]

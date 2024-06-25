@@ -1,10 +1,16 @@
 .loader{
     -webkit-perspective:700px;
     perspective: 700px;
-    height: 100%;
+    min-height:58.5rem;
     background-color: #FF6000;
+
   }
   
+  .loading-section{
+    --bs-gutter-x: 0;
+    min-height: 100%;
+  }
+
   .loader>span{
     font-size: 130px;
     font-family: "franklin gothic medium",sans-serif;

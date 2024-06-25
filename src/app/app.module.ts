@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbCarouselModule,NgbAlertModule,NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 //Component Imports
 import { BentoComponent } from './components/bento/bento.component';
@@ -24,6 +26,10 @@ import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.c
 import { LoadingComponent } from './components/loading/loading.component';
 import { AdvertisementsComponent } from './pages/advertisements/advertisements.component';
 import { StoryDetailsComponent } from './pages/story-details/story-details.component';
+import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
+import { DashboardnavbarComponent } from './components/admin-dashboard-components/dashboardnavbar/dashboardnavbar.component';
+import { DashboardrequesttableComponent } from './components/admin-dashboard-components/dashboardrequesttable/dashboardrequesttable.component';
+import { ListFilterPipe } from '../app/util/list-filter';
 
 @NgModule({
   declarations: [
@@ -43,7 +49,11 @@ import { StoryDetailsComponent } from './pages/story-details/story-details.compo
     ForgotpasswordComponent,
     LoadingComponent,
     AdvertisementsComponent,
-    StoryDetailsComponent
+    StoryDetailsComponent,
+    AdmindashboardComponent,
+    DashboardnavbarComponent,
+    DashboardrequesttableComponent,
+    ListFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -53,7 +63,9 @@ import { StoryDetailsComponent } from './pages/story-details/story-details.compo
     ReactiveFormsModule,
     NgbAlertModule,
     NgbModalModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+    NgbPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]
