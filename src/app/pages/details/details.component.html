@@ -1,7 +1,8 @@
 <div *ngIf="card" class="card-details">
   <div class="card-body">
-    <h1>{{ card.title }}</h1>
-
+    <div class="heading-container">
+    <h1 class="title">{{ card.title }}</h1>
+  </div>
     <section class="image-gallery" *ngIf="card">
       <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" (slid.bs.carousel)="onSlideChange($event)">
         <div class="carousel-inner">

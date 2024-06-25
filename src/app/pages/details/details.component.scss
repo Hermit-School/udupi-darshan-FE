@@ -102,7 +102,7 @@
 .image-gallery {
   position: relative;
   width: 100%;
-  max-width: 600px; 
+  max-width: 800px; 
   margin: 0 auto;
 }
 .carousel {
@@ -161,6 +161,9 @@
 .carousel-control-next {
   cursor: pointer;
 }
+
+
+
 .navbar {
   background-color: #222831;
   padding: 10px 0;
@@ -202,6 +205,7 @@
   height: 100%;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 0.2rem;
+  justify-content: space-between; 
 }
 .row > * {
   flex-shrink: inherit;
@@ -237,4 +241,37 @@
 
 .image-info {
   font-size: 14px; /* Adjust font size as needed */
+}
+
+
+.heading-container {
+  width: 100%;
+  max-width: 1536px;
+  height: 112px;
+  padding: 24px 16px 24px 32px; /* Adjusted padding around heading */
+  gap: 10px;
+}
+
+.title {
+  width: 100%;
+  max-width: 332px;
+  height: 48px;
+  gap: 0;
+  font-family: Helvetica, sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 48px;
+  text-align: left;
+  color: rgba(255, 255, 255, 1);
+  padding: 32px; /* Added padding around the image */
+ 
+}
+
+.image-gallery .main-image {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  width: calc(100% - 80px); /* Adjusted width to account for padding and border */
+  height: calc(100% - 80px); /* Adjusted height to account for padding and border */
 }
