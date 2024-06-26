@@ -1,21 +1,18 @@
 /* blog-cards.component.css */
 .container-fluid {
   display: flex;
-  flex-wrap: nowrap; /* Allow cards to wrap */
+  flex-wrap: nowrap; 
   gap: 1.8rem; 
   background-color: #222831;
-  
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
-  -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
-   overflow-x:auto; /* Ensure horizontal scrolling */
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+   overflow-x:auto; 
 }
 .card{
   margin-left: 0.5rem;
   width: 17rem;
-  border-color: #FF6000;
-  
+  border-color: #FF6000; 
 }
-
 .navbar {
   background-color: #222831;
   padding: 10px;
@@ -54,3 +51,23 @@ hr{
   background-color: #222831;
   padding: 2rem;
 }
+.card-container {
+  display: flex;
+  flex-wrap: nowrap; 
+  overflow-x: auto;   
+  -webkit-overflow-scrolling: touch; 
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-height: 100%;
+  height: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.2rem;
+}
+.no-underline {
+  text-decoration: none;
+}
+
+.no-underline:hover {
+  text-decoration: none; /* Ensure no underline on hover */
+}
+
