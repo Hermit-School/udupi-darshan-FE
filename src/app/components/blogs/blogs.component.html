@@ -1,66 +1,27 @@
-
-  <div class="navbar">
-    <h1 class="text-white fw-bold">Blogs</h1>
-  </div>
-  <div class="container-fluid">
-  <div class="col">
-    <div class="card h-100 " >
-      <img src="assets/images/b1.jpeg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title text-white">Kaup Light house</h5>
-        <hr >
-        <p class="card-text  text-color"> Quite evident by the name, there is a lighthouse on the beach which promises panoramic views of the sea, the beach and the neighbouring areas.</p>
-      </div>
-      <div class="card-footer" >
-        <small class="text-small">View Details--></small>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100" >
-      <img src="assets/images/bl2.webp" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title text-white">Malpe Beach </h5>
-        <hr >
-        <p class="card-text  text-color">Malpe is one of the exquisite unexplored beaches of the Indian West Coast. Located at the mouth of the Udayavar River,  the most famous being St. Mary’s Island.</p>
-      </div>
-      <div class="card-footer" >
-        <small class="text-small">View Details--></small>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100" >
-      <img src="assets/images/bl4.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title text-white">Krishna Matta</h5>
-        <hr >
-        <p class="card-text  text-color">The story of this temple starts with the birth of a child to a couple called Narayana Bhatta and his wife Vedavati in a village called Pajakakshetra near Udupi.</p>
-      </div>
-      <div class="card-footer" >
-        <small class="text-small">View Details--></small>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card h-100" >
-      <img src="assets/images/bl5.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title text-white">Maravante Beach</h5>
-        <hr >
-        <p class="card-text text-color">Maravanthe is a uniquely positioned beach in Coastal Karnataka with Arabian Sea on one side and Souparnika river on the other.</p>
-      </div>
-      <div class="card-footer" >
-        <small class="text-small">View Details--></small>
-      </div>
-    </div>
-  </div>
-  
+<div class="navbar">
+  <h1 class="text-white fw-bold">Blogs</h1>
 </div>
-<div class="footer">
+<div class="container-fluid">
+  <div class="row card-container">
+    <div class="col col-lg-3 col-md-6 mb-4" *ngFor="let blog of blogs">
+      <div class="card h-100">
+        <img [src]="blog.image" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title text-white">{{ blog.title }}</h5>
+          <hr>
+          <p class="card-text text-color">{{ blog.content }}</p>
+        </div>
+        <div class="card-footer">
+          <a [routerLink]="['/story', blog.id]" class="no-underline"><small class="text-small">View Details <i class="bi bi-arrow-right"></i></small></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="footer ">
   <div class="row">
     <div class="col text-center">
-      <button type="button" class="btn ">View All</button>
+      <button type="button" class="btn custom-footer-button">View All</button>
     </div>
   </div>
 </div>
