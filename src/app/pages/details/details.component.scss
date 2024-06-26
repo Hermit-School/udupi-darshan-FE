@@ -1,18 +1,17 @@
 .card-details {
   background-color: #222831;
   color: #fff;
-  padding: 20px;
   margin-top: 20px;
   width: 100%; 
   box-sizing: border-box; 
   border-radius: 0;
   margin: 0 auto; 
+  padding: 16px 0px 24px 0px;
+  font-size: 24px;
 }
 .card-details img {
   width: 100%;
-  height: auto;
-  border-radius: 5px;
-  margin-bottom: 20px;
+  height: 100%;
 }
 .card-details h1 {
   font-size: 2em;
@@ -83,13 +82,7 @@
 .card-details .how-to-visit p:last-child {
   margin-bottom: 0;
 }
-@media (max-width: 768px) {
-  .card-details .card-img-top {
-    width: 100%;
-    height: auto;
-    margin-bottom: 20px;
-  }
-}
+
 .big-image-container {
   margin-top: 20px;
 }
@@ -114,6 +107,8 @@
 }
 .carousel-item img {
   width: 100%;
+  border-radius: 0.2rem;
+  height: 400px;
 }
 .image-gallery h2 {
   text-align: center;
@@ -135,13 +130,11 @@
 }
 .image-gallery .image-info {
   position: absolute;
-  bottom: 10px;
   right: 10px; 
   color: white;
   font-size: 18px;
   padding: 5px 10px;
   background-color: rgba(0, 0, 0, 0.5); 
-  border-radius: 5px;
 }
 .image-gallery .arrow-button {
   position: absolute;
@@ -162,27 +155,19 @@
   cursor: pointer;
 }
 
-
-
-.navbar {
-  background-color: #222831;
-  padding: 10px 0;
-  text-align: center;
-}
-.navbar h1 {
-  margin: 0;
-}
 .card {
   background-color: #222831;
   border: 0.1rem solid #faf9f8fe;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 17rem;
+  border-radius: 0.3rem;
+  display: flex;
+  flex-direction: column;
 }
 .card-title {
-  font-size: 1.25rem;
-  text-decoration: underline;
-  color: #ff6000; 
+  font-size: 1rem;
+  line-height: 1.4rem;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+
 }
 .card-footer {
   background-color: #f8f9fa;
@@ -227,44 +212,31 @@
 }
 .image-gallery {
   position: relative;
+  max-width: 100%;
+  max-height:50%;
 }
 
 .image-overlay {
   position: absolute;
   top: 10px; /* Adjust top position as needed */
   right: 10px; /* Adjust right position as needed */
-  background-color: rgba(0, 0, 0, 0.5); /* Transparent background with 50% opacity */
   color: white; /* Text color */
   padding: 6px 12px; /* Adjust padding as needed */
   border-radius: 0; /* Ensure no border radius */
 }
-
-.image-info {
-  font-size: 14px; /* Adjust font size as needed */
-}
-
-
 .heading-container {
   width: 100%;
   max-width: 1536px;
-  height: 112px;
-  padding: 24px 16px 24px 32px; /* Adjusted padding around heading */
-  gap: 10px;
 }
 
 .title {
   width: 100%;
-  max-width: 332px;
-  height: 48px;
-  gap: 0;
   font-family: Helvetica, sans-serif;
   font-size: 40px;
   font-weight: 700;
   line-height: 48px;
   text-align: left;
   color: rgba(255, 255, 255, 1);
-  padding: 32px; /* Added padding around the image */
- 
 }
 
 .image-gallery .main-image {
@@ -274,4 +246,39 @@
   object-fit: cover;
   width: calc(100% - 80px); /* Adjusted width to account for padding and border */
   height: calc(100% - 80px); /* Adjusted height to account for padding and border */
+}
+.row1{
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
+}
+.col{
+  flex: 1 1 20%;
+  max-width: 20%;
+  min-width: 200px;
+}
+.card-img-top{
+  width: 100%;
+  height: auto;
+  border-bottom-right-radius: 0rem;
+  border-bottom-left-radius: 0rem;
+  
+}
+.card-body{
+  padding: 12px;
+  flex: 1;
+  background-color: #222831;
+}
+hr{
+  border-top: 0.2rem  solid #ff6000;
+  width: 10rem;
+}
+.how-to-visit{
+  font-weight: 400;
+}
+.container1{
+  background-color: #222831;
+  width: 100%;
 }

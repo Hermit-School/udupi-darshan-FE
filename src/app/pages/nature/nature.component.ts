@@ -3,26 +3,18 @@ import { Router } from '@angular/router';
 import { natureServiceService } from 'src/app/services/nature.service';
 import { Details } from 'src/app/models/card';
 
-interface Card {
-  image: string;
-  title: string;
-  id: number;
-}
 
 @Component({
   selector: 'app-nature',
   templateUrl: './nature.component.html',
   styleUrls: ['./nature.component.scss']
 })
-export class NatureComponent implements OnInit, OnDestroy {
 
-  // Boolean to control view state
+export class NatureComponent implements OnInit, OnDestroy {
   viewAllNature = false;
   viewAllWildlife = false;
   viewAllActivity = false;
   viewAllBeaches = false;
-
-  // Array of activity card
 
   allData : any = []
 
