@@ -5,7 +5,9 @@
     color: #FF6000;
     font-weight: bold;
 }
-
+.custom-navbar-height{
+  background-color: #222831;
+}
 .container-fluid {
     background-color: #222831;
 }
@@ -165,12 +167,9 @@ textarea {
   max-width: 100%;
   width: 100%; 
 }
-.modal-lg {
-  
+.modal-lg { 
   max-width: 60vw;
 }
-
-
 .modal-dialog {
   display: flex;
   justify-content: center;
