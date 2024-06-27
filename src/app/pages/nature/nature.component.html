@@ -1,67 +1,35 @@
-
-
-<div class="container-fluid p-0" >
-<div class="heading-container">
+<div class="container-fluid p-0">
+  <div class="heading-container">
     <h1 class="heading-text text-white fw-bold">Experience the joy of being with nature</h1>
-    <img src="assets/images/Vectorblob.svg" alt="Design Blob" class="design-blob">     
-</div>
-<div class="navbar">
+    <img src="assets/images/Vectorblob.svg" alt="Design Blob" class="design-blob">
+  </div>
+
+  <!-- === best of nature ===  -->
+  <div class="navbar">
     <h1 class="text-white fw-bold">Best Of Nature</h1>
   </div>
-  <!-- Card Section -->
-  <div class="container-fluid mt-4">
+<div class="container-fluid mt-4">
     <div class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-4 g-4">
-      <div class="col">
+      <div class="col" *ngFor="let card of visibleNatureCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img src="assets/images/b1.jpeg" class="card-img-top" alt="Card Image 1">
+          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
           <div class="card-body">
-            <h5 class="card-title">Kaup Light House</h5>
-            
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="assets/images/endpoint.jpg" class="card-img-top" alt="Card Image 2">
-          <div class="card-body">
-            <h5 class="card-title">Manipal End Point</h5>
-            
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="assets/images/n1.webp" class="card-img-top" alt="Card Image 3">
-          <div class="card-body">
-            <h5 class="card-title">Arbi Falls</h5>
-            
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card h-100">
-          <img src="assets/images/n2.jpg" class="card-img-top" alt="Card Image 4">
-          <div class="card-body">
-            <h5 class="card-title">Tree Park</h5>
-            
+            <h5 class="card-title">{{ card.title }}</h5>
           </div>
         </div>
       </div>
     </div>
-
   </div>
-  
   <!-- Activity List Heading -->
   <div class="activity-heading mt-4">
     <h2 class="text-white fw-bold">Activity List</h2>
   </div>
-
-  <!-- Activity Cards Section -->
-   <div class="container-fluid mt-4" >
+<!-- Activity Cards Section -->
+  <div class="container-fluid mt-4">
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
-      <div class="col" *ngFor="let card of visibleActivityCards">
+      <div class="col" *ngFor="let card of visibleActivityCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
           <div class="card-body">
             <h5 class="card-title">{{ card.title }}</h5>
           </div>
@@ -69,45 +37,41 @@
       </div>
     </div>
     <div class="text-center mt-3">
-    <button class="btn btn-view-all mt-4" (click)="toggleViewAll()">
-      {{ viewAll ? 'View Less' : 'View All' }}
-    </button>
+      <button class="btn btn-view-all mt-4" (click)="toggleViewActivity()">
+        {{ viewAllActivity ? 'View Less' : 'View All' }}
+      </button>
+    </div>
   </div>
-  </div>
+<!-- wildlife -->
   <div class="activity-heading mt-4">
     <h2 class="text-white fw-bold">Wildlife</h2>
   </div>
-  
-  
-  <div class="container-fluid mt-4">
+<div class="container-fluid mt-4">
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
-      <div class="col" *ngFor="let card of visibleWildlifeCards">
+      <div class="col" *ngFor="let card of visibleWildlifeCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
           <div class="card-body">
             <h5 class="card-title">{{ card.title }}</h5>
           </div>
         </div>
       </div>
     </div>
-  
-
     <div class="text-center mt-3">
-      <button class="btn btn-view-all" (click)="toggleViewAllWildlife()">
+      <button class="btn btn-view-all mt-4" (click)="toggleViewAllWildlife()">
         {{ viewAllWildlife ? 'View Less' : 'View All' }}
       </button>
     </div>
-    
-  </div> 
-  <div class="activity-heading mt-4">
-    <h2 class="text-white fw-bold">Beach List</h2>
+  </div>
+<div class="activity-heading mt-4">
+    <h2 class="text-white fw-bold">Beaches</h2>
   </div>
   <!-- Beaches Cards Section -->
   <div class="container-fluid mt-4">
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
-      <div class="col" *ngFor="let card of visibleBeachCards">
+      <div class="col" *ngFor="let card of visibleBeachCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.image" class="card-img-top" [alt]="card.title">
+          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
           <div class="card-body">
             <h5 class="card-title">{{ card.title }}</h5>
           </div>
@@ -120,4 +84,3 @@
       </button>
     </div>
   </div>
-</div>
