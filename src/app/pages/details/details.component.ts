@@ -5,7 +5,6 @@ import { natureServiceService } from 'src/app/services/nature.service';
 import { CultureService } from 'src/app/services/culture.service';
 import { Details } from 'src/app/models/card';
 
-
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',

@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Environment, MockRoutes } from 'src/constants/routes';
 import { Details } from '../models/card';
-
-
-
 @Injectable({
   providedIn: 'root'
 })

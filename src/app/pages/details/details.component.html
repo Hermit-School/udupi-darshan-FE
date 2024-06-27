@@ -1,9 +1,7 @@
 <div class="container-fluid">
  <div *ngIf="card" > 
   <!-- <div class="card-body"> --> 
-   
-     
-    <div class="heading-container mb-4">
+   <div class="heading-container mb-4">
     <h1 class="title">{{ card.title }}</h1>
   </div>
   <div class="container1">
@@ -23,58 +21,40 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
-    
-      <div class="image-overlay" [ngClass]="{ 'active': isOverlayActive }">
+    <div class="image-overlay" [ngClass]="{ 'active': isOverlayActive }">
         <div class="image-info">
           <span>{{ currentSlideIndex + 1 }}/{{ card?.images?.length ?? 0 }}</span>
         </div>
       </div>
   </section>
   </div>
-
-    <div *ngIf="card" class="card-details"> 
+<div *ngIf="card" class="card-details"> 
     <p>
-      
       <!-- Main description based on the card id -->
       <ng-container *ngIf="card.id !== undefined && card.id !== null">
         <div >
           {{card.desc}}
-          
-          
-    <section class="tips">
+          <section class="tips">
       <h2 class="bold fw-bold">Tips</h2>
       <ul>
         <li *ngFor="let tip of card.tips">
           {{tip}}
         </li>
-        
-      </ul>
+         </ul>
     </section>
     <section class="best-time">
       <h2 class="bold fw-bold">Best Time to Visit</h2>
       <p>{{card.best_time_to_visit}}</p>
     </section>
-
-<section class="how-to-visit">
+    <section class="how-to-visit">
       <h2 class="bold fw-bold">How To Visit?</h2>
-
-
       <p *ngIf="card.how_to_visit.by_car">By Car:{{card.how_to_visit.by_car}}</p>
       <p *ngIf="card.how_to_visit.by_public">By Public Transport:{{card.how_to_visit.by_public}}</p>
       <p *ngIf="card.how_to_visit.by_bike">By Bike: {{card.how_to_visit.by_bike}}</p>
-
-  </section>
+</section>
 </div>
-
-
-
-
-
-
 <!-- <div class="navbar bg-dark"> -->
-
-  <h1 >Don't Miss These</h1>
-
+<h1 >Don't Miss These</h1>
 <div class="card-container">
   <div class="row1 mb-4">
     <div class="col">
@@ -91,7 +71,6 @@
         </div>
       </div>
     </div>
-    
     <div class="col">
       <div class="card h-100">
         <img src="assets/images/bl2.webp" class="card-img-top" alt="...">
@@ -147,5 +126,3 @@
     </div>
   </div>
   </div>
-
-

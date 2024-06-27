@@ -56,18 +56,8 @@ export class NatureComponent implements OnInit, OnDestroy {
   }
 
   updateVisibleBestOfNatureCard() {
-    const isMobile = window.innerWidth < 1000;
-    if (this.viewAllNature) {
-      this.visibleNatureCards = this.allData.filter((_ : Details) => (_.subCategory == 'Best Of Nature'));
-    } else {
-      this.visibleNatureCards = this.allData.filter((_ : Details) => (_.subCategory == 'Best Of Nature')).slice(0, isMobile ? 2 : 4);
+      this.visibleNatureCards = this.allData.filter((_ : Details) => (_.subCategory == 'Best Of Nature')).slice(0, 4);
     }
-  }
-
-  toggleViewAllNature() {
-    this.viewAllNature = !this.viewAllNature;
-    this.updateVisibleBestOfNatureCard();
-  }
 
   updateActivityList() {
     const isMobile = window.innerWidth < 1000;

@@ -154,20 +154,22 @@
 .carousel-control-next {
   cursor: pointer;
 }
-
 .card {
   background-color: #222831;
-  border: 0.1rem solid #faf9f8fe;
+  border: 0.1rem solid #ffffff;
   border-radius: 0.3rem;
   display: flex;
   flex-direction: column;
 }
 .card-title {
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1.4rem;
   color: #ffffff;
   font-family: Arial, Helvetica, sans-serif;
-
+}
+.card-text {
+  font-size: 0.9rem; 
+  color: #fff;
 }
 .card-footer {
   background-color: #f8f9fa;
@@ -218,17 +220,16 @@
 
 .image-overlay {
   position: absolute;
-  top: 10px; /* Adjust top position as needed */
-  right: 10px; /* Adjust right position as needed */
-  color: white; /* Text color */
-  padding: 6px 12px; /* Adjust padding as needed */
-  border-radius: 0; /* Ensure no border radius */
+  top: 10px; 
+  right: 10px;
+  color: white; 
+  padding: 6px 12px; 
+  border-radius: 0; 
 }
 .heading-container {
   width: 100%;
   max-width: 1536px;
 }
-
 .title {
   width: 100%;
   font-family: Helvetica, sans-serif;
@@ -238,14 +239,13 @@
   text-align: left;
   color: rgba(255, 255, 255, 1);
 }
-
 .image-gallery .main-image {
   display: block;
   max-width: 100%;
   max-height: 100%;
   object-fit: cover;
-  width: calc(100% - 80px); /* Adjusted width to account for padding and border */
-  height: calc(100% - 80px); /* Adjusted height to account for padding and border */
+  width: calc(100% - 80px); 
+  height: calc(100% - 80px); 
 }
 .row1{
   display: flex;
@@ -264,7 +264,6 @@
   height: auto;
   border-bottom-right-radius: 0rem;
   border-bottom-left-radius: 0rem;
-  
 }
 .card-body{
   padding: 12px;
@@ -274,6 +273,7 @@
 hr{
   border-top: 0.2rem  solid #ff6000;
   width: 10rem;
+  opacity: 1 !important;
 }
 .how-to-visit{
   font-weight: 400;

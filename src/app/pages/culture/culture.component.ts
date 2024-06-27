@@ -53,25 +53,15 @@ export class CultureComponent implements OnInit,OnDestroy{
   }
   
   updateVisibleBestOfCultureCard(){
-  const isMobile=window.innerWidth<1000;
-  if(this.viewAllCulture){
-    this.visibleCultureCards=this.allData.filter((_:Details)=>(_.subCategory=='Rathotsavas'));
-  }else{
-      this.visibleCultureCards=this.allData.filter((_:Details)=>(_.subCategory=='Rathotsavas')).slice(0, isMobile ? 2 : 4);
+  
+    this.visibleCultureCards=this.allData.filter((_:Details)=>(_.subCategory=='Rathotsavas')).slice(0,  4);
   }
-}
-toggleViewAllCulture(){
-  this.viewAllCulture=!this.viewAllCulture;
-  this.updateVisibleBestOfCultureCard
-}
 
   toggleViewAll() {
     this.viewAllActivity = !this.viewAllActivity;
     this.updateActivityList();
   }
-
-
-  updateActivityList() {
+updateActivityList() {
     const isMobile = window.innerWidth < 1000; 
     if (this.viewAllActivity) {
       this.visibleActivityCards = this.allData.filter((_:Details)=>(_.subCategory=='Mathas'));
@@ -79,9 +69,7 @@ toggleViewAllCulture(){
       this.visibleActivityCards = this.allData.filter((_:Details)=>(_.subCategory=='Mathas')).slice(0, isMobile ? 2 : 4);
     }
   }
-
-
-  toggleViewAllWildlife() {
+toggleViewAllWildlife() {
     this.viewAllWildlife = !this.viewAllWildlife;
     this.updateWildlifeList();
   }
@@ -94,9 +82,7 @@ toggleViewAllCulture(){
       this.visibleWildlifeCards = this.allData.filter((_:Details)=>(_.subCategory=='Festivals')).slice(0, isMobile ? 2 : 4);
     }
   }
-
-  
-  toggleViewAllBeaches():void {
+ toggleViewAllBeaches():void {
     this.viewAllBeaches = !this.viewAllBeaches;
     this.updateBeachList();
   }
@@ -108,7 +94,6 @@ toggleViewAllCulture(){
       this.visibleBeachCards = this.allData.filter((item:any)=>item.subCategory==='Beach List').slice(0, isMobile ? 2 : 4);
     }
   }
-
 goToDetails(id: number) {
     this.router.navigate(['/details/culture',id]);
   }
