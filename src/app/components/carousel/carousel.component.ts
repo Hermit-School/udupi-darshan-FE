@@ -1,18 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-carousel',
   templateUrl: './carousel.component.html',
   styleUrls: ['./carousel.component.scss']
 })
-export class CarouselComponent implements OnInit {
+export class CarouselComponent {
+  images = [
+    { src: 'assets/images/a6.jpg', description: 'Discover Udupi with these 6 beautiful beaches' },
+    { src: 'assets/images/a3.jpg', description: 'Discover Udupi with these 6 beautiful beaches' },
+    { src: 'assets/images/a4.jpg', description: 'Discover Udupi with these 6 beautiful beaches' }
+  ];
 
-  images:any = [];
-  constructor() { }
-
-  ngOnInit(): void {
-    this.images = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/900/500`);
-  }
-
+  
 }

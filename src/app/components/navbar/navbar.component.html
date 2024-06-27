@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top custom-navbar-height">
+<nav class="navbar navbar-expand-lg sticky-top custom-navbar-height">
   <div class="container-fluid">
     <a class="navbar-brand brand-margin" href="#" routerLink="/home">Udupi Darshan</a>
     <form class="d-flex search-form ms-auto">
@@ -58,7 +58,7 @@
         <a class="nav-link color" href="#">Stories</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link color" routerLink="/advertisements" href="#" (click)="closeOffcanvas()">Advertisement</a>
+        <a class="nav-link color" routerLink="/advertisements" href="#" (click)="closeOffcanvas(); removePadding()">Advertisement</a>
       </li>
       <li class="nav-item">
         <button class="btn" data-bs-toggle="modal" data-bs-target="#writeToUsModal">Write to us</button>

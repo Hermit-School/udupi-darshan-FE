@@ -1,65 +1,58 @@
-.bordered-img {
-    border: 0.08rem solid #FF6000 ;
-    border-radius: 0.5rem; /* Optional: Adds rounded corners */
-    // margin-bottom: 1rem; /* Optional: Adds spacing between images */
-}
-.img-fluid {
-    max-width: 100%;
-    height: auto;
-}
-
 .row > [class^="col-"] {
-    padding: 0rem; /* Remove default padding */
+    padding: 1rem; 
 }
-
 .col-6 img {
-    width: 98%;
-    height: 90%;
-    
-}
-
-.col-12 img{
-    width:80%;
-    height:100%;
-    
+    width: 100%;
+    height: 11.3rem; 
+    border-top-left-radius:  0.5rem;
+    border-top-right-radius:  0.5rem;   
 }
 .custom-container{
-    padding: 2rem;
+    padding: 0.5rem 1rem 0rem 0.5rem;
 }
 .container-fluid{
-    background-color:  #222831;
-    
+    background-color:  #222831;   
 }
 .btn{
     border-color: #FF6000;
-   
-}
-.text-color{
     color: #FF6000;
+  }
+  h1{
+    color: #ffffff;
+    font-size: 2.5rem;
+    line-height: 3rem;
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 1rem;
+  }
+  .card-body{
+    background-color: #222831;
+    color: #ffffff;
+    border-bottom-left-radius:  0.5rem;
+    border-bottom-right-radius:  0.5rem;
+  }
+  .card-text{
+    font-size: 0.8rem;
+    font-weight: 400;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.2rem;
+  }
+  .h-100{
+    border-radius: 0.5rem;
+    border-color: #F0F0F0;
+    border-inline-color: #F0F0F0;
+  }
+.card-img-top{
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    height:11.3rem
+}
+.custom-large-card {
+    height: 15rem; 
 }
 
-
-.image-container {
-    position: relative;
-    height: 100%; /* Set a fixed height for the image container */
-    overflow: hidden; /* Hide any overflow from the image */
+.custom-large-card .card-img-top {
+    height: 11.7rem;
+    object-fit: fill;
 }
 
-.image-container img {
-    width: 98%; /* Make the image fill the container horizontally */
-    height: 90%; /* Make the image fill the container vertically */
-    object-fit: cover; /* Scale the image to cover the entire container */
-}
-
-.image-caption {
-    bottom: auto;
-    text-align:left;
-    color:#FFFFFF;
-    width: 98%;
-    background-color: rgba(0, 0, 0, 0.5);;
-    padding: 10px;
-    transform: translateY(-100%);
-}
-h1{
-    font-size: 2.5vw;
-}

@@ -1,28 +1,31 @@
 .footer {
     background-color:#222831; 
     padding: 0.2rem 0; 
-    border-top: 0.01rem solid #ABA3A8;  
+    border-top: 0.01rem solid #ABA3A8; 
+    height: 5.2rem; 
   } 
   .footer-content {
     display: flex;
     justify-content: space-between;   
   }
-  
   .left, .right {
     flex: 1;
     text-align:start;
-    
     font-size: medium;
   }
   .left{
     color: #FF6000;
     font-style: italic;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    padding: 1.5rem 0rem 1rem 1rem;
   }
-  
   .right {
     text-align: end;
-    color: #d3caca;
-    
+    color: #787070;
+    padding: 1.5rem 0rem 1rem 1rem;
+    font-family: Helvetica;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.4rem; 
   }
   
