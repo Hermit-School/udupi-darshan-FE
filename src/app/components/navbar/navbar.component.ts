@@ -121,4 +121,8 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
       this.renderer.removeClass(document.body, 'offcanvas-open');
     }
   }
+  removePadding() {
+    document.body.style.paddingRight = '0px'; // or set it to an empty string to remove it completely
+    document.body.style.overflow = 'auto'; // Ensure overflow is set correctly
+  }
 }
