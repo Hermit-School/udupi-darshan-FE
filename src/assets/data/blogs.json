@@ -1,113 +1,112 @@
 [
-    {
-      "id": 1,
-      "title": "Kaup Light house",
-      "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
-      "content1": "Submitted by: Anusha Shetty on 12/12/2022",
-      "image": "assets/images/b1.jpeg",
-      "relatedImages": ["assets/images/a1.jpeg", "assets/images/a2.jpg", "assets/images/a1.jpeg", "assets/images/a2.jpg"],
-      "relatedContent": [
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
-      ],
-      "cards": [
-        { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
-      ]
-    },
-    {
-      "id": 2,
-      "title": "Malpe Beach",
-      "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
-      "content1": "Submitted by: Anusha Shetty on 12/12/2022",
-      "image": "assets/images/bl2.webp",
-      "relatedImages": ["assets/images/a3.jpg", "assets/images/a4.jpg", "assets/images/a3.jpg", "assets/images/a3.jpg"],
-      "relatedContent": [
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
-      ],
-      "cards": [
-        { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
-      ]
-    },
-    {
-      "id": 3,
-      "title": "Krishna Matta",
-      "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
-      "content1": "Submitted by: Anusha Shetty on 12/12/2022",
-      "image": "assets/images/bl4.jpg",
-      "relatedImages": ["assets/images/a7.jpg", "assets/images/a7.jpg", "assets/images/a7.jpg", "assets/images/a7.jpg"],
-      "relatedContent": [
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
-      ],
-      "cards": [
-        { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
-      ]
-    },
-    {
-      "id": 4,
-      "title": "Maravante Beach",
-      "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
-      "content1": "Submitted by: Anusha Shetty on 12/12/2022",
-      "image": "assets/images/bl5.jpg",
-      "relatedImages": ["assets/images/a1.jpeg", "assets/images/a1.jpeg", "assets/images/a1.jpeg", "assets/images/a1.jpeg"],
-      "relatedContent": [
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
-      ],
-      "cards": [
-        { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
-      ]
-    },
-    {
-      "id": 5,
-      "title": "Maravante Beach",
-      "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
-      "content1": "Submitted by: Anusha Shetty on 12/12/2022",
-      "image": "assets/images/bl5.jpg",
-      "relatedImages": ["assets/images/a1.jpeg", "assets/images/a1.jpeg", "assets/images/a1.jpeg", "assets/images/a1.jpeg"],
-      "relatedContent": [
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
-        "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
-      ],
-      "cards": [
-        { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
-        { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
-      ]
-    }
-  ]
-  
+  {
+    "id": 1,
+    "title": "Kaup Light house",
+    "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
+    "content1": "Submitted by: Anusha Shetty on 12/12/2022",
+    "image": "assets/images/b1.jpeg",
+    "relatedImages": ["assets/images/a1.jpeg", "assets/images/a2.jpg", "assets/images/a1.jpeg", "assets/images/a2.jpg"],
+    "relatedContent": [
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
+    ],
+    "cards": [
+      { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Malpe Beach",
+    "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
+    "content1": "Submitted by: Anusha Shetty on 12/12/2022",
+    "image": "assets/images/bl2.webp",
+    "relatedImages": ["assets/images/a3.jpg", "assets/images/a4.jpg", "assets/images/a3.jpg", "assets/images/a3.jpg"],
+    "relatedContent": [
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
+    ],
+    "cards": [
+      { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Krishna Matta",
+    "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
+    "content1": "Submitted by: Anusha Shetty on 12/12/2022",
+    "image": "assets/images/bl4.jpg",
+    "relatedImages": ["assets/images/a7.jpg", "assets/images/a7.jpg", "assets/images/a7.jpg", "assets/images/a7.jpg"],
+    "relatedContent": [
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
+    ],
+    "cards": [
+      { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Maravante Beach",
+    "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
+    "content1": "Submitted by: Anusha Shetty on 12/12/2022",
+    "image": "assets/images/bl5.jpg",
+    "relatedImages": ["assets/images/a1.jpeg", "assets/images/a1.jpeg", "assets/images/a1.jpeg", "assets/images/a1.jpeg"],
+    "relatedContent": [
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
+    ],
+    "cards": [
+      { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Maravante Beach",
+    "content": " Indulge in Udupi cuisine and experience the rich tapestry of flavors, where every bite tells a story of tradition and authenticity. ",
+    "content1": "Submitted by: Anusha Shetty on 12/12/2022",
+    "image": "assets/images/bl5.jpg",
+    "relatedImages": ["assets/images/a1.jpeg", "assets/images/a1.jpeg", "assets/images/a1.jpeg", "assets/images/a1.jpeg"],
+    "relatedContent": [
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest.",
+      "Hesaraghatta Falls is a picturesque waterfall located near Bangalore, Karnataka, known for its serene surroundings and lush greenery. It's a popular spot for nature lovers and photographers, especially during the monsoon season when the falls are at their fullest."
+    ],
+    "cards": [
+      { "id": 1, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 2, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 3, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 4, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." },
+      { "id": 5, "image": "assets/images/a2.jpg", "title": "Best Of Food", "text": "Experience the depth of the ocean by scubadiving in th." }
+    ]
+  }
+]
