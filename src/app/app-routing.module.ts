@@ -10,12 +10,14 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { StoryDetailsComponent } from './pages/story-details/story-details.component';
 import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
+import { FoodComponent } from './pages/food/food.component';
 
 const routes: Routes = [
     // Default route
     { path: '', component: LandingPageComponent },
     { path: 'nature', component: NatureComponent },
     { path: 'culture', component: CultureComponent },
+    { path: 'food', component: FoodComponent },
     {path:'advertisements',component:AdvertisementsComponent},
     { path: 'admin', component: AdminComponent },
     { path: 'home', component: LandingPageComponent },

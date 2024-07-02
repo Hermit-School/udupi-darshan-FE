@@ -30,6 +30,7 @@ import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.c
 import { DashboardnavbarComponent } from './components/admin-dashboard-components/dashboardnavbar/dashboardnavbar.component';
 import { DashboardrequesttableComponent } from './components/admin-dashboard-components/dashboardrequesttable/dashboardrequesttable.component';
 import { ListFilterPipe } from '../app/util/list-filter';
+import { FoodComponent } from './pages/food/food.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ListFilterPipe } from '../app/util/list-filter';
     AdmindashboardComponent,
     DashboardnavbarComponent,
     DashboardrequesttableComponent,
-    ListFilterPipe
+    ListFilterPipe,
+    FoodComponent
   ],
   imports: [
     BrowserModule,
