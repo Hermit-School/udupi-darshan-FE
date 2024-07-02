@@ -1,0 +1,134 @@
+.main-image-container img {
+    width: 100%;
+    height: 70vh;   
+    border-radius: 0.3rem; 
+}
+.main-img{
+  padding:1rem;
+}
+.card-img-top {
+  width: 100%; 
+  height:100%;
+  border-radius: 0.3rem;
+}
+  .container-fluid{
+    background-color: #222831;
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
+h2 {
+  font-family: 'Helvetica', sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #FFFFFF;
+  line-height: 3rem;
+  margin: 0px;
+  }
+  .row{
+    margin-left: 0rem;
+    margin-right: 0rem;
+  }
+  
+  .row > * {
+  padding-left: 0.1rem;
+  padding-right: 0.1rem;
+}
+.heading{
+  padding: 1rem;
+}
+.para{
+  padding: 1rem;
+}
+.content1 {
+  font-family: 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 1.2rem;
+  color: #FFFFFF;
+  line-height: 3rem;
+  margin: 0px; 
+}
+.text{
+  color: #FFFFFF;
+  line-height: 2rem;
+  margin: 0rem 0.5rem;
+  font-weight: 400;
+  font-size:1rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+h3 {
+  font-family: 'Helvetica', sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #FFFFFF;
+  line-height: 3rem;
+  padding: 1.5rem 1rem 1.5rem 0.5rem;
+  margin: 0px; 
+}
+.card-container {
+  overflow-x: auto; 
+  display: flex;
+  scrollbar-width: none;
+  padding: 0.5rem 1rem 0rem 0.5rem; 
+}
+.row1 {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.col {
+  flex: 1 1 20%; 
+  max-width: 20%; 
+  min-width: 200px; 
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.3rem;
+  border-color: #FF6000;
+  height: 100%;
+}
+.h-100{
+  border-color: #FFFFFF;
+}
+.card-img {
+  width: 100%;
+  height: auto; 
+  border-bottom-right-radius: 0rem; 
+  border-bottom-left-radius:0rem;
+}
+.card-body {
+  padding: 12px; 
+  flex: 1; 
+  background-color: #222831;
+}
+.card-text {
+  font-size: 14px; 
+}
+hr{
+  border-top: 0.2rem solid #FF6000; 
+  width: 10rem;
+}
+.card-text{
+  color: #FFFFFF73;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.3rem;
+}
+.card-title{
+  font-size: 1rem;
+  line-height: 1.4rem;
+  color:#FFFFFF;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.card-footer{
+  background-color: #222831;
+  border-top: 0.01rem solid #FFFFFF33;
+}
+.text-small{
+  color:#FF6000;
+  font-size: 0.9rem;
+  line-height: 1.2rem;
+}

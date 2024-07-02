@@ -28,7 +28,7 @@
           <a class="nav-link ms-lg-3 ms-xl-5" href="#">Food</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" href="#">Stories</a>
+          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/story" aria-current="page" href="#">Stories</a>
         </li>
         <li class="nav-item">
           <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/advertisements" aria-current="page" href="#">Advertisement</a>
@@ -55,7 +55,7 @@
         <a class="nav-link color" href="#">Food</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link color" href="#">Stories</a>
+        <a class="nav-link color" routerLink="/story" href="#" (click)="closeOffcanvas()">Stories</a>
       </li>
       <li class="nav-item">
         <a class="nav-link color" routerLink="/advertisements" href="#" (click)="closeOffcanvas(); removePadding()">Advertisement</a>
