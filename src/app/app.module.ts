@@ -30,6 +30,7 @@ import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.c
 import { DashboardnavbarComponent } from './components/admin-dashboard-components/dashboardnavbar/dashboardnavbar.component';
 import { DashboardrequesttableComponent } from './components/admin-dashboard-components/dashboardrequesttable/dashboardrequesttable.component';
 import { ListFilterPipe } from '../app/util/list-filter';
+import { FoodComponent } from './pages/food/food.component';
 import { StoryComponent } from './pages/story/story.component';
 
 @NgModule({
@@ -55,7 +56,8 @@ import { StoryComponent } from './pages/story/story.component';
     DashboardnavbarComponent,
     DashboardrequesttableComponent,
     ListFilterPipe,
-    StoryComponent,
+    FoodComponent,
+    StoryComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,39 @@
+{
+    "hotelCards": [
+      { "image": "assets/images/h2.jpg", "title": "Hotel A" },
+      { "image": "assets/images/h2.jpg", "title": "Hotel B" },
+      { "image": "assets/images/h2.jpg", "title": "Hotel C" },
+      { "image": "assets/images/h2.jpg", "title": "Hotel D" },
+      { "image": "assets/images/h2.jpg", "title": "Hotel E" },
+      { "image": "assets/images/h2.jpg", "title": "Hotel F" },
+      { "image": "assets/images/h2.jpg", "title": "Hotel G" },
+      { "image": "assets/images/h2.jpg", "title": "Hotel H" },
+      { "image": "assets/images/h2.jpg", "title": "Hotel I" },
+      { "image": "assets/images/h2.jpg", "title": "Hotel J" }
+    ],
+    "restaurantCards": [
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant A" },
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant B" },
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant C" },
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant D" },
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant E" },
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant F" },
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant G" },
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant H" },
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant I" },
+      { "image": "assets/images/h1.jpeg", "title": "Restaurant J" }
+    ],
+    "teaPointCards": [
+      { "image": "assets/images/t1.webp", "title": "TeaPot" },
+      { "image": "assets/images/t1.webp", "title": "Tea Point B" },
+      { "image": "assets/images/t1.webp", "title": "Tea Point C" },
+      { "image": "assets/images/t1.webp", "title": "Tea Point D" },
+      { "image": "assets/images/t1.webp", "title": "Tea Point E" },
+      { "image": "assets/images/t1.webp", "title": "Tea Point F" },
+      { "image": "assets/images/t1.webp", "title": "Tea Point G" },
+      { "image": "assets/images/t1.webp", "title": "Tea Point H" },
+      { "image": "assets/images/t1.webp", "title": "Tea Point I" },
+      { "image": "assets/images/t1.webp", "title": "Tea Point J" }
+    ]
+  }
+  

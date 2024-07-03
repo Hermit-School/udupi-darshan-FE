@@ -10,6 +10,7 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { BlogDetailsComponent} from './pages/blog-details/blog-details.component';
 import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
+import { FoodComponent } from './pages/food/food.component';
 import {StoryComponent} from 'src/app/pages/story/story.component';
 
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
     { path: '', component: LandingPageComponent },
     { path: 'nature', component: NatureComponent },
     { path: 'culture', component: CultureComponent },
+    { path: 'food', component: FoodComponent },
     {path:'advertisements',component:AdvertisementsComponent},
     { path: 'admin', component: AdminComponent },
     { path: 'home', component: LandingPageComponent },
