@@ -3,15 +3,17 @@
 }
 
 .left-panel {
-    background-color: black;
-    color: white;
     align-content: center;
     text-align: center;
     min-height:58.5rem;
+    background-color: #293042;
+    color:white;
+    box-shadow: rgb(244, 245, 247) 0px 8px 24px;
 }
 
 .login-section {
     min-height: 100%;
+    
 }
 
 .admin-panel {
@@ -28,6 +30,14 @@ h3 {
 }
 
 .right-panel {
-    background-color:lightgrey;
-    min-height:58.5rem
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    min-height:58.5rem;
+    background-color: lightblue;
+}
+
+.login-container{
+    border: solid 1px white;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    background-color: lightblue;
+    border-radius: 8px;
 }
