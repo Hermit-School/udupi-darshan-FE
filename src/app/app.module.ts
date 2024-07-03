@@ -25,11 +25,12 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { AdvertisementsComponent } from './pages/advertisements/advertisements.component';
-import { StoryDetailsComponent } from './pages/story-details/story-details.component';
+import { BlogDetailsComponent } from './pages/blog-details/blog-details.component';
 import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
 import { DashboardnavbarComponent } from './components/admin-dashboard-components/dashboardnavbar/dashboardnavbar.component';
 import { DashboardrequesttableComponent } from './components/admin-dashboard-components/dashboardrequesttable/dashboardrequesttable.component';
 import { ListFilterPipe } from '../app/util/list-filter';
+import { StoryComponent } from './pages/story/story.component';
 
 @NgModule({
   declarations: [
@@ -49,11 +50,12 @@ import { ListFilterPipe } from '../app/util/list-filter';
     ForgotpasswordComponent,
     LoadingComponent,
     AdvertisementsComponent,
-    StoryDetailsComponent,
+    BlogDetailsComponent,
     AdmindashboardComponent,
     DashboardnavbarComponent,
     DashboardrequesttableComponent,
-    ListFilterPipe
+    ListFilterPipe,
+    StoryComponent,
   ],
   imports: [
     BrowserModule,

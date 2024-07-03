@@ -8,8 +8,9 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
  import { DetailsComponent } from './pages/details/details.component';
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
-import { StoryDetailsComponent } from './pages/story-details/story-details.component';
+import { BlogDetailsComponent} from './pages/blog-details/blog-details.component';
 import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
+import {StoryComponent} from 'src/app/pages/story/story.component';
 
 const routes: Routes = [
     // Default route
@@ -23,8 +24,10 @@ const routes: Routes = [
     { path: '404', component: PagenotfoundComponent },
     { path: 'forgotpassword', component: ForgotpasswordComponent },
     { path: 'admindashboard', component: AdmindashboardComponent },
-    { path: 'story/:id', component: StoryDetailsComponent },
+    { path: 'story/:id', component: BlogDetailsComponent },
+    { path: 'story', component:StoryComponent},
     { path: '**', redirectTo: '404', pathMatch: 'full' },
+    
   ];
   @NgModule({
     imports: [RouterModule.forRoot(routes,{useHash: true})],

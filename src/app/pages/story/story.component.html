@@ -1,0 +1,30 @@
+<div class="container-fluid p-0" >
+    <div class="col-12 col-sm-8 col-md-6 col-lg-4 heading-container">
+        <h2 class="heading-text text-white fw-bold">Read Stories Written By Various Travellers</h2>
+        <img src="assets/images/Vectorblob.svg" alt="Design Blob" class="design-blob">
+        </div>     
+<div *ngFor="let chunk of chunkedStories" class="card-container1">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 " >
+        <div class="col" *ngFor="let story of chunk" >
+            <div class="card " >
+                    <img [src]="story.image" alt="Image" class="square-image">
+                <div class="card-body">
+                    <div class="text-container">
+                                <p class="name-text">{{ story.title }}</p>
+                                <p class="author-text">By {{ story.author }}</p>
+                            <div class="line"></div>
+                            <div class="additional-content">
+                                <p class="text-content">{{ story.content }}</p>
+                            </div>
+                        </div>
+                            <div class="card-footer">
+                                        <a href="#" class="card-footer-link">
+                                        <p class="footer-text">Read Full Blog <i class="bi bi-arrow-right"></i></p>
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
