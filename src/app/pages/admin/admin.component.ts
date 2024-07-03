@@ -17,4 +17,8 @@ export class AdminComponent implements OnInit {
     console.log('forgotPassword');
     this.router.navigate(['/forgotpassword']);
   }
+
+  login(){
+    this.router.navigate(['/admindashboard']);
+  }
 }
