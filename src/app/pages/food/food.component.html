@@ -1,0 +1,107 @@
+<div class="container-fluid p-0" >
+    <div class="heading-container">
+        <h1 class="heading-text text-white fw-bold">Experience The Joy Of Being With Food</h1>
+        <img src="assets/images/Vectorblob.svg" alt="Design Blob" class="design-blob">     
+    </div>
+    <div class="navbar">
+        <h1 class="text-white fw-bold">Best Of Food</h1>
+      </div>
+      <div class="container-fluid mt-4">
+        <div class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-4 g-4">
+          <div class="col">
+            <div class="card h-100">
+              <img src="assets/images/h1.jpeg" class="card-img-top" alt="Card Image 1">
+              <div class="card-body">
+                <h5 class="card-title">Woodlands</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100">
+              <img src="assets/images/h2.webp" class="card-img-top" alt="Card Image 2">
+              <div class="card-body">
+                <h5 class="card-title">Dollops Manipal </h5> 
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100">
+              <img src="assets/images/h3.jpeg" class="card-img-top" alt="Card Image 3">
+              <div class="card-body">
+                <h5 class="card-title">Manipal Inn</h5>  
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100">
+              <img src="assets/images/h1.jpeg" class="card-img-top" alt="Card Image 4">
+              <div class="card-body">
+                <h5 class="card-title">Shantisagara</h5> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-heading mt-4">
+        <h2 class="text-white fw-bold">Hotels</h2>
+      </div>
+       <div class="container-fluid mt-4" >
+        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
+          <div class="col" *ngFor="let card of visibleHotelCards">
+            <div class="card h-100">
+              <img [src]="card.image" class="card-img-top" [alt]="card.title">
+              <div class="card-body">
+                <h5 class="card-title">{{ card.title }}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-3">
+        <button class="btn btn-view-all mt-4" (click)="toggleViewAll()">
+          {{ viewAllHotel ? 'View Less' : 'View All' }}
+        </button>
+      </div>
+      </div>
+      <div class="activity-heading mt-4">
+        <h2 class="text-white fw-bold">Restaurants</h2>
+      </div>
+      <div class="container-fluid mt-4">
+        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
+          <div class="col" *ngFor="let card of visibleRestaurantCards">
+            <div class="card h-100">
+              <img [src]="card.image" class="card-img-top" [alt]="card.title">
+              <div class="card-body">
+                <h5 class="card-title">{{ card.title }}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-3">
+          <button class="btn btn-view-all" (click)="toggleViewAllRestaurants()">
+            {{ viewAllRestaurants ? 'View Less' : 'View All' }}
+          </button>
+        </div>  
+      </div> 
+      <div class="activity-heading mt-4">
+        <h2 class="text-white fw-bold">Snack Time</h2>
+      </div>
+      <div class="container-fluid mt-4">
+        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
+          <div class="col" *ngFor="let card of visibleTeaPointCards">
+            <div class="card h-100">
+              <img [src]="card.image" class="card-img-top" [alt]="card.title">
+              <div class="card-body">
+                <h5 class="card-title">{{ card.title }}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-3 gap">
+          <button class="btn btn-view-all mt-4" (click)="toggleViewAllTeaPoints()">
+            {{ viewAllTeaPoints ? 'View Less' : 'View All' }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    

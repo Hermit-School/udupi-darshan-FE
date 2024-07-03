@@ -11,11 +11,11 @@
         </div>
         <div class="col-7 right-panel">
             <div class="mt-20"></div>
-            <div class="container-fluid">
+            <div class="container-fluid login-container  pt-3 pb-5">
                 <form class="row">
                     <div class="row mt-4">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
                             <label for="validationServer01" class="form-label">Username</label>
                             <input type="text" class="form-control " id="validationServer01" value=""
                                 required="">
@@ -23,11 +23,11 @@
 
                             </div> -->
                         </div>
-                        <div class="col-md-4"></div>
+                        <div class="col-md-3"></div>
                     </div>
                     <div class="row mt-4">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-4">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
                             <label for="validationServer02" class="form-label">Password</label>
                             <input type="password" class="form-control " id="validationServer02" value=""
                                 required="">
@@ -35,10 +35,10 @@
 
                             </div> -->
                         </div>
-                        <div class="col-md-4"></div>
+                        <div class="col-md-3"></div>
                     </div>
                     <div class="col-12 text-center mt-5">
-                        <button class="btn btn-light" type="submit">Login</button>
+                        <button class="btn btn-light" type="submit" (click)="login()">Login</button>
                         <button class="btn btn-light mx-3" (click)="forgotPassword()">Forgot Password</button>
                     </div>
                 </form>

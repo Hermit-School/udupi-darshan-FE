@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <div *ngIf="blog">
+    <div class="heading">
+    <h2>{{ blog.title }}</h2>
+    <p class="content1">{{blog.content1}}</p>
+    </div>
+    <div class="main-img">
+    <div class="main-image-container">
+      <img [src]="blog.image" alt="Blog image" class="img-fluid">
+    </div>
+    <div class="row mt-4">
+      <div *ngFor="let relatedImage of relatedImages; let i = index" [ngClass]="{'col-3': true, 'col-md-3': true, 'col-lg-4': true, 'mb-3': true, 'd-lg-none': i === 3}">
+        <div class="card">
+          <img [src]="relatedImage" alt="Related image" class="card-img-top">
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class=" para" >
+      <ng-container *ngFor="let paragraph of relatedContent">
+        <p class="text">{{ paragraph }}</p>
+      </ng-container>
+      <h3>Don't Miss These</h3>
+      <div class="card-container">
+        <div class="row1 mb-4">
+          <div class="col" *ngFor="let card of cards">
+            <div class="card h-100">
+              <img [src]="card.image" alt="Card image" class="card-img">
+              <div class="card-body">
+                <h5 class="card-title">{{ card.title }}</h5>
+                <hr>
+                <p class="card-text">{{ card.text }}</p>
+              </div>
+              <div class="card-footer">
+                <a><small class="text-small">View Details <i class="bi bi-arrow-right"></i></small></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
