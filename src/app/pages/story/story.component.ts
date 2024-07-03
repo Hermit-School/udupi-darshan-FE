@@ -21,7 +21,6 @@ export class StoryComponent implements OnInit {
   fetchStories(): void {
     this.storyService.getStories().subscribe(data => {
       this.stories = data;
-      console.log('Fetched stories:', data); 
     this.stories = data;
     this.chunkStories();
     });
@@ -31,7 +30,6 @@ export class StoryComponent implements OnInit {
     this.chunkedStories = [];
     for (let i = 0; i < this.stories.length; i += chunkSize) {
       this.chunkedStories.push(this.stories.slice(i, i + chunkSize));
-    }
-    console.log('Chunked stories:', this.chunkedStories); 
+    } 
   }
 }
