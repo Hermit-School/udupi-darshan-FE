@@ -1,17 +1,17 @@
 .advertisement {
     display:flex;
-    flex-wrap: wrap;
-    gap: 0.2rem; /* Adjust the gap as per your preference */
+    flex-wrap: nowrap;
+    gap: 0.2rem; 
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
-  
   .advertisement-image img {
-    width: 100%; /* Ensure images fill their containers */
-    height: 94%; /* Maintain aspect ratio */
-    max-width: 100%; /* Ensure images don't exceed their container's width */
-    max-height: 100%;
+    width: 100%;
+    height: 8rem;
+    max-width: 100%; 
 }
   .advertisement-image {
-    width: calc(50% - 0.1rem); /* Each image takes 50% width minus half of the gap */
+    width: 25%;
     overflow: hidden;
 }
   
