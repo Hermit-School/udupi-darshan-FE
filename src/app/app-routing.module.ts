@@ -12,6 +12,7 @@ import { BlogDetailsComponent} from './pages/blog-details/blog-details.component
 import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
 import { FoodComponent } from './pages/food/food.component';
 import {StoryComponent} from 'src/app/pages/story/story.component';
+import { StoryDetailsComponent } from './pages/story-details/story-details.component';
 
 const routes: Routes = [
     // Default route
@@ -26,13 +27,17 @@ const routes: Routes = [
     { path: '404', component: PagenotfoundComponent },
     { path: 'forgotpassword', component: ForgotpasswordComponent },
     { path: 'admindashboard', component: AdmindashboardComponent },
-    { path: 'story/:id', component: BlogDetailsComponent },
+    { path: 'blog/:id', component: BlogDetailsComponent },
+    { path: 'story/:id', component: StoryDetailsComponent},
     { path: 'story', component:StoryComponent},
     { path: '**', redirectTo: '404', pathMatch: 'full' },
     
   ];
   @NgModule({
-    imports: [RouterModule.forRoot(routes,{useHash: true})],
+    imports: [RouterModule.forRoot(routes, {
+      scrollPositionRestoration: 'enabled', 
+      useHash: true
+    })],
     exports: [RouterModule]
   })
 export class AppRoutingModule { }

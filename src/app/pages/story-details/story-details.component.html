@@ -1,12 +1,12 @@
 <div class="container-fluid">
-  <div *ngIf="blog">
+  <div *ngIf="story">
     <div class="heading">
-    <h2>{{ blog.title }}</h2>
-    <p class="content1">{{blog.content1}}</p>
+    <h2>{{ story.title }}</h2>
+    <p class="content1">{{story.content1}}</p>
     </div>
     <div class="main-img">
     <div class="main-image-container">
-      <img [src]="blog.image" alt="Blog image" class="img-fluid">
+      <img [src]="story.image" alt="Blog image" class="img-fluid">
     </div>
     <div class="row mt-4">
       <div *ngFor="let relatedImage of relatedImages; let i = index" [ngClass]="{'col-3': true, 'col-md-3': true, 'col-lg-4': true, 'mb-3': true, 'd-lg-none': i === 3}">

@@ -15,5 +15,10 @@ export class StoryService {
   getStories(): Observable<Story[]> {
     return this.http.get<Story[]>(this.jsonUrl);
   }
+  getStoryById(id: number): Observable<Story | undefined> {
+    return this.getStories().pipe(
+      map(blogs => blogs.find(story => story.id === id))
+    );
+  }
 }
 

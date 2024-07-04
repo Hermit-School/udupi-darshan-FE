@@ -16,14 +16,14 @@
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" (click)="onNextClick()" [disabled]="currentSlideIndex === (card?.images?.length ?? 0) - 1">
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" (click)="onNextClick()" [disabled]="currentSlideIndex === (card.images.length) - 1">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
     <div class="image-overlay" [ngClass]="{ 'active': isOverlayActive }">
         <div class="image-info">
-          <span>{{ currentSlideIndex + 1 }}/{{ card?.images?.length ?? 0 }}</span>
+          <span>{{ currentSlideIndex + 1 }}/{{card && card.images ? card.images.length : 0}}</span>
         </div>
       </div>
   </section>
