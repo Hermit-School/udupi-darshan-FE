@@ -20,6 +20,6 @@ export class BlogsComponent implements OnInit {
   }
 
   viewDetails(blogId: number): void {
-    this.router.navigate(['/story', blogId]);
+    this.router.navigate(['/blog', blogId]);
   }
 }

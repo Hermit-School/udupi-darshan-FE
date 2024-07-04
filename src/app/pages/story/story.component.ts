@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Story } from 'src/app/models/story';
 import { StoryService } from 'src/app/services/story.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-story',
@@ -12,10 +13,18 @@ export class StoryComponent implements OnInit {
   stories: Story[] = [];
   chunkedStories: Story[][] = [];
 
-  constructor(private storyService: StoryService) { }
+  constructor(private router:Router, private storyService: StoryService) { }
 
   ngOnInit(): void {
     this.fetchStories();
+    this.storyService.getStories().subscribe((stories:Story[])=>{
+      this.stories=stories;
+    }
+    );
+
+  }
+  viewDetails(storyId:number):void{
+    this.router.navigate(['/story',storyId]);
   }
 
   fetchStories(): void {

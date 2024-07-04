@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BlogService } from '../../services/blog.service'; 
-import  {Blog} from 'src/app/models/blog';
+import { StoryService } from 'src/app/services/story.service'; 
+import  {Story} from 'src/app/models/story';
 
 @Component({
   selector: 'app-story-details',
@@ -9,26 +9,25 @@ import  {Blog} from 'src/app/models/blog';
   styleUrls: ['./story-details.component.scss']
 })
 export class StoryDetailsComponent implements OnInit {
-  blog: Blog | undefined;
+ story: Story | undefined;
   relatedImages: string[] = [];
   relatedContent: string[] = [];
   cards: any[] = [];
 
-  constructor(private route: ActivatedRoute, private blogService: BlogService) { }
+  constructor(private route: ActivatedRoute, private storyService: StoryService) { }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam !== null) {
-      const blogId = +idParam;
-      this.blogService.getBlogById(blogId).subscribe(blog => {
-        if (blog) {
-          this.blog = blog;
-          this.relatedImages = blog.relatedImages;
-          this.relatedContent = blog.relatedContent;
-          this.cards = blog.cards;
-        } else {
-          console.error(`Blog with id ${blogId} not found`);
+      const storyId = +idParam;
+      this.storyService.getStoryById(storyId).subscribe(story => {
+        if (story) {
+          this.story = story;
+          this.relatedImages = story.relatedImages;
+          this.relatedContent =story.relatedContent;
+          this.cards = story.cards;
         }
+        
       });
     }
   }
