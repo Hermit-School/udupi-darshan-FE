@@ -8,7 +8,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
  import { DetailsComponent } from './pages/details/details.component';
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
-import { BlogDetailsComponent} from './pages/blog-details/blog-details.component';
+import { BlogDetailsComponent} from './components/blog-details/blog-details.component';
 import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
 import { FoodComponent } from './pages/food/food.component';
 import {StoryComponent} from 'src/app/pages/story/story.component';

@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Environment, MockRoutes } from 'src/constants/routes';
 import { Details } from '../models/card';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 
 export class natureServiceService {
-
-   natureData : Details[] = [];
-   
+  private jsonUrl = 'assets/data/nature.json';
   constructor(private http: HttpClient) { }
 
-  getData() {
-    return this.http.get<any[]>(Environment.local + MockRoutes.getNatureData);
+  getData(): Observable<Details[]> {
+    return this.http.get<Details[]>(this.jsonUrl);
   }
 }

@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Environment, MockRoutes } from 'src/constants/routes';
-import { Details } from 'src/app/models/card';
+import { Details } from '../models/card';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class CultureService {
-
-   cultureData : Details[] = [];
-   
+  private jsonUrl = 'assets/data/culture.json';
   constructor(private http: HttpClient) { }
 
-  getData() {
-    return this.http.get<Details[]>(Environment.local + MockRoutes.geCultureData);
+  getData(): Observable<Details[]> {
+    return this.http.get<Details[]>(this.jsonUrl);
   }
 }
