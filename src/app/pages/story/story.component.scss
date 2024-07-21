@@ -10,16 +10,16 @@
     flex-direction: column;
     padding: 0;
 }
+// B015 FE BY sulaxmi(from)
 .heading-text {
-    color: #FFF; 
-    margin: 0; 
+    color: #FFF;
+    margin: 3rem; 
     z-index: 1; 
     text-align: center;
-    font-family: Helvetica, sans-serif;
-    font-size: 40px;
-    font-weight: 700;
-    line-height: 48px;
-    }
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 2.5rem;
+}
+//to
 .design-blob {
   position: absolute; 
   top: 40%;
@@ -55,8 +55,11 @@
     margin: 0 auto;
     
 }
+//border radius
 .square-image {
     width: 100%;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
     border-bottom-right-radius: 0rem; 
     border-bottom-left-radius:0rem;
 }
@@ -109,8 +112,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; 
+    display: -webkit-box; 
     -webkit-box-orient: vertical;
     text-align: left;
     color: rgba(255, 255, 255, 0.45);
@@ -129,20 +131,6 @@
     font-size: 0.9rem;
     line-height: 1.2rem;
 }
-// .card-footer{
-//     background-color: #222831;
-//     border-top: 0.01rem solid #FFFFFF33;
-//   }
-
-
-
-// .footer-text-container {
-//     width: 112px; /* Adjusted width to match specified properties */
-//     height: 20px; /* Adjusted height */
-//     gap: 4px;
-    
-// }
-
 .footer-text {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 14px;
@@ -154,6 +142,7 @@
     display: flex;
     align-items: center;
 }
+
 .footer-text i {
     margin-left: 4px; 
 }

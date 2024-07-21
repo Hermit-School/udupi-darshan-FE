@@ -5,7 +5,10 @@
     width: 100%;
     height: 11.3rem; 
     border-top-left-radius:  0.5rem;
-    border-top-right-radius:  0.5rem;   
+    border-top-right-radius:  0.5rem;  
+    // B014 FE BY SULAXMI FROM
+    object-fit: cover;
+    //TO
 }
 .custom-container{
     padding: 0.5rem 1rem 0rem 0.5rem;
@@ -17,14 +20,16 @@
     border-color: #FF6000;
     color: #FF6000;
   }
+  // B013 FE BY sulaxmi(from)
   h1{
     color: #ffffff;
-    font-size: 2.5rem;
-    line-height: 3rem;
-    font-weight: 700;
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    line-height: 2.5rem;
+    font-weight: 600;
     font-family: Arial, Helvetica, sans-serif;
-    padding: 1rem;
+    padding: 0.1rem 1rem 0.5rem 0rem;
   }
+  // to
   .card-body{
     background-color: #222831;
     color: #ffffff;
@@ -53,6 +58,8 @@
 
 .custom-large-card .card-img-top {
     height: 11.7rem;
-    object-fit: fill;
+    // B014 FE BY SULAXMI FROM
+    object-fit: cover;
+    //TO
 }
 

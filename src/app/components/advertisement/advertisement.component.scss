@@ -14,4 +14,35 @@
     width: 25%;
     overflow: hidden;
 }
-  
+
+.slideshow-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.slideshow-track {
+  display: flex;
+  transition: transform 3s ease-in-out;
+}
+
+.slide {
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.advertisement {
+  display: flex;
+}
+
+.advertisement-image {
+  flex: 1;
+}
+
+.advertisement img,
+.slideshow-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill; 
+}
