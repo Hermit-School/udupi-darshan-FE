@@ -1,0 +1,73 @@
+.card-footer {
+    background-color: #222831;
+    border-top: 0.01rem solid rgba(247, 244, 244, 0.753);
+  }
+  .text-small {
+    color: #ff6000;
+    // B014 FE BY sulaxmi(from)
+    font-size: 0.9rem;
+    //to
+  }
+  .btn {
+    color: #ff6000;
+    border-color: #ff6000;
+    font-size: large;
+  }
+  .image-gallery {
+    position: relative;
+    max-width: 100%;
+    max-height:50%;
+  }
+  
+  .image-overlay {
+    position: absolute;
+    top: 10px; 
+    right: 10px;
+    color: white; 
+    padding: 6px 12px; 
+    border-radius: 0; 
+  }
+  .heading-container {
+    width: 100%;
+    max-width: 1536px;
+  }
+  .title {
+    width: 100%;
+    font-family: Helvetica, sans-serif;
+    // B014 FE BY sulaxmi(from)
+    font-size: clamp(1.5rem, 3vw, 2.3rem);
+    //to
+    font-weight: 700;
+    line-height: 48px;
+    text-align: left;
+    color: rgba(255, 255, 255, 1);
+  }
+    .row1{
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 1rem;
+      width: 100%;
+      justify-content: space-between;
+    }
+    .col{
+      flex: 1 1 20%;
+      max-width: 20%;
+      min-width: 200px;
+    }
+    .card-img-top{
+      width: 100%;
+      height: auto;
+      border-bottom-right-radius: 0rem;
+      border-bottom-left-radius: 0rem;
+    }
+    .card-body{
+      padding: 12px;
+      flex: 1;
+      background-color: #222831;
+    }
+    hr{
+      border-top: 0.2rem  solid #ff6000;
+      width: 10rem;
+      opacity: 1 !important;
+    }
+   
