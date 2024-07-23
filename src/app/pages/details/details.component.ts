@@ -9,7 +9,6 @@ import { Details } from 'src/app/models/card';
   selector: 'app-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss',
-    '../../../styles/pages/details.scss',
   ]
 })
 export class DetailsComponent implements OnInit {
