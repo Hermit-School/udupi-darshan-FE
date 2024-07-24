@@ -32,7 +32,10 @@
     cursor: pointer;
   }
   .fit-screen-img {
-    object-fit: fill;
     width: 100%;
     height: 91vh;
-}
+    // B014 FE BY sulaxmi(from)
+    object-fit: cover; 
+    //to
+  }
+  

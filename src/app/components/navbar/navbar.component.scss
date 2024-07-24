@@ -1,23 +1,26 @@
 .icon {
      color: #FF6000;
 }
+// F026 FE BY sulaxmi(from)
 .nav-link {
-    color: #FF6000;
+    color: #f9f9f9;
     font-weight: bold;
 }
+.active-link{
+  color: #FF6000;
+}
+//TO
 .custom-navbar-height{
   background-color: #222831;
 }
 .container-fluid {
     background-color: #222831;
 }
-.navbar-toggler {
-    
+.navbar-toggler {  
     margin-left: 10px;
     border: none;
 }
 .btn {
-
     color: #FF6000;
     border-color: #FF6000;
 }
@@ -34,16 +37,13 @@
 .has-error .form-control {
     border: 0.1rem solid rgb(224, 11, 11);
 }
-
 .modal-footer {
     border: none;
 }
-
 .required-field {
     color: #e3350a;
     font-weight: bold;
 }
-
 .form-label {
     font-weight: bold;
 }
@@ -52,7 +52,6 @@
     align-items: center;
     margin: 5px 0;
   }
-
   .photo-name-container {
     display: flex;
     justify-content: space-between;
@@ -63,23 +62,19 @@
     border-radius: 4px;
     background-color: #f9f9f9;
   }
-
   .photo-name-container p {
     margin: 0;
     cursor: pointer;
     flex-grow: 1;
   }
-
   .delete-icon {
     margin-left: 10px;
     font-size: 16px;
     font-weight: bold;
-}
-    
+}  
   .delete-icon:hover {
     color: #cc0000;
   }
-
   .uploaded-photos {
     display: flex;
     flex-direction: column;
@@ -90,7 +85,6 @@
     font-size: 1.1rem;
     text-align: center; 
     padding: 0.5rem 10%;
-
   }
   .btn1{
     color: #222831;
@@ -103,10 +97,6 @@
     color: #FF6000;
     margin-right: 2rem;
   }
-  .position-relative .input-group {
-    position: relative;
-  }
-  
   .search-icon {
     background-color: transparent;
     border: none;
@@ -118,31 +108,21 @@
   pointer-events: none;
   transform: translateY(-50%);  
   }
-  .navbar-brand {
-    margin-right: 1rem; 
-  }
-  
-  
 .input-group{
   display: block;
 }
-
 .search-input {
   padding-left: 2rem; 
   width: 256px; 
   position:relative;
 }
-.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
-  
-  border-radius: 0.7rem;
-  
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) { 
+  border-radius: 0.7rem; 
 }
 .search-form {
   margin-right: 1rem; 
 }
-.custom-ml-inherit {
-  margin-left: inherit;
-}
+
 .navbar-toggler:focus {
   outline: none;
   box-shadow: none;
@@ -162,8 +142,7 @@
 .offcanvas-body .nav-item {
   margin-bottom: 0.8rem; 
 }
-textarea {
- 
+textarea { 
   max-width: 100%;
   width: 100%; 
 }

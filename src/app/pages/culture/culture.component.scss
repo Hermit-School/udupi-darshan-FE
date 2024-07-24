@@ -12,11 +12,15 @@
     margin-bottom: 0;
   }
   .heading-text {
-    color: #FFF; 
-    margin: 0;
+    // B015 FE BY sulaxmi(from)
+    color: #FFF;
+    margin: 3rem; 
     z-index: 1; 
     text-align: center;
-  }
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 2.5rem;
+    //to
+}
 .design-blob {
     position: absolute; 
     top: 40%;
@@ -58,13 +62,12 @@
   color: #FFF;
    font-size: 2rem; 
 }
+// B013 FE BY sulaxmi(from)
 h2{
   margin-bottom: 0rem;
-  font-size: xx-large;
+  font-size: clamp(1.5rem, 3vw, 1.7rem);
 }
-h1{
-  font-size: xx-large;
-}
+//to
 .more-cards {
   display: none;
 }

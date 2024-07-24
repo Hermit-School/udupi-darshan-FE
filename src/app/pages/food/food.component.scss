@@ -11,13 +11,16 @@
   justify-content: center;
   flex-direction: column;
 }
+// B015 FE BY sulaxmi(from)
 .heading-text {
-  margin: 1rem;  
+  color: #FFF;
+  margin: 3rem; 
   z-index: 1; 
   text-align: center;
-  line-height: 3rem; 
-  font-family:Arial, Helvetica, sans-serif;    
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 2.5rem;
 }
+//to
 .design-blob {
 position: absolute; 
 top: 40%;
@@ -58,10 +61,9 @@ z-index: 0;
 }
 h2{
   margin-bottom: 0rem;
-  font-size: xx-large;
-}
-h1{
-  font-size: xx-large;
+  // B013 FE BY sulaxmi(from)
+  font-size: clamp(1.5rem, 3vw, 1.7rem);
+  //to
 }
 .more-cards {
   display: none;

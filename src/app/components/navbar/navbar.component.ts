@@ -16,7 +16,6 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   wordCount: number = 0;
   maxWordCount: number = 500;
   @ViewChild('writeToUsModal') writeToUsModal!: ElementRef;
-  // router: any;
 
   constructor(private fb: FormBuilder, private router: Router,private renderer: Renderer2) {
     this.form = this.fb.group({
@@ -25,7 +24,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
       message: ['', Validators.required]
     });
   }
-
+  
   ngOnInit(): void {
     this.form.get('message')?.valueChanges.subscribe(value => {
       this.wordCount = this.countWords(value);

@@ -1,19 +1,32 @@
-<div #advertisementContainer>
-<div class="advertisement">
-    <div class="advertisement-image">
-      <img src="assets/images/ad1.jpg" alt="Image 1">
-    </div>
-    <div class="advertisement-image">
-      <img src="assets/images/add.jpg" alt="Image 2">
-    </div>
-    <div class="advertisement-image">
-      <img src="assets/images/ad5.jpeg" alt="Image 3">
-    </div>
-    <div class="advertisement-image">
-      <img src="assets/images/ad8.jpg" alt="Image 4">
+<!--  F025 FE by sulaxmi(full component) -->
+<div *ngIf="!isSmallScreen">
+  <div #advertisementContainer>
+    <div class="advertisement">
+      <div class="advertisement-image">
+        <img src="assets/images/ad1.jpg" alt="Image 1">
+      </div>
+      <div class="advertisement-image">
+        <img src="assets/images/add.jpg" alt="Image 2">
+      </div>
+      <div class="advertisement-image">
+        <img src="assets/images/ad5.jpeg" alt="Image 3">
+      </div>
+      <div class="advertisement-image">
+        <img src="assets/images/ad8.jpg" alt="Image 4">
+      </div>
     </div>
   </div>
 </div>
 
-  
-
+<div *ngIf="isSmallScreen">
+  <div class="slideshow-container">
+    <div class="slideshow-track" [style.transform]="'translateX(-' + slideIndex * 100 + '%)'" [style.transition]="transitionStyle">
+      <div class="slide" *ngFor="let image of images">
+        <img [src]="image.src" class="d-block w-100" [alt]="image.alt">
+      </div>
+      <div class="slide">
+        <img [src]="images[0].src" class="d-block w-100" [alt]="images[0].alt">
+      </div>
+    </div>
+  </div>
+</div>
