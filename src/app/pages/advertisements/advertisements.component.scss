@@ -48,9 +48,11 @@
 }
 .modal-header {
     border-bottom: none; 
+    padding: 0.2rem 1rem 0rem 0rem;
 }
 .modal-footer{
     border-top: none;
+    padding: 0rem;
 }
 .table > :not(caption) > * > * { 
     border-bottom-width:0rem;
@@ -58,9 +60,14 @@
 }
 .bold-text {
     font-weight: bold;
+    font-size: 14px;
+    line-height: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
 }
 thead{
-    border-bottom: 0.1rem solid rgba(12, 12, 12, 0.829);
+    border-bottom: 0.1rem solid #00000033;
+    font-weight: 700;
 }
 .card-container {
     background-color: #222831;
@@ -108,4 +115,32 @@ thead{
 .small-cards {
     gap: 0px;
 }
-
+.modal-content{
+   padding:  1rem;
+}
+.modal-body{
+    padding: 0rem;
+    font-size: 14px;
+    line-height: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 400;
+}
+ .ad{
+    font-size: 1.2rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    line-height: 1.5rem;
+ } 
+ .contact{
+    font-size: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    line-height: 1.5rem;
+ }
+ .contact-text span {
+    display: inline-block; 
+    margin-bottom: 0.5rem; 
+  }
+  .btn-close{
+    --bs-btn-close-opacity: none;
+  }
