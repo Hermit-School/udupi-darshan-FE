@@ -1,45 +1,76 @@
 <div class="container-fluid admin-panel">
     <div class="row login-section">
-        <div class="col-5 left-panel">
+        <div class="col-12 col-md-5 left-panel">
             <div class="row">
                 <h1>Administrator Login Page</h1>
-                
             </div>
             <div class="row">
                 <h3>Login here to moderate Content</h3>
             </div>
         </div>
-        <div class="col-7 right-panel">
-            <div class="mt-20"></div>
-            <div class="container-fluid login-container  pt-3 pb-5">
-                <form class="row">
+        <div class="col-12 col-md-7 right-panel">
+            <div class="mt-5"></div>
+            <div class="container-fluid login-container pt-3 pb-5">
+                <form class="row needs-validation" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
                     <div class="row mt-4">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            <label for="validationServer01" class="form-label">Username</label>
-                            <input type="text" class="form-control " id="validationServer01" value=""
-                                required="">
-                            <!-- <div class="valid-feedback">
-
-                            </div> -->
+                        <div class="col-12 col-md-3"></div>
+                        <div class="col-12 col-md-6">
+                            <label for="username" class="form-label">Username (Email)</label>
+                            <input
+                                type="email"
+                                formControlName="username"
+                                class="form-control"
+                                id="username"
+                                [ngClass]="{
+                                    'input-invalid': loginForm.get('username')?.invalid && loginForm.get('username')?.touched,
+                                    'input-valid': loginForm.get('username')?.valid
+                                }"
+                                required
+                            >
+                            <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="invalid-feedback d-block">
+                                <div *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.</div>
+                                <div *ngIf="loginForm.get('username')?.errors?.['email']">Invalid email address.</div>
+                            </div>
                         </div>
-                        <div class="col-md-3"></div>
+                        <div class="col-12 col-md-3"></div>
                     </div>
                     <div class="row mt-4">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            <label for="validationServer02" class="form-label">Password</label>
-                            <input type="password" class="form-control " id="validationServer02" value=""
-                                required="">
-                            <!-- <div class="valid-feedback">
-
-                            </div> -->
+                        <div class="col-12 col-md-3"></div>
+                        <div class="col-12 col-md-6 position-relative">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <input
+                                    [type]="changetype ? 'password' : 'text'"
+                                    formControlName="password"
+                                    class="form-control password-input"
+                                    id="password"
+                                    [ngClass]="{
+                                        'input-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
+                                        'input-valid': loginForm.get('password')?.valid
+                                    }"
+                                    required
+                                >
+                                <button type="button"  class=" eye-icon btn btn-outline-secondary toggle-password" (click)="togglePasswordVisibility()">
+                                    <i [ngClass]="changetype ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="invalid-feedback d-block">
+                                Password does not meet the requirements
+                                <button type="button" class="btn tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                title={{passwordTooltip}}  data-bs-custom-class="custom-tooltip">?</button>
+                            </div>
                         </div>
-                        <div class="col-md-3"></div>
+                        <div class="col-12 col-md-3"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-3"></div>
+                        <div class="col-12 col-md-6">
+                            <button class="btn btn-link p-0" type="button" (click)="forgotPassword()">Forgot Password?</button>
+                        </div>
+                        <div class="col-12 col-md-3"></div>
                     </div>
                     <div class="col-12 text-center mt-5">
-                        <button class="btn btn-light" type="submit" (click)="login()">Login</button>
-                        <button class="btn btn-light mx-3" (click)="forgotPassword()">Forgot Password</button>
+                        <button class="btn btn-light" type="submit" [disabled]="!loginForm.valid">Login</button>
                     </div>
                 </form>
             </div>

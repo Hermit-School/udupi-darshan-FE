@@ -128,11 +128,32 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-exit" data-bs-dismiss="modal" (click)="resetModal()">Exit</button>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button type="submit" class="btn btn-submit" [disabled]="form.invalid" data-bs-dismiss="modal">Submit</button>
+              <button type="submit" class="btn btn-submit" [disabled]="form.invalid" >Submit</button>
             </div>
           </div>
         </form>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container  p-3">
+  <!-- Success Toast -->
+  <div #successToast class="toast bg-success text-white align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        <i class="bi bi-check-circle-fill me-2"></i> Form submitted successfully!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
+  <div #errorToast class="toast bg-danger text-white align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        <i class="bi bi-x-circle-fill me-2"></i> Error submitting form. Please try again.
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
 </div>
