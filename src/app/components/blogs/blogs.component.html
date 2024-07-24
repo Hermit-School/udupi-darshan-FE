@@ -1,25 +1,30 @@
 <div class="container-fluid">
-  <h1>Blogs </h1>
-<div class="card-container">
-  <div class="row1 mb-4">
-    <div class="col" *ngFor="let blog of blogs">
-      <div class="card h-100">
-        <img [src]="blog.image" class="card-img" alt="...">
-        <div class="card-body">
-          <h5 class="card-title text-white">{{ blog.title }}</h5>
-          <hr>
-          <p class="card-text text-color">{{ blog.content }}</p>
-        </div>
-        <div class="card-footer">
-          <a [routerLink]="['/blog', blog.id]" class="no-underline"><small class="text-small">View Details <i class="bi bi-arrow-right"></i></small></a>
-        </div>
+  <h1>Blogs</h1>
+  <div class="card-container">
+    <div class="row1 mb-4">
+      <div class="col" *ngFor="let blog of blogs">
+        <!-- cards clickable -->
+        <a [routerLink]="['/blog', blog.id]" class="card-link">
+          <div class="card h-100">
+            <img [src]="blog.image" class="card-img" alt="...">
+            <div class="card-body">
+              <h5 class="card-title text-white">{{ blog.title }}</h5>
+              <hr>
+              <p class="card-text text-color">{{ blog.content }}</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-small">View Details <i class="bi bi-arrow-right"></i></small>
+            </div>
+          </div>
+        </a>
       </div>
     </div>
   </div>
 </div>
-</div>
-<div class="row ">
+<!-- F027 FE BY SULAXMI (From)-->
+<div class="row">
   <div class="col text-center mb-3">
-    <button type="button" class="btn custom-footer-button">View More</button>
+    <button type="button" class="btn custom-footer-button" [routerLink]="['/story']">View More</button>
   </div>
+  <!-- to -->
 </div>

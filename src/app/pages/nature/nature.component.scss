@@ -11,12 +11,16 @@
     justify-content: center;
     flex-direction: column;
 }
+// B015 FE BY sulaxmi(from)
 .heading-text {
     color: #FFF;
-    margin: 0; 
+    margin: 3rem; 
     z-index: 1; 
     text-align: center;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 2.5rem;
 }
+//to
 .design-blob {
   position: absolute; 
   top: 40%;
@@ -77,10 +81,9 @@
   }
   h2{
     margin-bottom: 0rem;
-    font-size: xx-large;
-  }
-  h1{
-    font-size: xx-large;
+    // B013 FE BY sulaxmi(from)
+    font-size: clamp(1.5rem, 3vw, 1.7rem);
+    //to
   }
   .more-cards {
     display: none;
@@ -94,13 +97,6 @@
   .mt-4 {
     margin-top: 0rem !important;
     margin-bottom: 0rem !important;
-}
-.wildlife-heading {
-  text-align:left;
-  padding: 20px;
-  background-color: #222831;
-  color: #FFF; 
-   font-size: 2rem; 
 }
 .btn {
    color: #FF6000;
