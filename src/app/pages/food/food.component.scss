@@ -11,13 +11,16 @@
   justify-content: center;
   flex-direction: column;
 }
+// B015 FE BY sulaxmi(from)
 .heading-text {
-  margin: 1rem;  
+  color: #FFF;
+  margin: 3rem; 
   z-index: 1; 
   text-align: center;
-  line-height: 3rem; 
-  font-family:Arial, Helvetica, sans-serif;    
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 2.5rem;
 }
+//to
 .design-blob {
 position: absolute; 
 top: 40%;
@@ -42,13 +45,27 @@ z-index: 0;
   height: 100%; 
   object-fit: cover;
 }
-.card-body{
-  background-color:#222831;
-  
+.card-body {
+  background-color: #222831;
+  border-bottom-left-radius: 6px; 
+  border-bottom-right-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0.7rem;
+  min-height: 3rem; 
+  height: 0vh; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.card-title{
-  color:#FFF
-}
+
+  .card-title{
+    color:#FFF;
+    font-size:0.8rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    line-height: 1rem;
+  }
 .activity-heading {  
   text-align:left;
   padding: 20px;
@@ -58,10 +75,9 @@ z-index: 0;
 }
 h2{
   margin-bottom: 0rem;
-  font-size: xx-large;
-}
-h1{
-  font-size: xx-large;
+  // B013 FE BY sulaxmi(from)
+  font-size: clamp(1.5rem, 3vw, 1.7rem);
+  //to
 }
 .more-cards {
   display: none;
