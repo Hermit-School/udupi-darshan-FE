@@ -8,7 +8,8 @@ import { Details } from 'src/app/models/card';
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
-  styleUrls: ['./details.component.scss']
+  styleUrls: ['./details.component.scss',
+  ]
 })
 export class DetailsComponent implements OnInit {
   @Input() description: string | undefined;

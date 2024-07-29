@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('errorToast') errorToast!: ElementRef;
   isSuccess: boolean | undefined;
   
+
   constructor(private fb: FormBuilder, private router: Router,private renderer: Renderer2) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
@@ -28,7 +29,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
       message: ['', Validators.required]
     });
   }
-
+  
   ngOnInit(): void {
     this.form.get('message')?.valueChanges.subscribe(value => {
       this.wordCount = this.countWords(value);

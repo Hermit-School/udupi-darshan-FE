@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbCarouselModule,NgbAlertModule,NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 //Component Imports
@@ -33,6 +33,7 @@ import { ListFilterPipe } from '../app/util/list-filter';
 import { FoodComponent } from './pages/food/food.component';
 import { StoryComponent } from './pages/story/story.component';
 import { StoryDetailsComponent } from './pages/story-details/story-details.component';
+import { MyHttpInterceptor } from './services/Interceptor/MyHttpInterceptor';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,7 @@ import { StoryDetailsComponent } from './pages/story-details/story-details.compo
     HttpClientModule,
     NgbPaginationModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

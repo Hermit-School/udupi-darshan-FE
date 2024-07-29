@@ -18,20 +18,21 @@
 
     <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarTogglerDemo02">
       <ul class="navbar-nav me-auto align-items-lg-center">
+       <!-- F026 FE BY sulaxmi(from) -->
         <li class="nav-item">
-          <a class="nav-link " routerLink="/nature" aria-current="page" href="#">Nature</a>
+          <a class="nav-link " routerLink="/nature" routerLinkActive="active-link"  aria-current="page" href="#">Nature</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/culture" aria-current="page" href="#">Culture</a>
+          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/culture" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" aria-current="page" href="#">Culture</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/food" aria-current="page" href="#">Food</a>
+          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/food" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" aria-current="page" href="#">Food</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/story" aria-current="page" href="#">Stories</a>
+          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/story" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" aria-current="page" href="#">Stories</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/advertisements" aria-current="page" href="#">Advertisement</a>
+          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/advertisements" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" aria-current="page" href="#">Advertisement</a>
         </li>
         <li class="nav-item">
           <button class="btn ms-lg-3 ms-xl-5" data-bs-toggle="modal" data-bs-target="#writeToUsModal">Write to us</button>
@@ -39,7 +40,7 @@
       </ul>
     </div>
   </div>
-
+<!-- TO -->
   
 
 <div class="offcanvas offcanvas-end d-lg-none d-block" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel"  >
