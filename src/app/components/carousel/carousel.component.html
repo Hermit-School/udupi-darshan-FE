@@ -1,13 +1,12 @@
-<div class="container-fluid">
-    <ngb-carousel [showNavigationIndicators]="true" >
-      <ng-template ngbSlide *ngFor="let image of images; let i = index">
-        <div class="picsum-img-wrapper text-center">
-          <img [src]="image.src" alt="Slide image" class="d-block w-100 fit-screen-img" />
-        </div>
-        <div class="carousel-caption">
-          <p class="text-white">{{ image.description }}</p> 
-        </div>
-      </ng-template>
-    </ngb-carousel>
-  </div>
-  
+<div class="container-fluid p-0">
+  <ngb-carousel [showNavigationIndicators]="true">
+    <ng-template ngbSlide *ngFor="let image of images; let i = index">
+      <div class="carousel-item-wrapper">
+        <img [src]="image.src" alt="Slide image" class="d-block w-100 fit-screen-img" />
+      </div>
+      <div class="carousel-caption">
+        <p class="text-white">{{ image.description }}</p>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+</div>
