@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy , Re
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -16,6 +17,10 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   wordCount: number = 0;
   maxWordCount: number = 500;
   @ViewChild('writeToUsModal') writeToUsModal!: ElementRef;
+  @ViewChild('successToast') successToast!: ElementRef;
+  @ViewChild('errorToast') errorToast!: ElementRef;
+  isSuccess: boolean | undefined;
+  
 
   constructor(private fb: FormBuilder, private router: Router,private renderer: Renderer2) {
     this.form = this.fb.group({
@@ -87,24 +92,32 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   onSubmit(): void {
     if (this.form.valid) {
       console.log(this.form.value);
+        this.showToast('successToast');
+        this.isSuccess = false; 
       this.resetForm(); 
     } else {
       console.log('Form is invalid');
+      this.isSuccess = false;
+      this.showToast('errorToast'); 
     }
   }
-
+showToast(toastId: 'successToast' | 'errorToast'): void {
+    const toastElement = this[toastId].nativeElement as HTMLElement;
+    if (toastElement) {
+      const toast = (window as any).bootstrap.Toast.getOrCreateInstance(toastElement);
+      toast.show();
+    }
+  }
   resetForm(): void {
     this.form.reset(); 
     this.files = []; 
     this.wordCount = 0; 
     this.form.controls['message'].enable(); 
   }
-
-  resetModal(): void {
+resetModal(): void {
     this.resetForm();
   }
-
-  navigateTo(route: string): void {
+ navigateTo(route: string): void {
     this.router.navigate([route]);
   }
   closeOffcanvas() {
@@ -121,7 +134,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   removePadding() {
-    document.body.style.paddingRight = '0px'; // or set it to an empty string to remove it completely
-    document.body.style.overflow = 'auto'; // Ensure overflow is set correctly
+    document.body.style.paddingRight = '0px'; 
+    document.body.style.overflow = 'auto';
   }
 }
