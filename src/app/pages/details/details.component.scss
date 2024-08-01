@@ -1,6 +1,5 @@
 .card-details {
   background-color: #222831;
-  color: #fff;
   margin-top: 20px;
   width: 100%; 
   box-sizing: border-box; 
@@ -8,7 +7,10 @@
   margin: 0 auto; 
   padding: 16px 0px 24px 0px;
   // B014 FE BY sulaxmi(from)
-  font-size: clamp(1rem, 3vw, 1.3rem);
+  font-size: clamp(0.88rem, 3vw, 1.125rem);
+}
+.para{
+  color:#fcfcfc;
 }
 .card-details img {
   width: 100%;
@@ -23,13 +25,14 @@
 .card-details .best-time,
 .card-details .how-to-visit {
   margin-bottom: 20px;
-  text-align: left; 
+  text-align: left;
+  font-size: clamp(0.88rem, 3vw, 1.125rem); 
 }
 // B014 FE BY sulaxmi(from)
 .card-details .tips h2,
 .card-details .best-time h2,
 .card-details .how-to-visit h2 {
-  font-size: clamp(1rem, 3vw, 1.3rem);
+  font-size: clamp(0.88rem, 3vw, 1.125rem);
   margin-top: 1.5em;
   margin-bottom: 0.5em;
   text-align: left; 
@@ -49,7 +52,7 @@
   text-align: left; 
   margin-bottom: 1em;
   // B015 FE BY sulaxmi(from)
-  font-size: clamp(1rem, 3vw, 1.3rem);
+  font-size: clamp(0.88rem, 3vw, 1.125rem);
   //to
 }
 .card-details .tips p,
@@ -57,6 +60,7 @@
 .card-details .how-to-visit p {
   margin-bottom: 1em;
   text-align: left; 
+  font-size: clamp(0.88rem, 3vw, 1.125rem);
 }
 .image-gallery {
   position: relative;
@@ -92,18 +96,18 @@
   font-size: 1rem;
   //to
   line-height: 1.4rem;
-  color: #ffffff;
+  color: #fcfcfc;
   font-family: Arial, Helvetica, sans-serif;
 }
 .card-text {
   font-size: 0.9rem; 
-  color: #fff;
+  color: #fcfcfc;
 }
 .container-fluid {
   background-color: #222831;
 }
 .text-color {
-  color: #fff;
+  color: #fcfcfc;
 }
 .card-container {
   display: flex;
