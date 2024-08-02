@@ -10,7 +10,7 @@ export class AdvertisementComponent implements OnInit {
   slideIndex: number = 0;
   transitionStyle: string = 'transform 2s ease-in-out';
   images = [
-    { src: 'assets/images/ad1.jpg', alt: 'Image 1' },
+    { src: 'assets/images/ad7.png', alt: 'Image 1' },
     { src: 'assets/images/add.jpg', alt: 'Image 2' },
     { src: 'assets/images/ad5.jpeg', alt: 'Image 3' },
     { src: 'assets/images/ad8.jpg', alt: 'Image 4' }
