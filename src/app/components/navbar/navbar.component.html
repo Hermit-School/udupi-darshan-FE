@@ -19,11 +19,11 @@
     <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarTogglerDemo02">
       <ul class="navbar-nav me-auto align-items-lg-center">
        <!-- F026 FE BY sulaxmi(from) -->
+       <li class="nav-item">
+        <a class="nav-link" [ngClass]="{'active-link': isRouteActive('/nature')}" routerLink="/nature" aria-current="page">Nature</a>
+      </li>
         <li class="nav-item">
-          <a class="nav-link " routerLink="/nature" routerLinkActive="active-link"  aria-current="page" href="#">Nature</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/culture" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" aria-current="page" href="#">Culture</a>
+          <a class="nav-link ms-lg-3 ms-xl-5" [ngClass]="{'active-link': isRouteActive('/culture')}" routerLink="/culture"  aria-current="page" href="#">Culture</a>
         </li>
         <li class="nav-item">
           <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/food" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: false }" aria-current="page" href="#">Food</a>
