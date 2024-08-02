@@ -2,7 +2,7 @@
 export class LoadingUtils {
     public static activeRequests = 0;
     private static loadingElement: HTMLElement | null = null;
-    public static readonly MIN_DISPLAY_TIME = 500; 
+    public static readonly MIN_DISPLAY_TIME = 200; 
   
     public static showLoader(): void {
       if (!this.loadingElement) {
