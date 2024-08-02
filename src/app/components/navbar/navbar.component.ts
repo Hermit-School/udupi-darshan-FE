@@ -50,7 +50,6 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.toggleSearch = false;
   }
   search(query: string): void {
-    console.log('Search query:', query);
   }
   
   ngOnInit(): void {
