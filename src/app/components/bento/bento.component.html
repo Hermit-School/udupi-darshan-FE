@@ -1,52 +1,12 @@
 <div class="container-fluid custom-container">
     <h1 class="text-left">Explore Udupi's Heritage</h1>
     <div class="row g-0">
-        <div class="col-6 col-md-3 position-relative">
-            <a [routerLink]="['/details/culture', '34']" class="text-decoration-none">
-                <div class="card h-100">
-                    <img src="assets/images/udupi2.jpg" class="card-img-top" alt="Item 1">
+        <div *ngFor="let card of cards; let i = index" [ngClass]="{'col-6 col-md-3 position-relative': !card.largeCard, 'col-12 mt-3 position-relative': card.largeCard}">
+            <a [routerLink]="['/details/culture', card.id]" class="text-decoration-none">
+                <div [ngClass]="{'card h-100': !card.largeCard, 'card custom-large-card': card.largeCard}">
+                    <img [src]="card.imgSrc" [ngClass]="card.imgClass || 'card-img-top'" [alt]="'Item ' + (i + 1)">
                     <div class="card-body">
-                        <p class="card-text text-center">Krishna Matt</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-6 col-md-3 position-relative">
-            <a [routerLink]="['/details/culture', '35']" class="text-decoration-none">
-                <div class="card h-100">
-                    <img src="assets/images/b3.jpg" class="card-img-top" alt="Item 2">
-                    <div class="card-body">
-                        <p class="card-text text-center">Ananteshwara temple</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-6 col-md-3 position-relative">
-            <a [routerLink]="['/details/culture', '36']" class="text-decoration-none">
-                <div class="card h-100">
-                    <img src="assets/images/b4.jpg" class="card-img-top" alt="Item 3">
-                    <div class="card-body">
-                        <p class="card-text text-center">Hasta Heritage</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-6 col-md-3 position-relative">
-            <a [routerLink]="['/details/culture', '37']" class="text-decoration-none">
-                <div class="card h-100">
-                    <img src="assets/images/b5.jpg" class="card-img-top1" alt="Item 4">
-                    <div class="card-body">
-                        <p class="card-text text-center">Hasta Shilpa Heritage</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-12 mt-3 position-relative">
-            <a [routerLink]="['/details/culture', '38']" class="text-decoration-none">
-                <div class="card custom-large-card">
-                    <img src="assets/images/b6.png" class="card-img-top bordered-img" alt="Item 5">
-                    <div class="card-body">
-                        <p class="card-text text-center">Corporation Bank Heritage Museum</p>
+                        <p class="card-text text-center">{{ card.text }}</p>
                     </div>
                 </div>
             </a>
