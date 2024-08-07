@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy , Renderer2,Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef,HostListener, AfterViewInit, OnDestroy , Renderer2,Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DetailsComponent } from 'src/app/pages/details/details.component';
@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   maxFiles: number = 2;
   wordCount: number = 0;
   maxWordCount: number = 500;
+  isSmallScreen: boolean = false;
   @ViewChild('writeToUsModal') writeToUsModal!: ElementRef;
   @ViewChild('successToast') successToast!: ElementRef;
   @ViewChild('errorToast') errorToast!: ElementRef;
@@ -35,9 +36,32 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   isRouteActive(route: string): boolean {
     return this.router.url.includes(route);
   }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize() {
+    this.isSmallScreen = window.innerWidth < 992; 
+  }
+
+  toggleSearch: boolean = false;
+  searchText: string = '';
+
+  openSearch() {
+    this.toggleSearch = true;
+  }
+
+  searchClose() {
+    this.toggleSearch = false;
+  }
+  search(query: string): void {
+  }
+  
   ngOnInit(): void {
     this.form.get('message')?.valueChanges.subscribe(value => {
       this.wordCount = this.countWords(value);
+      this.checkScreenSize();
     });
   }
 
