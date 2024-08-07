@@ -10,8 +10,12 @@ export class AdminserviceService {
 
   constructor(private http: HttpClient) { }
 
-  get adminEntryData(){
+ get adminEntryData(){
     return this.http.get<AdminNewEntriesInterface>(Environment.local+MockRoutes.getAdminEntryData);
+  }
+
+  sendOtp(){
+    return this.http.get<any>("https://udupi-darshan-be.onrender.com/v1/generateOTP");
   }
   
 }
