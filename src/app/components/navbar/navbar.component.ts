@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef,HostListener, AfterViewInit, OnDestroy , Renderer2 } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef,HostListener, AfterViewInit, OnDestroy , Renderer2,Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DetailsComponent } from 'src/app/pages/details/details.component';
 
 
 @Component({
@@ -9,6 +10,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() detailsComponent!: DetailsComponent;
+
   form: FormGroup;
   photoPreviews: string[] = [];
   selectedFiles: File[] = [];
@@ -29,6 +32,9 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
       email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
       message: ['', Validators.required]
     });
+  }
+  isRouteActive(route: string): boolean {
+    return this.router.url.includes(route);
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
