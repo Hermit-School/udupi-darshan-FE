@@ -10,9 +10,6 @@
     object-fit: cover;
     //TO
 }
-// .custom-container{
-//     padding: 0.5rem 1rem 0rem 0.5rem;
-// }
 .container-fluid{
     background-color:  #222831;   
 }
@@ -55,6 +52,10 @@
     border-color: #F0F0F0;
     border-inline-color: #F0F0F0;
   }
+  .card {
+    border-radius: 0.5rem; 
+    overflow: hidden; 
+}
 .card-img-top{
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
@@ -62,8 +63,8 @@
 }
 .custom-large-card {
     height: 15rem; 
+    
 }
-
 .custom-large-card .card-img-top {
     height: 11.7rem;
     // B014 FE BY SULAXMI FROM

@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { BentoService } from "src/app/services/bento.service";
 
 @Component({
   selector: 'app-bento',
@@ -7,16 +8,14 @@ import { Component, OnInit } from "@angular/core";
 })
 
 export class BentoComponent implements OnInit{
-  cards = [
-    { id: 34, imgSrc: 'assets/images/udupi2.jpg', text: 'Krishna Matt' },
-    { id: 35, imgSrc: 'assets/images/b3.jpg', text: 'Ananteshwara temple' },
-    { id: 36, imgSrc: 'assets/images/b4.jpg', text: 'Hasta Heritage' },
-    { id: 37, imgSrc: 'assets/images/b5.jpg', text: 'Hasta Shilpa Heritage', imgClass: 'card-img-top1' },
-    { id: 38, imgSrc: 'assets/images/b6.png', text: 'Corporation Bank Heritage Museum', largeCard: true, imgClass: 'card-img-top bordered-img' }
-  ];
-  constructor(){}
+  cards: any[] = [];  
+
+  constructor(private bentoService: BentoService) { }  
+
   ngOnInit(): void {
+    this.bentoService.getCards().subscribe((data) => {
+      this.cards = data;  
+    });
     
   }
-  
 }
