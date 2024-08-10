@@ -6,6 +6,7 @@
 <div *ngFor="let chunk of chunkedStories" class="card-container1">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 " >
         <div class="col" *ngFor="let story of chunk" >
+            <a [routerLink]="['/story', story.id]" class="card-footer-link">
             <div class="card " >
                     <img [src]="story.image" alt="Image" class="square-image">
                 <div class="card-body">
@@ -18,12 +19,12 @@
                             </div>
                         </div>
                             <div class="card-footer">
-                                        <a [routerLink]="['/story', story.id]" class="card-footer-link">
+                                        
                                         <p class="footer-text">Read Full Blog <i class="bi bi-arrow-right"></i></p>
-                                    </a>
+                                   
                             </div>
                         </div>
-                    </div>
+                    </div></a>
                 </div>
             </div>
         </div>
