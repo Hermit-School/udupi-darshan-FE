@@ -1,22 +1,23 @@
 <div class="container-fluid">
   <div *ngIf="story">
     <div class="heading">
-    <h2>{{ story.title }}</h2>
-    <p class="content1">{{story.content1}}</p>
+      <h2>{{ story.title }}</h2>
+      <p class="content1">{{story.content1}}</p>
     </div>
     <div class="main-img">
-    <div class="main-image-container">
-      <img [src]="story.image" alt="Blog image" class="img-fluid">
-    </div>
-    <div class="row mt-4">
-      <div *ngFor="let relatedImage of relatedImages; let i = index" [ngClass]="{'col-3': true, 'col-md-3': true, 'col-lg-4': true, 'mb-3': true, 'd-lg-none': i === 3}">
-        <div class="card">
-          <img [src]="relatedImage" alt="Related image" class="card-img-top">
+      <div class="main-image-container">
+        <img [src]="selectedImage" alt="Blog image" class="img-fluid">
+      </div>
+      <div class="row mt-2">
+        <div *ngFor="let relatedImage of relatedImages; let i = index"
+          [ngClass]="{'col-3': true, 'col-md-3': true, 'col-lg-4': true, 'mb-3': true, 'd-lg-none': i === 3}">
+          <div class="card" [ngClass]="{'active': selectedIndex === i}" (click)="onImageClick(relatedImage, i)">
+            <img [src]="relatedImage" alt="Related image" class="card-img-top">
+          </div>
         </div>
       </div>
     </div>
-    </div>
-    <div class=" para" >
+    <div class="para">
       <ng-container *ngFor="let paragraph of relatedContent">
         <p class="text">{{ paragraph }}</p>
       </ng-container>
@@ -38,10 +39,6 @@
           </div>
         </div>
       </div>
-      
-      </div>
     </div>
   </div>
-
-    
-
+</div>
