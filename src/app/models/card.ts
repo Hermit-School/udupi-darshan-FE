@@ -1,16 +1,29 @@
 export interface Details {
-  id : number;
-  title : string;
-  category : string;
-  subCategory : string;
-  thumbnail : string;
-  images : string[];
-  desc : string;
-  tips : string[];
-  best_time_to_visit : string;
-  how_to_visit : {
-    by_car : string;
-    by_public : string;
-    by_bike :string;
-  }
-} 
+  id: number;
+  name: string;
+  label: string;
+  location: string;
+  descr: string;
+  keyPoints: string[];
+  discover: string[];
+  impInfo: string[];
+  howToVisit: {
+    byBike: string;
+    byCar: string;
+    byPublic: string;
+  };
+  timings: string;
+  category: string;
+  dontMissThese: {
+    name: string;
+    description: string;
+    imageUrl: string;
+    link?: string;
+  }[];
+  images: {
+    url: string;
+    altText: string
+  }[];
+  link: string;
+  createdAt: string;
+}

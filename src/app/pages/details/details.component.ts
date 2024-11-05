@@ -1,6 +1,6 @@
 import { Component, Input, NgModule, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { natureServiceService } from 'src/app/services/nature.service';
 import { CultureService } from 'src/app/services/culture.service';
 import { Details } from 'src/app/models/card';
@@ -18,7 +18,7 @@ export class DetailsComponent implements OnInit {
   currentCategory: string | null = null;
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private router: Router,
     private natureService: natureServiceService,
     private cultureService: CultureService
@@ -31,23 +31,22 @@ export class DetailsComponent implements OnInit {
       switch (category) {
         case 'nature':
           this.natureService.getData().subscribe(data => {
-              this.card = data.filter(_ => (_.id == id))[0];
-            });
+            this.card = data.filter(_ => (_.id == id))[0];
+          });
+          break;
+        case 'culture':
+          this.cultureService.getAllCultures().subscribe(data => {
+            this.card = data.filter(_ => (_.id == id))[0];
+          });
           break;
 
-        case 'culture':
-          this.cultureService.getData().subscribe(data => {
-              this.card = data.filter(_ => (_.id == id))[0];
-            });
-          break;
-      
         default:
           break;
       }
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   showOverlay(): void {
     this.isOverlayActive = true;
@@ -84,7 +83,7 @@ export class DetailsComponent implements OnInit {
 @NgModule({
   declarations: [DetailsComponent],
   imports: [
-    CommonModule 
+    CommonModule
   ]
 })
 export class DetailsModule { }
