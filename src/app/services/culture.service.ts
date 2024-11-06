@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Details } from '../models/card';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CultureService {
 
-  private apiUrl = 'http://localhost:8080/api/culture/getdata';
+  private readonly apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
+
   getAllCultures(): Observable<Details[]> {
     return this.http.get<Details[]>(this.apiUrl);
   }
