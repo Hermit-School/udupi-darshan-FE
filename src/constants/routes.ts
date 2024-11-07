@@ -4,7 +4,12 @@ export const MockRoutes = {
     getCultureData: '/assets/data/activityCards.json',
     getAdminEntryData: '/assets/data/tablentry.json'
 }
-
+export const ApiRoutes = {
+    natureData: "/v1/nature/getdata",
+    cultureData: "/v1/culture/getdata"
+};
 export const Environment = {
-    local:'http://localhost:4200',
+    local: 'http://localhost:4200',
+    production: 'https://udupi-darshan-be.onrender.com',
+    routes: ApiRoutes
 }

@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Details } from '../models/card';
-import { environment } from '../../environments/environment';
+import { Environment } from '../../constants/routes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CultureService {
 
-  private readonly apiUrl = environment.apiUrl;
+  private readonly apiUrl = `${Environment.production}${Environment.routes.cultureData}`;
 
   constructor(private http: HttpClient) { }
 

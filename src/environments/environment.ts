@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  apiUrl: 'https://udupi-darshan-be.onrender.com/v1/culture/getdata'
+  production: false,
+  apiUrl: 'http://localhost:8080/v1/culture/getdata'
 };
 
 /*
