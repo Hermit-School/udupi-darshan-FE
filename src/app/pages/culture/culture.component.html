@@ -1,6 +1,6 @@
 <div class="container-fluid p-0">
   <div class="heading-container">
-     <!-- B015 FE BY sulaxmi(from) -->
+    <!-- B015 FE BY sulaxmi(from) -->
     <h1 class="heading-text text-white fw-bold">Experience The Rich Cultural Heritage of Udupi</h1>
     <img src="assets/images/Vectorblob.svg" alt="Design Blob" class="design-blob">
   </div>
@@ -8,31 +8,28 @@
     <h2 class="text-white fw-bold">Rathotsavas</h2>
   </div>
   <!-- to -->
-  <!-- Card Section -->
   <div class="container-fluid mt-4">
     <div class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleCultureCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
+          <img [src]="card.images[0]" class="card-img-top" [alt]="card.name">
           <div class="card-body">
-            <h5 class="card-title">{{ card.title }}</h5>
+            <h5 class="card-title">{{ card.name }}</h5>
           </div>
         </div>
       </div>
     </div>
- </div>
-  <!-- Activity List Heading -->
+  </div>
   <div class="activity-heading mt-4">
     <h2 class="text-white fw-bold">Mathas</h2>
   </div>
-  <!-- Activity Cards Section -->
   <div class="container-fluid mt-4">
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleActivityCards" (click)="goToDetails(card.id)">
-        <div class="card h-100" >
-          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
+        <div class="card h-100">
+          <img [src]="card.images[0]" class="card-img-top" [alt]="card.name">
           <div class="card-body">
-            <h5 class="card-title">{{ card.title }}</h5>
+            <h5 class="card-title">{{ card.name }}</h5>
           </div>
         </div>
       </div>
@@ -49,10 +46,10 @@
   <div class="container-fluid mt-4">
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleWildlifeCards" (click)="goToDetails(card.id)">
-        <div class="card h-100" >
-          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
+        <div class="card h-100">
+          <img [src]="card.images[0]" class="card-img-top" [alt]="card.name">
           <div class="card-body">
-            <h5 class="card-title">{{ card.title }}</h5>
+            <h5 class="card-title">{{ card.name }}</h5>
           </div>
         </div>
       </div>
@@ -66,14 +63,13 @@
   <div class="activity-heading mt-4">
     <h2 class="text-white fw-bold">Beach List</h2>
   </div>
-  <!-- Beaches Cards Section -->
   <div class="container-fluid mt-4">
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleBeachCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.thumbnail" class="card-img-top" [alt]="card.title">
+          <img [src]="card.images[0]" class="card-img-top" [alt]="card.name">
           <div class="card-body">
-            <h5 class="card-title">{{ card.title }}</h5>
+            <h5 class="card-title">{{ card.name }}</h5>
           </div>
         </div>
       </div>

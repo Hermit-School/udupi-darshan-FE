@@ -1,131 +1,100 @@
 <div class="details">
-<div class="container-fluid">
- <div *ngIf="card" > 
-  <!-- <div class="card-body"> --> 
-   <div class="heading-container mb-4">
-    <h1 class="title">{{ card.title }}</h1>
-  </div>
-  <div class="container1">
-    <section class="image-gallery" *ngIf="card">
-      <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" (slid.bs.carousel)="onSlideChange($event)">
-        <div class="carousel-inner">
-          <div *ngFor="let image of card.images; let i = index" class="carousel-item" [class.active]="i === 0">
-            <img [src]="image" [alt]="card.title" class="d-block w-100">
+  <div class="container-fluid">
+    <div *ngIf="card">
+      <div class="heading-container mb-4">
+        <h1 class="title">{{ card.name }}</h1>
+      </div>
+      <div class="container1">
+        <section class="image-gallery" *ngIf="card.images">
+          <div id="carouselExample" class="carousel slide" data-bs-ride="carousel"
+            (slid.bs.carousel)="onSlideChange($event)">
+            <div class="carousel-inner">
+              <div *ngFor="let image of card.images; let i = index" class="carousel-item" [class.active]="i === 0">
+                <img [src]="image" [alt]="card.name" class="d-block w-100">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev"
+              (click)="onPrevClick()" [disabled]="currentSlideIndex === 0">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next"
+              (click)="onNextClick()" [disabled]="currentSlideIndex === (card.images.length - 1)">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          <div class="image-overlay" [ngClass]="{ 'active': isOverlayActive }">
+            <div class="image-info">
+              <span>{{ currentSlideIndex + 1 }}/{{ card.images.length }}</span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div *ngIf="card" class="card-details">
+        <p>
+        <div class="para">
+          {{ card.descr }}
+          <section class="tips">
+            <h2 class="bold fw-bold">Tips</h2>
+            <ul>
+              <li *ngFor="let tip of card.keyPoints">
+                {{ tip }}
+              </li>
+            </ul>
+          </section>
+          <section class="discover">
+            <h2 class="bold fw-bold">Discover</h2>
+            <ul>
+              <li *ngFor="let item of card.discover">
+                {{ item }}
+              </li>
+            </ul>
+          </section>
+          <section class="important-info">
+            <h2 class="bold fw-bold">Important Information</h2>
+            <ul>
+              <li *ngFor="let info of card.impInfo">
+                {{ info }}
+              </li>
+            </ul>
+          </section>
+          <section class="how-to-visit">
+            <h2 class="bold fw-bold">How To Visit?</h2>
+            <p *ngIf="card.howToVisit.byCar">By Car: {{ card.howToVisit.byCar }}</p>
+            <p *ngIf="card.howToVisit.byPublic">By Public Transport: {{ card.howToVisit.byPublic }}</p>
+            <p *ngIf="card.howToVisit.byBike">By Bike: {{ card.howToVisit.byBike }}</p>
+          </section>
+          <section class="timings">
+            <h2 class="bold fw-bold">Timings</h2>
+            <p>{{ card.timings }}</p>
+          </section>
+          <section class="external-link">
+            <h2 class="bold fw-bold">More Information</h2>
+            <a [href]="card.link" target="_blank">{{ card.link }}</a>
+          </section>
+        </div>
+        <h1 class="bold fw-bold">Don't Miss These: </h1>
+        <div class="card-container">
+          <div class="row1">
+            <div *ngFor="let item of card.dontMissThese" class="col">
+              <div class="card h-100">
+                <img [src]="item.imageUrl" class="card-img-top" [alt]="item.name">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.name }}</h5>
+                  <hr>
+                  <p class="card-text">{{ item.description }}</p>
+                </div>
+                <div class="card-footer">
+                  <a *ngIf="item.link" [href]="item.link" target="_blank">
+                    <small class="text-small">View Details <i class='bi bi-arrow-right'></i></small>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev" (click)="onPrevClick()" [disabled]="currentSlideIndex === 0">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next" (click)="onNextClick()" [disabled]="currentSlideIndex === (card.images.length) - 1">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
       </div>
-    <div class="image-overlay" [ngClass]="{ 'active': isOverlayActive }">
-        <div class="image-info">
-          <span>{{ currentSlideIndex + 1 }}/{{card && card.images ? card.images.length : 0}}</span>
-        </div>
-      </div>
-  </section>
+    </div>
   </div>
-<div *ngIf="card" class="card-details"> 
-    <p>
-      <!-- Main description based on the card id -->
-      <ng-container *ngIf="card.id !== undefined && card.id !== null">
-        <div class="para">
-          {{card.desc}}
-          <section class="tips">
-      <h2 class="bold fw-bold">Tips</h2>
-      <ul>
-        <li *ngFor="let tip of card.tips">
-          {{tip}}
-        </li>
-         </ul>
-    </section>
-    <section class="best-time">
-      <h2 class="bold fw-bold">Best Time to Visit</h2>
-      <p>{{card.best_time_to_visit}}</p>
-    </section>
-    <section class="how-to-visit">
-      <h2 class="bold fw-bold">How To Visit?</h2>
-      <p *ngIf="card.how_to_visit.by_car">By Car:{{card.how_to_visit.by_car}}</p>
-      <p *ngIf="card.how_to_visit.by_public">By Public Transport:{{card.how_to_visit.by_public}}</p>
-      <p *ngIf="card.how_to_visit.by_bike">By Bike: {{card.how_to_visit.by_bike}}</p>
-</section>
 </div>
-<!-- <div class="navbar bg-dark"> -->
-   <!-- B015 FE BY sulaxmi(from) -->
-<h1 >Don't Miss These:</h1>
-<!-- to -->
-<div class="card-container">
-  <div class="row1 mb-4">
-    <div class="col">
-    <!-- Existing Cards -->
-      <div class="card h-100">
-        <img src="assets/images/b1.jpeg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title text-white">Kaup Light house</h5>
-          <hr>
-          <p class="card-text text-color">Experience the depth of the ocean by scubadiving in th.</p>
-        </div>
-        <div class="card-footer">
-          <a><small class="text-small">View Details<i class='bi bi-arrow-right' ></i></small></a>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card h-100">
-        <img src="assets/images/bl2.webp" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title text-white">Malpe Beach</h5>
-          <hr>
-          <p class="card-text text-color"> Experience the depth of the ocean by scubadiving in th.</p>
-        </div>
-        <div class="card-footer">
-          <a><small class="text-small">View Details<i class='bi bi-arrow-right' ></i></small></a>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card h-100">
-        <img src="assets/images/bl4.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title text-white">Krishna Matta</h5>
-          <hr>
-          <p class="card-text text-color">Experience the depth of the ocean by scubadiving in th.</p>
-        </div>
-        <div class="card-footer">
-          <a><small class="text-small">View Details<i class='bi bi-arrow-right' ></i></small></a>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card h-100">
-        <img src="assets/images/bl5.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title text-white">Maravante Beach</h5>
-          <hr>
-          <p class="card-text text-color">Experience the depth of the ocean by scubadiving in th.</p>
-        </div>
-        <div class="card-footer">
-          <a><small class="text-small">View Details<i class='bi bi-arrow-right' ></i></small></a>
-        </div>
-      </div>
-    </div>
-    <!-- New Card -->
-    <div class="col">
-      <div class="card h-100">
-        <img src="assets/images/be8.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title text-white">Delta Point</h5>
-          <hr>
-          <p class="card-text text-color">The only place where you get to see the sea and the river meet.</p>
-        </div>
-        <div class="card-footer">
-          <a><small class="text-small">View Details<i class='bi bi-arrow-right' ></i></small></a>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
