@@ -1,91 +1,110 @@
 .card-details {
   background-color: #222831;
   margin-top: 20px;
-  width: 100%; 
-  box-sizing: border-box; 
+  width: 100%;
+  box-sizing: border-box;
   border-radius: 0;
-  margin: 0 auto; 
+  margin: 0 auto;
   padding: 16px 0px 24px 0px;
   // B014 FE BY sulaxmi(from)
   font-size: clamp(0.88rem, 3vw, 1.125rem);
 }
-.para{
-  color:#fcfcfc;
+
+.para {
+  color: #fcfcfc;
 }
+
 .card-details img {
   width: 100%;
-  height: 100%;
+  max-height: 30vh;
 }
+
 .card-details h1 {
   font-size: clamp(1.5rem, 3vw, 2.3rem);
   margin-bottom: 0.5em;
-  text-align: left; 
+  text-align: left;
   color: #ffffff;
-}//to
+}
+
+//to
 .card-details .tips,
 .card-details .best-time,
 .card-details .how-to-visit {
   margin-bottom: 20px;
   text-align: left;
-  font-size: clamp(0.88rem, 3vw, 1.125rem); 
+  font-size: clamp(0.88rem, 3vw, 1.125rem);
 }
+
 // B014 FE BY sulaxmi(from)
 .card-details .tips h2,
 .card-details .best-time h2,
-.card-details .how-to-visit h2 {
+.card-details .how-to-visit h2,
+.card-details .timings h2,
+.card-details .external-link h2,
+.card-details .important-info h2,
+.card-details .discover h2 {
   font-size: clamp(0.88rem, 3vw, 1.125rem);
   margin-top: 1.5em;
   margin-bottom: 0.5em;
-  text-align: left; 
+  text-align: left;
   color: #ffffff;
 }
+
 //to
 .card-details .tips ul,
 .card-details .best-time ul,
 .card-details .how-to-visit ul {
   list-style-type: disc;
   padding-left: 20px;
-  text-align: left; 
+  text-align: left;
 }
+
 .card-details .tips li,
 .card-details .best-time li,
 .card-details .how-to-visit li {
   margin-bottom: 0.5em;
-  text-align: left; 
+  text-align: left;
   margin-bottom: 1em;
   // B015 FE BY sulaxmi(from)
   font-size: clamp(0.88rem, 3vw, 1.125rem);
   //to
 }
+
 .card-details .tips p,
 .card-details .best-time p,
 .card-details .how-to-visit p {
   margin-bottom: 1em;
-  text-align: left; 
+  text-align: left;
   font-size: clamp(0.88rem, 3vw, 1.125rem);
 }
+
 .image-gallery {
   position: relative;
   width: 100%;
-  max-width: 100%; 
+  max-width: 100%;
   margin: 0 auto;
 }
+
 .carousel {
   position: relative;
   width: 100%;
 }
+
 .carousel-inner {
   width: 100%;
 }
+
 .carousel-item img {
   width: 100%;
   border-radius: 0.2rem;
   height: 400px;
 }
+
 .carousel-control-prev,
 .carousel-control-next {
   cursor: pointer;
 }
+
 .card {
   background-color: #222831;
   border: 0.1rem solid #ffffff;
@@ -93,6 +112,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .card-title {
   // B014 FE BY sulaxmi(from)
   font-size: 1rem;
@@ -101,16 +121,20 @@
   color: #fcfcfc;
   font-family: Arial, Helvetica, sans-serif;
 }
+
 .card-text {
-  font-size: 0.9rem; 
+  font-size: 0.9rem;
   color: #fcfcfc;
 }
+
 .container-fluid {
   background-color: #222831;
 }
+
 .text-color {
   color: #fcfcfc;
 }
+
 .card-container {
   display: flex;
   flex-wrap: nowrap;
@@ -122,8 +146,17 @@
   height: 100%;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 0.2rem;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
-.row > * {
+
+.row>* {
   flex-shrink: inherit;
+}
+
+.external-link {
+  margin-bottom: 1rem;
+}
+
+a {
+  text-decoration: none;
 }

@@ -16,17 +16,17 @@ export class NatureComponent implements OnInit, OnDestroy {
   viewAllActivity = false;
   viewAllBeaches = false;
 
-  allData : any = []
+  allData: any = []
 
   visibleNatureCards: Details[] = [];
   visibleActivityCards: Details[] = [];
   visibleWildlifeCards: Details[] = [];
   visibleBeachCards: Details[] = [];
 
-  constructor(private router: Router , private natureService : natureServiceService) {
+  constructor(private router: Router, private natureService: natureServiceService) {
   }
 
- ngOnInit() {
+  ngOnInit() {
     this.loadData()
 
     window.addEventListener('resize', this.updateVisibleBestOfNatureCard.bind(this));
@@ -45,27 +45,28 @@ export class NatureComponent implements OnInit, OnDestroy {
       this.updateActivityList();
       this.updateBeachList();
       this.updateWildlifeList();
-    })}
+    })
+  }
 
 
   ngOnDestroy() {
     window.removeEventListener('resize', this.updateVisibleBestOfNatureCard.bind(this));
     window.removeEventListener('resize', this.updateActivityList.bind(this));
-    window.removeEventListener('resize',this.updateWildlifeList.bind(this));
-    window.removeEventListener('resize',this.updateBeachList.bind(this));
+    window.removeEventListener('resize', this.updateWildlifeList.bind(this));
+    window.removeEventListener('resize', this.updateBeachList.bind(this));
   }
 
   updateVisibleBestOfNatureCard() {
-    this.visibleNatureCards = this.allData.filter((_: Details) => _.subCategory == 'Best Of Nature').slice(0, 4);
+    this.visibleNatureCards = this.allData.filter((_: Details) => _.label == 'Best Of Nature').slice(0, 4);
     console.log('Nature Cards:', this.visibleNatureCards);
   }
 
   updateActivityList() {
     const isMobile = window.innerWidth < 1000;
     if (this.viewAllActivity) {
-      this.visibleActivityCards = this.allData.filter((_: Details) => _.subCategory == 'Activity List');
+      this.visibleActivityCards = this.allData.filter((_: Details) => _.label == 'Activity List');
     } else {
-      this.visibleActivityCards = this.allData.filter((_: Details) => _.subCategory == 'Activity List').slice(0, isMobile ? 2 : 4);
+      this.visibleActivityCards = this.allData.filter((_: Details) => _.label == 'Activity List').slice(0, isMobile ? 2 : 4);
     }
     console.log('Activity Cards:', this.visibleActivityCards);
   }
@@ -74,26 +75,26 @@ export class NatureComponent implements OnInit, OnDestroy {
     this.updateActivityList();
   }
 
-  
+
   updateWildlifeList() {
     const isMobile = window.innerWidth < 1000;
     if (this.viewAllWildlife) {
-      this.visibleWildlifeCards = this.allData.filter((_: Details) => _.subCategory == 'Wildlife List');
+      this.visibleWildlifeCards = this.allData.filter((_: Details) => _.label == 'Wildlife List');
     } else {
-      this.visibleWildlifeCards = this.allData.filter((_: Details) => _.subCategory == 'Wildlife List').slice(0, isMobile ? 2 : 4);
+      this.visibleWildlifeCards = this.allData.filter((_: Details) => _.label == 'Wildlife List').slice(0, isMobile ? 2 : 4);
     }
     console.log('Wildlife Cards:', this.visibleWildlifeCards);
   }
-  toggleViewAllWildlife(){
-    this.viewAllWildlife=!this.viewAllWildlife;
+  toggleViewAllWildlife() {
+    this.viewAllWildlife = !this.viewAllWildlife;
     this.updateWildlifeList();
   }
   updateBeachList() {
     const isMobile = window.innerWidth < 1000;
     if (this.viewAllBeaches) {
-      this.visibleBeachCards = this.allData.filter((item: any) => item.subCategory === 'Beach List');
+      this.visibleBeachCards = this.allData.filter((item: any) => item.label === 'Beach List');
     } else {
-      this.visibleBeachCards = this.allData.filter((item: any) => item.subCategory === 'Beach List').slice(0, isMobile ? 2 : 4);
+      this.visibleBeachCards = this.allData.filter((item: any) => item.label === 'Beach List').slice(0, isMobile ? 2 : 4);
     }
     console.log('Beach Cards:', this.visibleBeachCards);
   }
@@ -102,7 +103,7 @@ export class NatureComponent implements OnInit, OnDestroy {
     this.updateBeachList();
   }
 
-goToDetails(id: number) {
-    this.router.navigate(['/details/nature',id]);
+  goToDetails(id: number) {
+    this.router.navigate(['/details/nature', id]);
   }
 }
