@@ -30,7 +30,7 @@ export class DetailsComponent implements OnInit {
 
       switch (category) {
         case 'nature':
-          this.natureService.getData().subscribe(data => {
+          this.natureService.getAllNatures().subscribe(data => {
             this.card = data.filter(_ => (_.id == id))[0];
           });
           break;

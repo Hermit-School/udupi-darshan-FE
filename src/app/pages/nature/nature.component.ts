@@ -16,7 +16,7 @@ export class NatureComponent implements OnInit, OnDestroy {
   viewAllActivity = false;
   viewAllBeaches = false;
 
-  allData: any = []
+  allData: Details[] = []
 
   visibleNatureCards: Details[] = [];
   visibleActivityCards: Details[] = [];
@@ -39,7 +39,7 @@ export class NatureComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.natureService.getData().subscribe(data => {
+    this.natureService.getAllNatures().subscribe(data => {
       this.allData = data;
       this.updateVisibleBestOfNatureCard();
       this.updateActivityList();
