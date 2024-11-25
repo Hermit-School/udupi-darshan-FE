@@ -7,7 +7,8 @@ export const MockRoutes = {
 }
 export const ApiRoutes = {
     natureData: "/v1/nature/getdata",
-    cultureData: "/v1/culture/getdata"
+    cultureData: "/v1/culture/getdata",
+    foodData: "/v1/food/getdata"
 };
 export const Environment = {
     local: 'http://localhost:4200',
