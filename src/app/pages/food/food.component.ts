@@ -1,81 +1,100 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subscription } from 'rxjs';
-import { Card } from 'src/app/models/food';
+import { Router } from '@angular/router';
+import { FoodService } from 'src/app/services/food.service';
+import { Details } from 'src/app/models/card';
+
 @Component({
   selector: 'app-food',
   templateUrl: './food.component.html',
   styleUrls: ['./food.component.scss']
 })
 export class FoodComponent implements OnInit, OnDestroy {
-  viewAllHotel = false;
+  viewAllBestOfFood = false;
+  viewAllHotels = false;
   viewAllRestaurants = false;
-  viewAllTeaPoints = false;
-  hotelCards: Card[] = [];
-  restaurantCards: Card[] = [];
-  teaPointCards: Card[] = [];
-  visibleHotelCards: Card[] = [];
-  visibleRestaurantCards: Card[] = [];
-  visibleTeaPointCards: Card[] = [];
-  private dataSubscription: Subscription | undefined;
-  constructor(private http: HttpClient) {}
-  ngOnInit() {
-    this.dataSubscription = this.http.get<any>('assets/data/food.json').subscribe(data => {
-      this.hotelCards = data.hotelCards;
-      this.restaurantCards = data.restaurantCards;
-      this.teaPointCards = data.teaPointCards;
-      this.updateVisibleHotelCards();
-      this.updateVisibleRestaurantCards();
-      this.updateVisibleTeaPointCards();
+  viewAllTeaSnacks = false;
+
+  allData: Details[] = [];
+
+  visibleBestOfFoodCards: Details[] = [];
+  visibleHotelsCards: Details[] = [];
+  visibleRestaurantsCards: Details[] = [];
+  visibleTeaSnacksCards: Details[] = [];
+
+  constructor(private router: Router, private foodService: FoodService) { }
+
+  loadData(): void {
+    this.foodService.getAllFoods().subscribe(data => {
+      this.allData = data;
+      this.updateVisibleBestOfFoodCards();
+      this.updateHotelsList();
+      this.updateRestaurantsList();
+      this.updateTeaSnacksList();
     });
-    window.addEventListener('resize', this.updateVisibleHotelCards.bind(this));
-    window.addEventListener('resize', this.updateVisibleRestaurantCards.bind(this));
-    window.addEventListener('resize', this.updateVisibleTeaPointCards.bind(this));
+  }
+
+  ngOnInit(): void {
+    this.loadData();
+
+    window.addEventListener('resize', this.updateLists.bind(this));
     document.body.style.overflow = 'auto';
     document.body.style.paddingRight = '0';
   }
-  ngOnDestroy() {
-    if (this.dataSubscription) {
-      this.dataSubscription.unsubscribe();
-    }
-    window.removeEventListener('resize', this.updateVisibleHotelCards.bind(this));
-    window.removeEventListener('resize', this.updateVisibleRestaurantCards.bind(this));
-    window.removeEventListener('resize', this.updateVisibleTeaPointCards.bind(this));
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.updateLists.bind(this));
   }
-  toggleViewAll() {
-    this.viewAllHotel = !this.viewAllHotel;
-    this.updateVisibleHotelCards();
+
+  updateLists(): void {
+    this.updateVisibleBestOfFoodCards();
+    this.updateHotelsList();
+    this.updateRestaurantsList();
+    this.updateTeaSnacksList();
   }
-  updateVisibleHotelCards() {
+
+  updateVisibleBestOfFoodCards(): void {
+    this.visibleBestOfFoodCards = this.allData.filter(card => card.label === 'Best of Food').slice(0, 4);
+  }
+
+  toggleViewAllBestOfFood(): void {
+    this.viewAllBestOfFood = !this.viewAllBestOfFood;
+    this.updateVisibleBestOfFoodCards();
+  }
+
+  updateHotelsList(): void {
     const isMobile = window.innerWidth < 1000;
-    if (this.viewAllHotel) {
-      this.visibleHotelCards = this.hotelCards;
-    } else {
-      this.visibleHotelCards = this.hotelCards.slice(0, isMobile ? 2 : 4);
-    }
+    const allHotelsCards = this.allData.filter(card => card.label === 'Hotels');
+    this.visibleHotelsCards = this.viewAllHotels ? allHotelsCards : allHotelsCards.slice(0, isMobile ? 2 : 4);
   }
-  toggleViewAllRestaurants() {
+
+  toggleViewAllHotels(): void {
+    this.viewAllHotels = !this.viewAllHotels;
+    this.updateHotelsList();
+  }
+
+  updateRestaurantsList(): void {
+    const isMobile = window.innerWidth < 1000;
+    const allRestaurantsCards = this.allData.filter(card => card.label === 'Restaurants');
+    this.visibleRestaurantsCards = this.viewAllRestaurants ? allRestaurantsCards : allRestaurantsCards.slice(0, isMobile ? 2 : 4);
+  }
+
+  toggleViewAllRestaurants(): void {
     this.viewAllRestaurants = !this.viewAllRestaurants;
-    this.updateVisibleRestaurantCards();
+    this.updateRestaurantsList();
   }
-  updateVisibleRestaurantCards() {
+
+  updateTeaSnacksList(): void {
     const isMobile = window.innerWidth < 1000;
-    if (this.viewAllRestaurants) {
-      this.visibleRestaurantCards = this.restaurantCards;
-    } else {
-      this.visibleRestaurantCards = this.restaurantCards.slice(0, isMobile ? 2 : 4);
-    }
+    const allTeaSnacksCards = this.allData.filter(card => card.label === 'Tea & Snacks');
+    this.visibleTeaSnacksCards = this.viewAllTeaSnacks ? allTeaSnacksCards : allTeaSnacksCards.slice(0, isMobile ? 2 : 4);
   }
-  toggleViewAllTeaPoints() {
-    this.viewAllTeaPoints = !this.viewAllTeaPoints;
-    this.updateVisibleTeaPointCards();
+
+  toggleViewAllTeaSnacks(): void {
+    this.viewAllTeaSnacks = !this.viewAllTeaSnacks;
+    this.updateTeaSnacksList();
   }
-  updateVisibleTeaPointCards() {
-    const isMobile = window.innerWidth < 1000;
-    if (this.viewAllTeaPoints) {
-      this.visibleTeaPointCards = this.teaPointCards;
-    } else {
-      this.visibleTeaPointCards = this.teaPointCards.slice(0, isMobile ? 2 : 4);
-    }
+
+  goToDetails(id: number): void {
+    this.router.navigate(['/details/food', id]);
   }
 }

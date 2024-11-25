@@ -1,109 +1,124 @@
 .heading-container {
   background-color: #222831;
-  height: 25vh; 
+  height: 25vh;
   width: 100%;
-  position: relative;     
+  position: relative;
   left: 0;
   right: 0;
-  overflow: hidden; 
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
+
 // B015 FE BY sulaxmi(from)
 .heading-text {
   color: #FFF;
-  margin: 3rem; 
-  z-index: 1; 
+  margin: 3rem;
+  z-index: 1;
   text-align: center;
   font-size: clamp(2rem, 3vw, 3rem);
   line-height: 2.5rem;
 }
+
 //to
 .design-blob {
-position: absolute; 
-top: 40%;
-left: 70%;
-transform: translateX(-50%); 
-width: 220vw; 
-z-index: 0;
+  position: absolute;
+  top: 40%;
+  left: 70%;
+  transform: translateX(-50%);
+  width: 220vw;
+  z-index: 0;
 }
-  .navbar {
-    background-color: #222831; 
-    padding: 10px;
-    text-align: center;
+
+.navbar {
+  background-color: #222831;
+  padding: 10px;
+  text-align: center;
 }
-.container-fluid{
+
+.container-fluid {
   background-color: #222831;
 }
-.card{
+
+.card {
   border: 2px solid #FFF;
+  cursor: pointer;
 }
+
 .card img {
   width: 100%;
-  height: 100%; 
+  height: 100%;
   object-fit: cover;
 }
+
 .card-body {
   background-color: #222831;
-  border-bottom-left-radius: 6px; 
+  border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   text-align: center;
   cursor: pointer;
   padding: 0.7rem;
-  min-height: 3rem; 
-  height: 0vh; 
+  min-height: 3rem;
+  height: 0vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-  .card-title{
-    color:#FFF;
-    font-size:0.8rem;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 400;
-    line-height: 1rem;
-  }
-.activity-heading {  
-  text-align:left;
+.card-title {
+  color: #FFF;
+  font-size: 0.8rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  line-height: 1rem;
+}
+
+.activity-heading {
+  text-align: left;
   padding: 10px;
   background-color: #222831;
   color: #FFF;
-   font-size: 2rem; 
+  font-size: 2rem;
 }
-h2{
+
+h2 {
   margin-bottom: 0rem;
   // B013 FE BY sulaxmi(from)
   font-size: clamp(1.5rem, 3vw, 1.7rem);
   //to
 }
+
 .more-cards {
   display: none;
 }
+
 .btn-view-all {
   display: block;
   margin: 20px auto;
   margin-top: 2rem;
 }
+
 .mt-4 {
   margin-top: 0rem !important;
   margin-bottom: 0rem !important;
 }
+
 .wildlife-heading {
-  
-text-align:left;
-padding: 20px;
-background-color: #222831;
-color: #FFF; 
- font-size: 2rem; 
+  text-align: left;
+  padding: 20px;
+  background-color: #222831;
+  color: #FFF;
+  font-size: 2rem;
 }
+
 .btn {
   color: #FF6000;
-border-color: #FF6000;
+  border-color: #FF6000;
 }
+
 .gap {
-background-color:#222831;
-padding-bottom: 20px;
+  background-color: #222831;
+  padding-bottom: 20px;
 }

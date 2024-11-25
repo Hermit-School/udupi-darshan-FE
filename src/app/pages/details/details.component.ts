@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { natureServiceService } from 'src/app/services/nature.service';
 import { CultureService } from 'src/app/services/culture.service';
 import { Details } from 'src/app/models/card';
+import { FoodService } from 'src/app/services/food.service';
 
 @Component({
   selector: 'app-details',
@@ -21,7 +22,8 @@ export class DetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private natureService: natureServiceService,
-    private cultureService: CultureService
+    private cultureService: CultureService,
+    private foodService: FoodService
   ) {
     this.route.params.subscribe(params => {
       const id = Number(params['id']);
@@ -39,7 +41,11 @@ export class DetailsComponent implements OnInit {
             this.card = data.filter(_ => (_.id == id))[0];
           });
           break;
-
+        case 'food':
+          this.foodService.getAllFoods().subscribe(data => {
+            this.card = data.filter(_ => (_.id == id))[0];
+          });
+          break;
         default:
           break;
       }
