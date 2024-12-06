@@ -13,25 +13,25 @@ export class StoryComponent implements OnInit {
   stories: Story[] = [];
   chunkedStories: Story[][] = [];
 
-  constructor(private router:Router, private storyService: StoryService) { }
+  constructor(private router: Router, private storyService: StoryService) { }
 
   ngOnInit(): void {
     this.fetchStories();
-    this.storyService.getStories().subscribe((stories:Story[])=>{
-      this.stories=stories;
+    this.storyService.getAllStories().subscribe((stories: Story[]) => {
+      this.stories = stories;
     }
     );
 
   }
-  viewDetails(storyId:number):void{
-    this.router.navigate(['/story',storyId]);
+  viewDetails(storyId: number): void {
+    this.router.navigate(['/story', storyId]);
   }
 
   fetchStories(): void {
-    this.storyService.getStories().subscribe(data => {
+    this.storyService.getAllStories().subscribe(data => {
       this.stories = data;
-    this.stories = data;
-    this.chunkStories();
+      this.stories = data;
+      this.chunkStories();
     });
   }
   chunkStories(): void {
@@ -39,6 +39,9 @@ export class StoryComponent implements OnInit {
     this.chunkedStories = [];
     for (let i = 0; i < this.stories.length; i += chunkSize) {
       this.chunkedStories.push(this.stories.slice(i, i + chunkSize));
-    } 
+    }
+  }
+  getTruncatedContent(content: string, limit: number): string {
+    return content.length > limit ? content.substring(0, limit) + '...' : content;
   }
 }

@@ -2,39 +2,38 @@
   <div *ngIf="story">
     <div class="heading">
       <h2>{{ story.title }}</h2>
-      <p class="content1">{{story.content1}}</p>
+      <p class="content1">Submitted By : {{ story.submittedBy }} on {{ story.createdAt }}</p>
     </div>
     <div class="main-img">
+
       <div class="main-image-container">
-        <img [src]="selectedImage" alt="Blog image" class="img-fluid">
+        <img [src]="story.images[selectedIndex]" alt="Blog image" class="img-fluid">
       </div>
+
       <div class="row mt-2">
-        <div *ngFor="let relatedImage of relatedImages; let i = index"
+        <div *ngFor="let image of story?.images; let i = index"
           [ngClass]="{'col-3': true, 'col-md-3': true, 'col-lg-4': true, 'mb-3': true, 'd-lg-none': i === 3}">
-          <div class="card" [ngClass]="{'active': selectedIndex === i}" (click)="onImageClick(relatedImage, i)">
-            <img [src]="relatedImage" alt="Related image" class="card-img-top">
+          <div class="card" [ngClass]="{'active': selectedIndex === i}" (click)="onImageClick(i)">
+            <img [src]="image" alt="Related image {{ i }}" class="card-img-top">
           </div>
         </div>
       </div>
     </div>
-    <div class="para">
-      <ng-container *ngFor="let paragraph of relatedContent">
-        <p class="text">{{ paragraph }}</p>
-      </ng-container>
-      <h3>Don't Miss These</h3>
-      <div class="card-container">
-        <div class="row1 mb-4">
-          <div class="col" *ngFor="let card of cards">
-            <div class="card h-100">
-              <img [src]="card.image" alt="Card image" class="card-img">
-              <div class="card-body">
-                <h5 class="card-title">{{ card.title }}</h5>
-                <hr>
-                <p class="card-text">{{ card.text }}</p>
-              </div>
-              <div class="card-footer">
-                <a><small class="text-small">View Details <i class="bi bi-arrow-right"></i></small></a>
-              </div>
+
+    <p class="text">{{ story.content }}</p>
+    <h3 class="bold fw-bold">Don't Miss These: </h3>
+    <div class="card-container">
+      <div class="row1 mb-4">
+        <div *ngFor="let item of story.dontMissThese" class="col">
+          <div class="card h-100">
+            <img [src]="item.imageUrl" class="card-img-top" [alt]="item.name">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.name }}</h5>
+              <hr>
+              <p class="card-text">{{ item.description }}</p>
+            </div>
+            <div class="card-footer">
+              <a><small class="text-small">View Details <i class="bi bi-arrow-right"></i></small></a>
             </div>
           </div>
         </div>

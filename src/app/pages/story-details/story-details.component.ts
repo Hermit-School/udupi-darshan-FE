@@ -9,33 +9,21 @@ import { Story } from 'src/app/models/story';
   styleUrls: ['./story-details.component.scss']
 })
 export class StoryDetailsComponent implements OnInit {
-  selectedImage: string | undefined;
-  selectedIndex: number | null = null;
-  story: Story | undefined;
-  relatedImages: string[] = [];
-  relatedContent: string[] = [];
-  cards: any[] = [];
-  constructor(private route: ActivatedRoute, private storyService: StoryService) { }
+  story!: Story;
+  selectedIndex: number = 0;
+
+  constructor(private storyService: StoryService, private route: ActivatedRoute) { }
+
   ngOnInit(): void {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    if (idParam !== null) {
-      const storyId = +idParam;
-      this.storyService.getStoryById(storyId).subscribe(story => {
-        if (story) {
-          this.story = story;
-          this.relatedImages = story.relatedImages;
-          this.relatedContent = story.relatedContent;
-          this.cards = story.cards;
-          if (this.relatedImages.length > 0) {
-            this.selectedImage = this.relatedImages[0];
-            this.selectedIndex = 0;
-          }
-        }
+    const storyId = this.route.snapshot.paramMap.get('id');
+    if (storyId) {
+      this.storyService.getStoryById(+storyId).subscribe((data: Story) => {
+        this.story = data;
       });
     }
   }
-  onImageClick(relatedImage: string, index: number) {
-    this.selectedImage = relatedImage;
+
+  onImageClick(index: number): void {
     this.selectedIndex = index;
   }
 }
