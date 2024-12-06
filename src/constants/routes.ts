@@ -6,9 +6,9 @@ export const MockRoutes = {
     generateOtp: '/v1/generateOTP',
 }
 export const ApiRoutes = {
-    natureData: "/v1/nature/getdata",
-    cultureData: "/v1/culture/getdata",
-    foodData: "/v1/food/getdata",
+    natureData: "/v1/nature/getNature",
+    cultureData: "/v1/culture/getCulture",
+    foodData: "/v1/food/getFood",
     storyData: "/v1/blogs/getBlogs"
 };
 export const Environment = {
