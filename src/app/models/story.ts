@@ -1,16 +1,14 @@
 export interface Story {
-    id:number;
-    title: string;
-    author: string;
-    content: string;
-    image: string;
-    content1?: string;
-    relatedImages: string[];
-    relatedContent: string[];
-  cards: {
-    id: number;
-    image: string;
-    title?: string;
-    text: string;
+  id: number;
+  title: string;
+  submittedBy: string;
+  content: string;
+  images: string;
+  createdAt: string;
+  dontMissThese: {
+    name: string;
+    description: string;
+    imageUrl: string;
+    link?: string;
   }[];
-  }
+}
