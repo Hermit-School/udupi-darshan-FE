@@ -17,11 +17,6 @@ export class StoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchStories();
-    this.storyService.getAllStories().subscribe((stories: Story[]) => {
-      this.stories = stories;
-    }
-    );
-
   }
   viewDetails(storyId: number): void {
     this.router.navigate(['/story', storyId]);
@@ -29,7 +24,6 @@ export class StoryComponent implements OnInit {
 
   fetchStories(): void {
     this.storyService.getAllStories().subscribe(data => {
-      this.stories = data;
       this.stories = data;
       this.chunkStories();
     });
