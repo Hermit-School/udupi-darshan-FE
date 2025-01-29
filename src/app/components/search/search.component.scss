@@ -1,9 +1,5 @@
-.search-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 90%;
-    margin-right: 2rem;
+.ms-auto {
+    margin-right: 1rem;
 }
 
 .input-group[_ngcontent-bgm-c43]>[_ngcontent-bgm-c43]:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
@@ -18,6 +14,7 @@
 }
 
 .input-group-text {
+    margin-right: 0rem;
     background-color: #fff;
     border-bottom-left-radius: 0.7rem;
     border-top-left-radius: 0.7rem;
@@ -72,6 +69,32 @@ input#form1 {
     cursor: pointer;
 }
 
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-item h6 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.dropdown-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #6c757d;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: #f8f9fa;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: #FF6000;
+}
+
 .search-overlay {
     position: fixed;
     top: 0;
@@ -95,26 +118,4 @@ input#form1 {
 .btn2 {
     background-color: #222831;
     border: none;
-}
-
-.dropdown-item h6 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.dropdown-item p {
-    margin: 0;
-    font-size: 14px;
-    color: #6c757d;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-        background-color: #f8f9fa;
-    }
-}
-
-a {
-    text-decoration: none;
-    color: #FF6000;
 }

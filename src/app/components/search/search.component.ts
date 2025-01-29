@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Details } from 'src/app/models/card';
 import { SharedService } from 'src/app/services/shared.service';
@@ -19,6 +19,13 @@ export class SearchComponent {
     private sharedService: SharedService,
     private router: Router
   ) { }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
+  checkScreenSize() {
+    this.isSmallScreen = window.innerWidth < 992;
+  }
 
   openSearch() {
     this.toggleSearch = true;
@@ -66,15 +73,6 @@ export class SearchComponent {
     if (!field || !query) return field || '';
     const regex = new RegExp(`(${query})`, 'gi');
     return field.replace(regex, '<b>$1</b>');
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.checkScreenSize();
-  }
-
-  checkScreenSize() {
-    this.isSmallScreen = window.innerWidth < 992;
   }
 
   selectResult(result: Details): void {
