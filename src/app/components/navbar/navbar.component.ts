@@ -36,10 +36,6 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   isRouteActive(route: string): boolean {
     return this.router.url.includes(route);
   }
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.checkScreenSize();
-  }
 
   checkScreenSize() {
     this.isSmallScreen = window.innerWidth < 992;
