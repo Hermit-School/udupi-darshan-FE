@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef,HostListener, AfterViewInit, OnDestroy , Renderer2,Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit, OnDestroy, Renderer2, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DetailsComponent } from 'src/app/pages/details/details.component';
-
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
+
 export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() detailsComponent!: DetailsComponent;
 
@@ -24,40 +24,23 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('successToast') successToast!: ElementRef;
   @ViewChild('errorToast') errorToast!: ElementRef;
   isSuccess: boolean | undefined;
-  
 
-  constructor(private fb: FormBuilder, private router: Router,private renderer: Renderer2) {
+  constructor(private fb: FormBuilder, private router: Router, private renderer: Renderer2) {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
       message: ['', Validators.required]
     });
   }
+
   isRouteActive(route: string): boolean {
     return this.router.url.includes(route);
   }
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.checkScreenSize();
-  }
 
   checkScreenSize() {
-    this.isSmallScreen = window.innerWidth < 992; 
+    this.isSmallScreen = window.innerWidth < 992;
   }
 
-  toggleSearch: boolean = false;
-  searchText: string = '';
-
-  openSearch() {
-    this.toggleSearch = true;
-  }
-
-  searchClose() {
-    this.toggleSearch = false;
-  }
-  search(query: string): void {
-  }
-  
   ngOnInit(): void {
     this.form.get('message')?.valueChanges.subscribe(value => {
       this.wordCount = this.countWords(value);
@@ -90,7 +73,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFileSelected(event: any): void {
     const selectedFiles = event.target.files;
-    const maxSize =  6291456;
+    const maxSize = 6291456;
 
     if (this.files.length + selectedFiles.length > this.maxFiles) {
       alert(`You can only upload a maximum of ${this.maxFiles} photos.`);
@@ -121,16 +104,16 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   onSubmit(): void {
     if (this.form.valid) {
       console.log(this.form.value);
-        this.showToast('successToast');
-        this.isSuccess = false; 
-      this.resetForm(); 
+      this.showToast('successToast');
+      this.isSuccess = false;
+      this.resetForm();
     } else {
       console.log('Form is invalid');
       this.isSuccess = false;
-      this.showToast('errorToast'); 
+      this.showToast('errorToast');
     }
   }
-showToast(toastId: 'successToast' | 'errorToast'): void {
+  showToast(toastId: 'successToast' | 'errorToast'): void {
     const toastElement = this[toastId].nativeElement as HTMLElement;
     if (toastElement) {
       const toast = (window as any).bootstrap.Toast.getOrCreateInstance(toastElement);
@@ -138,15 +121,15 @@ showToast(toastId: 'successToast' | 'errorToast'): void {
     }
   }
   resetForm(): void {
-    this.form.reset(); 
-    this.files = []; 
-    this.wordCount = 0; 
-    this.form.controls['message'].enable(); 
+    this.form.reset();
+    this.files = [];
+    this.wordCount = 0;
+    this.form.controls['message'].enable();
   }
-resetModal(): void {
+  resetModal(): void {
     this.resetForm();
   }
- navigateTo(route: string): void {
+  navigateTo(route: string): void {
     this.router.navigate([route]);
   }
   closeOffcanvas() {
@@ -163,7 +146,7 @@ resetModal(): void {
     }
   }
   removePadding() {
-    document.body.style.paddingRight = '0px'; 
+    document.body.style.paddingRight = '0px';
     document.body.style.overflow = 'auto';
   }
 }

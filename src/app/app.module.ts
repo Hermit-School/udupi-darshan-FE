@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { NgbCarouselModule,NgbAlertModule,NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCarouselModule, NgbAlertModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
@@ -34,6 +34,7 @@ import { FoodComponent } from './pages/food/food.component';
 import { StoryComponent } from './pages/story/story.component';
 import { StoryDetailsComponent } from './pages/story-details/story-details.component';
 import { MyHttpInterceptor } from './services/Interceptor/MyHttpInterceptor';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { MyHttpInterceptor } from './services/Interceptor/MyHttpInterceptor';
     ListFilterPipe,
     FoodComponent,
     StoryComponent,
-    StoryDetailsComponent
+    StoryDetailsComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
