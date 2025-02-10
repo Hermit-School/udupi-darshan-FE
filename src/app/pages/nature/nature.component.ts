@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { natureServiceService } from 'src/app/services/nature.service';
 import { Details } from 'src/app/models/card';
 
-
 @Component({
   selector: 'app-nature',
   templateUrl: './nature.component.html',
@@ -28,14 +27,12 @@ export class NatureComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadData()
-
     window.addEventListener('resize', this.updateVisibleBestOfNatureCard.bind(this));
     window.addEventListener('resize', this.updateActivityList.bind(this));
     document.body.style.overflow = 'auto';
     document.body.style.paddingRight = '0';
     window.addEventListener('resize', this.updateBeachList.bind(this));
     window.addEventListener('resize', this.updateWildlifeList.bind(this));
-
   }
 
   loadData() {
@@ -47,7 +44,6 @@ export class NatureComponent implements OnInit, OnDestroy {
       this.updateWildlifeList();
     })
   }
-
 
   ngOnDestroy() {
     window.removeEventListener('resize', this.updateVisibleBestOfNatureCard.bind(this));
@@ -74,7 +70,6 @@ export class NatureComponent implements OnInit, OnDestroy {
     this.viewAllActivity = !this.viewAllActivity;
     this.updateActivityList();
   }
-
 
   updateWildlifeList() {
     const isMobile = window.innerWidth < 1000;

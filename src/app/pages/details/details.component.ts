@@ -5,6 +5,7 @@ import { natureServiceService } from 'src/app/services/nature.service';
 import { CultureService } from 'src/app/services/culture.service';
 import { Details } from 'src/app/models/card';
 import { FoodService } from 'src/app/services/food.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-details',
@@ -23,36 +24,51 @@ export class DetailsComponent implements OnInit {
     private router: Router,
     private natureService: natureServiceService,
     private cultureService: CultureService,
-    private foodService: FoodService
-  ) {
+    private foodService: FoodService,
+    private sharedService: SharedService
+  ) { }
+  ngOnInit(): void {
     this.route.params.subscribe(params => {
       const id = Number(params['id']);
       const category = params['category'];
       this.currentCategory = category;
-
-      switch (category) {
-        case 'nature':
-          this.natureService.getAllNatures().subscribe(data => {
-            this.card = data.filter(_ => (_.id == id))[0];
-          });
-          break;
-        case 'culture':
-          this.cultureService.getAllCultures().subscribe(data => {
-            this.card = data.filter(_ => (_.id == id))[0];
-          });
-          break;
-        case 'food':
-          this.foodService.getAllFoods().subscribe(data => {
-            this.card = data.filter(_ => (_.id == id))[0];
-          });
-          break;
-        default:
-          break;
-      }
+      this.fetchData(category, id);
     });
   }
 
-  ngOnInit() { }
+  fetchData(category: string, id: number): void {
+    switch (category) {
+      case 'nature':
+        this.natureService.getAllNatures().subscribe(data => {
+          this.sharedService.setDetailsData(data);
+          this.card = data.find(item => item.id === id) || null;
+        });
+        break;
+      case 'culture':
+        this.cultureService.getAllCultures().subscribe(data => {
+          this.sharedService.setDetailsData(data);
+          this.card = data.find(item => item.id === id) || null;
+        });
+        break;
+      case 'food':
+        this.foodService.getAllFoods().subscribe(data => {
+          this.sharedService.setDetailsData(data);
+          this.card = data.find(item => item.id === id) || null;
+        });
+        break;
+      default:
+        this.card = null;
+        break;
+    }
+
+    const cardId = this.route.snapshot.paramMap.get('id');
+    if (cardId) {
+      const id = Number(cardId);
+      this.sharedService.getSearchResults().subscribe((results) => {
+        this.card = results.find((item) => item.id === id) || null;
+      });
+    }
+  }
 
   showOverlay(): void {
     this.isOverlayActive = true;

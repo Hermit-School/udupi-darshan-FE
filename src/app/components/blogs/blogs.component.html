@@ -3,7 +3,6 @@
   <div class="card-container">
     <div class="row1 mb-4">
       <div class="col" *ngFor="let blog of blogs">
-        <!-- cards clickable -->
         <a [routerLink]="['/blog', blog.id]" class="card-link">
           <div class="card h-100">
             <img [src]="blog.image" class="card-img" alt="...">

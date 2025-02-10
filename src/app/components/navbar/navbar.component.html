@@ -3,41 +3,8 @@
     <a class="navbar-brand brand-margin" href="#" routerLink="/home">
       <img src="assets/images/static/horizontal_logo.svg" alt="Udupi Darshan Logo" style="height: 30px;">
     </a>
-    <div class="ms-auto" *ngIf="!isSmallScreen" (click)="searchClose()">
-      <div class="input-group">
-        <span class="input-group-text" id="basic-addon1">
-          <i class="bi bi-search icon"></i>
-        </span>
-        <input #input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search"
-          aria-describedby="basic-addon1" />
-      </div>
-    </div>
 
-
-    <div class="input">
-      <button class="btn2" *ngIf="isSmallScreen" (click)="openSearch()">
-        <i class="bi bi-search"></i>
-      </button>
-
-      <button class="navbar-toggler ms-sm-3 d-lg-none" type="button" data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-        <i class="bi bi-list icon"></i>
-      </button>
-    </div>
-    <div class="search-overlay" *ngIf="toggleSearch" (click)="searchClose()">
-      <div class="search-block" (click)="$event.stopPropagation()">
-        <div class="input-group">
-          <span class="input-group-text" id="basic-addon1">
-            <i class="bi bi-search icon"></i>
-          </span>
-          <input #input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search"
-            aria-describedby="basic-addon1" />
-          <!-- <button class="btn btn-outline-secondary" type="button" (click)="searchClose()">
-            <i class="bi bi-x"></i>
-          </button> -->
-        </div>
-      </div>
-    </div>
+    <app-search></app-search>
 
     <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarTogglerDemo02">
       <ul class="navbar-nav me-auto align-items-lg-center">
@@ -70,7 +37,6 @@
     </div>
   </div>
   <!-- TO -->
-
 
   <div class="offcanvas offcanvas-end d-lg-none d-block" tabindex="-1" id="offcanvasNavbar"
     aria-labelledby="offcanvasNavbarLabel">

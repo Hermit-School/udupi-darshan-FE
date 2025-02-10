@@ -1,8 +1,6 @@
-import { AfterViewInit, Component,  OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
-
-
 
 @Component({
   selector: 'app-admin',
@@ -22,8 +20,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     Contain at least one special character (-, _, @).
   `;
 
-
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(private fb: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -39,35 +36,25 @@ export class AdminComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   ngAfterViewInit(): void {
     const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.forEach((tooltipTriggerEl) => {
       new (window as any).bootstrap.Tooltip(tooltipTriggerEl, {
-        customClass: 'custom-tooltip' // Apply custom class for styling
+        customClass: 'custom-tooltip'
       });
     });
   }
-  
 
   togglePasswordVisibility(): void {
     this.changetype = !this.changetype;
     if (!this.changetype) {
       this.showPasswordTimeout = setTimeout(() => {
         this.changetype = true;
-      }, 1000); // Revert to hidden password after 3 seconds
+      }, 1000);
     } else {
       clearTimeout(this.showPasswordTimeout);
     }
   }
-
-
-
-  // viewpass(){
-  //   this.visible=!this.visible;
-  //   this.changetype=!this.changetype;
-
-  // }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
@@ -77,7 +64,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
       console.log('Form is not valid');
     }
   }
-  
+
   forgotPassword(): void {
     console.log('forgotPassword');
     this.router.navigate(['/forgotpassword']);

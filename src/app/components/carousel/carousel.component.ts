@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 @Component({
   selector: 'app-carousel',
   templateUrl: './carousel.component.html',
@@ -11,6 +10,4 @@ export class CarouselComponent {
     { src: 'assets/images/a3.jpg', description: 'Discover Udupi with these 6 beautiful beaches' },
     { src: 'assets/images/a4.jpg', description: 'Discover Udupi with these 6 beautiful beaches' }
   ];
-
-  
 }
