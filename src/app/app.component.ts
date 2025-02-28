@@ -1,13 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { DetailsComponent } from './pages/details/details.component';
 import { Meta, Title } from '@angular/platform-browser';
 import { filter, map } from 'rxjs';
+import { DetailsComponent } from './pages/details/details.component';
+import { SharedService } from './services/shared.service';
+import { CultureService } from './services/culture.service';
+import { FoodService } from './services/food.service';
+import { natureServiceService } from './services/nature.service';
+import { Details } from './models/card';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent implements OnInit {
   @ViewChild(DetailsComponent) detailsComponent!: DetailsComponent;
 
@@ -15,7 +22,10 @@ export class AppComponent implements OnInit {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
     private titleService: Title,
-    private metaService: Meta
+    private metaService: Meta, private sharedService: SharedService,
+    private natureService: natureServiceService,
+    private cultureService: CultureService,
+    private foodService: FoodService
   ) { }
 
   ngOnInit() {
@@ -42,5 +52,25 @@ export class AppComponent implements OnInit {
         }
       });
 
+    const allData: Details[] = [];
+
+    this.natureService.getAllNatures().subscribe((natureData) => {
+      allData.push(...natureData);
+      this.updateSharedService(allData);
+    });
+
+    this.cultureService.getAllCultures().subscribe((cultureData) => {
+      allData.push(...cultureData);
+      this.updateSharedService(allData);
+    });
+
+    this.foodService.getAllFoods().subscribe((foodData) => {
+      allData.push(...foodData);
+      this.updateSharedService(allData);
+    });
+  }
+
+  private updateSharedService(data: Details[]): void {
+    this.sharedService.setDetailsData([...data]);
   }
 }
