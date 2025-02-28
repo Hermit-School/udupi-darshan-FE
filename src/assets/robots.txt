@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /admindashboard
+
+Sitemap: https://udupi-darshan.web.app/assets/sitemap.xml
