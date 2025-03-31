@@ -1,11 +1,10 @@
-<div class="ms-auto" *ngIf="!isSmallScreen" (click)="searchClose()">
+<!-- <div class="ms-auto" *ngIf="!isSmallScreen" (click)="searchClose()">
     <div class="input-group ">
         <span class="input-group-text" id="basic-addon1">
             <i class="bi bi-search icon"></i>
         </span>
         <input #input type="search" id="form1" class="form-control" [(ngModel)]="searchText" placeholder="Search"
             aria-label="Search" aria-describedby="basic-addon1" (keyup)="search($event)" />
-        <!-- Dropdown for results -->
         <div class="search-dropdown w-100 shadow-lg" *ngIf="showDropdown && results.length > 0"
             [ngClass]="{'show':showDropdown}">
             <div class="drop">
@@ -48,11 +47,14 @@
 <div class="search-overlay" *ngIf="toggleSearch" (click)="searchClose()">
     <div class="search-block" (click)="$event.stopPropagation()">
         <div class="input-group">
-            <span class="input-group-text" id="basic-addon1">
+            <span class="input-group-text">
                 <i class="bi bi-search icon"></i>
             </span>
-            <input #input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search"
-                aria-describedby="basic-addon1" (keyup)="search($event)" />
+            <input #input type="search" id="form1" class="form-control" placeholder="Search" [(ngModel)]="searchText"
+                (keyup)="search($event)" />
+            <button class="btn-close" (click)="searchClose()"></button>
+           
+
             <div class="search-dropdown" *ngIf="showDropdown && results.length > 0">
                 <div *ngFor="let item of results" class="dropdown-item" (click)="selectResult(item)">
                     <a [routerLink]="['/details', item.category, item.id]" (click)="searchClose()">
@@ -62,6 +64,96 @@
                             [innerHTML]="getHighlightedText(item.descr, searchText)"></p>
                     </a>
                 </div>
+            </div>
+            <div *ngIf="isNatureSearchText(searchText)" class="dropdown-item">
+                <a [routerLink]="['/nature']" [queryParams]="{ category: searchText }" (click)="searchClose()">
+                    <h6>Go to {{ searchText | titlecase }} Page</h6>
+                </a>
+            </div>
+            <div *ngIf="isCultureSearchText(searchText)" class="dropdown-item">
+                <a [routerLink]="['/culture']" [queryParams]="{ category: searchText }" (click)="searchClose()">
+                    <h6>Go to {{ searchText | titlecase }} Page</h6>
+                </a>
+            </div>
+            <div *ngIf="isFoodSearchText(searchText)" class="dropdown-item">
+                <a [routerLink]="['/food']" [queryParams]="{ category: searchText }" (click)="searchClose()">
+                    <h6>Go to {{ searchText | titlecase }} Page</h6>
+                </a>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- Search Bar for Large Screens -->
+<div class="ms-auto d-none d-lg-flex">
+    <div class="input-group">
+        <span class="input-group-text" id="basic-addon1">
+            <i class="bi bi-search icon"></i>
+        </span>
+        <input #input type="search" id="form1" class="form-control" [(ngModel)]="searchText" placeholder="Search"
+            aria-label="Search" aria-describedby="basic-addon1" (keyup)="search($event)" />
+        <!-- Dropdown for results -->
+        <div class="search-dropdown w-100 shadow-lg" *ngIf="showDropdown && results.length > 0">
+            <div class="drop">
+                <div *ngFor="let item of results" class="dropdown-item" (click)="selectResult(item)">
+                    <a [routerLink]="['/details', item.category, item.id]" (click)="searchClose()">
+                        <h6 *ngIf="item.name.toLowerCase().includes(searchText.toLowerCase())"
+                            [innerHTML]="getHighlightedText(item.name, searchText)"></h6>
+                        <p *ngIf="item.descr && item.descr.toLowerCase().includes(searchText.toLowerCase())"
+                            [innerHTML]="getHighlightedText(item.descr, searchText)"></p>
+                    </a>
+                </div>
+                <div *ngIf="isNatureSearchText(searchText)" class="dropdown-item">
+                    <a [routerLink]="['/nature']" [queryParams]="{ category: searchText }" (click)="searchClose()">
+                        <h6>Go to {{ searchText | titlecase }} Page</h6>
+                    </a>
+                </div>
+                <div *ngIf="isCultureSearchText(searchText)" class="dropdown-item">
+                    <a [routerLink]="['/culture']" [queryParams]="{ category: searchText }" (click)="searchClose()">
+                        <h6>Go to {{ searchText | titlecase }} Page</h6>
+                    </a>
+                </div>
+                <div *ngIf="isFoodSearchText(searchText)" class="dropdown-item">
+                    <a [routerLink]="['/food']" [queryParams]="{ category: searchText }" (click)="searchClose()">
+                        <h6>Go to {{ searchText | titlecase }} Page</h6>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Icon for Small Screens -->
+<div class="d-flex d-lg-none">
+    <button class="btn2" (click)="openSearch()">
+        <i class="bi bi-search icon"></i>
+    </button>
+    <button class="navbar-toggler ms-sm-3 d-lg-none" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <i class="bi bi-list icon"></i>
+    </button>
+</div>
+
+<!-- Full-Screen Search Overlay for Small Screens -->
+<div class="search-overlay" *ngIf="toggleSearch" (click)="searchClose()">
+    <div class="search-block" (click)="$event.stopPropagation()">
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="bi bi-search icon"></i>
+            </span>
+            <input #input type="search" id="form1" class="form-control" [(ngModel)]="searchText" placeholder="Search"
+                aria-label="Search" (keyup)="search($event)" />
+            <!-- <button class="btn-close" (click)="searchClose()"></button> -->
+        </div>
+        <!-- Search Dropdown for Small Screens -->
+        <div class="search-dropdown" *ngIf="showDropdown && results.length > 0">
+            <div *ngFor="let item of results" class="dropdown-item" (click)="selectResult(item)">
+                <a [routerLink]="['/details', item.category, item.id]" (click)="searchClose()">
+                    <h6 *ngIf="item.name.toLowerCase().includes(searchText.toLowerCase())"
+                        [innerHTML]="getHighlightedText(item.name, searchText)"></h6>
+                    <p *ngIf="item.descr && item.descr.toLowerCase().includes(searchText.toLowerCase())"
+                        [innerHTML]="getHighlightedText(item.descr, searchText)"></p>
+                </a>
             </div>
             <div *ngIf="isNatureSearchText(searchText)" class="dropdown-item">
                 <a [routerLink]="['/nature']" [queryParams]="{ category: searchText }" (click)="searchClose()">

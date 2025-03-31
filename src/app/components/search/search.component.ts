@@ -9,7 +9,6 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent {
-  isSmallScreen: boolean = false;
   toggleSearch: boolean = false;
   searchText: string = '';
   results: Details[] = [];
@@ -19,13 +18,6 @@ export class SearchComponent {
     private sharedService: SharedService,
     private router: Router
   ) { }
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.checkScreenSize();
-  }
-  checkScreenSize() {
-    this.isSmallScreen = window.innerWidth < 992;
-  }
 
   openSearch() {
     this.toggleSearch = true;
