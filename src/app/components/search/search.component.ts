@@ -79,5 +79,4 @@ export class SearchComponent {
       this.results = data;
     });
   }
-
 }
