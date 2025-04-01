@@ -26,22 +26,6 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.loading = false;
     }, 2800);
-    const allData: Details[] = [];
-
-    this.natureService.getAllNatures().subscribe((natureData) => {
-      allData.push(...natureData);
-      this.updateSharedService(allData);
-    });
-
-    this.cultureService.getAllCultures().subscribe((cultureData) => {
-      allData.push(...cultureData);
-      this.updateSharedService(allData);
-    });
-
-    this.foodService.getAllFoods().subscribe((foodData) => {
-      allData.push(...foodData);
-      this.updateSharedService(allData);
-    });
   }
 
   private updateSharedService(data: Details[]): void {
