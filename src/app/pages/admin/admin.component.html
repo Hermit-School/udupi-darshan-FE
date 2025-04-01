@@ -1,20 +1,13 @@
 <div class="container-fluid d-flex justify-content-center align-items-center ">
-    <!-- <div class="admin-panel d-flex justify-content-center align-items-center min-vh-100"> -->
-    <!-- <div class="row w-100">
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4 mx-auto"> -->
     <div class="row justify-content-center">
-        <div class="col-md-6 col-md-12 "> <!-- Makes card responsive -->
+        <div class="col-md-6 col-md-12 ">
             <div class="card">
                 <div class="card-body">
                     <h2 class="text-center text">
                         <i class="bi bi-person-lock"></i> Admin Login
                     </h2>
-
-                    <!-- <p class="text-center">Login to manage content</p> -->
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
-                        <!-- Username -->
                         <div class="mb ">
-                            <!-- <label for="username" class="form-label text">Username (Email)</label> -->
                             <div class="input-group ">
                                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                                 <input type="email" formControlName="username" class="form-control" id="username"
@@ -29,12 +22,8 @@
                                 <div *ngIf="loginForm.get('username')?.errors?.['email']">Invalid email address.
                                 </div>
                             </div>
-                            <!-- </div> -->
                         </div>
-
-                        <!-- Password -->
                         <div>
-                            <!-- <label for="password" class="form-label text">Password</label> -->
                             <div class="input-group width">
                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input [type]="changetype ? 'password' : 'text'" formControlName="password"
@@ -64,14 +53,11 @@
                                 </button>
                             </div>
                         </div>
-
-                        <!-- Forgot Password -->
                         <div class="text-end mb-3">
                             <button type="button" class="btn forgot-password " (click)="forgotPassword()">Forgot
                                 Password?</button>
                         </div>
 
-                        <!-- Login Button -->
                         <div class="d-grid">
                             <button class="btn" type="submit" [disabled]="!loginForm.valid"
                                 [ngClass]="{'btn-dark-orange': loginForm.valid, 'btn-light-orange': !loginForm.valid}">
@@ -83,6 +69,3 @@
                 </div>
             </div>
         </div>
-        <!-- </div>
-</div> -->
-        <!-- </div> -->
