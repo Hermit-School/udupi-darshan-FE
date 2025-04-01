@@ -19,13 +19,13 @@ import { StoryDetailsComponent } from './pages/story-details/story-details.compo
 
 const routes: Routes = [
   // Default route
-  { path: '', component: LandingPageComponent, data: { title: 'Udupi Darshan - Explore Culture & Nature', metaDescription: 'Discover the best places in Udupi, including culture, food, nature, and stories.' } },
+  { path: 'home', component: LandingPageComponent, data: { title: 'Udupi Darshan - Explore Culture & Nature', metaDescription: 'Discover the best places in Udupi, including culture, food, nature, and stories.' } },
   { path: 'nature', component: NatureComponent, data: { title: 'Nature in Udupi - Explore Scenic Beauty', metaDescription: 'Experience the natural beauty of Udupi with beaches, forests, and more.' } },
   { path: 'culture', component: CultureComponent, data: { title: 'Culture of Udupi - Traditions & Heritage', metaDescription: 'Dive into the rich cultural heritage of Udupi, including traditions, temples, and history.' } },
   { path: 'food', component: FoodComponent, data: { title: 'Udupi Food - Famous Dishes & Cuisine', metaDescription: 'Taste the delicious Udupi cuisine with authentic South Indian flavors and iconic dishes.' } },
   { path: 'advertisements', component: AdvertisementsComponent },
   { path: 'admin', component: AdminComponent },
-  { path: 'home', component: LandingPageComponent },
+  { path: '', component: LandingPageComponent },
   { path: 'details/:category/:id', component: DetailsComponent },
   { path: '404', component: PagenotfoundComponent, data: { title: 'Page Not Found - Udupi Darshan', metaDescription: 'Oops! The page you are looking for does not exist. Explore Udupi Darshan for more content.' } },
   { path: 'forgotpassword', component: ForgotpasswordComponent },
