@@ -1,0 +1,17 @@
+# robots.txt file is used to control and guide search engine crawlers on how to interact with your website.
+# It helps in allowing or restricting access to certain parts of your site.
+
+# The User-agent directive specifies which web crawlers (bots) these rules apply to.
+# The asterisk (*) means that these rules apply to all search engine bots.
+User-agent: *
+
+# Allow all bots to access all public pages on the website.
+Allow: /
+
+# Disallow bots from crawling admin-related pages to prevent them from being indexed in search engines.
+Disallow: /admin
+Disallow: /admindashboard
+
+# The Sitemap directive provides the location of the XML sitemap.
+# This helps search engines efficiently discover and index important pages of the website.
+Sitemap: https://udupi-darshan.web.app/assets/sitemap.xml
