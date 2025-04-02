@@ -1,8 +1,9 @@
-
-html, body {
+html,
+body {
   min-height: 100%;
 }
 
-  @import './dashboard.scss';
-  @import "~bootstrap-icons/font/bootstrap-icons.css";
-  @import './pages/details.scss';
+@import './dashboard.scss';
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+@import './pages/details.scss';
+@import './pages/admin.scss';

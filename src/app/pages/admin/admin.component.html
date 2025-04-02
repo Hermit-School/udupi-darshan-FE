@@ -1,79 +1,71 @@
-<div class="container-fluid admin-panel">
-    <div class="row login-section">
-        <div class="col-12 col-md-5 left-panel">
-            <div class="row">
-                <h1>Administrator Login Page</h1>
-            </div>
-            <div class="row">
-                <h3>Login here to moderate Content</h3>
-            </div>
-        </div>
-        <div class="col-12 col-md-7 right-panel">
-            <div class="mt-5"></div>
-            <div class="container-fluid login-container pt-3 pb-5">
-                <form class="row needs-validation" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
-                    <div class="row mt-4">
-                        <div class="col-12 col-md-3"></div>
-                        <div class="col-12 col-md-6">
-                            <label for="username" class="form-label">Username (Email)</label>
-                            <input
-                                type="email"
-                                formControlName="username"
-                                class="form-control"
-                                id="username"
-                                [ngClass]="{
-                                    'input-invalid': loginForm.get('username')?.invalid && loginForm.get('username')?.touched,
-                                    'input-valid': loginForm.get('username')?.valid
-                                }"
-                                required
-                            >
-                            <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="invalid-feedback d-block">
-                                <div *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.</div>
-                                <div *ngIf="loginForm.get('username')?.errors?.['email']">Invalid email address.</div>
+<div class="container-fluid d-flex justify-content-center align-items-center ">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-md-12 ">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="text-center text">
+                        <i class="bi bi-person-lock"></i> Admin Login
+                    </h2>
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+                        <div class="mb ">
+                            <div class="input-group ">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" formControlName="username" class="form-control" id="username"
+                                    [ngClass]="{
+                                    'is-invalid': loginForm.get('username')?.invalid && loginForm.get('username')?.touched
+                                }" required placeholder="Enter your email">
+                            </div>
+                            <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+                                class="invalid-feedback">
+                                <div *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.
+                                </div>
+                                <div *ngIf="loginForm.get('username')?.errors?.['email']">Invalid email address.
+                                </div>
                             </div>
                         </div>
-                        <div class="col-12 col-md-3"></div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-12 col-md-3"></div>
-                        <div class="col-12 col-md-6 position-relative">
-                            <label for="password" class="form-label">Password</label>
-                            <div class="input-group">
-                                <input
-                                    [type]="changetype ? 'password' : 'text'"
-                                    formControlName="password"
-                                    class="form-control password-input"
-                                    id="password"
-                                    [ngClass]="{
-                                        'input-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
-                                        'input-valid': loginForm.get('password')?.valid
-                                    }"
-                                    required
-                                >
-                                <button type="button"  class=" eye-icon btn btn-outline-secondary toggle-password" (click)="togglePasswordVisibility()">
+                        <div>
+                            <div class="input-group width">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input [type]="changetype ? 'password' : 'text'" formControlName="password"
+                                    class="form-control" id="password" [ngClass]="{
+                                        'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched
+                                    }" required placeholder="Enter your password">
+                                <button type="button" class="btn btn-outline-secondary"
+                                    (click)="togglePasswordVisibility()">
                                     <i [ngClass]="changetype ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                                 </button>
                             </div>
-                            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="invalid-feedback d-block">
+                            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                                class="invalid-feedback">
                                 Password does not meet the requirements
-                                <button type="button" class="btn tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                title={{passwordTooltip}}  data-bs-custom-class="custom-tooltip">?</button>
+
+                                <button *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                                    #passwordTooltip type="button" class="btn tooltip-icon" data-bs-toggle="tooltip"
+                                    data-bs-html="true" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
+                                    data-bs-title="<em>Password rules:</em><br>
+                                           - <b>Secure (8-10 chars)</b>:<br>
+                                             • Starts with a letter<br>
+                                             • Uppercase, lowercase, digit, special char (-, _, @)<br>
+                                           - <b>Passphrase (5-30 chars)</b>:<br>
+                                             • Starts with a letter<br>
+                                             • 3 words separated by hyphens (-)">
+                                    ?
+                                </button>
                             </div>
                         </div>
-                        <div class="col-12 col-md-3"></div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-12 col-md-3"></div>
-                        <div class="col-12 col-md-6">
-                            <button class="btn btn-link p-0" type="button" (click)="forgotPassword()">Forgot Password?</button>
+                        <div class="text-end mb-3">
+                            <button type="button" class="btn forgot-password " (click)="forgotPassword()">Forgot
+                                Password?</button>
                         </div>
-                        <div class="col-12 col-md-3"></div>
-                    </div>
-                    <div class="col-12 text-center mt-5">
-                        <button class="btn btn-light" type="submit" [disabled]="!loginForm.valid">Login</button>
-                    </div>
-                </form>
+
+                        <div class="d-grid">
+                            <button class="btn" type="submit" [disabled]="!loginForm.valid"
+                                [ngClass]="{'btn-dark-orange': loginForm.valid, 'btn-light-orange': !loginForm.valid}">
+                                Login
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
