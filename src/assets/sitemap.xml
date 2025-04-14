@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is the XML Sitemap for the Udupi Darshan website. -->
+<!-- A sitemap helps search engines discover and index pages more efficiently. -->
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage: The most important page, set to high priority (1.0) -->
+  <url>
+    <loc>https://udupi-darshan.web.app/</loc>
+    <changefreq>weekly</changefreq>  <!-- The page is updated weekly -->
+    <priority>1.0</priority>  <!-- Highest priority for better indexing -->
+  </url>
+
+  <!-- Nature Page -->
+  <url>
+    <loc>https://udupi-darshan.web.app/#/nature</loc>
+    <changefreq>weekly</changefreq>  <!-- Updated weekly -->
+    <priority>0.8</priority>  <!-- High priority but lower than the homepage -->
+  </url>
+
+  <!-- Culture Page -->
+  <url>
+    <loc>https://udupi-darshan.web.app/#/culture</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Food Page -->
+  <url>
+    <loc>https://udupi-darshan.web.app/#/food</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Story Page -->
+  <url>
+    <loc>https://udupi-darshan.web.app/#/story</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

@@ -20,7 +20,7 @@ jobs:
           node-version: 20.11.1
       - name: npm install, build
         run: |
-          npm install
+          npm install --force
           npm run build
       # - name: Install Firebase CLI
       #   run: |  

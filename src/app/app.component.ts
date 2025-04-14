@@ -1,4 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
+import { filter, map } from 'rxjs';
 import { DetailsComponent } from './pages/details/details.component';
 import { SharedService } from './services/shared.service';
 import { CultureService } from './services/culture.service';
@@ -17,15 +20,38 @@ export class AppComponent implements OnInit {
 
   loading = true;
 
-  constructor(private sharedService: SharedService,
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+    private titleService: Title,
+    private metaService: Meta, private sharedService: SharedService,
     private natureService: natureServiceService,
     private cultureService: CultureService,
-    private foodService: FoodService) { }
+    private foodService: FoodService
+  ) { }
 
   ngOnInit() {
     setTimeout(() => {
       this.loading = false;
     }, 2800);
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(() => {
+          let child = this.activatedRoute.firstChild;
+          while (child?.firstChild) {
+            child = child.firstChild;
+          }
+          return child?.snapshot.data;
+        })
+      )
+      .subscribe(data => {
+        if (data?.['title']) {
+          this.titleService.setTitle(data['title']);
+        }
+        if (data?.['metaDescription']) {
+          this.metaService.updateTag({ name: 'description', content: data['metaDescription'] });
+        }
+      });
+
     const allData: Details[] = [];
 
     this.natureService.getAllNatures().subscribe((natureData) => {
