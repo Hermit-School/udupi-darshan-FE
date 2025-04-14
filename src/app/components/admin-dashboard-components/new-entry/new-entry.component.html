@@ -1,0 +1,157 @@
+<div class="container-fluid d-flex align-items-center justify-content-center ">
+    <div class="card entry-card  mt-3 mb-3">
+        <div class="card-header text-center">
+            <h2>New Entry</h2>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="entryForm" (ngSubmit)="onSubmit()">
+                <!-- Name -->
+                <label for="name">Name:</label>
+                <input id="name" formControlName="name" placeholder="e.g. Manipal Lake" required class="form-control"
+                    [ngClass]="{ 'error-border': entryForm.get('name')?.invalid && entryForm.get('name')?.touched }" />
+
+                <!-- Error messages -->
+                <div *ngIf="entryForm.get('name')?.invalid && entryForm.get('name')?.touched" class="error">
+                    <span *ngIf="entryForm.get('name')?.errors?.['required']">Name is required.</span>
+                    <span *ngIf="entryForm.get('name')?.errors?.['pattern']">Only alphabets and spaces are
+                        allowed.</span>
+                </div>
+
+                <!-- Label -->
+                <label for="label">Label:</label>
+                <input id="label" formControlName="label" placeholder="e.g. Find your perfect escape at Manipal Lake"
+                    required class="form-control"
+                    [ngClass]="{'error-border':entryForm.get('label')?.invalid && entryForm.get('label')?.touched}" />
+                <div *ngIf="entryForm.get('label')?.invalid && entryForm.get('label')?.touched" class="error">
+                    <span *ngIf="entryForm.get('label')?.errors?.['required']">Label is required.</span>
+                    <span *ngIf="entryForm.get('label')?.errors?.['pattern']">Only alphabets and spaces are
+                        allowed.</span>
+                </div>
+                <!-- Location -->
+
+                <label for="location">Location:</label>
+                <input id="location" formControlName="location" placeholder="e.g. Manipal, Udupi" required
+                    class="form-control"
+                    [ngClass]="{ 'error-border': entryForm.get('location')?.invalid && entryForm.get('location')?.touched }" />
+
+                <!-- Error messages for Location -->
+                <div *ngIf="entryForm.get('location')?.invalid && entryForm.get('location')?.touched" class="error">
+                    <span *ngIf="entryForm.get('location')?.errors?.['required']">Location is required.</span>
+                    <span *ngIf="entryForm.get('location')?.errors?.['pattern']">Only alphabets, spaces, and commas are
+                        allowed.</span>
+                </div>
+
+                <!-- Description -->
+                <label for="descr">Description:</label>
+                <textarea id="descr" formControlName="descr" placeholder="e.g. A brief description of the place"
+                    required class="form-control"
+                    [ngClass]="{ 'error-border': entryForm.get('descr')?.invalid && entryForm.get('descr')?.touched }"></textarea>
+
+                <!-- Error messages for Description -->
+                <div *ngIf="entryForm.get('descr')?.invalid && entryForm.get('descr')?.touched" class="error">
+                    <span *ngIf="entryForm.get('descr')?.errors?.['required']">Description is required.</span>
+                </div>
+
+                <!-- Key Points -->
+                <div formArrayName="key_points">
+                    <label>Key Points:</label>
+                    <div *ngFor="let point of keyPoints?.controls; let i = index">
+                        <!-- <div *ngFor="let point of entryForm.get('key_points').controls; let i = index"> -->
+                        <input [formControlName]="i" placeholder="e.g. Stunning views and greenery" />
+                        <button type="button" (click)="removeKeyPoint(i)">Remove</button>
+                    </div>
+                    <button type="button" (click)="addKeyPoint()">Add Key Point</button>
+                </div>
+
+                <!-- Discover -->
+                <label>Discover:</label>
+                <div formArrayName="discover">
+                    <div *ngFor="let item of discover?.controls; let i = index">
+                        <input [formControlName]="i" placeholder="e.g. Nearby attractions and landmarks" required
+                            class="form-control" />
+                        <button type="button" (click)="removeDiscover(i)">Remove</button>
+                    </div>
+                    <button type="button" (click)="addDiscover()">Add Discover</button>
+                </div>
+
+                <!-- Important Information -->
+                <label>Important Information:</label>
+                <div formArrayName="imp_info">
+                    <div *ngFor="let item of impInfo?.controls; let i = index">
+                        <input [formControlName]="i" placeholder="e.g. Best time to visit" required
+                            class="form-control" />
+                        <button type="button" (click)="removeImpInfo(i)">Remove</button>
+                    </div>
+                    <button type="button" (click)="addImpInfo()">Add Info</button>
+                </div>
+
+                <!-- How to Visit -->
+                <label>How to Visit:</label>
+                <input formControlName="how_to_visit.byBike" placeholder="e.g. Distance from bus stop" required
+                    class="form-control" />
+                <input formControlName="how_to_visit.byCar" placeholder="e.g. Nearest railway station" required
+                    class="form-control" />
+                <input formControlName="how_to_visit.byPublic" placeholder="e.g. Nearest airport" required
+                    class="form-control" />
+
+                <!-- Timings -->
+                <label for="timings">Timings:</label>
+                <input id="timings" formControlName="timings" placeholder="e.g. Open hours and best visiting time"
+                    required class="form-control" />
+
+                <!-- Category -->
+                <label for="category">Category:</label>
+                <select id="category" formControlName="category">
+                    <option value="" disabled selected>Select the category</option>
+                    <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                </select>
+
+
+
+                <!-- Don't Miss These -->
+                <label>Don't Miss These:</label>
+                <div formArrayName="dont_miss_these">
+                    <div *ngFor="let item of dontMissThese?.controls; let i = index">
+
+                        <!-- <div *ngFor="let item of entryForm.get('dont_miss_these').controls; let i = index"> -->
+                        <input [formControlName]="i" placeholder="e.g. ID and Table Reference" />
+                        <button type="button" (click)="removeDontMiss(i)">Remove</button>
+                    </div>
+                    <button type="button" (click)="addDontMiss()">Add Item</button>
+                </div>
+
+                <!-- Images -->
+                <label>Images:</label>
+                <div formArrayName="images">
+                    <div *ngFor="let img of images?.controls; let i = index">
+
+                        <!-- <div *ngFor="let img of entryForm.get('images').controls; let i = index"> -->
+                        <input [formControlName]="i" placeholder="e.g. ../nature/example1.png" />
+                        <button type="button" (click)="removeImage(i)">Remove</button>
+                    </div>
+                    <button type="button" (click)="addImage()">Add Image</button>
+                </div>
+                <!-- Link input with base shown as light color -->
+                <div class="link-wrapper">
+                    <label for="link">Link:</label>
+                    <div class="link-box">
+                        <span class="base-url">{{ selectedBaseUrl }}</span>
+                        <input id="link" type="text" formControlName="link" [placeholder]="currentPlaceholder"
+                            class="dynamic-input" [disabled]="!selectedBaseUrl" />
+                    </div>
+                    <!-- </div> -->
+
+
+                    <!-- Full preview below -->
+                    <small style="color: #888; font-style: italic;">Full link: {{ fullLink }}</small>
+                </div>
+            </form>
+        </div>
+        <div class="submit">
+            <button class="glossy-submit-btn" [disabled]="entryForm.invalid">SUBMIT</button>
+        </div>
+        <!-- </form> -->
+
+        <!-- </div> -->
+    </div>
+</div>
