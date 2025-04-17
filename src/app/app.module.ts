@@ -35,6 +35,7 @@ import { StoryComponent } from './pages/story/story.component';
 import { StoryDetailsComponent } from './pages/story-details/story-details.component';
 import { MyHttpInterceptor } from './services/Interceptor/MyHttpInterceptor';
 import { SearchComponent } from './components/search/search.component';
+import { NewEntryComponent } from './components/admin-dashboard-components/new-entry/new-entry.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { SearchComponent } from './components/search/search.component';
     FoodComponent,
     StoryComponent,
     StoryDetailsComponent,
-    SearchComponent
+    SearchComponent,
+    NewEntryComponent
   ],
   imports: [
     BrowserModule,
