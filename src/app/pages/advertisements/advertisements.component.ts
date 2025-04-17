@@ -10,8 +10,11 @@ export class AdvertisementsComponent implements OnInit {
   images: any[] = [];
   largeImage: any;
   smallImages: any[] = [];
+  email:any;
 
-  constructor(private imageService: AdvertisementsService) { }
+  constructor(private imageService: AdvertisementsService) {
+    this.email = 'Udupidarshan@gmail.com';
+   }
 
   ngOnInit(): void {
     this.imageService.getImages().subscribe(data => {
