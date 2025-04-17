@@ -36,6 +36,7 @@ import { StoryDetailsComponent } from './pages/story-details/story-details.compo
 import { MyHttpInterceptor } from './services/Interceptor/MyHttpInterceptor';
 import { SearchComponent } from './components/search/search.component';
 import { NewEntryComponent } from './components/admin-dashboard-components/new-entry/new-entry.component';
+import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,9 @@ import { NewEntryComponent } from './components/admin-dashboard-components/new-e
     HttpClientModule,
     NgbPaginationModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true }],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
