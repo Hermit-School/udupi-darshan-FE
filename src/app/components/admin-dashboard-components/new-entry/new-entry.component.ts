@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { BASE_URLS, CATEGORIES, PLACEHOLDER_MAP } from 'src/constants/routes';
 
 @Component({
   selector: 'app-new-entry',
@@ -7,95 +8,13 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./new-entry.component.scss']
 })
 export class NewEntryComponent {
-  // entryForm: FormGroup;
-  //   mainSections = ['Nature', 'Culture', 'Food', 'Story', 'Ads'];
-  //   subsectionsMap: { [key: string]: string[] } = {
-  //     'Nature': ['Beaches', 'Forests', 'Waterfalls'],
-  //     'Culture': ['Temples', 'Festivals', 'Local Art'],
-  //     'Food': ['Street Food', 'Traditional Meals', 'Desserts'],
-  //     'Story': ['Legends', 'Travel Experiences', 'History'],
-  //     'Ads': ['Promotions', 'Offers', 'Events']
-  //   };
-  //   filteredSubsections: string[] = [];
-  //   uploadedImages: File[] = [];
-  //   previewImages: string[] = [];
-
-  //   constructor(private fb: FormBuilder) {
-  //     this.entryForm = this.fb.group({
-  //       mainSection: ['', Validators.required],
-  //       subSection: [''],
-  //       title: ['', Validators.required],
-  //       content: ['', Validators.required]
-  //     });
-  //   }
-
-  //   // Update the available subsections based on the selected main section
-  //   updateSubsections() {
-  //     const selectedSection = this.entryForm.value.mainSection;
-  //     this.filteredSubsections = this.subsectionsMap[selectedSection] || [];
-  //   }
-
-  //   // Handle image uploads (limit to 3)
-  //   onFileChange(event: any) {
-  //     const files = event.target.files;
-  //     if (files.length + this.uploadedImages.length > 3) {
-  //       alert('You can only upload up to 3 images.');
-  //       return;
-  //     }
-  //     for (let file of files) {
-  //       if (this.uploadedImages.length < 3) {
-  //         this.uploadedImages.push(file);
-
-  //         // Preview Image
-  //         const reader = new FileReader();
-  //         reader.onload = (e: any) => this.previewImages.push(e.target.result);
-  //         reader.readAsDataURL(file);
-  //       }
-  //     }
-  //   }
-
-  //   // Handle Form Submission
-  //   onSubmit() {
-  //     console.log('New Entry:', this.entryForm.value);
-  //     console.log('Uploaded Images:', this.uploadedImages);
-  //     alert('Entry Submitted Successfully!');
-  //   }
-  // }
   @ViewChild('linkInput') linkInputRef!: ElementRef;
 
   entryForm!: FormGroup;
-  categories: string[] = [
-    "nature-park",
-    "nature-waterfalls",
-    "nature-bridge",
-    "nature-activity",
-    "nature-island",
-    "nature-camp",
-    "nature-viewpoint",
-    "culture-temple",
-    "food-hotel",
-    "food-restaurant",
-    "food-cafe"
+  categories = CATEGORIES;
+  placeholderMap = PLACEHOLDER_MAP;
 
-  ];
-  placeholderMap: { [key: string]: string } = {
-    "nature-park": "e.g. puttige",
-    "nature-waterfalls": "e.g. arbi-falls",
-    "nature-bridge": "e.g. hanging-bridge",
-    "nature-activity": "e.g. hiking-spot",
-    "nature-island": "e.g. st-marys",
-    "nature-camp": "e.g. jungle-camp",
-    "nature-viewpoint": "e.g. sunset-point",
-    "culture-temple": "e.g. anantheshwara",
-    "food-hotel": "e.g. woodlands",
-    "food-restaurant": "e.g. fishland",
-    "food-cafe": "e.g. cafe-coffee-day"
-  };
-
-  // currentPlaceholder: string = "Enter location name";
-
-  constructor(private fb: FormBuilder) {
-  }
+  constructor(private fb: FormBuilder) { }
 
   selectedBaseUrl: string = '';
   fullLink: string = '';
@@ -103,39 +22,30 @@ export class NewEntryComponent {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.selectedBaseUrl = 'https://udupi-darshan.web.app/#/nature/';
+    this.selectedBaseUrl = BASE_URLS['nature'];
     this.fullLink = this.selectedBaseUrl;
 
-    // Handle category changes
     this.entryForm.get('category')?.valueChanges.subscribe((selectedCategory: string) => {
-
-      // Update the base URL
       if (selectedCategory.startsWith('nature-')) {
-        this.selectedBaseUrl = 'https://udupi-darshan.web.app/#/nature/';
+        this.selectedBaseUrl = BASE_URLS['nature'];
       } else if (selectedCategory.startsWith('culture-')) {
-        this.selectedBaseUrl = 'https://udupi-darshan.web.app/#/culture/';
+        this.selectedBaseUrl = BASE_URLS['culture'];
       } else if (selectedCategory.startsWith('food-')) {
-        this.selectedBaseUrl = 'https://udupi-darshan.web.app/#/food/';
+        this.selectedBaseUrl = BASE_URLS['food'];
       } else {
-        this.selectedBaseUrl = 'https://udupi-darshan.web.app/#/nature/';
-        // this.fullLink = this.selectedBaseUrl;
-
+        this.selectedBaseUrl = BASE_URLS['nature'];
       }
 
-      // Update placeholder dynamically
       this.currentPlaceholder = this.placeholderMap[selectedCategory] || 'e.g. malpe beach';
 
-      // Update full link
       const userInput = this.entryForm.get('link')?.value || '';
       this.fullLink = this.selectedBaseUrl + userInput;
     });
 
-    // Handle link text input changes
     this.entryForm.get('link')?.valueChanges.subscribe((userInput: string) => {
       this.fullLink = this.selectedBaseUrl + (userInput || '');
     });
   }
-
 
   private initializeForm(): void {
     this.entryForm = this.fb.group({
@@ -147,9 +57,9 @@ export class NewEntryComponent {
       discover: this.fb.array([]),
       imp_info: this.fb.array([]),
       how_to_visit: this.fb.group({
-        byBike: [''],
-        byCar: [''],
-        byPublic: ['']
+        byBike: ['', Validators.required],
+        byCar: ['', Validators.required],
+        byPublic: ['', Validators.required]
       }),
       timings: [''],
       category: ['', Validators.required],
@@ -159,7 +69,6 @@ export class NewEntryComponent {
     });
   }
 
-  // **Getter methods with safe type assertion to prevent null errors**
   get keyPoints(): FormArray {
     return this.entryForm.get('key_points') as FormArray;
   }
@@ -204,11 +113,22 @@ export class NewEntryComponent {
     this.dontMissThese.removeAt(index);
   }
 
-  addImage(): void {
-    this.images.push(this.fb.control('', Validators.required));
+  addImage() {
+    if (this.images.length < 3) {
+      this.images.push(new FormControl(null, Validators.required));
+    }
   }
-  removeImage(index: number): void {
+
+  removeImage(index: number) {
     this.images.removeAt(index);
+  }
+
+  onFileSelected(event: any, index: number) {
+    const file = event.target.files[0];
+    if (file) {
+      this.images.at(index).setValue(file);
+      this.images.at(index).markAsTouched();
+    }
   }
 
   onSubmit(): void {
@@ -219,5 +139,4 @@ export class NewEntryComponent {
       console.log('Form is invalid');
     }
   }
-
 }

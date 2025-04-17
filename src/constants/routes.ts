@@ -33,3 +33,34 @@ export const ROUTES = {
     STORY: { path: 'story' },
     WILDCARD: { path: '**', redirectTo: '404', pathMatch: 'full' as 'full' }
 };
+export const CATEGORIES = [
+    "nature-park",
+    "nature-waterfalls",
+    "nature-bridge",
+    "nature-activity",
+    "nature-island",
+    "nature-camp",
+    "nature-viewpoint",
+    "culture-temple",
+    "food-hotel",
+    "food-restaurant",
+    "food-cafe"
+];
+export const PLACEHOLDER_MAP: { [key: string]: string } = {
+    "nature-park": "e.g. puttige",
+    "nature-waterfalls": "e.g. arbi-falls",
+    "nature-bridge": "e.g. hanging-bridge",
+    "nature-activity": "e.g. hiking-spot",
+    "nature-island": "e.g. st-marys",
+    "nature-camp": "e.g. jungle-camp",
+    "nature-viewpoint": "e.g. sunset-point",
+    "culture-temple": "e.g. anantheshwara",
+    "food-hotel": "e.g. woodlands",
+    "food-restaurant": "e.g. fishland",
+    "food-cafe": "e.g. cafe-coffee-day"
+};
+export const BASE_URLS: { [key: string]: string } = {
+    'nature': 'https://udupi-darshan.web.app/#/nature/',
+    'culture': 'https://udupi-darshan.web.app/#/culture/',
+    'food': 'https://udupi-darshan.web.app/#/food/'
+};

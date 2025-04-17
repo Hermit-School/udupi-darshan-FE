@@ -1,12 +1,8 @@
 .dashboard-container {
    display: flex;
-   // height: 100vh;
-   // background: #f4f4f4;
 }
 
-/* Sidebar Styles */
 .sidebar {
-   // width: 250px;
    background: linear-gradient(45deg, #FF6000, #222831);
    color: white;
    padding: 20px;
@@ -49,7 +45,6 @@
    font-size: 18px;
 }
 
-/* Main Content */
 .main-content {
    flex: 1;
    padding: 20px;
