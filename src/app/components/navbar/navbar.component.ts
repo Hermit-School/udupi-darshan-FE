@@ -24,6 +24,8 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('successToast') successToast!: ElementRef;
   @ViewChild('errorToast') errorToast!: ElementRef;
   isSuccess: boolean | undefined;
+  hideNavbar = false;
+
 
   constructor(private fb: FormBuilder, private router: Router, private renderer: Renderer2) {
     this.form = this.fb.group({
@@ -31,6 +33,10 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
       email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
       message: ['', Validators.required]
     });
+    this.router.events.subscribe(() => {
+      this.hideNavbar = this.router.url === '/new-entry';
+    });
+
   }
 
   isRouteActive(route: string): boolean {

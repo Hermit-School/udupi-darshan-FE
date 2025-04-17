@@ -15,6 +15,7 @@ import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.c
 import { FoodComponent } from './pages/food/food.component';
 import { StoryComponent } from 'src/app/pages/story/story.component';
 import { StoryDetailsComponent } from './pages/story-details/story-details.component';
+import { NewEntryComponent } from './components/admin-dashboard-components/new-entry/new-entry.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: ROUTES.CULTURE.path, component: CultureComponent, data: { title: ROUTES.CULTURE.title, metaDescription: ROUTES.CULTURE.metaDescription } },
   { path: ROUTES.FOOD.path, component: FoodComponent, data: { title: ROUTES.FOOD.title, metaDescription: ROUTES.FOOD.metaDescription } },
   { path: ROUTES.ADVERTISEMENTS.path, component: AdvertisementsComponent },
+  { path: 'new-entry', component: NewEntryComponent },
   { path: ROUTES.ADMIN.path, component: AdminComponent },
   { path: ROUTES.LANDING.path, component: LandingPageComponent },
   { path: ROUTES.DETAILS.path, component: DetailsComponent },
