@@ -12,7 +12,7 @@ export const ApiRoutes = {
     storyData: "/v1/blogs/getBlogs"
 };
 export const Environment = {
-    local: 'http://localhost:4200',
+    local: 'http://localhost:9000',
     production: 'https://udupi-darshan-be.onrender.com',
     routes: ApiRoutes
 }
