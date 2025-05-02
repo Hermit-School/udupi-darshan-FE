@@ -14,6 +14,16 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
     LoadingUtils.incrementActiveRequests();
 
+    const token = localStorage.getItem('jwtToken');
+
+    if (token) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+
     return next.handle(request).pipe(
       delay(LoadingUtils.MIN_DISPLAY_TIME),  // Ensure the request takes at least the minimum display time
       finalize(() => {
