@@ -12,7 +12,7 @@
     <div class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleBestOfFoodCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.images[0]" class="card-img-top" [alt]="card.name">
+          <img [src]="apiUrl+card.images[0]" class="card-img-top" [alt]="card.name">
           <div class="card-body">
             <h5 class="card-title">{{ card.name }}</h5>
           </div>
@@ -27,7 +27,7 @@
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleHotelsCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.images[0]" class="card-img-top" [alt]="card.name">
+          <img [src]="apiUrl + card.images[0]" class="card-img-top" [alt]="card.name">
           <div class="card-body">
             <h5 class="card-title">{{ card.name }}</h5>
           </div>
@@ -48,7 +48,7 @@
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleRestaurantsCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.images[0]" class="card-img-top" [alt]="card.name">
+          <img [src]="apiUrl+card.images[0]" class="card-img-top" [alt]="card.name">
           <div class="card-body">
             <h5 class="card-title">{{ card.name }}</h5>
           </div>
@@ -69,7 +69,7 @@
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleTeaSnacksCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.images[0]" class="card-img-top" [alt]="card.name">
+          <img [src]="apiUrl+card.images[0]" class="card-img-top" [alt]="card.name">
           <div class="card-body">
             <h5 class="card-title">{{ card.name }}</h5>
           </div>

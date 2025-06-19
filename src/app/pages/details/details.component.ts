@@ -6,6 +6,7 @@ import { CultureService } from 'src/app/services/culture.service';
 import { Details } from 'src/app/models/card';
 import { FoodService } from 'src/app/services/food.service';
 import { SharedService } from 'src/app/services/shared.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-details',
@@ -13,6 +14,7 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./details.component.scss']
 })
 export class DetailsComponent implements OnInit {
+  public apiUrl = environment.apiUrl;
   @Input() description: string | undefined;
   card: Details | null = null;
   isOverlayActive: boolean = false;

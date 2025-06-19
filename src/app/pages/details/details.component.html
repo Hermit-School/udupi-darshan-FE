@@ -10,7 +10,7 @@
             (slid.bs.carousel)="onSlideChange($event)">
             <div class="carousel-inner">
               <div *ngFor="let image of card.images; let i = index" class="carousel-item" [class.active]="i === 0">
-                <img [src]="image" [alt]="card.name" class="d-block w-100">
+                <img [src]="apiUrl + image" [alt]="card.name" class="d-block w-100">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev"

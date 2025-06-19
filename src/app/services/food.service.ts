@@ -11,6 +11,7 @@ export class FoodService {
 
     private readonly apiUrl = `${Environment.production}${Environment.routes.foodData}`;
 
+
     constructor(private http: HttpClient) { }
 
     getAllFoods(): Observable<Details[]> {
@@ -22,13 +23,13 @@ export class FoodService {
     }
 
     addFood(food: Details): Observable<Details> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.post<Details>(this.apiUrl, food, { headers });
+        // const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<Details>(this.apiUrl, food);
     }
 
     updateFood(id: number, food: Details): Observable<Details> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.put<Details>(`${this.apiUrl}/${id}`, food, { headers });
+        // const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.put<Details>(`${this.apiUrl}/${id}`, food);
     }
 
     deleteFood(id: number): Observable<void> {
