@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FoodService } from 'src/app/services/food.service';
 import { Details } from 'src/app/models/card';
-import { environment } from 'src/environments/environment'; // import environment
+import { ApiRoutes } from 'src/constants/routes';
 
 @Component({
   selector: 'app-food',
@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment'; // import environmen
   styleUrls: ['./food.component.scss']
 })
 export class FoodComponent implements OnInit, OnDestroy {
-  public apiUrl = environment.apiUrl;
+  public apiUrl = ApiRoutes.apiUrl;
 
   viewAllBestOfFood = false;
   viewAllHotels = false;

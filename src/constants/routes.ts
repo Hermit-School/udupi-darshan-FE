@@ -9,7 +9,8 @@ export const ApiRoutes = {
     natureData: "/v1/nature/getNature",
     cultureData: "/v1/culture/getCulture",
     foodData: "/v1/food/getFood1",
-    storyData: "/v1/blogs/getBlogs"
+    storyData: "/v1/blogs/getBlogs",
+    apiUrl: 'http://localhost:8080'
 };
 export const Environment = {
     local: 'http://localhost:8080',
