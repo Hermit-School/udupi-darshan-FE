@@ -1,32 +1,174 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { BASE_URLS, CATEGORIES, PLACEHOLDER_MAP } from 'src/constants/routes';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-dashboardnavbar',
   templateUrl: './dashboardnavbar.component.html',
   styleUrls: ['./dashboardnavbar.component.scss']
 })
-export class DashboardnavbarComponent implements OnInit {
+export class DashboardnavbarComponent implements OnInit, AfterViewInit {
+  @ViewChild('entryModal') entryModal!: ElementRef;
+  modalInstance: any;
 
-  isDarkMode = false;
+  activeForm: 'nature' | 'culture' | 'food' | null = null;
 
-  ngOnInit() {
-    // Load dark mode preference from localStorage
+
+  deleteForm(section: string) {
+
+    this.activeForm = null;
+  }
+
+  currentCategory: string = '';
+  subcategoryOptions: string[] = [];
+  selectedBaseUrl: string = '';
+  currentPlaceholder: string = '';
+  openModal(category: string) {
+    this.currentCategory = category;
+    switch (category) {
+      case 'nature':
+        this.subcategoryOptions = CATEGORIES.filter(cat => cat.startsWith('nature-'));
+        this.selectedBaseUrl = BASE_URLS['nature'];
+        break;
+      case 'culture':
+        this.subcategoryOptions = CATEGORIES.filter(cat => cat.startsWith('culture-'));
+        this.selectedBaseUrl = BASE_URLS['culture'];
+        break;
+      case 'food':
+        this.subcategoryOptions = CATEGORIES.filter(cat => cat.startsWith('food-'));
+        this.selectedBaseUrl = BASE_URLS['food'];
+        break;
+      default:
+        this.subcategoryOptions = [];
+        this.selectedBaseUrl = '';
+    }
+  }
+
+  @ViewChild('linkInput') linkInputRef!: ElementRef;
+
+  entryForm!: FormGroup;
+  categories = CATEGORIES;
+  placeholderMap = PLACEHOLDER_MAP;
+
+  constructor(private fb: FormBuilder) { }
+
+  fullLink: string = '';
+
+  ngOnInit(): void {
     const savedMode = localStorage.getItem('darkMode') === 'true';
-    this.isDarkMode = savedMode;
-    this.applyDarkMode();
+
+    this.initializeForm();
+    this.selectedBaseUrl = BASE_URLS['nature'];
+    this.fullLink = this.selectedBaseUrl;
+    this.entryForm.get('category')?.valueChanges.subscribe(selectedCategory => {
+      this.currentPlaceholder = PLACEHOLDER_MAP[selectedCategory] || 'e.g. malpe-beach';
+      this.updateFullLink();
+    });
+
+    this.entryForm.get('link')?.valueChanges.subscribe(() => {
+      this.updateFullLink();
+    });
   }
 
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    localStorage.setItem('darkMode', this.isDarkMode.toString());
-    this.applyDarkMode();
+  updateFullLink() {
+    const link = this.entryForm.get('link')?.value || '';
+    this.fullLink = this.selectedBaseUrl + link;
+  }
+  private initializeForm(): void {
+    this.entryForm = this.fb.group({
+      name: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
+      label: ['', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]],
+      location: ['', [Validators.required, Validators.pattern(/^[A-Za-z\s,]+$/)]],
+      descr: ['', Validators.required],
+      key_points: this.fb.array([], Validators.required),
+      discover: this.fb.array([]),
+      imp_info: this.fb.array([]),
+      how_to_visit: this.fb.group({
+        byBike: ['', Validators.required],
+        byCar: ['', Validators.required],
+        byPublic: ['', Validators.required]
+      }),
+      timings: [''],
+      category: ['', Validators.required],
+      dont_miss_these: this.fb.array([], Validators.required),
+      images: this.fb.array([]),
+      link: ['']
+    });
   }
 
-  applyDarkMode() {
-    if (this.isDarkMode) {
-      document.body.classList.add('dark-mode');
+  get keyPoints(): FormArray {
+    return this.entryForm.get('key_points') as FormArray;
+  }
+  get discover(): FormArray {
+    return this.entryForm.get('discover') as FormArray;
+  }
+  get impInfo(): FormArray {
+    return this.entryForm.get('imp_info') as FormArray;
+  }
+  get dontMissThese(): FormArray {
+    return this.entryForm.get('dont_miss_these') as FormArray;
+  }
+  get images(): FormArray {
+    return this.entryForm.get('images') as FormArray;
+  }
+
+  addKeyPoint(): void {
+    this.keyPoints.push(this.fb.control('', Validators.required));
+  }
+  removeKeyPoint(index: number): void {
+    this.keyPoints.removeAt(index);
+  }
+
+  addDiscover(): void {
+    this.discover.push(this.fb.control('', Validators.required));
+  }
+  removeDiscover(index: number): void {
+    this.discover.removeAt(index);
+  }
+
+  addImpInfo(): void {
+    this.impInfo.push(this.fb.control('', Validators.required));
+  }
+  removeImpInfo(index: number): void {
+    this.impInfo.removeAt(index);
+  }
+
+  addDontMiss(): void {
+    this.dontMissThese.push(this.fb.control('', Validators.required));
+  }
+  removeDontMiss(index: number): void {
+    this.dontMissThese.removeAt(index);
+  }
+
+  addImage() {
+    if (this.images.length < 3) {
+      this.images.push(new FormControl(null, Validators.required));
+    }
+  }
+
+  removeImage(index: number) {
+    this.images.removeAt(index);
+  }
+
+  onFileSelected(event: any, index: number) {
+    const file = event.target.files[0];
+    if (file) {
+      this.images.at(index).setValue(file);
+      this.images.at(index).markAsTouched();
+    }
+  }
+  ngAfterViewInit() {
+    this.modalInstance = new bootstrap.Modal(this.entryModal.nativeElement);
+  }
+  onSubmit(): void {
+    if (this.entryForm.valid) {
+      this.modalInstance.hide();
+      this.entryForm.reset();
+      console.log('Form Submitted', this.entryForm.value);
     } else {
-      document.body.classList.remove('dark-mode');
+      console.log('Form is invalid');
     }
   }
 }
