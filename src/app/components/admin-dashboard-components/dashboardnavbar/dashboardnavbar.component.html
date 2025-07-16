@@ -33,9 +33,9 @@
 
   <div class="main-content">
     <div class="top-bar">
-      <div class="entry-section-container mt-4">
+      <div class="entry-section-container d-flex flex-column gap-4 mt-2">
 
-        <div class="section-container mb-4">
+        <div class="section-container p-3 border rounded shadow-sm bg-light mb-4">
           <h4 class="mb-3 text-center">Nature</h4>
           <div class="d-flex justify-content-center gap-3 mb-3">
             <button class="btn btn-success" (click)="openModal('nature')" data-bs-toggle="modal"
@@ -55,7 +55,6 @@
                     <input id="name" formControlName="name" placeholder="e.g. Manipal Lake" required
                       class="form-control"
                       [ngClass]="{ 'error-border': entryForm.get('name')?.invalid && entryForm.get('name')?.touched }" />
-
                     <div *ngIf="entryForm.get('name')?.invalid && entryForm.get('name')?.touched" class="error">
                       <span *ngIf="entryForm.get('name')?.errors?.['required']">Name is required.</span>
                       <span *ngIf="entryForm.get('name')?.errors?.['pattern']">Only alphabets and spaces are
@@ -93,7 +92,6 @@
                       <span *ngIf="entryForm.get('descr')?.errors?.['required']">Description is required.</span>
                     </div>
 
-                    <!-- Add Key Point Label & Button Row -->
                     <div formArrayName="key_points">
                       <label class="key-label">Key Points:</label>
                       <div *ngFor="let point of keyPoints?.controls; let i = index" class="section-wrapper">
@@ -235,7 +233,7 @@
           </div>
         </div>
 
-        <div class="section-container mb-4">
+        <div class="section-container  p-3 border rounded shadow-sm bg-light mb-4">
           <h4 class="mb-3 text-center">Culture</h4>
           <div class="d-flex justify-content-center gap-3 mb-3">
             <button class="btn btn-success" (click)="openModal('culture')" data-bs-toggle="modal"
@@ -244,7 +242,7 @@
           </div>
         </div>
 
-        <div class="section-container mb-4">
+        <div class="section-container  p-3 border rounded shadow-sm bg-light mb-2">
           <h4 class="mb-3 text-center">Food</h4>
           <div class="d-flex justify-content-center gap-3 mb-3">
             <button class="btn btn-success" (click)="openModal('food')" data-bs-toggle="modal"
