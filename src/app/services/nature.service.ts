@@ -9,8 +9,8 @@ import { Environment } from 'src/constants/routes';
 })
 export class natureServiceService {
 
-  private readonly apiUrl = `${Environment.production}${Environment.routes.natureData}`;
-
+  // private readonly apiUrl = `${Environment.production}${Environment.routes.natureData}`;
+  private apiUrl = 'http://localhost:8080/v1/nature';
   constructor(private http: HttpClient) { }
   getAllNatures(): Observable<Details[]> {
     return this.http.get<Details[]>(this.apiUrl);
@@ -20,9 +20,10 @@ export class natureServiceService {
     return this.http.get<Details>(`${this.apiUrl}/${id}`);
   }
 
-  addNature(nature: Details): Observable<Details> {
+  addNature(formData: FormData): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<Details>(this.apiUrl, nature, { headers });
+    // return this.http.post<Details>(this.apiUrl, nature, { headers });
+    return this.http.post(`${this.apiUrl}/postNature`, formData);
   }
 
   updateNature(id: number, nature: Details): Observable<Details> {

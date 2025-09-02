@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BASE_URLS, CATEGORIES, PLACEHOLDER_MAP } from 'src/constants/routes';
+import { HttpClient } from '@angular/common/http';
+import { natureServiceService } from 'src/app/services/nature.service'
 
 declare var bootstrap: any;
 
@@ -14,10 +16,11 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   modalInstance: any;
 
   activeForm: 'nature' | 'culture' | 'food' | null = null;
-
+  natureEntries: any[] = [];
+  cultureEntries: any[] = [];
+  foodEntries: any[] = [];
 
   deleteForm(section: string) {
-
     this.activeForm = null;
   }
 
@@ -52,14 +55,18 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   categories = CATEGORIES;
   placeholderMap = PLACEHOLDER_MAP;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private natureService: natureServiceService, private http: HttpClient) { }
 
   fullLink: string = '';
 
   ngOnInit(): void {
-    const savedMode = localStorage.getItem('darkMode') === 'true';
-
     this.initializeForm();
+
+    this.addKeyPoint();
+    this.addDiscover();
+    this.addImpInfo();
+    this.addDontMiss();
+    this.addImage();
     this.selectedBaseUrl = BASE_URLS['nature'];
     this.fullLink = this.selectedBaseUrl;
     this.entryForm.get('category')?.valueChanges.subscribe(selectedCategory => {
@@ -71,7 +78,75 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
       this.updateFullLink();
     });
   }
+  toggleDetails(entry: any) {
+    entry.showDetails = !entry.showDetails;
+  }
 
+  deleteAllEntries(category: string): void {
+    if (confirm(`Are you sure you want to delete all ${category} entries?`)) {
+      switch (category) {
+        case 'nature':
+          this.natureEntries = [];
+          break;
+        case 'culture':
+          this.cultureEntries = [];
+          break;
+        case 'food':
+          this.foodEntries = [];
+          break;
+      }
+    }
+  }
+  selectedImages: File[] = [];
+  onSubmit() {
+    if (this.entryForm.invalid) return;
+    const formData = new FormData();
+    formData.append('name', this.entryForm.get('name')?.value);
+    formData.append('label', this.entryForm.get('label')?.value);
+    formData.append('location', this.entryForm.get('location')?.value);
+    formData.append('descr', this.entryForm.get('descr')?.value);
+    formData.append('timings', this.entryForm.get('timings')?.value);
+    formData.append('category', this.entryForm.get('category')?.value);
+    formData.append('link', this.entryForm.get('link')?.value);
+
+    // arrays
+    this.entryForm.get('key_points')?.value.forEach((kp: string) => {
+      formData.append('key_points', kp);
+    });
+    this.entryForm.get('discover')?.value.forEach((d: string) => {
+      formData.append('discover', d);
+    });
+    this.entryForm.get('imp_info')?.value.forEach((info: string) => {
+      formData.append('imp_info', info);
+    });
+    this.entryForm.get('dont_miss_these')?.value.forEach((dm: string) => {
+      formData.append('dont_miss_these', dm);
+    });
+
+    // ✅ nested object: how_to_visit
+    const howToVisit = this.entryForm.get('how_to_visit')?.value;
+    if (howToVisit) {
+      formData.append('byBike', howToVisit.byBike);
+      formData.append('byCar', howToVisit.byCar);
+      formData.append('byPublic', howToVisit.byPublic);
+    }
+
+    // append files
+    this.selectedImages.forEach(file => {
+      formData.append('images', file);
+    });
+
+    this.natureService.addNature(formData).subscribe({
+      next: () => {
+        alert('Entry saved successfully');
+        this.entryForm.reset();
+      },
+      error: (err: any) => {
+        console.error('Error submitting entry:', err);
+        alert('Failed to save entry');
+      }
+    });
+  }
   updateFullLink() {
     const link = this.entryForm.get('link')?.value || '';
     this.fullLink = this.selectedBaseUrl + link;
@@ -162,13 +237,6 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.modalInstance = new bootstrap.Modal(this.entryModal.nativeElement);
   }
-  onSubmit(): void {
-    if (this.entryForm.valid) {
-      this.modalInstance.hide();
-      this.entryForm.reset();
-      console.log('Form Submitted', this.entryForm.value);
-    } else {
-      console.log('Form is invalid');
-    }
-  }
+
+
 }
