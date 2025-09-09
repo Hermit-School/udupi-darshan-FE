@@ -34,7 +34,7 @@ export const ROUTES = {
     WILDCARD: { path: '**', redirectTo: '404', pathMatch: 'full' as 'full' }
 };
 export const CATEGORIES = [
-    "Nature",
+    "nature",
     "nature-waterfalls",
     "nature-bridge",
     "nature-activity",
@@ -47,7 +47,7 @@ export const CATEGORIES = [
     "food-cafe"
 ];
 export const PLACEHOLDER_MAP: { [key: string]: string } = {
-    "Nature": "e.g. puttige",
+    "nature": "e.g. puttige",
     "nature-waterfalls": "e.g. arbi-falls",
     "nature-bridge": "e.g. hanging-bridge",
     "nature-activity": "e.g. hiking-spot",
