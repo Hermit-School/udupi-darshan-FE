@@ -9,8 +9,8 @@ import { Environment } from 'src/constants/routes';
 })
 export class natureServiceService {
 
-  // private readonly apiUrl = `${Environment.production}${Environment.routes.natureData}`;
-  private apiUrl = 'http://localhost:8080/v1/nature';
+  private readonly apiUrl = `${Environment.production}${Environment.routes.natureData}`;
+
   constructor(private http: HttpClient) { }
   getAllNatures(): Observable<Details[]> {
     return this.http.get<Details[]>(this.apiUrl);
