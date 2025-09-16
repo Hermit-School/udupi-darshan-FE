@@ -100,52 +100,28 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   selectedImages: File[] = [];
   onSubmit() {
     if (this.entryForm.invalid) return;
-    const formData = new FormData();
-    formData.append('name', this.entryForm.get('name')?.value);
-    formData.append('label', this.entryForm.get('label')?.value);
-    formData.append('location', this.entryForm.get('location')?.value);
-    formData.append('descr', this.entryForm.get('descr')?.value);
-    formData.append('timings', this.entryForm.get('timings')?.value);
-    formData.append('category', this.entryForm.get('category')?.value);
-    formData.append('link', this.entryForm.get('link')?.value);
 
-    // arrays
-    this.entryForm.get('key_points')?.value.forEach((kp: string) => {
-      formData.append('key_points', kp);
-    });
-    this.entryForm.get('discover')?.value.forEach((d: string) => {
-      formData.append('discover', d);
-    });
-    this.entryForm.get('imp_info')?.value.forEach((info: string) => {
-      formData.append('imp_info', info);
-    });
-    this.entryForm.get('dont_miss_these')?.value.forEach((dm: string) => {
-      formData.append('dont_miss_these', dm);
-    });
+    const entry = {
+      ...this.entryForm.value,
+      images: this.images.value,
+      fullLink: this.fullLink
+    };
 
-    // ✅ nested object: how_to_visit
-    const howToVisit = this.entryForm.get('how_to_visit')?.value;
-    if (howToVisit) {
-      formData.append('byBike', howToVisit.byBike);
-      formData.append('byCar', howToVisit.byCar);
-      formData.append('byPublic', howToVisit.byPublic);
+    switch (this.currentCategory) {
+      case 'nature':
+        this.natureEntries.push(entry);
+        break;
+      case 'culture':
+        this.cultureEntries.push(entry);
+        break;
+      case 'food':
+        this.foodEntries.push(entry);
+        break;
     }
 
-    // append files
-    this.selectedImages.forEach(file => {
-      formData.append('images', file);
-    });
+    alert(`${this.currentCategory} entry saved locally`);
+    this.entryForm.reset();
 
-    this.natureService.addNature(formData).subscribe({
-      next: () => {
-        alert('Entry saved successfully');
-        this.entryForm.reset();
-      },
-      error: (err: any) => {
-        console.error('Error submitting entry:', err);
-        alert('Failed to save entry');
-      }
-    });
   }
   updateFullLink() {
     const link = this.entryForm.get('link')?.value || '';
@@ -237,6 +213,4 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.modalInstance = new bootstrap.Modal(this.entryModal.nativeElement);
   }
-
-
 }
