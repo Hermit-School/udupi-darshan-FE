@@ -42,15 +42,17 @@
               data-bs-target="#entryModal">Add</button>
             <button class="btn btn-danger">Delete</button>
           </div>
-          <div class="modal fade" id="entryModal" tabindex="-1" aria-labelledby="entryModalLabel" aria-hidden="true">
+          <div class="modal fade" #entryModal tabindex="-1" aria-labelledby="entryModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down modal-sm modal-lg">
               <div class="modal-content">
                 <div class=" modal-header">
                   <h5 class="modal-title" id="entryModalLabel">New {{ currentCategory | titlecase }} Entry</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                  <form [formGroup]="entryForm" (ngSubmit)="onSubmit()">
+
+                <!-- ✅ Form Starts Here -->
+                <form [formGroup]="entryForm" (ngSubmit)="onSubmit()">
+                  <div class="modal-body">
                     <label for="name">Name:</label>
                     <input id="name" formControlName="name" placeholder="e.g. Manipal Lake" required
                       class="form-control"
@@ -173,24 +175,32 @@
                       <label for="category">Category:</label>
                       <select id="category" formControlName="category">
                         <option value="" disabled selected>Select the category</option>
-                        <option *ngFor="let cat of subcategoryOptions" [value]="cat">{{ cat }}</option>
+                        <!-- <option *ngFor="let cat of subcategoryOptions" [value]="cat">{{ cat }}</option> -->
+                        <option value="nature">Nature</option>
                       </select>
                     </div>
                     <div formArrayName="dont_miss_these">
                       <label>Don't Miss These:</label>
-                      <div *ngFor="let item of dontMissThese?.controls; let i = index" class="section-wrapper">
+                      <div *ngFor="let group of dontMissThese.controls; let i = index" [formGroupName]="i"
+                        class="section-wrapper">
+
                         <div class="section">
-                          <input [formControlName]="i" placeholder="e.g. ID and Table Reference" required
-                            class="form-control"
-                            [ngClass]="{'error-border':item.invalid && (item.dirty || item.touched)}" />
+                          <input formControlName="title" placeholder="Title" class="form-control" />
+                          <input formControlName="description" placeholder="Description" class="form-control" />
+                          <input formControlName="imageUrl" placeholder="Image URL" class="form-control" />
+                          <input formControlName="link" placeholder="Link" class="form-control" />
+
                           <button class="remove-btn" type="button" (click)="removeDontMiss(i)">Remove</button>
                         </div>
-                        <div class="error" *ngIf="item.invalid && (item.dirty||item.touched)">
-                          This field is required.
+
+                        <div class="error" *ngIf="group.invalid && (group.dirty || group.touched)">
+                          All fields are required.
                         </div>
                       </div>
+
                       <button class="btn1 add-btn" type="button" (click)="addDontMiss()">Add Item</button>
                     </div>
+
 
                     <label>Images:</label>
                     <div formArrayName="images">
@@ -222,34 +232,39 @@
                           class="dynamic-input" [disabled]="!selectedBaseUrl" />
                       </div>
                       <small style="color: #888; font-style: italic;">Full link: {{ fullLink }}</small>
+
+
                     </div>
-                  </form>
-                  <div class="submit mt-3">
-                    <button type="submit" class="glossy-submit-btn" [disabled]="entryForm.invalid">SUBMIT</button>
+                    <!-- </form> -->
+                    <div class="submit mt-3">
+                      <button type="submit" class="glossy-submit-btn" [disabled]="entryForm.invalid">SUBMIT</button>
+                    </div>
                   </div>
-                </div>
+                </form>
               </div>
+
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="section-container  p-3 border rounded shadow-sm bg-light mb-4">
-          <h4 class="mb-3 text-center">Culture</h4>
-          <div class="d-flex justify-content-center gap-3 mb-3">
-            <button class="btn btn-success" (click)="openModal('culture')" data-bs-toggle="modal"
-              data-bs-target="#entryModal">Add</button>
-            <button class="btn btn-danger">Delete</button>
-          </div>
+      <div class="section-container  p-3 border rounded shadow-sm bg-light mb-4">
+        <h4 class="mb-3 text-center">Culture</h4>
+        <div class="d-flex justify-content-center gap-3 mb-3">
+          <button class="btn btn-success" (click)="openModal('culture')" data-bs-toggle="modal"
+            data-bs-target="#entryModal">Add</button>
+          <button class="btn btn-danger">Delete</button>
         </div>
+      </div>
 
-        <div class="section-container  p-3 border rounded shadow-sm bg-light mb-2">
-          <h4 class="mb-3 text-center">Food</h4>
-          <div class="d-flex justify-content-center gap-3 mb-3">
-            <button class="btn btn-success" (click)="openModal('food')" data-bs-toggle="modal"
-              data-bs-target="#entryModal">Add</button>
-            <button class="btn btn-danger">Delete</button>
-          </div>
+      <div class="section-container  p-3 border rounded shadow-sm bg-light mb-2">
+        <h4 class="mb-3 text-center">Food</h4>
+        <div class="d-flex justify-content-center gap-3 mb-3">
+          <button class="btn btn-success" (click)="openModal('food')" data-bs-toggle="modal"
+            data-bs-target="#entryModal">Add</button>
+          <button class="btn btn-danger">Delete</button>
         </div>
       </div>
     </div>
   </div>
+</div>
