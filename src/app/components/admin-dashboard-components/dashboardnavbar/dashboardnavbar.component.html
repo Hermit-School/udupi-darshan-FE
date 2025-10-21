@@ -1,5 +1,4 @@
 <div class="container-fluid dashboard-container">
-  <!-- Sidebar -->
   <nav class="sidebar">
     <h3 class="logo">Dashboard</h3>
     <ul class="nav-links">
@@ -50,7 +49,6 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <!-- ✅ Form Starts Here -->
                 <form [formGroup]="entryForm" (ngSubmit)="onSubmit()">
                   <div class="modal-body">
                     <label for="name">Name:</label>
@@ -235,7 +233,6 @@
 
 
                     </div>
-                    <!-- </form> -->
                     <div class="submit mt-3">
                       <button type="submit" class="glossy-submit-btn" [disabled]="entryForm.invalid">SUBMIT</button>
                     </div>
