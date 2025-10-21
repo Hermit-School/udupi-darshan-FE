@@ -91,7 +91,7 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
         byCar: ['', Validators.required],
         byPublic: ['', Validators.required]
       }),
-      timings: [''],
+      createdAt: [''],
       category: ['', Validators.required],
       dont_miss_these: this.fb.array([
         this.createDontMissItem()
@@ -177,6 +177,8 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   onSubmit(): void {
     if (this.entryForm.valid) {
       const formData = new FormData();
+      const fullLinkValue = this.selectedBaseUrl + (this.entryForm.value.link || '');
+      formData.append('link', fullLinkValue);
 
       Object.keys(this.entryForm.value).forEach(key => {
         if (key === 'images') {
@@ -200,7 +202,10 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
             formData.append(`dont_miss_these[${idx}].imageUrl`, item.imageUrl);
             formData.append(`dont_miss_these[${idx}].link`, item.link);
           });
-        } else {
+        } else if (key !== 'link') {
+          formData.append(key, this.entryForm.value[key]);
+        }
+        else {
           formData.append(key, this.entryForm.value[key]);
         }
       });

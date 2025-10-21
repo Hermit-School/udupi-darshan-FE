@@ -27,7 +27,9 @@
     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let card of visibleActivityCards" (click)="goToDetails(card.id)">
         <div class="card h-100">
-          <img [src]="card.images[0]" class="card-img-top" [alt]="card.name">
+          <!-- <img [src]="card.images[0]" class="card-img-top" [alt]="card.name"> -->
+          <img [src]="'http://localhost:8080' + card.images[0]" alt="Nature Image" />
+
           <div class="card-body">
             <h5 class="card-title">{{ card.name }}</h5>
           </div>
