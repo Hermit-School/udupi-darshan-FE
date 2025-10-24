@@ -167,8 +167,13 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   onFileSelected(event: any, index: number) {
     const file = event.target.files[0];
     if (file) {
-      this.images.at(index).setValue(file);
-      this.images.at(index).markAsTouched();
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = (reader.result as string).split(',')[1];
+        this.images.at(index).setValue(base64String);
+        this.images.at(index).markAsTouched();
+      };
+      reader.readAsDataURL(file);
     }
   }
   ngAfterViewInit() {
