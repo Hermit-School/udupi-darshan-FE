@@ -7,6 +7,7 @@ export const MockRoutes = {
 }
 export const ApiRoutes = {
     natureData: "/v1/nature/getNature",
+    natureDatapost: "/v1/nature/postNature",
     cultureData: "/v1/culture/getCulture",
     foodData: "/v1/food/getFood",
     storyData: "/v1/blogs/getBlogs"
