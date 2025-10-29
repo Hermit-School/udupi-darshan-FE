@@ -222,17 +222,6 @@
                       </div>
                     </div>
 
-                    <div class="link-wrapper">
-                      <label for="link">Link:</label>
-                      <div class="link-box">
-                        <span class="base-url">{{ selectedBaseUrl }}</span>
-                        <input id="link" type="text" formControlName="link" [placeholder]="currentPlaceholder"
-                          class="dynamic-input" [disabled]="!selectedBaseUrl" />
-                      </div>
-                      <small style="color: #888; font-style: italic;">Full link: {{ fullLink }}</small>
-
-
-                    </div>
                     <div class="submit mt-3">
                       <button type="submit" class="glossy-submit-btn" [disabled]="entryForm.invalid">SUBMIT</button>
                     </div>

@@ -26,7 +26,7 @@ export class natureServiceService {
     return this.http.post<Details>(this.apiUrl, nature, { headers });
   }
   addEntry(formData: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrlnature}/postNature`, formData);
+    return this.http.post(`${this.apiUrlnature}`, formData);
   }
 
   updateNature(id: number, nature: Details): Observable<Details> {

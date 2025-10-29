@@ -55,28 +55,11 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
 
   constructor(private natureService: natureServiceService, private fb: FormBuilder) { }
 
-  fullLink: string = '';
-
   ngOnInit(): void {
-    const savedMode = localStorage.getItem('darkMode') === 'true';
 
     this.initializeForm();
-    this.selectedBaseUrl = BASE_URLS['nature'];
-    this.fullLink = this.selectedBaseUrl;
-    this.entryForm.get('category')?.valueChanges.subscribe(selectedCategory => {
-      this.currentPlaceholder = PLACEHOLDER_MAP[selectedCategory] || 'e.g. malpe-beach';
-      this.updateFullLink();
-    });
-
-    this.entryForm.get('link')?.valueChanges.subscribe(() => {
-      this.updateFullLink();
-    });
   }
 
-  updateFullLink() {
-    const link = this.entryForm.get('link')?.value || '';
-    this.fullLink = this.selectedBaseUrl + link;
-  }
   private initializeForm(): void {
     this.entryForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
