@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BASE_URLS, CATEGORIES, PLACEHOLDER_MAP } from 'src/constants/routes';
-
+import { natureServiceService } from 'src/app/services/nature.service';
 declare var bootstrap: any;
 
 @Component({
@@ -15,9 +15,7 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
 
   activeForm: 'nature' | 'culture' | 'food' | null = null;
 
-
   deleteForm(section: string) {
-
     this.activeForm = null;
   }
 
@@ -44,6 +42,9 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
         this.subcategoryOptions = [];
         this.selectedBaseUrl = '';
     }
+    if (this.modalInstance) {
+      this.modalInstance.show();
+    }
   }
 
   @ViewChild('linkInput') linkInputRef!: ElementRef;
@@ -52,30 +53,13 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   categories = CATEGORIES;
   placeholderMap = PLACEHOLDER_MAP;
 
-  constructor(private fb: FormBuilder) { }
-
-  fullLink: string = '';
+  constructor(private natureService: natureServiceService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    const savedMode = localStorage.getItem('darkMode') === 'true';
 
     this.initializeForm();
-    this.selectedBaseUrl = BASE_URLS['nature'];
-    this.fullLink = this.selectedBaseUrl;
-    this.entryForm.get('category')?.valueChanges.subscribe(selectedCategory => {
-      this.currentPlaceholder = PLACEHOLDER_MAP[selectedCategory] || 'e.g. malpe-beach';
-      this.updateFullLink();
-    });
-
-    this.entryForm.get('link')?.valueChanges.subscribe(() => {
-      this.updateFullLink();
-    });
   }
 
-  updateFullLink() {
-    const link = this.entryForm.get('link')?.value || '';
-    this.fullLink = this.selectedBaseUrl + link;
-  }
   private initializeForm(): void {
     this.entryForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
@@ -90,9 +74,11 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
         byCar: ['', Validators.required],
         byPublic: ['', Validators.required]
       }),
-      timings: [''],
+      createdAt: [''],
       category: ['', Validators.required],
-      dont_miss_these: this.fb.array([], Validators.required),
+      dont_miss_these: this.fb.array([
+        this.createDontMissItem()
+      ], Validators.required),
       images: this.fb.array([]),
       link: ['']
     });
@@ -136,8 +122,9 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   }
 
   addDontMiss(): void {
-    this.dontMissThese.push(this.fb.control('', Validators.required));
+    this.dontMissThese.push(this.createDontMissItem());
   }
+
   removeDontMiss(index: number): void {
     this.dontMissThese.removeAt(index);
   }
@@ -152,11 +139,24 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
     this.images.removeAt(index);
   }
 
+  private createDontMissItem(): FormGroup {
+    return this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      imageUrl: ['', Validators.required],
+      link: ['', Validators.required]
+    });
+  }
   onFileSelected(event: any, index: number) {
     const file = event.target.files[0];
     if (file) {
-      this.images.at(index).setValue(file);
-      this.images.at(index).markAsTouched();
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = (reader.result as string).split(',')[1];
+        this.images.at(index).setValue(base64String);
+        this.images.at(index).markAsTouched();
+      };
+      reader.readAsDataURL(file);
     }
   }
   ngAfterViewInit() {
@@ -164,9 +164,54 @@ export class DashboardnavbarComponent implements OnInit, AfterViewInit {
   }
   onSubmit(): void {
     if (this.entryForm.valid) {
-      this.modalInstance.hide();
-      this.entryForm.reset();
-      console.log('Form Submitted', this.entryForm.value);
+      const formData = new FormData();
+      const fullLinkValue = this.selectedBaseUrl + (this.entryForm.value.link || '');
+      formData.append('link', fullLinkValue);
+
+      Object.keys(this.entryForm.value).forEach(key => {
+        if (key === 'images') {
+          this.images.controls.forEach((control) => {
+            if (control.value) {
+              formData.append('images', control.value);
+            }
+          });
+        } else if (key === 'key_points' || key === 'discover' || key === 'imp_info') {
+          this.entryForm.value[key].forEach((item: string) => {
+            formData.append(key, item);
+          });
+        } else if (key === 'how_to_visit') {
+          formData.append('byBike', this.entryForm.value.how_to_visit.byBike);
+          formData.append('byCar', this.entryForm.value.how_to_visit.byCar);
+          formData.append('byPublic', this.entryForm.value.how_to_visit.byPublic);
+        } else if (key === 'dont_miss_these') {
+          this.entryForm.value.dont_miss_these.forEach((item: any, idx: number) => {
+            formData.append(`dont_miss_these[${idx}].title`, item.title);
+            formData.append(`dont_miss_these[${idx}].description`, item.description);
+            formData.append(`dont_miss_these[${idx}].imageUrl`, item.imageUrl);
+            formData.append(`dont_miss_these[${idx}].link`, item.link);
+          });
+        } else if (key !== 'link') {
+          formData.append(key, this.entryForm.value[key]);
+        }
+        else {
+          formData.append(key, this.entryForm.value[key]);
+        }
+      });
+
+      this.natureService.addEntry(formData).subscribe({
+        next: (response) => {
+          console.log(' Entry submitted successfully:', response);
+          if (this.modalInstance) {
+            this.modalInstance.hide();
+          }
+
+          this.entryForm.reset();
+        },
+        error: (error) => {
+          console.error(' Error submitting entry:', error);
+        }
+      });
+
     } else {
       console.log('Form is invalid');
     }
