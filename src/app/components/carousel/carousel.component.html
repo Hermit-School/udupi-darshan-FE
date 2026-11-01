@@ -2,7 +2,7 @@
   <ngb-carousel [showNavigationIndicators]="true">
     <ng-template ngbSlide *ngFor="let image of images; let i = index">
       <div class="carousel-item-wrapper">
-        <img [src]="image.src" alt="Slide image" class="d-block w-100 fit-screen-img" />
+        <img [attr.loading]="i === 0 ? 'eager' : 'lazy'" [attr.fetchpriority]="i === 0 ? 'high' : 'low'" decoding="async" [src]="image.src" alt="Slide image" class="d-block w-100 fit-screen-img" />
       </div>
       <div class="carousel-caption">
         <p class="text-white">{{ image.description }}</p>
