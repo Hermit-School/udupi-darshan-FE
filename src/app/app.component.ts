@@ -19,7 +19,6 @@ import { Details } from './models/card';
 export class AppComponent implements OnInit {
   @ViewChild(DetailsComponent) detailsComponent!: DetailsComponent;
 
-  loading = true;
   private readonly destroyRef = inject(DestroyRef);
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
@@ -31,9 +30,6 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 2800);
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
