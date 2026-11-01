@@ -2,33 +2,35 @@
 # https://github.com/firebase/firebase-tools
 
 name: Create Build on PR
-'on': pull_request
+'on':
+  pull_request:
+  push:
+    branches: [release-v1]
+  workflow_dispatch:
 permissions:
-  checks: write
   contents: read
-  pull-requests: write
 jobs:
   build_and_preview:
-    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Git Repo
-        uses: actions/checkout@v3
-      - name: Use Node.js 20.1.0
-        uses: actions/setup-node@v3
+        uses: actions/checkout@v4
+      - name: Use Node.js 24 LTS
+        uses: actions/setup-node@v4
         with:
-          node-version: 20.11.1
+          node-version-file: .nvmrc
+          cache: npm
       - name: npm install, build
         run: |
-          npm install --force
-          npm run build
-      # - name: Install Firebase CLI
-      #   run: |  
-      #     npm install -g firebase-tools
-      #     firebase --version
-      # - name: Deploy to Firebase
-      #   run: |
-      #     echo '${{secrets.FIREBASE_SERVICE_ACCOUNT_UDUPI_DARSHAN}}' > $HOME/gcloud-service-key.json
-      #     export GOOGLE_APPLICATION_CREDENTIALS="$HOME/gcloud-service-key.json"
-      #     firebase deploy --only hosting
-
+          npm ci
+          npm run verify
+      - name: Retain frontend verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-verification
+          retention-days: 7
+          path: |
+            test-results/junit.xml
+            dist/udupi-darshan-fe/

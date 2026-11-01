@@ -1,3 +1,5 @@
+import { environment } from '../environments/environment';
+export const API_BASE_URL = environment.apiBaseUrl;
 export const MockRoutes = {
     getNatureData: '/assets/data/nature.json',
     geCultureData: '/assets/data/culture.json',
@@ -13,7 +15,7 @@ export const ApiRoutes = {
 };
 export const Environment = {
     local: 'http://localhost:8080',
-    production: 'https://udupi-darshan-be.onrender.com',
+    production: API_BASE_URL,
     routes: ApiRoutes
 }
 export const ROUTES = {

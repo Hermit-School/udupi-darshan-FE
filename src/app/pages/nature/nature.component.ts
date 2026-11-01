@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { natureServiceService } from 'src/app/services/nature.service';
 import { Details } from 'src/app/models/card';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-nature',
   templateUrl: './nature.component.html',
   styleUrls: ['./nature.component.scss']
@@ -15,6 +15,7 @@ export class NatureComponent implements OnInit, OnDestroy {
   viewAllActivity = false;
   viewAllBeaches = false;
 
+  private readonly resizeListeners = [this.updateVisibleBestOfNatureCard.bind(this), this.updateActivityList.bind(this), this.updateBeachList.bind(this), this.updateWildlifeList.bind(this)];
   allData: Details[] = []
 
   visibleNatureCards: Details[] = [];
@@ -27,12 +28,12 @@ export class NatureComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadData()
-    window.addEventListener('resize', this.updateVisibleBestOfNatureCard.bind(this));
-    window.addEventListener('resize', this.updateActivityList.bind(this));
+    window.addEventListener('resize', this.resizeListeners[0]);
+    window.addEventListener('resize', this.resizeListeners[1]);
     document.body.style.overflow = 'auto';
     document.body.style.paddingRight = '0';
-    window.addEventListener('resize', this.updateBeachList.bind(this));
-    window.addEventListener('resize', this.updateWildlifeList.bind(this));
+    window.addEventListener('resize', this.resizeListeners[2]);
+    window.addEventListener('resize', this.resizeListeners[3]);
   }
 
   loadData() {
@@ -46,10 +47,10 @@ export class NatureComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    window.removeEventListener('resize', this.updateVisibleBestOfNatureCard.bind(this));
-    window.removeEventListener('resize', this.updateActivityList.bind(this));
-    window.removeEventListener('resize', this.updateWildlifeList.bind(this));
-    window.removeEventListener('resize', this.updateBeachList.bind(this));
+    window.removeEventListener('resize', this.resizeListeners[0]);
+    window.removeEventListener('resize', this.resizeListeners[1]);
+    window.removeEventListener('resize', this.resizeListeners[3]);
+    window.removeEventListener('resize', this.resizeListeners[2]);
   }
 
   updateVisibleBestOfNatureCard() {

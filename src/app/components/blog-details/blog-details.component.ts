@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BlogService } from 'src/app/services/blog.service'; 
+import { BlogService } from 'src/app/services/blog.service';
 import  {Blog} from 'src/app/models/blog';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-blog-details',
   templateUrl: './blog-details.component.html',
   styleUrls: ['./blog-details.component.scss']

@@ -22,15 +22,15 @@ export class StoryService {
 
   addStory(story: Story): Observable<Story> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<Story>(this.apiUrl, story, { headers });
+    return this.http.post<Story>(`${Environment.production}/v1/blogs/postBlogs`, story, { headers });
   }
 
   updateStory(id: number, story: Story): Observable<Story> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<Story>(`${this.apiUrl}/${id}`, story, { headers });
+    return this.http.put<Story>(`${Environment.production}/v1/blogs/updateBlogs/${id}`, story, { headers });
   }
 
   deleteStory(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${Environment.production}/v1/blogs/deleteBlogs/${id}`);
   }
 }

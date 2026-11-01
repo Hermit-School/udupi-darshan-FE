@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Details } from 'src/app/models/card';
 import { SharedService } from 'src/app/services/shared.service';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
@@ -62,14 +62,21 @@ export class SearchComponent {
   }
 
   getHighlightedText(field: string | undefined, query: string): string {
-    if (!field || !query) return field || '';
-    const regex = new RegExp(`(${query})`, 'gi');
-    return field.replace(regex, '<b>$1</b>');
+    const escape = (text: string) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+    if (!field || !query) return escape(field || '');
+    const normalized = field.toLowerCase();
+    const needle = query.toLowerCase();
+    let result = '', start = 0, index: number;
+    while ((index = normalized.indexOf(needle, start)) !== -1) {
+      result += escape(field.slice(start, index)) + '<b>' + escape(field.slice(index, index + query.length)) + '</b>';
+      start = index + query.length;
+    }
+    return result + escape(field.slice(start));
   }
 
   selectResult(result: Details): void {
     this.searchClose();
-    this.router.navigate(['/details', result.category, result.id]).then(() => {
+    this.router.navigate(['/details', result.category.toLowerCase().split('-')[0], result.id]).then(() => {
       this.searchClose();
     });
   }

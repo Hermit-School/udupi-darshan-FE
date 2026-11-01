@@ -1,3 +1,4 @@
+import { adminGuard } from './guards/admin.guard';
 import { NgModule } from '@angular/core';
 import { NavigationEnd, Router, RouterModule, Routes } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -24,13 +25,13 @@ const routes: Routes = [
   { path: ROUTES.CULTURE.path, component: CultureComponent, data: { title: ROUTES.CULTURE.title, metaDescription: ROUTES.CULTURE.metaDescription } },
   { path: ROUTES.FOOD.path, component: FoodComponent, data: { title: ROUTES.FOOD.title, metaDescription: ROUTES.FOOD.metaDescription } },
   { path: ROUTES.ADVERTISEMENTS.path, component: AdvertisementsComponent },
-  { path: 'new-entry', component: NewEntryComponent },
+  { path: 'new-entry', component: NewEntryComponent, canActivate: [adminGuard] },
   { path: ROUTES.ADMIN.path, component: AdminComponent },
   { path: ROUTES.LANDING.path, component: LandingPageComponent },
   { path: ROUTES.DETAILS.path, component: DetailsComponent },
   { path: ROUTES.NOT_FOUND.path, component: PagenotfoundComponent, data: { title: ROUTES.NOT_FOUND.title, metaDescription: ROUTES.NOT_FOUND.metaDescription } },
   { path: ROUTES.FORGOT_PASSWORD.path, component: ForgotpasswordComponent },
-  { path: ROUTES.ADMIN_DASHBOARD.path, component: AdmindashboardComponent },
+  { path: ROUTES.ADMIN_DASHBOARD.path, component: AdmindashboardComponent, canActivate: [adminGuard] },
   { path: ROUTES.BLOG_DETAILS.path, component: BlogDetailsComponent },
   { path: ROUTES.STORY_DETAILS.path, component: StoryDetailsComponent },
   { path: ROUTES.STORY.path, component: StoryComponent },

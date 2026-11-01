@@ -11,10 +11,7 @@ export class AdminserviceService {
   constructor(private http: HttpClient) { }
 
   get adminEntryData() {
-    return this.http.get<AdminNewEntriesInterface>(Environment.local + MockRoutes.getAdminEntryData);
+    return this.http.get<AdminNewEntriesInterface>(MockRoutes.getAdminEntryData);
   }
 
-  sendOtp() {
-    return this.http.get<any>(`${Environment.production}${MockRoutes.generateOtp}`);
-  }
 }

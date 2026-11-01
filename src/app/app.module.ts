@@ -1,10 +1,11 @@
+import { DetailsModule } from './pages/details/details.component';
+import { AuthInterceptor } from './services/Interceptor/AuthInterceptor';
 //Module Imports
-import { NgModule } from '@angular/core';
+import { NgModule, provideZoneChangeDetection } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbCarouselModule, NgbAlertModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -68,6 +69,7 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
     NewEntryComponent
   ],
   imports: [
+    DetailsModule,
     BrowserModule,
     AppRoutingModule,
     NgbCarouselModule,
@@ -75,11 +77,11 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
     ReactiveFormsModule,
     NgbAlertModule,
     NgbModalModule,
-    BrowserAnimationsModule,
     HttpClientModule,
     NgbPaginationModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true },
+  providers: [provideZoneChangeDetection(), { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

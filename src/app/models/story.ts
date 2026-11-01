@@ -3,7 +3,7 @@ export interface Story {
   title: string;
   submittedBy: string;
   content: string;
-  images: string;
+  images: string[];
   createdAt: string;
   dontMissThese: {
     name: string;

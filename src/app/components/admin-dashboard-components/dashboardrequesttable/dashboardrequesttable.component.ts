@@ -3,7 +3,7 @@ import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminNewEntriesInterface } from 'src/app/models/adminnewentrydata';
 
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-dashboardrequesttable',
   templateUrl: './dashboardrequesttable.component.html',
   styleUrls: ['./dashboardrequesttable.component.scss']
@@ -20,7 +20,7 @@ export class DashboardrequesttableComponent implements OnInit {
   collectionSize: number = 100;
   currentRate = 4;
 
-  constructor() { 
+  constructor() {
 
   }
 

@@ -11,7 +11,7 @@ export interface Details {
     byBike: string;
     byCar: string;
     byPublic: string;
-  };
+  } | null;
   timings: string;
   category: string;
   dontMissThese: {
@@ -20,10 +20,7 @@ export interface Details {
     imageUrl: string;
     link?: string;
   }[];
-  images: {
-    url: string;
-    altText: string
-  }[];
+  images: string[];
   link: string;
   createdAt: string;
 }

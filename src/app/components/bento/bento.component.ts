@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-bento',
   templateUrl: './bento.component.html',
   styleUrls: ['./bento.component.scss']

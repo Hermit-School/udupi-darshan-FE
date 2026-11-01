@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, DestroyRef, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
-import { filter, map } from 'rxjs';
+import { filter, map, forkJoin, of, catchError } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DetailsComponent } from './pages/details/details.component';
 import { SharedService } from './services/shared.service';
 import { CultureService } from './services/culture.service';
@@ -9,7 +10,7 @@ import { FoodService } from './services/food.service';
 import { natureServiceService } from './services/nature.service';
 import { Details } from './models/card';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
   @ViewChild(DetailsComponent) detailsComponent!: DetailsComponent;
 
   loading = true;
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
     private titleService: Title,
@@ -52,7 +54,13 @@ export class AppComponent implements OnInit {
         }
       });
 
-    const allData: Details[] = [];
+    forkJoin([
+      this.natureService.getAllNatures().pipe(catchError(() => of([]))),
+      this.cultureService.getAllCultures().pipe(catchError(() => of([]))),
+      this.foodService.getAllFoods().pipe(catchError(() => of([])))
+    ]).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(groups => {
+      this.sharedService.setDetailsData(groups.flat());
+    });
   }
 
   private updateSharedService(data: Details[]): void {

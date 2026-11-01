@@ -1,0 +1,32 @@
+{
+  "verified_at": "2026-11-01T16:36:22.101823+00:00",
+  "branch": "release-v1",
+  "base_commit": "893cf9d9edec1881de829d0b21a0e9d01e31f097",
+  "source_changes_uncommitted": true,
+  "angular": "21.2.25",
+  "node": "24.22.2",
+  "tests": {
+    "tests": 49,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "npm_audit_findings": 0,
+  "audit_scope": "all dependencies including development tools",
+  "firebase_output": "dist/udupi-darshan-fe",
+  "frontend_deployed": false,
+  "production_admin_login_verified": false,
+  "local_browser_password_otp_logout_verified": true,
+  "package_lock_sha256": "62d67ed5395b2664fd889209caeec21b87d1bd8b067bf18b0edb7bcb2615b422",
+  "bundle_sha256": {
+    "chunk-D5H2PX4Q.js": "6ac76eb14c6fd94aa6c84c27bf44f5706098a48c8f9247dc6dc783f1a269ecc6",
+    "chunk-HVUFEJBH.js": "aa655f36dc0d570759288e5bc6edb95056366ab826a53c111a89091362fa0206",
+    "chunk-LYINSWNG.js": "a2fcbac0545fcdb18ae72d4abce2d7e3365b390a5d27d739294c4022590fe475",
+    "chunk-OHBPZJTZ.js": "6f955ad6acb2494d3d5fa353565733d13118feddad7b669e06c1ea58b9343789",
+    "index.html": "35817f2659e4cb0dd3cd9a98e15b4c89f4be7802b033858180201ccd1b9a265a",
+    "main-2EANLNQT.js": "b2e173df8bc312d89dbef1c3e8acd9c95a92b8b7079c5b4db4528231f8fb060a",
+    "polyfills-OMGXLRKZ.js": "e17f0df06722c6970921eb3a134e49734e69c9ac0f460edce43547cca52b2996",
+    "scripts-7SWBP3MU.js": "1e7a2a7ad0ffe985357a680d1aac010e3e65b605d4fe65ba79582341a75bdf55",
+    "styles-3MGI3WTN.css": "aa91bbccec25ae4927c6d89c04aa84f2544052338f2aa7a70ad964b7f580bcca"
+  }
+}

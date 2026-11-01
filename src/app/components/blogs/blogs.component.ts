@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { BlogService } from 'src/app/services/blog.service';
 import  {Blog}  from 'src/app/models/blog';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-blogs',
   templateUrl: './blogs.component.html',
   styleUrls: ['./blogs.component.scss'],

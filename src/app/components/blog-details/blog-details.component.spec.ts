@@ -1,3 +1,7 @@
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { AppModule } from 'src/app/app.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BlogDetailsComponent } from './blog-details.component';
@@ -8,7 +12,8 @@ describe('StoryDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BlogDetailsComponent ]
+      imports: [AppModule, HttpClientTestingModule, RouterTestingModule],
+
     })
     .compileComponents();
 

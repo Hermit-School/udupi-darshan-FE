@@ -1,71 +1,25 @@
-<div class="container-fluid d-flex justify-content-center align-items-center ">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-md-12 ">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="text-center text">
-                        <i class="bi bi-person-lock"></i> Admin Login
-                    </h2>
-                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
-                        <div class="mb ">
-                            <div class="input-group ">
-                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                <input type="email" formControlName="username" class="form-control" id="username"
-                                    [ngClass]="{
-                                    'is-invalid': loginForm.get('username')?.invalid && loginForm.get('username')?.touched
-                                }" required placeholder="Enter your email">
-                            </div>
-                            <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
-                                class="invalid-feedback">
-                                <div *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.
-                                </div>
-                                <div *ngIf="loginForm.get('username')?.errors?.['email']">Invalid email address.
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="input-group width">
-                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                <input [type]="changetype ? 'password' : 'text'" formControlName="password"
-                                    class="form-control" id="password" [ngClass]="{
-                                        'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched
-                                    }" required placeholder="Enter your password">
-                                <button type="button" class="btn btn-outline-secondary"
-                                    (click)="togglePasswordVisibility()">
-                                    <i [ngClass]="changetype ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-                                </button>
-                            </div>
-                            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-                                class="invalid-feedback">
-                                Password does not meet the requirements
-
-                                <button *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-                                    #passwordTooltip type="button" class="btn tooltip-icon" data-bs-toggle="tooltip"
-                                    data-bs-html="true" data-bs-custom-class="custom-tooltip" data-bs-placement="bottom"
-                                    data-bs-title="<em>Password rules:</em><br>
-                                           - <b>Secure (8-10 chars)</b>:<br>
-                                             • Starts with a letter<br>
-                                             • Uppercase, lowercase, digit, special char (-, _, @)<br>
-                                           - <b>Passphrase (5-30 chars)</b>:<br>
-                                             • Starts with a letter<br>
-                                             • 3 words separated by hyphens (-)">
-                                    ?
-                                </button>
-                            </div>
-                        </div>
-                        <div class="text-end mb-3">
-                            <button type="button" class="btn forgot-password " (click)="forgotPassword()">Forgot
-                                Password?</button>
-                        </div>
-
-                        <div class="d-grid">
-                            <button class="btn" type="submit" [disabled]="!loginForm.valid"
-                                [ngClass]="{'btn-dark-orange': loginForm.valid, 'btn-light-orange': !loginForm.valid}">
-                                Login
-                            </button>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-        </div>
+<div class="container-fluid d-flex justify-content-center align-items-center">
+  <div class="card"><div class="card-body">
+    <h2 class="text-center text"><i class="bi bi-person-lock" aria-hidden="true"></i> Admin sign in</h2>
+    <p role="alert" class="alert alert-danger" *ngIf="error">{{ error }}</p>
+    <form *ngIf="phase === 'credentials'" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <label for="username">Username</label>
+      <input id="username" class="form-control mb-3" formControlName="username" autocomplete="username" required>
+      <label for="password">Password</label>
+      <div class="input-group mb-3">
+        <input id="password" class="form-control" formControlName="password" [type]="showPassword ? 'text' : 'password'" autocomplete="current-password" required>
+        <button type="button" class="btn btn-outline-secondary" (click)="showPassword = !showPassword" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">{{ showPassword ? 'Hide' : 'Show' }}</button>
+      </div>
+      <button type="submit" class="btn btn-dark-orange w" [disabled]="busy || loginForm.invalid">{{ busy ? 'Sending code…' : 'Send sign-in code' }}</button>
+      <a routerLink="/forgotpassword" class="d-block mt-3">Need help signing in?</a>
+    </form>
+    <form *ngIf="phase === 'otp'" [formGroup]="otpForm" (ngSubmit)="verify()">
+      <p>A six-digit code was sent to your account’s email address. It expires in five minutes.</p>
+      <label for="otp">Email verification code</label>
+      <input id="otp" class="form-control mb-3" formControlName="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+      <button type="submit" class="btn btn-dark-orange w" [disabled]="busy || otpForm.invalid">{{ busy ? 'Verifying…' : 'Verify and sign in' }}</button>
+      <button type="button" class="btn btn-link mt-3" [disabled]="busy" (click)="restart()">Request a new code or change account</button>
+    </form>
+    <a routerLink="/home" class="d-block mt-3">Back to public site</a>
+  </div></div>
+</div>
