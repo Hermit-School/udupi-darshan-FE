@@ -8,6 +8,8 @@ import { HttpResponse } from '@angular/common/http';
 export class CacheService {
   private cache = new Map<string, HttpResponse<any>>();
 
+  clear(): void { this.cache.clear(); }
+
   get(url: string): HttpResponse<any> | undefined {
     return this.cache.get(url);
   }

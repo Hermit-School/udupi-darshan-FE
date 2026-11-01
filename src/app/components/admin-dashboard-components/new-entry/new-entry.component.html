@@ -1,3 +1,4 @@
+<p class="alert alert-info" role="status">Content editing is not available yet.</p>
 <div class="container-fluid d-flex align-items-center justify-content-center ">
     <div class="card entry-card  mt-3 mb-3">
         <div class="card-header text-center">
@@ -47,7 +48,7 @@
 
                 <div formArrayName="key_points">
                     <label>Key Points:</label>
-                    <div *ngFor="let point of keyPoints?.controls; let i = index">
+                    <div *ngFor="let point of keyPoints.controls; let i = index">
                         <input [formControlName]="i" placeholder="e.g. Stunning views and greenery" required
                             class="form-control" />
                         <div class="error" *ngIf="point.invalid && (point.dirty || point.touched)">
@@ -60,7 +61,7 @@
 
                 <label>Discover:</label>
                 <div formArrayName="discover">
-                    <div *ngFor="let item of discover?.controls; let i = index">
+                    <div *ngFor="let item of discover.controls; let i = index">
                         <input [formControlName]="i" placeholder="e.g. Nearby attractions and landmarks" required
                             class="form-control" />
                         <div class="error" *ngIf="item.invalid && (item.dirty || item.touched)">
@@ -73,7 +74,7 @@
 
                 <label>Important Information:</label>
                 <div formArrayName="imp_info">
-                    <div *ngFor="let item of impInfo?.controls; let i = index">
+                    <div *ngFor="let item of impInfo.controls; let i = index">
                         <input [formControlName]="i" placeholder="e.g. Best time to visit" required
                             class="form-control" />
                         <div class="error" *ngIf="item.invalid && (item.dirty || item.touched)">
@@ -121,7 +122,7 @@
 
                 <label>Don't Miss These:</label>
                 <div formArrayName="dont_miss_these">
-                    <div *ngFor="let item of dontMissThese?.controls; let i = index">
+                    <div *ngFor="let item of dontMissThese.controls; let i = index">
                         <input [formControlName]="i" placeholder="e.g. ID and Table Reference" required
                             class="form-control" />
                         <div class="error" *ngIf="item.invalid && item.touched">
@@ -134,7 +135,7 @@
 
                 <label>Images:</label>
                 <div formArrayName="images">
-                    <div *ngFor="let img of images?.controls; let i = index">
+                    <div *ngFor="let img of images.controls; let i = index">
                         <input type="file" (change)="onFileSelected($event, i)" />
                         <div class="error" *ngIf="img.invalid && img.touched">
                             This field is required.
@@ -156,13 +157,13 @@
                     <div class="link-box">
                         <span class="base-url">{{ selectedBaseUrl }}</span>
                         <input id="link" type="text" formControlName="link" [placeholder]="currentPlaceholder"
-                            class="dynamic-input" [disabled]="!selectedBaseUrl" />
+                            class="dynamic-input" />
                     </div>
                     <small style="color: #888; font-style: italic;">Full link: {{ fullLink }}</small>
                 </div>
             </form>
             <div class="submit mt-3">
-                <button type="submit" class="glossy-submit-btn" [disabled]="entryForm.invalid">SUBMIT</button>
+                <button type="submit" class="glossy-submit-btn" [disabled]="true">SUBMIT</button>
             </div>
         </div>
     </div>

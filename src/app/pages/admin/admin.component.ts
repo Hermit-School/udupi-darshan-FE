@@ -1,124 +1,49 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Component, OnDestroy } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
 
-declare var bootstrap: any;
+@Component({ standalone: false, selector: 'app-admin', templateUrl: './admin.component.html', styleUrls: ['./admin.component.scss'] })
+export class AdminComponent implements OnDestroy {
+  loginForm = this.fb.nonNullable.group({ username: ['', Validators.required], password: ['', Validators.required] });
+  otpForm = this.fb.nonNullable.group({ otp: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]] });
+  phase: 'credentials' | 'otp' = 'credentials';
+  busy = false;
+  error = '';
+  showPassword = false;
+  private destroyed = new Subject<void>();
+  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {}
 
-@Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
-})
-export class AdminComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  loginForm!: FormGroup;
-  changetype: boolean = true;
-  showPasswordTimeout: any;
-
-  @ViewChild('passwordTooltip', { static: false }) passwordTooltipElement!: ElementRef;
-  tooltipInitialized: boolean = false;
-
-  constructor(private fb: FormBuilder, private router: Router) { }
-
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, this.passwordValidator]]
-    });
-
-    this.loginForm.statusChanges.subscribe(() => {
-      this.toggleSubmitButton();
-    });
-  }
-
-  ngAfterViewInit(): void {
-    const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach((tooltipTriggerEl) => {
-      new (window as any).bootstrap.Tooltip(tooltipTriggerEl, {
-        boundary: 'viewport', // Ensure it stays within view
-        customClass: 'custom-tooltip',
-        html: true,
-        placement: 'bottom',
-      });
-    });
-  }
-
-
-  ngAfterViewChecked(): void {
-    this.initializeDynamicTooltip();
-  }
-
-  initializeTooltips() {
-    const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach((tooltipTriggerEl) => {
-      new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-  }
-
-  initializeDynamicTooltip() {
-    if (this.passwordTooltipElement && !this.tooltipInitialized) {
-      setTimeout(() => {
-        new bootstrap.Tooltip(this.passwordTooltipElement.nativeElement);
-        this.tooltipInitialized = true;
-      }, 0);
-    }
-  }
-
-  passwordValidator(control: AbstractControl): ValidationErrors | null {
-    const value = control.value;
-    if (!value) return { required: true };
-
-    const minLength = 8;
-    const maxLength = 30;
-    const startsWithLetter = /^[a-zA-Z]/.test(value);
-    const containsLowercase = /[a-z]/.test(value);
-    const containsUppercase = /[A-Z]/.test(value);
-    const containsDigit = /[0-9]/.test(value);
-    const containsSpecialChar = /[-_@]/.test(value);
-    const validPattern = /^[a-zA-Z0-9-_@]*$/.test(value);
-    const isPassphrase = /^[a-z]+(-[a-z]+)+$/i.test(value) && value.split('-').length >= 3;
-    const isSecurePassword = containsLowercase && containsUppercase && containsDigit && containsSpecialChar;
-
-    if (
-      value.length < minLength ||
-      value.length > maxLength ||
-      !startsWithLetter ||
-      !validPattern ||
-      (!isSecurePassword && !isPassphrase)
-    ) {
-      return { invalidPassword: true };
-    }
-
-    return null;
-  }
-
-
-  toggleSubmitButton(): void {
-    const submitButton = document.querySelector('button[type="submit"]') as HTMLButtonElement;
-    if (submitButton) {
-      submitButton.disabled = !this.loginForm.valid;
-    }
-  }
-  togglePasswordVisibility(): void {
-    this.changetype = !this.changetype;
-    if (!this.changetype) {
-      this.showPasswordTimeout = setTimeout(() => {
-        this.changetype = true;
-      }, 1000);
-    } else {
-      clearTimeout(this.showPasswordTimeout);
-    }
-  }
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.router.navigate(['/admindashboard']);
-    } else {
-      console.log('Form is not valid');
+    if (this.busy || this.loginForm.invalid) { this.loginForm.markAllAsTouched(); return; }
+    this.error = ''; this.busy = true;
+    const { username, password } = this.loginForm.getRawValue();
+    this.auth.requestOtp(username.trim(), password).pipe(takeUntil(this.destroyed), finalize(() => this.busy = false))
+      .subscribe({ next: () => { this.loginForm.controls.password.reset(); this.showPassword = false; this.phase = 'otp'; },
+        error: error => { this.loginForm.controls.password.reset(); this.error = this.message(error); } });
+  }
+  verify(): void {
+    if (this.busy || this.otpForm.invalid) { this.otpForm.markAllAsTouched(); return; }
+    this.error = ''; this.busy = true;
+    this.auth.verifyOtp(this.otpForm.controls.otp.value).pipe(takeUntil(this.destroyed), finalize(() => this.busy = false))
+      .subscribe({ next: () => { void this.router.navigate(['/admindashboard']); }, error: error => this.error = this.message(error) });
+  }
+  restart(): void {
+    this.auth.clearSession(); this.phase = 'credentials'; this.error = ''; this.otpForm.reset();
+  }
+  private message(error: unknown): string {
+    if (!(error instanceof HttpErrorResponse)) return error instanceof Error ? error.message : 'Unable to sign in.';
+    switch (error.status) {
+      case 401: return this.phase === 'otp' ? 'The code is invalid, expired, or has too many attempts. Request a new code by signing in again.' : 'Incorrect username or password, or the account is temporarily locked.';
+      case 403: return 'This account does not have administrator access.';
+      case 429: return 'Please wait before requesting another code. Codes expire after five minutes.';
+      case 502: return 'Email could not be sent. Please try again later.';
+      case 0: return 'Unable to reach the server. Please check your connection and try again.';
+      default: return 'Sign-in is temporarily unavailable. Please try again later.';
     }
   }
-
-  forgotPassword(): void {
-    console.log('forgotPassword');
-    this.router.navigate(['/forgotpassword']);
-  }
+  ngOnDestroy(): void { this.destroyed.next(); this.destroyed.complete(); }
 }
-

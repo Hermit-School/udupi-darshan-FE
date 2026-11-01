@@ -4,7 +4,7 @@ import { BASE_URLS, CATEGORIES, PLACEHOLDER_MAP } from 'src/constants/routes';
 
 declare var bootstrap: any;
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-dashboardnavbar',
   templateUrl: './dashboardnavbar.component.html',
   styleUrls: ['./dashboardnavbar.component.scss']

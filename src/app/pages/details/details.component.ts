@@ -1,18 +1,22 @@
-import { Component, Input, NgModule, OnInit } from '@angular/core';
+import { Component, Input, NgModule, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { natureServiceService } from 'src/app/services/nature.service';
 import { CultureService } from 'src/app/services/culture.service';
 import { Details } from 'src/app/models/card';
 import { FoodService } from 'src/app/services/food.service';
-import { SharedService } from 'src/app/services/shared.service';
+import { Subscription } from 'rxjs';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss']
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnDestroy {
+  loading = false;
+  error = "";
+  private routeSubscription?: Subscription;
+  private requestSubscription?: Subscription;
   @Input() description: string | undefined;
   card: Details | null = null;
   isOverlayActive: boolean = false;
@@ -24,11 +28,10 @@ export class DetailsComponent implements OnInit {
     private router: Router,
     private natureService: natureServiceService,
     private cultureService: CultureService,
-    private foodService: FoodService,
-    private sharedService: SharedService
+    private foodService: FoodService
   ) { }
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
+    this.routeSubscription = this.route.params.subscribe(params => {
       const id = Number(params['id']);
       const category = params['category'];
       this.currentCategory = category;
@@ -37,37 +40,24 @@ export class DetailsComponent implements OnInit {
   }
 
   fetchData(category: string, id: number): void {
-    switch (category) {
-      case 'nature':
-        this.natureService.getAllNatures().subscribe(data => {
-          this.sharedService.setDetailsData(data);
-          this.card = data.find(item => item.id === id) || null;
-        });
-        break;
-      case 'culture':
-        this.cultureService.getAllCultures().subscribe(data => {
-          this.sharedService.setDetailsData(data);
-          this.card = data.find(item => item.id === id) || null;
-        });
-        break;
-      case 'food':
-        this.foodService.getAllFoods().subscribe(data => {
-          this.sharedService.setDetailsData(data);
-          this.card = data.find(item => item.id === id) || null;
-        });
-        break;
-      default:
-        this.card = null;
-        break;
+    this.requestSubscription?.unsubscribe();
+    this.card = null; this.error = ''; this.currentSlideIndex = 0;
+    const section = (category || '').toLowerCase().split('-')[0];
+    const service = section === 'nature' ? this.natureService.getNatureById.bind(this.natureService)
+      : section === 'culture' ? this.cultureService.getCultureById.bind(this.cultureService)
+      : section === 'food' ? this.foodService.getFoodById.bind(this.foodService) : null;
+    if (!service || !Number.isSafeInteger(id) || id <= 0) {
+      this.loading = false; this.error = 'Destination not found.'; return;
     }
+    this.loading = true;
+    this.requestSubscription = service(id).subscribe({
+      next: card => { this.card = card; this.loading = false; },
+      error: () => { this.loading = false; this.error = 'Unable to load this destination. Please try again.'; }
+    });
+  }
 
-    const cardId = this.route.snapshot.paramMap.get('id');
-    if (cardId) {
-      const id = Number(cardId);
-      this.sharedService.getSearchResults().subscribe((results) => {
-        this.card = results.find((item) => item.id === id) || null;
-      });
-    }
+  ngOnDestroy(): void {
+    this.routeSubscription?.unsubscribe(); this.requestSubscription?.unsubscribe();
   }
 
   showOverlay(): void {

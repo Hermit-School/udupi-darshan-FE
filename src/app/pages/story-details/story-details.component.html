@@ -11,7 +11,7 @@
       </div>
 
       <div class="row mt-2">
-        <div *ngFor="let image of story?.images; let i = index"
+        <div *ngFor="let image of story.images; let i = index"
           [ngClass]="{'col-3': true, 'col-md-3': true, 'col-lg-4': true, 'mb-3': true, 'd-lg-none': i === 3}">
           <div class="card" [ngClass]="{'active': selectedIndex === i}" (click)="onImageClick(i)">
             <img [src]="image" alt="Related image {{ i }}" class="card-img-top">

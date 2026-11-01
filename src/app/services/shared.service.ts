@@ -20,6 +20,7 @@ export class SharedService {
 
     setDetailsData(data: Details[]): void {
         this.detailsData = [...data];
+        if (this.searchTextSource.value) this.search(this.searchTextSource.value);
     }
 
     private search(query: string): void {

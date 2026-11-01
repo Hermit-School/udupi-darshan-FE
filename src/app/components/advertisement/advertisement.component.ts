@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-advertisement',
   templateUrl: './advertisement.component.html',
   styleUrls: ['./advertisement.component.scss']
@@ -27,7 +27,7 @@ export class AdvertisementComponent implements OnInit {
   }
 
   checkScreenSize() {
-    this.isSmallScreen = window.innerWidth <= 1000; 
+    this.isSmallScreen = window.innerWidth <= 1000;
   }
 
   startSlideshow() {
@@ -38,10 +38,10 @@ export class AdvertisementComponent implements OnInit {
         setTimeout(() => {
           this.transitionStyle = 'transform 2s ease-in-out';
           this.slideIndex++;
-        }, 20); 
+        }, 20);
       } else {
         this.slideIndex++;
       }
-    }, 3000); 
+    }, 3000);
   }
 }

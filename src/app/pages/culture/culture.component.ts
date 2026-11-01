@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CultureService } from 'src/app/services/culture.service';
 import { Details } from 'src/app/models/card';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-culture',
   templateUrl: './culture.component.html',
   styleUrls: ['./culture.component.scss']
@@ -14,6 +14,7 @@ export class CultureComponent implements OnInit, OnDestroy {
   viewAllActivity = false;
   viewAllBeaches = false;
 
+  private readonly resizeListener = () => this.updateLists();
   allData: Details[] = [];
 
   visibleCultureCards: Details[] = [];
@@ -36,13 +37,13 @@ export class CultureComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadData();
 
-    window.addEventListener('resize', this.updateLists.bind(this));
+    window.addEventListener('resize', this.resizeListener);
     document.body.style.overflow = 'auto';
     document.body.style.paddingRight = '0';
   }
 
   ngOnDestroy(): void {
-    window.removeEventListener('resize', this.updateLists.bind(this));
+    window.removeEventListener('resize', this.resizeListener);
   }
 
   updateLists(): void {

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DetailsComponent } from 'src/app/pages/details/details.component';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
@@ -25,6 +25,8 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('errorToast') errorToast!: ElementRef;
   isSuccess: boolean | undefined;
   hideNavbar = false;
+  readonly storySubmissionAvailable = false;
+  private readonly modalResetListener = () => this.resetModal();
 
 
   constructor(private fb: FormBuilder, private router: Router, private renderer: Renderer2) {
@@ -55,11 +57,11 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.writeToUsModal.nativeElement.addEventListener('hidden.bs.modal', this.resetModal.bind(this));
+    this.writeToUsModal.nativeElement.addEventListener('hidden.bs.modal', this.modalResetListener);
   }
 
   ngOnDestroy(): void {
-    this.writeToUsModal.nativeElement.removeEventListener('hidden.bs.modal', this.resetModal.bind(this));
+    this.writeToUsModal.nativeElement.removeEventListener('hidden.bs.modal', this.modalResetListener);
   }
 
   countWords(text: string | null | undefined): number {
@@ -108,16 +110,8 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     window.open(url, '_blank');
   }
   onSubmit(): void {
-    if (this.form.valid) {
-      console.log(this.form.value);
-      this.showToast('successToast');
-      this.isSuccess = false;
-      this.resetForm();
-    } else {
-      console.log('Form is invalid');
-      this.isSuccess = false;
-      this.showToast('errorToast');
-    }
+    // No public submission endpoint is configured. Never claim the story was sent.
+    this.form.markAllAsTouched();
   }
   showToast(toastId: 'successToast' | 'errorToast'): void {
     const toastElement = this[toastId].nativeElement as HTMLElement;
@@ -139,17 +133,8 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate([route]);
   }
   closeOffcanvas() {
-    const offcanvas = document.getElementById('offcanvasNavbar');
-    if (offcanvas) {
-      this.renderer.removeClass(offcanvas, 'show');
-      const backdrop = document.querySelector('.offcanvas-backdrop');
-      if (backdrop) {
-        backdrop.remove();
-      }
-      document.body.classList.remove('offcanvas-backdrop');
-      this.renderer.setStyle(document.body, 'overflow', 'auto');
-      this.renderer.removeClass(document.body, 'offcanvas-open');
-    }
+    const panel = document.getElementById('offcanvasNavbar');
+    if (panel) (window as any).bootstrap.Offcanvas.getOrCreateInstance(panel).hide();
   }
   removePadding() {
     document.body.style.paddingRight = '0px';

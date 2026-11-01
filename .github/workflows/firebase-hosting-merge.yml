@@ -11,21 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Git Repo
-        uses: actions/checkout@v3
-      - name: Use Node.js 20.1.0
-        uses: actions/setup-node@v3
+        uses: actions/checkout@v4
+      - name: Use Node.js 24 LTS
+        uses: actions/setup-node@v4
         with:
-          node-version: 20.11.1
+          node-version-file: .nvmrc
+          cache: npm
       - name: npm install, build
         run: |
-          npm install --force
-          npm run build
+          npm ci
+          npm run verify
       - name: Install Firebase CLI
         run: |  
-          npm install -g firebase-tools
+          npm install -g firebase-tools@15.34.2 --no-audit --no-fund
           firebase --version
-      - name: Deploy to Firebase
+      - name: Configure Firebase credentials
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_UDUPI_DARSHAN }}
         run: |
-          echo '${{secrets.FIREBASE_SERVICE_ACCOUNT_UDUPI_DARSHAN}}' > $HOME/gcloud-service-key.json
-          export GOOGLE_APPLICATION_CREDENTIALS="$HOME/gcloud-service-key.json"
-          firebase deploy --only hosting
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          credential = Path(os.environ['RUNNER_TEMP']) / 'firebase-service-account.json'
+          credential.write_text(os.environ['FIREBASE_SERVICE_ACCOUNT_JSON'])
+          credential.chmod(0o600)
+          PY
+      - name: Deploy to Firebase
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-service-account.json
+        run: firebase deploy --only hosting --non-interactive

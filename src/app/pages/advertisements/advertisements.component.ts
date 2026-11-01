@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AdvertisementsService } from 'src/app/services/advertisements.service'; 
+import { AdvertisementsService } from 'src/app/services/advertisements.service';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-advertisements',
   templateUrl: './advertisements.component.html',
   styleUrls: ['./advertisements.component.scss']
@@ -19,8 +19,8 @@ export class AdvertisementsComponent implements OnInit {
   ngOnInit(): void {
     this.imageService.getImages().subscribe(data => {
       this.images = data;
-      this.largeImage = this.images[4]; 
-      this.smallImages = this.images.slice(5, 11); 
+      this.largeImage = this.images[4];
+      this.smallImages = this.images.slice(5, 11);
     });
   }
 }

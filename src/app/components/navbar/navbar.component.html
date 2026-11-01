@@ -5,6 +5,10 @@
     </a>
 
     <app-search></app-search>
+    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Open navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
     <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarTogglerDemo02">
       <ul class="navbar-nav me-auto align-items-lg-center">
@@ -40,6 +44,10 @@
 
   <div class="offcanvas offcanvas-end d-lg-none d-block" tabindex="-1" id="offcanvasNavbar"
     aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header">
+      <h5 id="offcanvasNavbarLabel">Explore Udupi</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close navigation"></button>
+    </div>
     <div class="offcanvas-body">
       <ul class="navbar-nav me-auto align-items-lg-center">
         <li class="nav-item">
@@ -76,7 +84,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <p *ngIf="!storySubmissionAvailable" role="status">Story submissions are currently unavailable.</p>
+        <form *ngIf="storySubmissionAvailable" [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="mb-3"
             [class.has-error]="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
             <label for="name" class="form-label">Name <span class="required-field">*</span></label>

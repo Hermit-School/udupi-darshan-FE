@@ -5,7 +5,7 @@ import { StoryService } from 'src/app/services/story.service';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-story',
   templateUrl: './story.component.html',
   styleUrls: ['./story.component.scss']
@@ -27,7 +27,7 @@ export class StoryComponent implements OnInit {
 
   fetchStories(): void {
     this.storyService.getAllStories().subscribe(data => {
-      if (data = []) {
+      if (data.length === 0) {
         this.nodataShow();
       }
       else {

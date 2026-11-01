@@ -1,12 +1,12 @@
 import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { platformBrowser } from '@angular/platform-browser';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -17,12 +17,16 @@ import { firebaseConfig } from "src/constants/firebaseConfigConstants";
 
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+if (environment.production) {
+  void Promise.all([import('firebase/app'), import('firebase/analytics')])
+    .then(async ([{ initializeApp }, { isSupported, getAnalytics }]) => {
+      if (await isSupported()) getAnalytics(initializeApp(firebaseConfig));
+    }).catch(() => {});
+}
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowser().bootstrapModule(AppModule)
   .catch(err => console.error(err));

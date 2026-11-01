@@ -1,3 +1,4 @@
+<p class="alert alert-info" role="status">Content editing is not available yet.</p>
 <div class="container-fluid dashboard-container">
   <!-- Sidebar -->
   <nav class="sidebar">
@@ -40,9 +41,9 @@
           <div class="d-flex justify-content-center gap-3 mb-3">
             <button class="btn btn-success" (click)="openModal('nature')" data-bs-toggle="modal"
               data-bs-target="#entryModal">Add</button>
-            <button class="btn btn-danger">Delete</button>
+            <button class="btn btn-danger" disabled>Delete</button>
           </div>
-          <div class="modal fade" id="entryModal" tabindex="-1" aria-labelledby="entryModalLabel" aria-hidden="true">
+          <div #entryModal class="modal fade" id="entryModal" tabindex="-1" aria-labelledby="entryModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down modal-sm modal-lg">
               <div class="modal-content">
                 <div class=" modal-header">
@@ -94,7 +95,7 @@
 
                     <div formArrayName="key_points">
                       <label class="key-label">Key Points:</label>
-                      <div *ngFor="let point of keyPoints?.controls; let i = index" class="section-wrapper">
+                      <div *ngFor="let point of keyPoints.controls; let i = index" class="section-wrapper">
                         <div class="section">
                           <input [formControlName]="i" placeholder="e.g. Stunning views and greenery" required
                             class="form-control"
@@ -110,7 +111,7 @@
 
                     <div formArrayName="discover">
                       <label>Discover:</label>
-                      <div *ngFor="let item of discover?.controls; let i = index" class="section-wrapper">
+                      <div *ngFor="let item of discover.controls; let i = index" class="section-wrapper">
                         <div class="section">
                           <input [formControlName]="i" placeholder="e.g. Nearby attractions and landmarks" required
                             class="form-control"
@@ -126,7 +127,7 @@
 
                     <div formArrayName="imp_info">
                       <label>Important Information:</label>
-                      <div *ngFor="let item of impInfo?.controls; let i = index" class="section-wrapper">
+                      <div *ngFor="let item of impInfo.controls; let i = index" class="section-wrapper">
                         <div class="section">
                           <input [formControlName]="i" placeholder="e.g. Best time to visit" required
                             class="form-control"
@@ -178,7 +179,7 @@
                     </div>
                     <div formArrayName="dont_miss_these">
                       <label>Don't Miss These:</label>
-                      <div *ngFor="let item of dontMissThese?.controls; let i = index" class="section-wrapper">
+                      <div *ngFor="let item of dontMissThese.controls; let i = index" class="section-wrapper">
                         <div class="section">
                           <input [formControlName]="i" placeholder="e.g. ID and Table Reference" required
                             class="form-control"
@@ -194,7 +195,7 @@
 
                     <label>Images:</label>
                     <div formArrayName="images">
-                      <div *ngFor="let img of images?.controls; let i = index" class="section-wrapper">
+                      <div *ngFor="let img of images.controls; let i = index" class="section-wrapper">
                         <div class="section">
                           <input type="file" (change)="onFileSelected($event, i)"
                             [ngClass]="{'error-border':img.invalid && (img.dirty||img.touched)}" />
@@ -219,13 +220,13 @@
                       <div class="link-box">
                         <span class="base-url">{{ selectedBaseUrl }}</span>
                         <input id="link" type="text" formControlName="link" [placeholder]="currentPlaceholder"
-                          class="dynamic-input" [disabled]="!selectedBaseUrl" />
+                          class="dynamic-input" />
                       </div>
                       <small style="color: #888; font-style: italic;">Full link: {{ fullLink }}</small>
                     </div>
                   </form>
                   <div class="submit mt-3">
-                    <button type="submit" class="glossy-submit-btn" [disabled]="entryForm.invalid">SUBMIT</button>
+                    <button type="submit" class="glossy-submit-btn" [disabled]="true">SUBMIT</button>
                   </div>
                 </div>
               </div>
@@ -238,7 +239,7 @@
           <div class="d-flex justify-content-center gap-3 mb-3">
             <button class="btn btn-success" (click)="openModal('culture')" data-bs-toggle="modal"
               data-bs-target="#entryModal">Add</button>
-            <button class="btn btn-danger">Delete</button>
+            <button class="btn btn-danger" disabled>Delete</button>
           </div>
         </div>
 
@@ -247,7 +248,7 @@
           <div class="d-flex justify-content-center gap-3 mb-3">
             <button class="btn btn-success" (click)="openModal('food')" data-bs-toggle="modal"
               data-bs-target="#entryModal">Add</button>
-            <button class="btn btn-danger">Delete</button>
+            <button class="btn btn-danger" disabled>Delete</button>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { StoryService } from 'src/app/services/story.service';
 import { Story } from 'src/app/models/story';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-story-details',
   templateUrl: './story-details.component.html',
   styleUrls: ['./story-details.component.scss']
