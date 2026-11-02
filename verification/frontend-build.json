@@ -1,12 +1,12 @@
 {
-  "verified_at": "2026-11-01T16:36:22.101823+00:00",
+  "verified_at": "2026-11-02T05:08:01.062699+00:00",
   "branch": "release-v1",
-  "base_commit": "893cf9d9edec1881de829d0b21a0e9d01e31f097",
+  "base_commit": "f6af46e855a00d3974958dc2f400e5c0bb6e7d27",
   "source_changes_uncommitted": true,
   "angular": "21.2.25",
   "node": "24.22.2",
   "tests": {
-    "tests": 49,
+    "tests": 65,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -23,10 +23,12 @@
     "chunk-HVUFEJBH.js": "aa655f36dc0d570759288e5bc6edb95056366ab826a53c111a89091362fa0206",
     "chunk-LYINSWNG.js": "a2fcbac0545fcdb18ae72d4abce2d7e3365b390a5d27d739294c4022590fe475",
     "chunk-OHBPZJTZ.js": "6f955ad6acb2494d3d5fa353565733d13118feddad7b669e06c1ea58b9343789",
-    "index.html": "35817f2659e4cb0dd3cd9a98e15b4c89f4be7802b033858180201ccd1b9a265a",
-    "main-2EANLNQT.js": "b2e173df8bc312d89dbef1c3e8acd9c95a92b8b7079c5b4db4528231f8fb060a",
+    "index.html": "0400dfa2604ca9815da0e671d8d1be067f4ff5bfb7ef961f81a096b38052ff78",
+    "main-QRD7A32C.js": "af9150b98046e8f487783571cb2f01c02781a039601800adadcaf7c535af338b",
     "polyfills-OMGXLRKZ.js": "e17f0df06722c6970921eb3a134e49734e69c9ac0f460edce43547cca52b2996",
     "scripts-7SWBP3MU.js": "1e7a2a7ad0ffe985357a680d1aac010e3e65b605d4fe65ba79582341a75bdf55",
     "styles-3MGI3WTN.css": "aa91bbccec25ae4927c6d89c04aa84f2544052338f2aa7a70ad964b7f580bcca"
-  }
+  },
+  "auth_tests": 25,
+  "local_browser_revocation_persisted": true
 }

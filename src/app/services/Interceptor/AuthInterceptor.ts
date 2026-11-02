@@ -12,11 +12,13 @@ export class AuthInterceptor implements HttpInterceptor {
     const api = req.url.startsWith(`${API_BASE_URL}/v1/`) || req.url.startsWith(`${API_BASE_URL}/actuator/`);
     const authEndpoint = /\/v1\/(?:login|generateOTP|verifyOTP|jwt\/generate|jwt\/validate)(?:\?|$)/.test(req.url);
     // Public reads must keep working if a session expires. Never send credentials to other hosts/assets.
-    const protectedRequest = api && !authEndpoint && (req.method !== 'GET' || req.url.includes('/actuator/'));
+    const publicHealth = req.method === 'GET' && /\/actuator\/health(?:[/?]|$)/.test(req.url);
+    const protectedRequest = api && !authEndpoint && !publicHealth && (req.method !== 'GET' || req.url.includes('/actuator/'));
     const token = protectedRequest ? this.auth.token : null;
-    const outgoing = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
+    const outgoing = token && !req.headers.has('Authorization') ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
     return next.handle(outgoing).pipe(catchError((error: HttpErrorResponse) => {
-      if (protectedRequest && error.status === 401 && outgoing.headers.has('Authorization')) this.auth.expireSession();
+      if (protectedRequest && error.status === 401 && this.auth.token
+          && outgoing.headers.get('Authorization') === `Bearer ${this.auth.token}`) this.auth.expireSession();
       return throwError(() => error);
     }));
   }
