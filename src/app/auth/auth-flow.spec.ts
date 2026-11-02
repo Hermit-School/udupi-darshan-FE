@@ -11,8 +11,9 @@ import { AdminComponent } from '../pages/admin/admin.component';
 import { adminGuard } from '../guards/admin.guard';
 import { API_BASE_URL } from 'src/constants/routes';
 
-function tokenFor(username: string, expires = Math.floor(Date.now() / 1000) + 3600): string {
-  return `header.${btoa(JSON.stringify({ sub: username, exp: expires }))}.signature`;
+function tokenFor(username: string, expires = Math.floor(Date.now() / 1000) + 3600, claims = {}, alg = 'HS256'): string {
+  return `${btoa(JSON.stringify({ alg }))}.${btoa(JSON.stringify({ sub: username, exp: expires,
+    iss: 'udupi-darshan', aud: ['udupi-darshan-api'], ...claims }))}.signature`;
 }
 
 describe('Admin authentication contract', () => {
@@ -29,7 +30,7 @@ describe('Admin authentication contract', () => {
     auth = TestBed.inject(AuthService); http = TestBed.inject(HttpTestingController);
     client = TestBed.inject(HttpClient); router = TestBed.inject(Router);
   });
-  afterEach(() => { http.verify(); auth.clearSession(); });
+  afterEach(() => { http.verify(); auth.clearSession(); vi.useRealTimers(); });
   function requestCode(): void {
     auth.requestOtp('admin', 'test-password').subscribe();
     const login = http.expectOne(`${API_BASE_URL}/v1/login`);
@@ -41,12 +42,18 @@ describe('Admin authentication contract', () => {
     expect(otp.request.responseType).toBe('text');
     otp.flush('Mail Sent Successfully...');
   }
-  function signIn(): string {
-    requestCode(); const token = tokenFor('admin');
+  function signIn(token = tokenFor('admin')): string {
+    requestCode();
     auth.verifyOtp('123456').subscribe();
     const verify = http.expectOne(`${API_BASE_URL}/v1/verifyOTP`);
     expect(verify.request.body).toEqual({ username: 'admin', otp: '123456' });
-    verify.flush(token); return token;
+    verify.flush(token); approveAccess(token); return token;
+  }
+  function approveAccess(token: string): void {
+    const access = http.expectOne(`${API_BASE_URL}/actuator/info`);
+    expect(access.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
+    expect(auth.isAdmin).toBe(false);
+    access.flush({});
   }
 
   it('does not authenticate before server OTP verification', () => {
@@ -54,6 +61,7 @@ describe('Admin authentication contract', () => {
     auth.verifyOtp('123456').subscribe();
     expect(auth.isAdmin).toBe(false);
     http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
+    approveAccess(tokenFor('admin'));
     expect(auth.isAdmin).toBe(true);
   });
   it('rejects non-admin accounts without sending an OTP', () => {
@@ -70,6 +78,7 @@ describe('Admin authentication contract', () => {
     expect(failed).toBe(true); expect(auth.isAdmin).toBe(false);
     auth.verifyOtp('123456').subscribe();
     http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
+    approveAccess(tokenFor('admin'));
     expect(auth.isAdmin).toBe(true);
   });
   it('sends bearer tokens only on protected requests to this API', () => {
@@ -100,12 +109,74 @@ describe('Admin authentication contract', () => {
     vi.useFakeTimers();
     requestCode(); auth.verifyOtp('123456').subscribe();
     http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin', Math.floor(Date.now()/1000)+2));
+    approveAccess(tokenFor('admin', Math.floor(Date.now()/1000)+2));
     expect(auth.isAdmin).toBe(true); await vi.advanceTimersByTimeAsync(2100); expect(auth.token).toBeNull();
     vi.useRealTimers();
   });
   it('guards both admin routes until a valid session exists', () => {
     const evaluate = () => TestBed.runInInjectionContext(() => adminGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot));
     expect(evaluate() instanceof UrlTree).toBe(true); signIn(); expect(evaluate()).toBe(true);
+  });
+  it.each([
+    ['wrong subject', () => tokenFor('someone-else')],
+    ['expired', () => tokenFor('admin', Math.floor(Date.now()/1000)-60)],
+    ['wrong issuer', () => tokenFor('admin', undefined, { iss: 'other' })],
+    ['wrong audience', () => tokenFor('admin', undefined, { aud: ['other-api'] })],
+    ['missing audience', () => tokenFor('admin', undefined, { aud: null })],
+    ['wrong algorithm', () => tokenFor('admin', undefined, {}, 'HS512')],
+    ['invalid expiry', () => tokenFor('admin', undefined, { exp: 'tomorrow' })],
+    ['malformed', () => 'not-a-jwt']
+  ])('rejects a %s token without opening a session', (_, makeToken) => {
+    requestCode(); let failed = false;
+    auth.verifyOtp('123456').subscribe({ error: () => failed = true });
+    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(makeToken());
+    http.expectNone(`${API_BASE_URL}/actuator/info`);
+    expect(failed).toBe(true); expect(auth.token).toBeNull();
+  });
+  it.each([401, 403])('requires current server admin authorization (%s)', status => {
+    requestCode(); let failed = false;
+    auth.verifyOtp('123456').subscribe({ error: () => failed = true });
+    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
+    expect(auth.token).toBeNull();
+    http.expectOne(`${API_BASE_URL}/actuator/info`).flush('', { status, statusText: 'Denied' });
+    expect(failed).toBe(true); expect(auth.isAdmin).toBe(false);
+  });
+  it('does not restore a session if OTP verification finishes after sign-out', () => {
+    requestCode(); let failed = false;
+    auth.verifyOtp('123456').subscribe({ error: () => failed = true });
+    const verify = http.expectOne(`${API_BASE_URL}/v1/verifyOTP`);
+    auth.logout().subscribe(); verify.flush(tokenFor('admin'));
+    http.expectNone(`${API_BASE_URL}/actuator/info`);
+    expect(failed).toBe(true); expect(auth.token).toBeNull();
+  });
+  it('does not restore a session if the admin access check finishes after sign-out', () => {
+    requestCode(); let failed = false;
+    auth.verifyOtp('123456').subscribe({ error: () => failed = true });
+    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
+    const access = http.expectOne(`${API_BASE_URL}/actuator/info`);
+    auth.logout().subscribe(); access.flush({});
+    expect(failed).toBe(true); expect(auth.token).toBeNull();
+  });
+  it('ignores an old request failure after a new sign-in', () => {
+    signIn(); client.post(`${API_BASE_URL}/v1/food/postFood`, {}).subscribe({ error: () => {} });
+    const previous = http.expectOne(`${API_BASE_URL}/v1/food/postFood`);
+    const current = signIn(tokenFor('admin', Math.floor(Date.now()/1000)+7200));
+    previous.flush('', { status: 401, statusText: 'Unauthorized' });
+    expect(auth.token).toBe(current); expect(auth.isAdmin).toBe(true);
+  });
+  it('preserves the token being revoked if a new sign-in completes before subscription', () => {
+    const previous = signIn(); const revoke$ = auth.logout();
+    const current = signIn(tokenFor('admin', Math.floor(Date.now()/1000)+7200));
+    revoke$.subscribe({ error: () => {} });
+    const revoke = http.expectOne(`${API_BASE_URL}/v1/jwt/revoke`);
+    expect(revoke.request.headers.get('Authorization')).toBe(`Bearer ${previous}`);
+    revoke.flush('', { status: 401, statusText: 'Already revoked' });
+    expect(auth.token).toBe(current);
+  });
+  it('keeps public health requests free of session credentials', () => {
+    signIn(); client.get(`${API_BASE_URL}/actuator/health`).subscribe();
+    const health = http.expectOne(`${API_BASE_URL}/actuator/health`);
+    expect(health.request.headers.has('Authorization')).toBe(false); health.flush({ status: 'UP' });
   });
   it('shows a real error and never navigates after incorrect credentials', () => {
     const fixture = TestBed.createComponent(AdminComponent); fixture.detectChanges();
@@ -126,6 +197,8 @@ describe('Admin authentication contract', () => {
     expect(component.phase).toBe('otp'); expect(navigate).not.toHaveBeenCalled();
     component.otpForm.setValue({ otp: '123456' }); component.verify();
     http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
+    expect(navigate).not.toHaveBeenCalled();
+    approveAccess(tokenFor('admin'));
     expect(navigate).toHaveBeenCalledWith(['/admindashboard']); fixture.destroy();
   });
 });

@@ -1,13 +1,15 @@
-# Frontend verification — November 1, 2026
+# Frontend verification — November 2, 2026
 
 Branch: `release-v1`. Changes are local and uncommitted; no frontend source was pushed and no Firebase deployment was performed.
 
 ## Results
 
 - Clean `npm ci` succeeds using Node 24.22.2 and the committed-format lockfile.
-- `npm run verify` succeeds: **49 tests pass**, full npm audit reports **zero findings**, and the optimized production build succeeds.
+- `npm run verify` succeeds: **65 tests pass** (including 25 authentication tests), full npm audit reports **zero findings**, and the optimized production build succeeds.
+- Latest JWT verification: returned tokens require HS256, the expected issuer/audience/subject and a valid expiry; the backend confirms current admin access before the frontend opens a session. Regression tests cover delayed responses after logout, delayed failures from older sessions, and revocation-header preservation.
 - Tests cover the password/OTP/token contract, admin guard, expiry/logout, restricted bearer headers, UI authentication failures, real backend content URLs, destination deep links and error handling, story rendering, literal search, delayed search-index loading, mobile menu lifecycle and prevention of false submission success.
 - Safari checks against an isolated local backend passed: public destination cards/details, story list/details, populated search and result navigation, unauthenticated dashboard redirection, incorrect password rejection, successful captured-OTP sign-in, dashboard access and logout. The unavailable submission notice also rendered and closed correctly.
+- Fresh Safari JWT checks against the current backend Docker image and disposable PostgreSQL/local SMTP passed: unauthenticated dashboard redirection, wrong-password and invalid-OTP errors, correct-OTP dashboard access, and logout. Logout persisted a revocation in the disposable database. Production builds contain the deployed HTTPS backend URL and no fixture credentials.
 - No production account or content was created, and no external email was sent. Production admin sign-in remains unverified because no admin account was provisioned.
 - Workflow YAML parses, and Firebase's configured public directory contains the generated `index.html` and bundled assets. The production bundle contains the deployed HTTPS backend URL and excludes local preview credentials, fixture code and backend credential names.
 - See `verification/frontend-build.json` for artifact checksums and `verification/npm-audit.json` for the point-in-time full dependency report.
