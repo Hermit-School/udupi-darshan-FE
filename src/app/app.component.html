@@ -1,10 +1,14 @@
 <div class="app-container">
+    @if (!hidePublicChrome) {
     <header>
         <app-navbar [detailsComponent]="detailsComponent"></app-navbar>
     </header>
+    }
     <app-loading></app-loading>
     <div class="main-content">
         <router-outlet></router-outlet>
     </div>
-    <app-footer></app-footer>
+    @if (!hidePublicChrome) {
+      <app-footer></app-footer>
+    }
 </div>

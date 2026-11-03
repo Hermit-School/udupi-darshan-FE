@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,6 +17,11 @@ export class AdminComponent implements OnDestroy {
   busy = false;
   error = '';
   showPassword = false;
+  @ViewChild('codeInput') set codeInput(input: ElementRef<HTMLInputElement> | undefined) {
+    if (input) queueMicrotask(() => {
+      if (input.nativeElement.isConnected) input.nativeElement.focus();
+    });
+  }
   private destroyed = new Subject<void>();
   constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {}
 
