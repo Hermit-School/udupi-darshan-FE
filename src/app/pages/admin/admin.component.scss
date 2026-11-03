@@ -32,14 +32,9 @@
 .temple { width: 100%; height: auto; opacity: .35; filter: brightness(0) invert(1); }
 .sign-in { padding: clamp(1.25rem, 5vw, 3.5rem); min-width: 0; }
 .back, .help { color: #9e3900; font-weight: 650; text-underline-offset: .2em; }
-.back { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; font-size: .875rem; }
-.steps { display: flex; flex-wrap: wrap; gap: .65rem 1rem; padding: 0; margin: 1.25rem 0; list-style: none; }
-.steps li { display: flex; align-items: center; gap: .45rem; color: #555d68; font-size: .8rem; font-weight: 650; }
-.steps span { display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: #f0eeec; }
-.steps [aria-current], .steps .complete { color: #9e3900; }
-.steps [aria-current] span, .steps .complete span { background: #9e3900; color: white; }
+.back { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; margin-bottom: 1.25rem; font-size: .875rem; }
 h1 { font-size: clamp(1.75rem, 4vw, 2.6rem); font-weight: 750; letter-spacing: -.045em; margin: 0 0 .5rem; }
-.intro, .security { color: #555d68; line-height: 1.55; }
+.intro { color: #555d68; line-height: 1.55; }
 .intro { margin-bottom: 1.5rem; }
 label { display: block; font-size: .875rem; font-weight: 700; margin: 0 0 .4rem; }
 input {
@@ -56,7 +51,6 @@ input {
 .password { position: relative; }
 .password input { padding-right: 4.5rem; }
 .toggle { position: absolute; right: .25rem; top: .125rem; height: 2.75rem; padding: 0 .65rem; border: 0; border-radius: .45rem; background: white; color: #9e3900; font-size: .875rem; font-weight: 700; }
-.code { letter-spacing: .25em; font-variant-numeric: tabular-nums; }
 .primary {
   display: flex;
   align-items: center;
@@ -75,10 +69,7 @@ input {
 .primary:hover:not(:disabled) { background: #f25a00; }
 .primary:disabled { background: #f1ebe6; color: #5d534c; }
 .help { display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: .45rem; padding: 0; border: 0; background: transparent; text-align: left; text-decoration: underline; font-size: .875rem; }
-.help:disabled { opacity: .65; }
 .notice { display: flex; gap: .6rem; padding: .75rem; border: 1px solid #f0c9c4; border-radius: .65rem; background: #fff4f2; color: #822b22; font-size: .875rem; }
-.security { margin: .9rem 0 0; padding-top: 1rem; border-top: 1px solid #e8e2de; font-size: .8rem; }
-.security i { margin-right: .25rem; }
 :where(a, button, input):focus-visible { outline: 3px solid #9e3900; outline-offset: 3px; }
 @media (max-width: 700px) {
   .access { align-items: start; }
