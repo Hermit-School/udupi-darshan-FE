@@ -19,6 +19,8 @@ import { Details } from './models/card';
 export class AppComponent implements OnInit {
   @ViewChild(DetailsComponent) detailsComponent!: DetailsComponent;
 
+  hidePublicChrome = false;
+
   private readonly destroyRef = inject(DestroyRef);
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
@@ -42,6 +44,7 @@ export class AppComponent implements OnInit {
         })
       )
       .subscribe(data => {
+        this.hidePublicChrome = data?.['hidePublicChrome'] === true;
         if (data?.['title']) {
           this.titleService.setTitle(data['title']);
         }
