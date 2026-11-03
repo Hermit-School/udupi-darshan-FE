@@ -1,33 +1,27 @@
-import { DashboardnavbarComponent } from '../../components/admin-dashboard-components/dashboardnavbar/dashboardnavbar.component';
+import { Component } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AdminNewEntriesInterface } from 'src/app/models/adminnewentrydata';
-import { AdminserviceService } from 'src/app/services/adminservice.service';
 
-@Component({ standalone: true, imports: [DashboardnavbarComponent],
+@Component({
+  standalone: true,
+  imports: [RouterLink],
   selector: 'app-admindashboard',
   templateUrl: './admindashboard.component.html',
-  styleUrls: ['./admindashboard.component.scss']
+  styleUrls: ['./admindashboard.component.scss'],
 })
-export class AdmindashboardComponent implements OnInit {
+export class AdmindashboardComponent {
+  readonly sections = [
+    { title: 'Nature', icon: 'tree', path: '/new-entry/nature', description: 'Beaches, trails, and scenic places.' },
+    { title: 'Culture', icon: 'bank', path: '/new-entry/culture', description: 'Temples, traditions, and heritage.' },
+    { title: 'Food', icon: 'cup-hot', path: '/new-entry/food', description: 'Local dishes, cafés, and restaurants.' },
+    { title: 'Stories', icon: 'journal-text', path: '/new-entry/story', description: 'Publish a story about Udupi.' },
+    { title: 'Ads', icon: 'megaphone', path: '/new-entry/ads', description: 'Add an ad image and an optional website link.' },
+  ];
 
-  adminNewEntryListData$: AdminNewEntriesInterface | undefined;
+  constructor(private auth: AuthService, private router: Router) {}
 
-  constructor(private adminService: AdminserviceService, private auth: AuthService, private router: Router) {
-    this.onLoadData();
-   }
   signOut(): void {
     this.auth.logout().subscribe({ error: () => { /* Local session was already cleared. */ } });
     void this.router.navigate(['/admin']);
   }
-  ngOnInit(): void {
-  }
-  onLoadData() {
-    this.adminService.adminEntryData.subscribe((data) => {
-      console.log(data);
-      this.adminNewEntryListData$ = data;
-    })
-  }
-
 }
