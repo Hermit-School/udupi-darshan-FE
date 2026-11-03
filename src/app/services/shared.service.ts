@@ -1,6 +1,11 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
+import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
+import { API_BASE_URL } from 'src/constants/routes';
+import { BACKGROUND_REQUEST } from './background-request';
+import { BehaviorSubject, Observable, catchError, finalize, forkJoin, map, of, shareReplay, tap, throwError } from 'rxjs';
 import { Details } from '../models/card';
+
+export type SearchEntry = Pick<Details, 'id' | 'name' | 'category'> & Partial<Pick<Details, 'label' | 'location' | 'link'>> & { summary?: string | null };
 
 @Injectable({
     providedIn: 'root',
@@ -8,18 +13,52 @@ import { Details } from '../models/card';
 export class SharedService {
     private searchTextSource = new BehaviorSubject<string>('');
     searchText$ = this.searchTextSource.asObservable();
-    private detailsData: Details[] = [];
+    private detailsData: SearchEntry[] = [];
     private updatedAt = 0;
-    private searchResults = new BehaviorSubject<Details[]>([]);
+    private searchResults = new BehaviorSubject<SearchEntry[]>([]);
 
-    constructor() { }
+    readonly indexLoading = signal(false);
+    readonly indexError = signal(false);
+    private pending?: Observable<SearchEntry[]>;
+
+    constructor(private http?: HttpClient) { }
+
+    loadIndex(): Observable<SearchEntry[]> {
+        if (this.pending) return this.pending;
+        if (!this.http || (this.updatedAt && Date.now() - this.updatedAt < 60_000)) return of(this.detailsData);
+        const http = this.http;
+        const context = new HttpContext().set(BACKGROUND_REQUEST, true);
+        this.indexLoading.set(true);
+        this.indexError.set(false);
+        this.pending = http.get<SearchEntry[]>(API_BASE_URL + '/v1/destination-search', { context }).pipe(
+            catchError((error: HttpErrorResponse) => {
+                // Older backend deployments have no index route. Fetch only when needed during rollout.
+                if (error.status !== 401 && error.status !== 404) return throwError(() => error);
+                return forkJoin(['Nature', 'Culture', 'Food'].map(category =>
+                    http.get<Details[]>(API_BASE_URL + '/v1/' + category.toLowerCase() + '/get' + category, { context }),
+                )).pipe(map(groups => groups.flat().map(({ id, name, category, label, location, link, descr }) =>
+                    ({ id, name, category, label, location, link, summary: descr?.slice(0, 180) }))));
+            }),
+            tap(items => this.setDetailsData(items)),
+            catchError(() => { this.indexError.set(true); return of(this.detailsData); }),
+            finalize(() => { this.pending = undefined; this.indexLoading.set(false); }),
+            shareReplay({ bufferSize: 1, refCount: false }),
+        );
+        return this.pending;
+    }
+
+    resolveRelatedLinks(items: { link?: string }[] | undefined): void {
+        if (items?.some(item => /^\/?[^/:?#]+$/.test(item.link ?? '') && !this.relatedLink(item.link))) {
+            this.loadIndex().subscribe();
+        }
+    }
 
     setSearchText(text: string): void {
         this.searchTextSource.next(text);
         this.search(text);
     }
 
-    setDetailsData(data: Details[]): void {
+    setDetailsData(data: SearchEntry[]): void {
         this.detailsData = [...data];
         this.updatedAt = Date.now();
         if (this.searchTextSource.value) this.search(this.searchTextSource.value);
@@ -28,14 +67,9 @@ export class SharedService {
     private search(query: string): void {
         const words = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
         this.searchResults.next(words.length ? this.detailsData.filter(item => {
-            const text = [item.name, item.descr, item.category, item.label, item.location].join(' ').toLowerCase();
+            const text = [item.name, item.summary, item.category, item.label, item.location].join(' ').toLowerCase();
             return words.every(word => text.includes(word));
         }) : []);
-    }
-
-    cachedDestination(section: string, id: number): Details | undefined {
-        if (Date.now() - this.updatedAt > 60_000) return undefined;
-        return this.detailsData.find(item => item.id === id && item.category?.toLowerCase() === section);
     }
 
     relatedRoute(slug: string): string[] | null {
@@ -61,21 +95,14 @@ export class SharedService {
     } catch { return null; }
   }
 
-    getSearchResults(): Observable<Details[]> {
+    getSearchResults(): Observable<SearchEntry[]> {
         return this.searchResults.asObservable();
     }
 
-    searchNature(query: string): void {
-        const lowerQuery = query.toLowerCase();
-        const filtered = this.detailsData.filter((item) =>
-            item.name.toLowerCase().includes(lowerQuery) &&
-            item.category?.toLowerCase() === 'nature'
-        );
-        this.searchResults.next(filtered);
-    }
+
 }
 
-export function matchesDestinationSlug(item: Details, slug: string): boolean {
+export function matchesDestinationSlug(item: SearchEntry, slug: string): boolean {
     const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     if (!normalize(slug)) return false;
     const tail = item.link?.split(/[/?#]/).filter(Boolean).at(-1);

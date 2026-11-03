@@ -10,7 +10,7 @@ import { FoodService } from '../services/food.service';
 import { CultureService } from '../services/culture.service';
 import { natureServiceService } from '../services/nature.service';
 import { StoryService } from '../services/story.service';
-import { SharedService } from '../services/shared.service';
+import { SearchEntry, SharedService } from '../services/shared.service';
 import { Details } from '../models/card';
 import { Story } from '../models/story';
 import { DetailsComponent } from '../pages/details/details.component';
@@ -111,7 +111,7 @@ describe('Public content rendering regressions', () => {
     fixture.destroy();
   });
   it('refreshes a pending search when public data finishes loading', () => {
-    const shared=new SharedService(); let results: Details[]=[];
+    const shared=new SharedService(); let results: SearchEntry[]=[];
     shared.getSearchResults().subscribe(data => results=data);
     shared.setSearchText('Lake'); expect(results).toEqual([]);
     shared.setDetailsData([{id:42,name:'Preview Lake',category:'Nature'} as Details]);

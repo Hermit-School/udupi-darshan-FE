@@ -47,6 +47,8 @@ test('mobile visitors can navigate to public content and unknown routes land on 
   await mockApi(page);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/#/home');
+  await expect.poll(() => page.locator('img[srcset*="a6-480"]').evaluate((img: HTMLImageElement) => img.currentSrc))
+    .toContain('/assets/images/a6-480.jpg');
   const museum = page.getByRole('img', { name: 'Corporation Bank Heritage Museum' });
   await museum.scrollIntoViewIfNeeded();
   await expect.poll(() => museum.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
@@ -200,7 +202,7 @@ test('mobile Write to us opens the restored form and closes cleanly', async ({ p
   await expect(page.locator('.modal-backdrop, .offcanvas-backdrop')).toHaveCount(0);
 });
 
-test('search opens loaded details immediately and legacy links stay in the same tab', async ({ page, context }) => {
+test('search loads one compact index on demand and legacy links stay in the same tab', async ({ page, context }) => {
   await mockApi(page);
   const destination = { id: 42, name: 'Preview Lake', category: 'Nature', label: 'Best Of Nature',
     link: '/preview-lake', descr: 'Scenic shore', images: [], keyPoints: [], discover: [], impInfo: [],
@@ -208,19 +210,34 @@ test('search opens loaded details immediately and legacy links stay in the same 
       { name: 'Other Lake', description: 'A nearby stop', link: '/other-lake' },
       { name: 'Unknown stop', description: 'Read about this stop here', link: '/missing-stop' },
     ] };
-  await page.route(api + '/v1/nature/getNature', r => r.fulfill({ json: [
-    destination, { ...destination, id: 43, name: 'Other Lake', link: '/other-lake', dontMissThese: [] },
-  ] }));
+  const listingReads: string[] = [];
+  let indexReads = 0;
+  page.on('request', r => {
+    if (/\/v1\/(nature|food|culture)\/get/.test(r.url())) listingReads.push(r.url());
+  });
+  await page.route(api + '/v1/destination-search', r => {
+    indexReads++;
+    return r.fulfill({ json: [
+      { id: 42, name: 'Preview Lake', category: 'Nature', link: '/preview-lake', summary: 'Scenic shore' },
+      { id: 43, name: 'Other Lake', category: 'Nature', link: '/other-lake' },
+    ] });
+  });
   let detailReads = 0;
   await page.route(api + '/v1/nature/42', r => { detailReads++; return r.fulfill({ json: destination }); });
+  await page.route(api + '/v1/nature/43', r => r.fulfill({ json: { ...destination, id: 43, name: 'Other Lake', dontMissThese: [] } }));
   await page.goto('/#/home');
+  await expect(page.getByRole('searchbox', { name: 'Search destinations' })).toBeVisible();
+  expect(indexReads).toBe(0);
+  expect(listingReads).toEqual([]);
   await page.getByRole('searchbox', { name: 'Search destinations' }).fill('preview');
   const result = page.getByRole('link', { name: /Preview Lake/ });
   await expect(result).toBeVisible();
   await result.click();
   await expect(page).toHaveURL(/#\/details\/nature\/42$/);
   await expect(page.getByText('Scenic shore')).toBeVisible();
-  expect(detailReads).toBe(0);
+  expect(indexReads).toBe(1);
+  expect(detailReads).toBe(1);
+  expect(listingReads).toEqual([]);
   await expect(page.getByRole('link', { name: 'View details' })).toHaveCount(1);
   await page.getByRole('link', { name: 'View details' }).click();
   await expect(page).toHaveURL(/#\/details\/nature\/43$/);
@@ -230,4 +247,30 @@ test('search opens loaded details immediately and legacy links stay in the same 
   await page.goto('/#/dashboard');
   await expect(page).toHaveURL(/#\/admin\?access=required$/);
   await expect(page.getByText('Sign in as an administrator to open this page.')).toBeVisible();
+});
+
+test('search falls back only on demand when the backend has no index yet', async ({ page }) => {
+  await mockApi(page);
+  let listingReads = 0;
+  let indexReads = 0;
+  await page.route(api + '/v1/destination-search', r => {
+    indexReads++;
+    return r.fulfill({ status: 401, json: {} });
+  });
+  for (const category of ['Nature', 'Culture', 'Food']) {
+    await page.route(api + '/v1/' + category.toLowerCase() + '/get' + category, r => {
+      listingReads++;
+      return r.fulfill({ json: category === 'Food' ? [{ id: 8, name: 'Market café', category }] : [] });
+    });
+  }
+  await page.goto('/#/home');
+  const search = page.getByRole('searchbox', { name: 'Search destinations' });
+  await expect(search).toBeVisible();
+  expect(listingReads).toBe(0);
+  await search.fill('market');
+  await expect(page.getByRole('link', { name: /Market café/ })).toBeVisible();
+  await search.fill('market café');
+  await expect(page.getByRole('link', { name: /Market café/ })).toBeVisible();
+  expect(indexReads).toBe(1);
+  expect(listingReads).toBe(3);
 });

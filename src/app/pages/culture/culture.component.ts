@@ -1,9 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CultureService } from 'src/app/services/culture.service';
 import { Details } from 'src/app/models/card';
 
-@Component({ standalone: false,
+@Component({ standalone: true, imports: [CommonModule],
   selector: 'app-culture',
   templateUrl: './culture.component.html',
   styleUrls: ['./culture.component.scss']
