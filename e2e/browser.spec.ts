@@ -20,14 +20,8 @@ async function mockApi(page: Page, allowAdmin = true) {
       'access-control-allow-methods': 'GET, POST, DELETE, OPTIONS' };
     if (method === 'OPTIONS') return route.fulfill({ status: 204, headers });
     calls.push(method + ' ' + path);
-    if (method === 'POST' && ['/v1/login', '/v1/generateOTP'].includes(path)) {
+    if (method === 'POST' && path === '/v1/admin/sign-in') {
       expect(request.postDataJSON()).toEqual({ userName: 'fixture-admin', password: 'fixture-password' });
-      return path === '/v1/login'
-        ? route.fulfill({ headers, json: [{ username: 'fixture-admin', permission: 'admin' }] })
-        : route.fulfill({ headers, body: 'sent' });
-    }
-    if (method === 'POST' && path === '/v1/verifyOTP') {
-      expect(request.postDataJSON()).toEqual({ username: 'fixture-admin', otp: '123456' });
       return route.fulfill({ headers, body: token });
     }
     if (path === '/actuator/info' || path === '/v1/jwt/revoke') {
@@ -46,9 +40,7 @@ async function mockApi(page: Page, allowAdmin = true) {
 async function signIn(page: Page) {
   await page.getByLabel('Username').fill('fixture-admin');
   await page.getByLabel('Password', { exact: true }).fill('fixture-password');
-  await page.getByRole('button', { name: 'Send sign-in code' }).click();
-  await page.getByLabel('Email verification code').fill('123456');
-  await page.getByRole('button', { name: 'Verify and sign in' }).click();
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
 }
 
 test('mobile visitors can navigate to public content and unknown routes land on 404', async ({ page }) => {
@@ -69,7 +61,7 @@ test('mobile visitors can navigate to public content and unknown routes land on 
   await expect(page).toHaveURL(/#\/404$/);
 });
 
-test('admin guard, OTP sign-in and sign-out work in a browser', async ({ page }) => {
+test('admin guard, password sign-in and sign-out work in a browser', async ({ page }) => {
   const calls = await mockApi(page);
   await page.goto('/#/admindashboard');
   await expect(page).toHaveURL(/#\/admin$/);
@@ -93,13 +85,12 @@ test('a server role denial prevents access even after receiving a token', async 
   await expect(page).toHaveURL(/#\/admin$/);
 });
 
-test('mobile admin sign-in guides the user through the two steps', async ({ page }) => {
+test('mobile admin sign-in guides the user with a single form', async ({ page }) => {
   await mockApi(page);
   await page.setViewportSize({ width: 360, height: 800 });
   await page.goto('/#/admin');
   await expect(page.getByRole('heading', { name: 'Admin sign in' })).toBeVisible();
   await expect(page.getByRole('navigation')).toHaveCount(0);
-  await expect(page.locator('[aria-current="step"]')).toHaveText(/Account/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(360);
 
   await page.getByLabel('Username').fill('fixture-admin');
@@ -109,14 +100,7 @@ test('mobile admin sign-in guides the user through the two steps', async ({ page
   await expect(password).toHaveAttribute('type', 'text');
   await page.getByRole('button', { name: 'Hide password' }).click();
   await expect(password).toHaveAttribute('type', 'password');
-  await page.getByRole('button', { name: 'Send sign-in code' }).click();
-
-  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
-  await expect(page.locator('[aria-current="step"]')).toHaveText(/Verification/);
-  await expect(page.getByLabel('Email verification code')).toBeFocused();
-  await expect(page.getByRole('button', { name: 'Verify and sign in' })).toBeDisabled();
-  await page.getByRole('button', { name: 'Request a new code or change account' }).click();
-  await expect(password).toHaveValue('');
+  await expect(page.getByRole('button', { name: 'Sign in', exact: true })).toBeEnabled();
   await page.getByRole('link', { name: 'Back to public site' }).click();
   await expect(page).toHaveURL(/#\/home$/);
   await expect(page.getByRole('navigation').first()).toBeVisible();

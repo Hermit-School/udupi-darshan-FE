@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, defer, of, throwError } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { Observable, defer, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { API_BASE_URL } from 'src/constants/routes';
 
-interface LoginUser { username: string; permission: string; }
 interface SessionClaims { sub: string; exp: number; iss: string; aud: string | string[]; }
 
 @Injectable({ providedIn: 'root' })
@@ -14,7 +13,6 @@ export class AuthService {
   private expiresAt = 0;
   private admin = false;
   private expiryTimer?: ReturnType<typeof setTimeout>;
-  private pendingUsername: string | null = null;
   private sessionVersion = 0;
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -25,36 +23,14 @@ export class AuthService {
   }
   get isAdmin(): boolean { return !!this.token && this.admin; }
 
-  requestOtp(username: string, password: string): Observable<string> {
+  signIn(username: string, password: string): Observable<string> {
     return defer(() => {
       this.clearSession();
       const version = this.sessionVersion;
-      const credentials = { userName: username, password };
-      return this.http.post<LoginUser[]>(`${API_BASE_URL}/v1/login`, credentials).pipe(
-        switchMap(users => {
-          this.requireCurrent(version);
-          if (users.length !== 1 || users[0].username !== username || users[0].permission?.toLowerCase() !== 'admin') {
-            return throwError(() => new Error('This account does not have administrator access.'));
-          }
-          return this.http.post(`${API_BASE_URL}/v1/generateOTP`, credentials, { responseType: 'text' }).pipe(
-            tap(() => { this.requireCurrent(version); this.pendingUsername = users[0].username; })
-          );
-        })
-      );
-    });
-  }
-
-  verifyOtp(otp: string): Observable<string> {
-    return defer(() => {
-      if (!this.pendingUsername) return throwError(() => new Error('Sign in again to request a code.'));
-      const username = this.pendingUsername;
-      const version = this.sessionVersion;
-      return this.http.post(`${API_BASE_URL}/v1/verifyOTP`, { username, otp }, { responseType: 'text' }).pipe(
+      return this.http.post(`${API_BASE_URL}/v1/admin/sign-in`, { userName: username, password }, { responseType: 'text' }).pipe(
         switchMap(token => {
           this.requireCurrent(version);
           const claims = this.sessionClaims(token, username);
-          // OTPs are single-use. A failed access check requires a fresh sign-in.
-          this.pendingUsername = null;
           // The backend verifies the signature, audience, revocation, active account and current admin role.
           // Decoding JWT claims in the browser alone cannot establish authorization.
           return this.http.get(`${API_BASE_URL}/actuator/info`, {
@@ -110,7 +86,7 @@ export class AuthService {
     this.sessionVersion++;
     if (this.expiryTimer) clearTimeout(this.expiryTimer);
     this.expiryTimer = undefined;
-    this.tokenValue = null; this.expiresAt = 0; this.admin = false; this.pendingUsername = null;
+    this.tokenValue = null; this.expiresAt = 0; this.admin = false;
   }
   expireSession(): void {
     this.clearSession();

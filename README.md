@@ -25,7 +25,7 @@ See [VERIFICATION.md](VERIFICATION.md) for current results and release boundarie
 
 Run `npm run build`, `npx playwright install chromium`, and `npm run test:e2e`.
 The tests serve the production build locally and intercept backend API traffic
-with fixtures, including OTP and admin-role responses. No production account
+with fixtures, including sign-in and admin-role responses. No production account
 or email is used. Both PR and Firebase deploy workflows run the Chromium suite
 and the PR workflow retains its reports under `test-results/`.
 
