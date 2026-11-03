@@ -23,8 +23,7 @@ describe('Admin authentication contract', () => {
   let router: Router;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, ReactiveFormsModule],
-      declarations: [AdminComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule, ReactiveFormsModule, AdminComponent],
       providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }]
     });
     auth = TestBed.inject(AuthService); http = TestBed.inject(HttpTestingController);

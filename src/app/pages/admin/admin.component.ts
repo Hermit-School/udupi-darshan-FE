@@ -1,3 +1,6 @@
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,7 +9,7 @@ import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 
-@Component({ standalone: false, selector: 'app-admin', templateUrl: './admin.component.html', styleUrls: ['./admin.component.scss'] })
+@Component({ standalone: true, imports: [CommonModule, ReactiveFormsModule, RouterLink], selector: 'app-admin', templateUrl: './admin.component.html', styleUrls: ['./admin.component.scss'] })
 export class AdminComponent implements OnDestroy {
   loginForm = this.fb.nonNullable.group({ username: ['', Validators.required], password: ['', Validators.required] });
   otpForm = this.fb.nonNullable.group({ otp: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]] });

@@ -25,6 +25,10 @@ jobs:
         run: |
           npm ci
           npm run verify
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Test the production build in Chromium
+        run: npm run test:e2e
       - name: Retain frontend verification
         if: always()
         uses: actions/upload-artifact@v4
@@ -32,5 +36,5 @@ jobs:
           name: frontend-verification
           retention-days: 7
           path: |
-            test-results/junit.xml
+            test-results/
             dist/udupi-darshan-fe/

@@ -7,16 +7,13 @@ import { NatureComponent } from './pages/nature/nature.component';
 import { CultureComponent } from 'src/app/pages/culture/culture.component';
 import { AdvertisementsComponent } from 'src/app/pages/advertisements/advertisements.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
-import { AdminComponent } from './pages/admin/admin.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { DetailsComponent } from './pages/details/details.component';
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
 import { BlogDetailsComponent } from './components/blog-details/blog-details.component';
-import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
 import { FoodComponent } from './pages/food/food.component';
 import { StoryComponent } from 'src/app/pages/story/story.component';
 import { StoryDetailsComponent } from './pages/story-details/story-details.component';
-import { NewEntryComponent } from './components/admin-dashboard-components/new-entry/new-entry.component';
 
 
 const routes: Routes = [
@@ -25,13 +22,13 @@ const routes: Routes = [
   { path: ROUTES.CULTURE.path, component: CultureComponent, data: { title: ROUTES.CULTURE.title, metaDescription: ROUTES.CULTURE.metaDescription } },
   { path: ROUTES.FOOD.path, component: FoodComponent, data: { title: ROUTES.FOOD.title, metaDescription: ROUTES.FOOD.metaDescription } },
   { path: ROUTES.ADVERTISEMENTS.path, component: AdvertisementsComponent },
-  { path: 'new-entry', component: NewEntryComponent, canActivate: [adminGuard] },
-  { path: ROUTES.ADMIN.path, component: AdminComponent },
+  { path: 'new-entry', loadComponent: () => import('./components/admin-dashboard-components/new-entry/new-entry.component').then(m => m.NewEntryComponent), canActivate: [adminGuard] },
+  { path: ROUTES.ADMIN.path, loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent) },
   { path: ROUTES.LANDING.path, component: LandingPageComponent },
   { path: ROUTES.DETAILS.path, component: DetailsComponent },
   { path: ROUTES.NOT_FOUND.path, component: PagenotfoundComponent, data: { title: ROUTES.NOT_FOUND.title, metaDescription: ROUTES.NOT_FOUND.metaDescription } },
   { path: ROUTES.FORGOT_PASSWORD.path, component: ForgotpasswordComponent },
-  { path: ROUTES.ADMIN_DASHBOARD.path, component: AdmindashboardComponent, canActivate: [adminGuard] },
+  { path: ROUTES.ADMIN_DASHBOARD.path, loadComponent: () => import('./pages/admindashboard/admindashboard.component').then(m => m.AdmindashboardComponent), canActivate: [adminGuard] },
   { path: ROUTES.BLOG_DETAILS.path, component: BlogDetailsComponent },
   { path: ROUTES.STORY_DETAILS.path, component: StoryDetailsComponent },
   { path: ROUTES.STORY.path, component: StoryComponent },

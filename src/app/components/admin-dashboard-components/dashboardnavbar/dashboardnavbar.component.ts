@@ -1,10 +1,13 @@
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BASE_URLS, CATEGORIES, PLACEHOLDER_MAP } from 'src/constants/routes';
 
 declare var bootstrap: any;
 
-@Component({ standalone: false,
+@Component({ standalone: true, imports: [CommonModule, ReactiveFormsModule, RouterLink],
   selector: 'app-dashboardnavbar',
   templateUrl: './dashboardnavbar.component.html',
   styleUrls: ['./dashboardnavbar.component.scss']

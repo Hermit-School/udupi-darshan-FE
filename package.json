@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:e2e": "playwright test",
     "test:auth": "ng test --watch=false --include=src/app/auth/auth-flow.spec.ts",
     "audit:production": "npm audit --omit=dev --audit-level=low",
     "audit": "npm audit --audit-level=low",
@@ -18,9 +19,9 @@
     "@angular/compiler": "21.2.25",
     "@angular/core": "21.2.25",
     "@angular/forms": "21.2.25",
+    "@angular/localize": "21.2.25",
     "@angular/platform-browser": "21.2.25",
     "@angular/router": "21.2.25",
-    "@angular/localize": "21.2.25",
     "@ng-bootstrap/ng-bootstrap": "20.0.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "5.3.8",
@@ -31,13 +32,14 @@
     "zone.js": "~0.16.3"
   },
   "devDependencies": {
+    "@angular/build": "21.2.29",
     "@angular/cli": "21.2.29",
     "@angular/compiler-cli": "21.2.25",
-    "typescript": "~5.9.3",
-    "@angular/build": "21.2.29",
-    "vitest": "^4.0.8",
+    "@playwright/test": "1.64.1",
+    "@types/bootstrap": "^5.2.10",
     "jsdom": "^27.0.0",
-    "@types/bootstrap": "^5.2.10"
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.8"
   },
   "browser": {
     "fs": false

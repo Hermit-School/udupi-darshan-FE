@@ -1,8 +1,10 @@
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BASE_URLS, CATEGORIES, PLACEHOLDER_MAP } from 'src/constants/routes';
 
-@Component({ standalone: false,
+@Component({ standalone: true, imports: [CommonModule, ReactiveFormsModule],
   selector: 'app-new-entry',
   templateUrl: './new-entry.component.html',
   styleUrls: ['./new-entry.component.scss']
