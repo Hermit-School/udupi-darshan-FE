@@ -1,9 +1,8 @@
-import { Component, OnInit, inject, Input } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Story } from 'src/app/models/story';
 import { StoryService } from 'src/app/services/story.service';
 import { Router } from '@angular/router';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({ standalone: false,
   selector: 'app-story',
@@ -14,7 +13,9 @@ export class StoryComponent implements OnInit {
   stories: Story[] = [];
   chunkedStories: Story[][] = [];
 
-  private modalService = inject(NgbModal);
+  private readonly destroyRef = inject(DestroyRef);
+  loading = true;
+  failed = false;
 
   constructor(private router: Router, private storyService: StoryService) { }
 
@@ -26,22 +27,10 @@ export class StoryComponent implements OnInit {
   }
 
   fetchStories(): void {
-    this.storyService.getAllStories().subscribe(data => {
-      if (data.length === 0) {
-        this.nodataShow();
-      }
-      else {
-        this.stories = data;
-        this.chunkStories();
-      }
+    this.storyService.getAllStories().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: data => { this.stories = data; this.chunkStories(); this.loading = false; },
+      error: () => { this.failed = true; this.loading = false; },
     });
-  }
-  nodataShow() {
-    let modalRef = null;
-    modalRef = this.modalService.open(NgbdModalContent, {
-      centered: true
-    });
-    modalRef.componentInstance.name = 'No data';
   }
   chunkStories(): void {
     const chunkSize = 4;
@@ -52,28 +41,5 @@ export class StoryComponent implements OnInit {
   }
   getTruncatedContent(content: string, limit: number): string {
     return content.length > limit ? content.substring(0, limit) + '...' : content;
-  }
-}
-
-@Component({
-  selector: 'ngbd-modal-content',
-  standalone: true,
-  template: `
-		<div class="modal-header justify-content-center">
-        No Data , Please Try Again Later
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-outline-danger" (click)="closeModal()">Close</button>
-		</div>
-	`,
-})
-export class NgbdModalContent {
-  activeModal = inject(NgbActiveModal);
-
-  constructor(private router: Router) { }
-
-  closeModal(){
-    this.router.navigate(['/home']);
-    this.activeModal.close('close click');
   }
 }

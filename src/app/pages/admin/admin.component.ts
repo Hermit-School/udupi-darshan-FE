@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,7 +16,9 @@ export class AdminComponent implements OnDestroy {
   error = '';
   showPassword = false;
   private destroyed = new Subject<void>();
-  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {}
+  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService, private route: ActivatedRoute) {}
+
+  get accessRequired(): boolean { return this.route.snapshot.queryParamMap.get('access') === 'required'; }
 
   onSubmit(): void {
     if (this.busy || this.loginForm.invalid) { this.loginForm.markAllAsTouched(); return; }

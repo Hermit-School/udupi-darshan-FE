@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, DestroyRef, inject } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { filter, map, forkJoin, of, catchError } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DetailsComponent } from './pages/details/details.component';
 import { SharedService } from './services/shared.service';
 import { CultureService } from './services/culture.service';
 import { FoodService } from './services/food.service';
@@ -17,8 +16,6 @@ import { Details } from './models/card';
 })
 
 export class AppComponent implements OnInit {
-  @ViewChild(DetailsComponent) detailsComponent!: DetailsComponent;
-
   hidePublicChrome = false;
 
   private readonly destroyRef = inject(DestroyRef);

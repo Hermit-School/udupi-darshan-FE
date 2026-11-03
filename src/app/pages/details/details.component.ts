@@ -1,11 +1,12 @@
 import { Component, Input, NgModule, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { natureServiceService } from 'src/app/services/nature.service';
 import { CultureService } from 'src/app/services/culture.service';
 import { Details } from 'src/app/models/card';
 import { FoodService } from 'src/app/services/food.service';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
+import { matchesDestinationSlug, SharedService } from 'src/app/services/shared.service';
 
 @Component({ standalone: false,
   selector: 'app-details',
@@ -28,14 +29,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private natureService: natureServiceService,
     private cultureService: CultureService,
-    private foodService: FoodService
+    private foodService: FoodService,
+    private shared: SharedService
   ) { }
   ngOnInit(): void {
     this.routeSubscription = this.route.params.subscribe(params => {
-      const id = Number(params['id']);
-      const category = params['category'];
+      const rawId = params['id'];
+      const category = params['category'] ?? this.route.snapshot.data['legacyCategory'];
       this.currentCategory = category;
-      this.fetchData(category, id);
+      if (this.route.snapshot.data['legacyCategory'] && !/^\d+$/.test(rawId)) this.fetchLegacy(category, rawId);
+      else this.fetchData(category, Number(rawId));
     });
   }
 
@@ -49,12 +52,34 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (!service || !Number.isSafeInteger(id) || id <= 0) {
       this.loading = false; this.error = 'Destination not found.'; return;
     }
+    const cached = this.shared.cachedDestination(section, id);
+    if (cached) { this.card = cached; this.loading = false; return; }
     this.loading = true;
     this.requestSubscription = service(id).subscribe({
       next: card => { this.card = card; this.loading = false; },
       error: () => { this.loading = false; this.error = 'Unable to load this destination. Please try again.'; }
     });
   }
+
+  private fetchLegacy(section: string, slug: string): void {
+    this.requestSubscription?.unsubscribe();
+    this.card = null;
+    this.error = '';
+    this.currentSlideIndex = 0;
+    this.loading = true;
+    const source = section === 'nature' ? this.natureService.getAllNatures()
+      : section === 'culture' ? this.cultureService.getAllCultures() : this.foodService.getAllFoods();
+    this.requestSubscription = source.pipe(map(items => items.filter(item => matchesDestinationSlug(item, slug)))).subscribe({
+      next: matches => {
+        this.card = matches.length === 1 ? matches[0] : null;
+        this.error = this.card ? '' : 'Destination not found.';
+        this.loading = false;
+      },
+      error: () => { this.loading = false; this.error = 'Unable to load this destination. Please try again.'; },
+    });
+  }
+
+  relatedLink(link?: string): string | string[] | null { return this.shared.relatedLink(link); }
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe(); this.requestSubscription?.unsubscribe();
@@ -95,7 +120,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 @NgModule({
   declarations: [DetailsComponent],
   imports: [
-    CommonModule
+    CommonModule, RouterModule
   ]
 })
 export class DetailsModule { }

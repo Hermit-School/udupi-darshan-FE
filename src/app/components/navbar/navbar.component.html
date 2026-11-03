@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg sticky-top custom-navbar-height" *ngIf="!hideNavbar">
+<nav class="navbar navbar-expand-lg sticky-top custom-navbar-height">
   <div class="container-fluid">
     <a class="navbar-brand brand-margin" href="#" routerLink="/home">
       <img src="assets/images/static/horizontal_logo.svg" alt="Udupi Darshan Logo" style="height: 30px;">
@@ -34,7 +34,7 @@
             [routerLinkActiveOptions]="{ exact: false }" aria-current="page" href="#">Advertisement</a>
         </li>
         <li class="nav-item">
-          <button class="btn ms-lg-3 ms-xl-5" data-bs-toggle="modal" data-bs-target="#writeToUsModal">Write to
+          <button class="btn ms-lg-3 ms-xl-5" type="button" (click)="openStoryForm()">Write to
             us</button>
         </li>
       </ul>
@@ -42,7 +42,7 @@
   </div>
   <!-- TO -->
 
-  <div class="offcanvas offcanvas-end d-lg-none d-block" tabindex="-1" id="offcanvasNavbar"
+  <div class="offcanvas offcanvas-end d-lg-none d-block" tabindex="-1" id="offcanvasNavbar" #mobileMenu
     aria-labelledby="offcanvasNavbarLabel">
     <div class="offcanvas-header">
       <h5 id="offcanvasNavbarLabel">Explore Udupi</h5>
@@ -64,120 +64,39 @@
         </li>
         <li class="nav-item">
           <a class="nav-link color" routerLink="/advertisements" href="#"
-            (click)="closeOffcanvas(); removePadding()">Advertisement</a>
+            (click)="closeOffcanvas()">Advertisement</a>
         </li>
         <li class="nav-item">
-          <button class="btn" data-bs-toggle="modal" data-bs-target="#writeToUsModal">Write to us</button>
+          <button class="btn" type="button" (click)="openStoryForm()">Write to us</button>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- Modal -->
-<div class="modal fade" id="writeToUsModal" tabindex="-1" aria-labelledby="writeToUsModalLabel" aria-hidden="true"
-  #writeToUsModal>
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="writeToUsModalLabel">Tell us your story!</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p *ngIf="!storySubmissionAvailable" role="status">Story submissions are currently unavailable.</p>
-        <form *ngIf="storySubmissionAvailable" [formGroup]="form" (ngSubmit)="onSubmit()">
-          <div class="mb-3"
-            [class.has-error]="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
-            <label for="name" class="form-label">Name <span class="required-field">*</span></label>
-            <div class="col-sm-9 col-lg-7">
-              <input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter your name">
-              <div
-                *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)"
-                class="error-message">
-                <div *ngIf="form.controls['name'].errors?.['required']">Name is required.</div>
-                <div *ngIf="form.controls['name'].errors?.['pattern']">Invalid Name.</div>
-              </div>
-            </div>
-          </div>
-          <div class="mb-3"
-            [class.has-error]="form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched)">
-            <label for="message" class="form-label">Your Experience <span class="required-field">*</span></label>
-            <div>
-              <textarea class="form-control" id="message" formControlName="message" rows="3" required
-                [ngModel]="form.controls['message'].value" (ngModelChange)="updateWordCount($event)"
-                [disabled]="wordCount >= maxWordCount"></textarea>
-              <small id="messageHelp" class="form-text text-muted">{{ wordCount }}/500 words</small>
-              <div
-                *ngIf="form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched)"
-                class="error-message">
-                <div *ngIf="form.controls['message'].errors?.['required']">Message is required.</div>
-              </div>
-            </div>
-          </div>
-          <div class="mb-3"
-            [class.has-error]="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
-            <label for="email" class="form-label">Email <span class="required-field">*</span></label>
-            <div class="col-sm-9 col-lg-7">
-              <input type="email" class="form-control" id="email" formControlName="email"
-                placeholder="Enter your email">
-              <div
-                *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
-                class="error-message">
-                <div *ngIf="form.controls['email'].errors?.['required']">Email is required.</div>
-                <div *ngIf="form.controls['email'].errors?.['pattern']">Invalid email format.</div>
-              </div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="photos" class="form-label">Photos</label>
-            <div class="upload-container">
-              <button type="button" id="photos" class="btn1 custom-file-upload" (click)="fileInput.click()">
-                <i class="bi bi-upload"></i> Click to upload
-              </button>
-              <input type="file" #fileInput accept="image/*" style="display:none" (change)="onFileSelected($event)">
-              <div class="uploaded-photos">
-                <div *ngFor="let file of files" class="photo-item">
-                  <div class="photo-name-container">
-                    <p (click)="openFile(file.url)">{{file.name}}</p>
-                    <i class="bi bi-trash delete-icon" (click)="removeFile(file)"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-exit" data-bs-dismiss="modal" (click)="resetModal()">Exit</button>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button type="submit" class="btn btn-submit" [disabled]="form.invalid">Submit</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+<ng-template #storyForm let-dialog>
+  <div class="modal-header">
+    <h2 class="modal-title h5" id="story-form-title">Tell us your story</h2>
+    <button type="button" class="btn-close" aria-label="Close story form" (click)="dialog.dismiss()"></button>
   </div>
-</div>
-
-<div class="toast-container  p-3">
-  <!-- Success Toast -->
-  <div #successToast class="toast bg-success text-white align-items-center" role="alert" aria-live="assertive"
-    aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body">
-        <i class="bi bi-check-circle-fill me-2"></i> Form submitted successfully!
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-        aria-label="Close"></button>
-    </div>
+  <div class="modal-body">
+    <p>Write your story below, then open an email draft to send it. You can attach photos in your email app.</p>
+    <form [formGroup]="form">
+      <label for="story-name" class="form-label">Name</label>
+      <input id="story-name" class="form-control mb-3" formControlName="name" maxlength="100" autocomplete="name" required>
+      <label for="story-message" class="form-label">Your experience</label>
+      <textarea id="story-message" class="form-control" formControlName="message" rows="5" maxlength="1500" required></textarea>
+      <p class="small text-muted mt-1">{{ form.controls.message.value.length }} / 1500 characters</p>
+      <label for="story-email" class="form-label">Email</label>
+      <input id="story-email" class="form-control" formControlName="email" type="email" maxlength="255" autocomplete="email" required>
+    </form>
   </div>
-
-  <div #errorToast class="toast bg-danger text-white align-items-center" role="alert" aria-live="assertive"
-    aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body">
-        <i class="bi bi-x-circle-fill me-2"></i> Error submitting form. Please try again.
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-        aria-label="Close"></button>
-    </div>
+  <div class="modal-footer">
+    <button class="btn btn-exit" type="button" (click)="dialog.dismiss()">Close</button>
+    @if (storyDraft; as draft) {
+      <a class="btn btn-submit" [href]="draft">Open email draft</a>
+    } @else {
+      <button class="btn btn-submit" type="button" disabled>Open email draft</button>
+    }
   </div>
-</div>
+</ng-template>
