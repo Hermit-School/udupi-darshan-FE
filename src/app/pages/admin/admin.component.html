@@ -12,50 +12,28 @@
 
     <section class="sign-in">
       <a class="back" routerLink="/home"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to public site</a>
-      <ol class="steps" aria-label="Sign-in progress">
-        <li [attr.aria-current]="phase === 'credentials' ? 'step' : null" [class.complete]="phase === 'otp'">
-          <span aria-hidden="true">{{ phase === 'otp' ? '✓' : '1' }}</span> Account
-        </li>
-        <li [attr.aria-current]="phase === 'otp' ? 'step' : null"><span aria-hidden="true">2</span> Verification</li>
-      </ol>
-      <h1 id="admin-title">{{ phase === 'credentials' ? 'Admin sign in' : 'Check your email' }}</h1>
-      <p class="intro" id="sign-in-instructions">{{ phase === 'credentials'
-        ? 'Enter your account details to receive a verification code.'
-        : 'Enter the six-digit code sent to your account email. The code expires in five minutes.' }}</p>
+      <h1 id="admin-title">Admin sign in</h1>
+      <p class="intro">Enter your username and password to open the dashboard.</p>
       @if (error) {
         <p class="notice" role="alert"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> {{ error }}</p>
       }
-      @if (phase === 'credentials') {
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [attr.aria-busy]="busy">
-          <label for="username">Username</label>
-          <input id="username" formControlName="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
-          <label for="password">Password</label>
-          <div class="password">
-            <input id="password" formControlName="password" [type]="showPassword ? 'text' : 'password'" autocomplete="current-password" required>
-            <button type="button" class="toggle" (click)="showPassword = !showPassword"
-              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-              {{ showPassword ? 'Hide' : 'Show' }}
-            </button>
-          </div>
-          <button type="submit" class="primary" [disabled]="busy || loginForm.invalid">
-            {{ busy ? 'Sending code…' : 'Send sign-in code' }}
-            <i class="bi bi-arrow-right" aria-hidden="true"></i>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [attr.aria-busy]="busy">
+        <label for="username">Username</label>
+        <input id="username" formControlName="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+        <label for="password">Password</label>
+        <div class="password">
+          <input id="password" formControlName="password" [type]="showPassword ? 'text' : 'password'" autocomplete="current-password" required>
+          <button type="button" class="toggle" (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            {{ showPassword ? 'Hide' : 'Show' }}
           </button>
-        </form>
-        <a class="help" routerLink="/forgotpassword">Need help signing in?</a>
-      } @else {
-        <form [formGroup]="otpForm" (ngSubmit)="verify()" [attr.aria-busy]="busy">
-          <label for="otp">Email verification code</label>
-          <input #codeInput id="otp" class="code" formControlName="otp" inputmode="numeric" autocomplete="one-time-code"
-            maxlength="6" pattern="[0-9]{6}" aria-describedby="sign-in-instructions" required>
-          <button type="submit" class="primary" [disabled]="busy || otpForm.invalid">
-            {{ busy ? 'Verifying…' : 'Verify and sign in' }}
-            <i class="bi bi-arrow-right" aria-hidden="true"></i>
-          </button>
-        </form>
-        <button type="button" class="help" [disabled]="busy" (click)="restart()">Request a new code or change account</button>
-      }
-      <p class="security"><i class="bi bi-shield-lock" aria-hidden="true"></i> Two-step verification protects this workspace.</p>
+        </div>
+        <button type="submit" class="primary" [disabled]="busy || loginForm.invalid">
+          {{ busy ? 'Signing in…' : 'Sign in' }}
+          <i class="bi bi-arrow-right" aria-hidden="true"></i>
+        </button>
+      </form>
+      <a class="help" routerLink="/forgotpassword">Need help signing in?</a>
     </section>
   </div>
 </main>

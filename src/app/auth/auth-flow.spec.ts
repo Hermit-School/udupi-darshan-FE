@@ -30,23 +30,12 @@ describe('Admin authentication contract', () => {
     client = TestBed.inject(HttpClient); router = TestBed.inject(Router);
   });
   afterEach(() => { http.verify(); auth.clearSession(); vi.useRealTimers(); });
-  function requestCode(): void {
-    auth.requestOtp('admin', 'test-password').subscribe();
-    const login = http.expectOne(`${API_BASE_URL}/v1/login`);
+  function signIn(token = tokenFor('admin')): string {
+    auth.signIn('admin', 'test-password').subscribe();
+    const login = http.expectOne(`${API_BASE_URL}/v1/admin/sign-in`);
     expect(login.request.method).toBe('POST');
     expect(login.request.body).toEqual({ userName: 'admin', password: 'test-password' });
-    login.flush([{ username: 'admin', permission: 'admin' }]);
-    const otp = http.expectOne(`${API_BASE_URL}/v1/generateOTP`);
-    expect(otp.request.method).toBe('POST');
-    expect(otp.request.responseType).toBe('text');
-    otp.flush('Mail Sent Successfully...');
-  }
-  function signIn(token = tokenFor('admin')): string {
-    requestCode();
-    auth.verifyOtp('123456').subscribe();
-    const verify = http.expectOne(`${API_BASE_URL}/v1/verifyOTP`);
-    expect(verify.request.body).toEqual({ username: 'admin', otp: '123456' });
-    verify.flush(token); approveAccess(token); return token;
+    login.flush(token); approveAccess(token); return token;
   }
   function approveAccess(token: string): void {
     const access = http.expectOne(`${API_BASE_URL}/actuator/info`);
@@ -55,30 +44,12 @@ describe('Admin authentication contract', () => {
     access.flush({});
   }
 
-  it('does not authenticate before server OTP verification', () => {
-    requestCode(); expect(auth.isAdmin).toBe(false);
-    auth.verifyOtp('123456').subscribe();
-    expect(auth.isAdmin).toBe(false);
-    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
-    approveAccess(tokenFor('admin'));
-    expect(auth.isAdmin).toBe(true);
-  });
-  it('rejects non-admin accounts without sending an OTP', () => {
+  it('rejects non-admin accounts without opening a session', () => {
     let failed = false;
-    auth.requestOtp('user', 'test-password').subscribe({ error: () => failed = true });
-    http.expectOne(`${API_BASE_URL}/v1/login`).flush([{ username: 'user', permission: 'user' }]);
-    http.expectNone(`${API_BASE_URL}/v1/generateOTP`);
+    auth.signIn('user', 'test-password').subscribe({ error: () => failed = true });
+    http.expectOne(`${API_BASE_URL}/v1/admin/sign-in`).flush('', { status: 403, statusText: 'Forbidden' });
+    http.expectNone(`${API_BASE_URL}/actuator/info`);
     expect(failed).toBe(true); expect(auth.isAdmin).toBe(false);
-  });
-  it('keeps invalid OTPs unauthenticated and allows a retry', () => {
-    requestCode(); let failed = false;
-    auth.verifyOtp('000000').subscribe({ error: () => failed = true });
-    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush('Invalid code', { status: 401, statusText: 'Unauthorized' });
-    expect(failed).toBe(true); expect(auth.isAdmin).toBe(false);
-    auth.verifyOtp('123456').subscribe();
-    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
-    approveAccess(tokenFor('admin'));
-    expect(auth.isAdmin).toBe(true);
   });
   it('sends bearer tokens only on protected requests to this API', () => {
     const token = signIn();
@@ -106,8 +77,8 @@ describe('Admin authentication contract', () => {
   });
   it('expires an in-memory session without leaving a stored token', async () => {
     vi.useFakeTimers();
-    requestCode(); auth.verifyOtp('123456').subscribe();
-    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin', Math.floor(Date.now()/1000)+2));
+    auth.signIn('admin', 'test-password').subscribe();
+    http.expectOne(`${API_BASE_URL}/v1/admin/sign-in`).flush(tokenFor('admin', Math.floor(Date.now()/1000)+2));
     approveAccess(tokenFor('admin', Math.floor(Date.now()/1000)+2));
     expect(auth.isAdmin).toBe(true); await vi.advanceTimersByTimeAsync(2100); expect(auth.token).toBeNull();
     vi.useRealTimers();
@@ -126,32 +97,32 @@ describe('Admin authentication contract', () => {
     ['invalid expiry', () => tokenFor('admin', undefined, { exp: 'tomorrow' })],
     ['malformed', () => 'not-a-jwt']
   ])('rejects a %s token without opening a session', (_, makeToken) => {
-    requestCode(); let failed = false;
-    auth.verifyOtp('123456').subscribe({ error: () => failed = true });
-    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(makeToken());
+    let failed = false;
+    auth.signIn('admin', 'test-password').subscribe({ error: () => failed = true });
+    http.expectOne(`${API_BASE_URL}/v1/admin/sign-in`).flush(makeToken());
     http.expectNone(`${API_BASE_URL}/actuator/info`);
     expect(failed).toBe(true); expect(auth.token).toBeNull();
   });
   it.each([401, 403])('requires current server admin authorization (%s)', status => {
-    requestCode(); let failed = false;
-    auth.verifyOtp('123456').subscribe({ error: () => failed = true });
-    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
+    let failed = false;
+    auth.signIn('admin', 'test-password').subscribe({ error: () => failed = true });
+    http.expectOne(`${API_BASE_URL}/v1/admin/sign-in`).flush(tokenFor('admin'));
     expect(auth.token).toBeNull();
     http.expectOne(`${API_BASE_URL}/actuator/info`).flush('', { status, statusText: 'Denied' });
     expect(failed).toBe(true); expect(auth.isAdmin).toBe(false);
   });
-  it('does not restore a session if OTP verification finishes after sign-out', () => {
-    requestCode(); let failed = false;
-    auth.verifyOtp('123456').subscribe({ error: () => failed = true });
-    const verify = http.expectOne(`${API_BASE_URL}/v1/verifyOTP`);
+  it('does not restore a session if password sign-in finishes after sign-out', () => {
+    let failed = false;
+    auth.signIn('admin', 'test-password').subscribe({ error: () => failed = true });
+    const verify = http.expectOne(`${API_BASE_URL}/v1/admin/sign-in`);
     auth.logout().subscribe(); verify.flush(tokenFor('admin'));
     http.expectNone(`${API_BASE_URL}/actuator/info`);
     expect(failed).toBe(true); expect(auth.token).toBeNull();
   });
   it('does not restore a session if the admin access check finishes after sign-out', () => {
-    requestCode(); let failed = false;
-    auth.verifyOtp('123456').subscribe({ error: () => failed = true });
-    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
+    let failed = false;
+    auth.signIn('admin', 'test-password').subscribe({ error: () => failed = true });
+    http.expectOne(`${API_BASE_URL}/v1/admin/sign-in`).flush(tokenFor('admin'));
     const access = http.expectOne(`${API_BASE_URL}/actuator/info`);
     auth.logout().subscribe(); access.flush({});
     expect(failed).toBe(true); expect(auth.token).toBeNull();
@@ -181,23 +152,20 @@ describe('Admin authentication contract', () => {
     const fixture = TestBed.createComponent(AdminComponent); fixture.detectChanges();
     const component = fixture.componentInstance; const navigate = vi.spyOn(router, 'navigate').mockResolvedValue(true);
     component.loginForm.setValue({ username: 'admin', password: 'wrong' }); component.onSubmit();
-    http.expectOne(`${API_BASE_URL}/v1/login`).flush('', { status: 401, statusText: 'Unauthorized' });
+    http.expectOne(`${API_BASE_URL}/v1/admin/sign-in`).flush('', { status: 401, statusText: 'Unauthorized' });
     fixture.detectChanges();
-    expect(component.phase).toBe('credentials'); expect(component.error).toContain('Incorrect');
+    expect(component.error).toContain('Incorrect');
     expect(navigate).not.toHaveBeenCalled(); expect(component.loginForm.controls.password.value).toBe('');
     fixture.destroy();
   });
-  it('navigates only after password and OTP verification have both succeeded', () => {
+  it('navigates directly to the dashboard after server authorization', () => {
     const fixture = TestBed.createComponent(AdminComponent); fixture.detectChanges();
     const component = fixture.componentInstance; const navigate = vi.spyOn(router, 'navigate').mockResolvedValue(true);
     component.loginForm.setValue({ username: 'admin', password: 'test-password' }); component.onSubmit();
-    http.expectOne(`${API_BASE_URL}/v1/login`).flush([{ username: 'admin', permission: 'ADMIN' }]);
-    http.expectOne(`${API_BASE_URL}/v1/generateOTP`).flush('Mail Sent Successfully...');
-    expect(component.phase).toBe('otp'); expect(navigate).not.toHaveBeenCalled();
-    component.otpForm.setValue({ otp: '123456' }); component.verify();
-    http.expectOne(`${API_BASE_URL}/v1/verifyOTP`).flush(tokenFor('admin'));
+    const token = tokenFor('admin');
+    http.expectOne(`${API_BASE_URL}/v1/admin/sign-in`).flush(token);
     expect(navigate).not.toHaveBeenCalled();
-    approveAccess(tokenFor('admin'));
+    approveAccess(token);
     expect(navigate).toHaveBeenCalledWith(['/admindashboard']); fixture.destroy();
   });
 });
