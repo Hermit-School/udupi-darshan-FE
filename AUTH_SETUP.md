@@ -4,19 +4,12 @@ Public browsing remains open. `/#/admindashboard` and `/#/new-entry` require a v
 
 ## Sign-in contract
 
-1. POST username/password to `/v1/login`; the returned account must have admin permission.
-2. POST the same credentials to `/v1/generateOTP`. The password is cleared from the form. OTP delivery uses the email on the backend account.
-3. POST `{username, otp}` to `/v1/verifyOTP`. Check that the returned JWT uses HS256, issuer `udupi-darshan`, audience `udupi-darshan-api`, the pending username and a future expiry. Confirm current admin access with a bearer-authenticated GET to `/actuator/info` before storing the session or navigating. The backend performs signature, revocation, active-account and role checks; browser decoding is only a response sanity check.
-4. Keep the token in memory. Attach it only to protected requests on the configured API. Public GETs (including health), assets and other hosts never receive it. Refreshing the page requires signing in again.
-5. Logout clears local state immediately and requests `/v1/jwt/revoke`. A protected API 401 for the current token clears the session; expiry redirects protected pages to sign-in. Late OTP/access responses cannot restore a signed-out session, and a delayed 401 for an older token cannot clear a newer session. Explicit revocation headers retain the token being revoked.
+1. POST username/password to `/v1/admin/sign-in`. The backend checks the password and administrator role, then returns a JWT. No email code is required.
+2. Check the returned JWT format, issuer, audience, subject and expiration. Confirm current admin access with a bearer-authenticated GET to `/actuator/info` before opening the dashboard.
+3. Keep the token in memory and attach it only to protected requests on the configured API. Refreshing requires signing in again.
+4. Sign-out clears local state and revokes the token. Expired sessions and current-token authorization failures return the user to sign-in.
 
-Wrong passwords, invalid/expired OTPs, rate limits, insufficient permissions, mail failure and network errors never report a successful sign-in. The forgot-password page provides guidance; no password-reset or public account-creation endpoint exists.
-
-## Production and test accounts
-
-The secured backend is deployed. Render allows the frontend origin `https://udupi-darshan.web.app`. Production has no admin account provisioned by this work. Provision one privately with the backend's documented command only when admin access is needed; never send its password in chat or put credentials in Angular environment files.
-
-Safari sign-in verification used an isolated local Spring Boot backend, disposable H2 data and a captured mail sender. It verified wrong-password rejection, OTP entry, protected-dashboard access and logout. The fixture and its disposable credentials are outside this repository and are excluded from production bundles. No production user was created and no external email was sent by these frontend tests.
+Deploy the backend endpoint before this frontend. New admin passwords may use 4–15 ASCII letters, digits or symbols without spaces; existing passwords remain valid. The help page directs users to the site administrator for forgotten passwords. Browser tests use fixtures and never send email.
 
 ## Current feature boundary
 
