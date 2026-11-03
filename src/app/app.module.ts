@@ -18,7 +18,6 @@ import { FooterComponent } from './components/footer/footer.component';
 import { CardContainerComponent } from './components/card-container/card-container.component';
 import { NatureComponent } from './pages/nature/nature.component';
 import { CultureComponent } from './pages/culture/culture.component';
-import { AdminComponent } from './pages/admin/admin.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
@@ -27,8 +26,6 @@ import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.c
 import { LoadingComponent } from './components/loading/loading.component';
 import { AdvertisementsComponent } from './pages/advertisements/advertisements.component';
 import { BlogDetailsComponent } from './components/blog-details/blog-details.component';
-import { AdmindashboardComponent } from './pages/admindashboard/admindashboard.component';
-import { DashboardnavbarComponent } from './components/admin-dashboard-components/dashboardnavbar/dashboardnavbar.component';
 import { DashboardrequesttableComponent } from './components/admin-dashboard-components/dashboardrequesttable/dashboardrequesttable.component';
 import { ListFilterPipe } from '../app/util/list-filter';
 import { FoodComponent } from './pages/food/food.component';
@@ -36,7 +33,6 @@ import { StoryComponent } from './pages/story/story.component';
 import { StoryDetailsComponent } from './pages/story-details/story-details.component';
 import { MyHttpInterceptor } from './services/Interceptor/MyHttpInterceptor';
 import { SearchComponent } from './components/search/search.component';
-import { NewEntryComponent } from './components/admin-dashboard-components/new-entry/new-entry.component';
 import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
 
 @NgModule({
@@ -52,21 +48,17 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
     CardContainerComponent,
     NatureComponent,
     CultureComponent,
-    AdminComponent,
     PagenotfoundComponent,
     ForgotpasswordComponent,
     LoadingComponent,
     AdvertisementsComponent,
     BlogDetailsComponent,
-    AdmindashboardComponent,
-    DashboardnavbarComponent,
     DashboardrequesttableComponent,
     ListFilterPipe,
     FoodComponent,
     StoryComponent,
     StoryDetailsComponent,
-    SearchComponent,
-    NewEntryComponent
+    SearchComponent
   ],
   imports: [
     DetailsModule,
