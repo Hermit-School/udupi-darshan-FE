@@ -1,8 +1,7 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { Details } from 'src/app/models/card';
-import { SharedService } from 'src/app/services/shared.service';
+import { SearchEntry, SharedService } from 'src/app/services/shared.service';
 
 @Component({ standalone: false,
   selector: 'app-search',
@@ -12,13 +11,13 @@ import { SharedService } from 'src/app/services/shared.service';
 export class SearchComponent {
   toggleSearch: boolean = false;
   searchText: string = '';
-  results: Details[] = [];
+  results: SearchEntry[] = [];
   showDropdown = false;
   private subscription?: Subscription;
   @ViewChild('input') input?: ElementRef<HTMLInputElement>;
 
   constructor(
-    private sharedService: SharedService,
+    readonly sharedService: SharedService,
     private router: Router
   ) { }
 
@@ -47,6 +46,7 @@ export class SearchComponent {
     const query = this.searchText.trim();
     this.sharedService.setSearchText(query);
     this.showDropdown = !!query;
+    if (query) this.sharedService.loadIndex().subscribe();
   }
 
   openFirst(event: Event): void {

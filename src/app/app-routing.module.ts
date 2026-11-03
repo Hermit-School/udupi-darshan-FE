@@ -3,40 +3,32 @@ import { NgModule } from '@angular/core';
 import { NavigationEnd, Router, RouterModule, Routes } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { ROUTES } from '../constants/routes'
-import { NatureComponent } from './pages/nature/nature.component';
-import { CultureComponent } from 'src/app/pages/culture/culture.component';
-import { AdvertisementsComponent } from 'src/app/pages/advertisements/advertisements.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
-import { DetailsComponent } from './pages/details/details.component';
 import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.component';
-import { BlogDetailsComponent } from './components/blog-details/blog-details.component';
-import { FoodComponent } from './pages/food/food.component';
-import { StoryComponent } from 'src/app/pages/story/story.component';
-import { StoryDetailsComponent } from './pages/story-details/story-details.component';
 
 
 const routes: Routes = [
   { path: ROUTES.HOME.path, component: LandingPageComponent, data: { title: ROUTES.HOME.title, metaDescription: ROUTES.HOME.metaDescription } },
-  { path: ROUTES.NATURE.path, component: NatureComponent, data: { title: ROUTES.NATURE.title, metaDescription: ROUTES.NATURE.metaDescription } },
-  { path: ROUTES.CULTURE.path, component: CultureComponent, data: { title: ROUTES.CULTURE.title, metaDescription: ROUTES.CULTURE.metaDescription } },
-  { path: ROUTES.FOOD.path, component: FoodComponent, data: { title: ROUTES.FOOD.title, metaDescription: ROUTES.FOOD.metaDescription } },
-  { path: ROUTES.ADVERTISEMENTS.path, component: AdvertisementsComponent },
+  { path: ROUTES.NATURE.path, loadComponent: () => import('./pages/nature/nature.component').then(m => m.NatureComponent), data: { title: ROUTES.NATURE.title, metaDescription: ROUTES.NATURE.metaDescription } },
+  { path: ROUTES.CULTURE.path, loadComponent: () => import('./pages/culture/culture.component').then(m => m.CultureComponent), data: { title: ROUTES.CULTURE.title, metaDescription: ROUTES.CULTURE.metaDescription } },
+  { path: ROUTES.FOOD.path, loadComponent: () => import('./pages/food/food.component').then(m => m.FoodComponent), data: { title: ROUTES.FOOD.title, metaDescription: ROUTES.FOOD.metaDescription } },
+  { path: ROUTES.ADVERTISEMENTS.path, loadComponent: () => import('./pages/advertisements/advertisements.component').then(m => m.AdvertisementsComponent) },
   { path: 'new-entry', redirectTo: 'new-entry/nature', pathMatch: 'full' },
   { path: 'new-entry/:type', loadComponent: () => import('./pages/content-editor/content-editor.component').then(m => m.ContentEditorComponent), canActivate: [adminGuard], data: { title: 'Add content | Udupi Darshan', hidePublicChrome: true } },
   { path: ROUTES.ADMIN.path, loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent), data: { title: 'Admin sign in | Udupi Darshan', hidePublicChrome: true } },
   { path: ROUTES.LANDING.path, component: LandingPageComponent },
-  { path: ROUTES.DETAILS.path, component: DetailsComponent },
+  { path: ROUTES.DETAILS.path, loadComponent: () => import('./pages/details/details.component').then(m => m.DetailsComponent) },
   ...['nature', 'culture', 'food'].map(legacyCategory => ({
-    path: legacyCategory + '/:id', component: DetailsComponent, data: { legacyCategory },
+    path: legacyCategory + '/:id', loadComponent: () => import('./pages/details/details.component').then(m => m.DetailsComponent), data: { legacyCategory },
   })),
   { path: 'dashboard', redirectTo: ROUTES.ADMIN_DASHBOARD.path, pathMatch: 'full' },
   { path: ROUTES.NOT_FOUND.path, component: PagenotfoundComponent, data: { title: ROUTES.NOT_FOUND.title, metaDescription: ROUTES.NOT_FOUND.metaDescription } },
   { path: ROUTES.FORGOT_PASSWORD.path, component: ForgotpasswordComponent },
   { path: ROUTES.ADMIN_DASHBOARD.path, loadComponent: () => import('./pages/admindashboard/admindashboard.component').then(m => m.AdmindashboardComponent), canActivate: [adminGuard], data: { title: 'Admin dashboard | Udupi Darshan', hidePublicChrome: true } },
-  { path: ROUTES.BLOG_DETAILS.path, component: BlogDetailsComponent },
-  { path: ROUTES.STORY_DETAILS.path, component: StoryDetailsComponent },
-  { path: ROUTES.STORY.path, component: StoryComponent },
+  { path: ROUTES.BLOG_DETAILS.path, loadComponent: () => import('./components/blog-details/blog-details.component').then(m => m.BlogDetailsComponent) },
+  { path: ROUTES.STORY_DETAILS.path, loadComponent: () => import('./pages/story-details/story-details.component').then(m => m.StoryDetailsComponent) },
+  { path: ROUTES.STORY.path, loadComponent: () => import('./pages/story/story.component').then(m => m.StoryComponent) },
   { path: ROUTES.WILDCARD.path, redirectTo: ROUTES.WILDCARD.redirectTo, pathMatch: ROUTES.WILDCARD.pathMatch }
 ];
 @NgModule({

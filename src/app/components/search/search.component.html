@@ -17,7 +17,8 @@
             <small>{{ item.category }}@if (item.location) { · {{ item.location }} }</small>
           </a>
         } @empty {
-          <p role="status">No matching destinations.</p>
+          <p role="status">{{ sharedService.indexLoading() ? 'Loading destinations…'
+            : sharedService.indexError() ? 'Search could not load. Try again.' : 'No matching destinations.' }}</p>
         }
       </div>
     }

@@ -32,3 +32,13 @@ and the PR workflow retains its reports under `test-results/`.
 The admin sign-in, dashboard, and new-entry routes load on demand. The initial
 production bundle dropped from about 1.00 MB to 958 kB; the build now fails
 if it exceeds 1 MB.
+
+### Public page performance
+
+Destination lists load on their own pages. Search requests a compact public
+index on demand, and full destination details load when opened. During a
+staggered rollout, search falls back to the existing lists if the index route
+is unavailable. Public section and detail routes load their code on navigation.
+Firebase revalidates the HTML shell and caches only fingerprinted JS/CSS for
+long-term reuse. Deploy the backend index first to get the smaller search
+payload immediately.

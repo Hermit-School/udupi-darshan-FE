@@ -1,9 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { natureServiceService } from 'src/app/services/nature.service';
 import { Details } from 'src/app/models/card';
 
-@Component({ standalone: false,
+@Component({ standalone: true, imports: [CommonModule],
   selector: 'app-nature',
   templateUrl: './nature.component.html',
   styleUrls: ['./nature.component.scss']

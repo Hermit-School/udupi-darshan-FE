@@ -1,10 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { SharedService } from 'src/app/services/shared.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StoryService } from 'src/app/services/story.service';
 import { Story } from 'src/app/models/story';
 
-@Component({ standalone: false,
+@Component({ standalone: true, imports: [CommonModule, RouterLink],
   selector: 'app-story-details',
   templateUrl: './story-details.component.html',
   styleUrls: ['./story-details.component.scss']
@@ -20,6 +21,7 @@ export class StoryDetailsComponent implements OnInit {
     if (storyId) {
       this.storyService.getStoryById(+storyId).subscribe((data: Story) => {
         this.story = data;
+        this.shared.resolveRelatedLinks(data.dontMissThese);
       });
     }
   }

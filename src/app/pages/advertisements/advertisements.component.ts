@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -5,7 +6,7 @@ import { API_BASE_URL } from 'src/constants/routes';
 import { Component, OnInit } from '@angular/core';
 import { AdvertisementsService } from 'src/app/services/advertisements.service';
 
-@Component({ standalone: false,
+@Component({ standalone: true, imports: [CommonModule],
   selector: 'app-advertisements',
   templateUrl: './advertisements.component.html',
   styleUrls: ['./advertisements.component.scss']
