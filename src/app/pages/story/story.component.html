@@ -3,12 +3,15 @@
         <h2 class="heading-text text-white fw-bold">Read Stories Written By Various Travellers</h2>
         <img src="assets/images/Vectorblob.svg" alt="Design Blob" class="design-blob">
     </div>
+    @if (!loading && !stories.length) {
+        <p class="container py-4" role="status">{{ failed ? 'Stories could not load. Please try again later.' : 'No stories have been published yet.' }}</p>
+    }
     <div *ngFor="let chunk of chunkedStories" class="card-container1">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 ">
             <div class="col" *ngFor="let story of chunk">
                 <a [routerLink]="['/story', story.id]" class="card-footer-link">
                     <div class="card ">
-                        <img [src]="story.images[0]" alt="Image" class="square-image">
+                        <img *ngIf="story.images?.[0] as image" [src]="image" alt="" class="square-image" loading="lazy">
                         <div class="card-body">
                             <div class="text-container">
                                 <p class="name-text">{{ story.title }}</p>

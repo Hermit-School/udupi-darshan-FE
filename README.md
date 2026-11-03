@@ -19,7 +19,7 @@ Production builds use `https://udupi-darshan-be.onrender.com`. Firebase deploys 
 
 Work on `release-v1`, push the complete change set and open a PR to `main`. Require the frontend verification workflow to pass. Merging into `main` triggers Firebase deployment using the existing service-account secret. After deployment, verify public pages, destination/story links, search and CORS on the hosted site.
 
-See [VERIFICATION.md](VERIFICATION.md) for current results and release boundaries, and [AUTH_SETUP.md](AUTH_SETUP.md) for authentication behavior. Content editing and public story submission are explicitly unavailable in this release; the UI does not claim that drafts were saved or messages sent.
+See [VERIFICATION.md](VERIFICATION.md) for current results and release boundaries, and [AUTH_SETUP.md](AUTH_SETUP.md) for authentication behavior. Administrators can publish from the dashboard. The public Write to us form opens an email draft; the visitor sends it from their mail app.
 
 ### Browser verification
 

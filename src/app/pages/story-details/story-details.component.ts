@@ -1,3 +1,4 @@
+import { SharedService } from 'src/app/services/shared.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StoryService } from 'src/app/services/story.service';
@@ -12,7 +13,7 @@ export class StoryDetailsComponent implements OnInit {
   story!: Story;
   selectedIndex: number = 0;
 
-  constructor(private storyService: StoryService, private route: ActivatedRoute) { }
+  constructor(private storyService: StoryService, private route: ActivatedRoute, readonly shared: SharedService) { }
 
   ngOnInit(): void {
     const storyId = this.route.snapshot.paramMap.get('id');

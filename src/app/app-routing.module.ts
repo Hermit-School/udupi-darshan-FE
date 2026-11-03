@@ -27,6 +27,10 @@ const routes: Routes = [
   { path: ROUTES.ADMIN.path, loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent), data: { title: 'Admin sign in | Udupi Darshan', hidePublicChrome: true } },
   { path: ROUTES.LANDING.path, component: LandingPageComponent },
   { path: ROUTES.DETAILS.path, component: DetailsComponent },
+  ...['nature', 'culture', 'food'].map(legacyCategory => ({
+    path: legacyCategory + '/:id', component: DetailsComponent, data: { legacyCategory },
+  })),
+  { path: 'dashboard', redirectTo: ROUTES.ADMIN_DASHBOARD.path, pathMatch: 'full' },
   { path: ROUTES.NOT_FOUND.path, component: PagenotfoundComponent, data: { title: ROUTES.NOT_FOUND.title, metaDescription: ROUTES.NOT_FOUND.metaDescription } },
   { path: ROUTES.FORGOT_PASSWORD.path, component: ForgotpasswordComponent },
   { path: ROUTES.ADMIN_DASHBOARD.path, loadComponent: () => import('./pages/admindashboard/admindashboard.component').then(m => m.AdmindashboardComponent), canActivate: [adminGuard], data: { title: 'Admin dashboard | Udupi Darshan', hidePublicChrome: true } },

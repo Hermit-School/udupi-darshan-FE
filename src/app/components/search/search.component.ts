@@ -1,4 +1,5 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { Details } from 'src/app/models/card';
 import { SharedService } from 'src/app/services/shared.service';
@@ -12,7 +13,9 @@ export class SearchComponent {
   toggleSearch: boolean = false;
   searchText: string = '';
   results: Details[] = [];
-  showDropdown: boolean = false;
+  showDropdown = false;
+  private subscription?: Subscription;
+  @ViewChild('input') input?: ElementRef<HTMLInputElement>;
 
   constructor(
     private sharedService: SharedService,
@@ -21,24 +24,13 @@ export class SearchComponent {
 
   openSearch() {
     this.toggleSearch = true;
-  }
-  isFoodSearchText(text: string): boolean {
-    const foodSearchTerms = ['hotel', 'snack', 'restaurant'];
-    return foodSearchTerms.includes(text.toLowerCase());
-  }
-  isNatureSearchText(text: string): boolean {
-    const natureSearchTerms = ['wildlife', 'beach', 'activity'];
-    return natureSearchTerms.includes(text.toLowerCase());
-  }
-  isCultureSearchText(text: string): boolean {
-    const cultureSearchTerms = ['matha', 'festival'];
-    return cultureSearchTerms.includes(text.toLowerCase());
+    requestAnimationFrame(() => { if (this.toggleSearch) this.input?.nativeElement.focus(); });
   }
 
   searchClose() {
     this.toggleSearch = false;
     this.searchText = '';
-    this.results = [];
+    this.sharedService.setSearchText('');
     this.showDropdown = false;
   }
 
@@ -50,15 +42,19 @@ export class SearchComponent {
     }
   }
 
-  search(event: KeyboardEvent): void {
-    const target = event.target as HTMLInputElement;
-    const query = target.value.trim();
-    if (event.key === 'Enter' && query) {
-      this.sharedService.setSearchText(query);
-      this.showDropdown = true;
-    } else {
-      this.showDropdown = false;
-    }
+  search(event: Event): void {
+    this.searchText = (event.target as HTMLInputElement).value;
+    const query = this.searchText.trim();
+    this.sharedService.setSearchText(query);
+    this.showDropdown = !!query;
+  }
+
+  openFirst(event: Event): void {
+    if (!this.showDropdown || !this.results.length) return;
+    event.preventDefault();
+    const item = this.results[0];
+    this.searchClose();
+    void this.router.navigate(['/details', item.category.toLowerCase(), item.id]);
   }
 
   getHighlightedText(field: string | undefined, query: string): string {
@@ -74,16 +70,9 @@ export class SearchComponent {
     return result + escape(field.slice(start));
   }
 
-  selectResult(result: Details): void {
-    this.searchClose();
-    this.router.navigate(['/details', result.category.toLowerCase().split('-')[0], result.id]).then(() => {
-      this.searchClose();
-    });
-  }
   ngOnInit(): void {
-    this.sharedService.getSearchResults();
-    this.sharedService.getSearchResults().subscribe((data) => {
-      this.results = data;
-    });
+    this.subscription = this.sharedService.getSearchResults().subscribe(data => { this.results = data.slice(0, 12); });
   }
+
+  ngOnDestroy(): void { this.subscription?.unsubscribe(); }
 }

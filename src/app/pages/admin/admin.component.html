@@ -2,11 +2,7 @@
   <div class="access-shell">
     <aside class="brand">
       <img src="assets/images/static/horizontal_logo.svg" alt="Udupi Darshan" class="brand-logo">
-      <div class="brand-copy">
-        <span class="eyebrow">ADMIN WORKSPACE</span>
-        <p>Udupi Darshan<br>Administration</p>
-        <span>Manage destinations, stories, and listings.</span>
-      </div>
+      <span class="eyebrow">ADMIN WORKSPACE</span>
       <img class="temple" src="assets/images/static/temple.svg" alt="" width="316" height="186">
     </aside>
 
@@ -14,6 +10,9 @@
       <a class="back" routerLink="/home"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to public site</a>
       <h1 id="admin-title">Admin sign in</h1>
       <p class="intro">Enter your username and password to open the dashboard.</p>
+      @if (accessRequired && !error) {
+        <p class="notice" role="status">Sign in as an administrator to open this page.</p>
+      }
       @if (error) {
         <p class="notice" role="alert"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> {{ error }}</p>
       }

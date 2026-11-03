@@ -64,7 +64,7 @@ test('mobile visitors can navigate to public content and unknown routes land on 
 test('admin guard, password sign-in and sign-out work in a browser', async ({ page }) => {
   const calls = await mockApi(page);
   await page.goto('/#/admindashboard');
-  await expect(page).toHaveURL(/#\/admin$/);
+  await expect(page).toHaveURL(/#\/admin(?:\?access=required)?$/);
   await signIn(page);
   await expect(page).toHaveURL(/#\/admindashboard$/);
   await expect(page.getByRole('heading', { name: 'Admin dashboard' })).toBeVisible();
@@ -75,7 +75,7 @@ test('admin guard, password sign-in and sign-out work in a browser', async ({ pa
   await page.getByRole('button', { name: 'Sign out' }).click();
   expect((await revoked).ok()).toBe(true);
   await page.goto('/#/new-entry');
-  await expect(page).toHaveURL(/#\/admin$/);
+  await expect(page).toHaveURL(/#\/admin(?:\?access=required)?$/);
   expect(calls).toContain('GET /actuator/info');
   expect(calls).toContain('DELETE /v1/jwt/revoke');
 });
@@ -86,7 +86,7 @@ test('a server role denial prevents access even after receiving a token', async 
   await signIn(page);
   await expect(page.getByRole('alert')).toContainText('does not have administrator access');
   await page.goto('/#/admindashboard');
-  await expect(page).toHaveURL(/#\/admin$/);
+  await expect(page).toHaveURL(/#\/admin(?:\?access=required)?$/);
 });
 
 test('mobile admin sign-in guides the user with a single form', async ({ page }) => {
@@ -171,4 +171,63 @@ test('admin can publish each content type from its own form', async ({ page }) =
   expect(requests[0].body).toMatchObject({ category: 'Nature', label: 'Best Of Nature', dontMissThese: [{ name: 'Nearby beach' }] });
   expect(requests[3].body).toMatchObject({ submittedBy: 'Editor', email: 'editor@example.invalid' });
   expect(requests[4].body).toMatchObject({ title: 'Local market', imageUrl: 'https://example.invalid/market.jpg' });
+});
+
+test('mobile Write to us opens the restored form and closes cleanly', async ({ page }) => {
+  await mockApi(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/#/story');
+  await expect(page.getByRole('status')).toContainText('No stories have been published yet.');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.locator('[data-bs-toggle="offcanvas"]')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Open navigation' }).click();
+  await page.getByRole('button', { name: 'Write to us' }).click();
+  const form = page.getByRole('dialog', { name: 'Tell us your story' });
+  await expect(form).toBeVisible();
+  await expect(page.locator('.offcanvas-backdrop')).toHaveCount(0);
+  await form.getByLabel('Name').fill('Fixture visitor');
+  await form.getByLabel('Email').fill('fixture@example.invalid');
+  await form.getByLabel('Your experience').fill('A day in Udupi');
+  await expect(form.getByRole('link', { name: 'Open email draft' })).toHaveAttribute('href', /^mailto:/);
+  await form.getByRole('button', { name: 'Close story form' }).click();
+  await expect(form).toBeHidden();
+  await expect(page).toHaveURL(/#\/story$/);
+  await page.getByRole('button', { name: 'Open navigation' }).click();
+  await page.getByRole('button', { name: 'Write to us' }).click();
+  await expect(form).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(form).toBeHidden();
+  await expect(page.locator('.modal-backdrop, .offcanvas-backdrop')).toHaveCount(0);
+});
+
+test('search opens loaded details immediately and legacy links stay in the same tab', async ({ page, context }) => {
+  await mockApi(page);
+  const destination = { id: 42, name: 'Preview Lake', category: 'Nature', label: 'Best Of Nature',
+    link: '/preview-lake', descr: 'Scenic shore', images: [], keyPoints: [], discover: [], impInfo: [],
+    dontMissThese: [
+      { name: 'Other Lake', description: 'A nearby stop', link: '/other-lake' },
+      { name: 'Unknown stop', description: 'Read about this stop here', link: '/missing-stop' },
+    ] };
+  await page.route(api + '/v1/nature/getNature', r => r.fulfill({ json: [
+    destination, { ...destination, id: 43, name: 'Other Lake', link: '/other-lake', dontMissThese: [] },
+  ] }));
+  let detailReads = 0;
+  await page.route(api + '/v1/nature/42', r => { detailReads++; return r.fulfill({ json: destination }); });
+  await page.goto('/#/home');
+  await page.getByRole('searchbox', { name: 'Search destinations' }).fill('preview');
+  const result = page.getByRole('link', { name: /Preview Lake/ });
+  await expect(result).toBeVisible();
+  await result.click();
+  await expect(page).toHaveURL(/#\/details\/nature\/42$/);
+  await expect(page.getByText('Scenic shore')).toBeVisible();
+  expect(detailReads).toBe(0);
+  await expect(page.getByRole('link', { name: 'View details' })).toHaveCount(1);
+  await page.getByRole('link', { name: 'View details' }).click();
+  await expect(page).toHaveURL(/#\/details\/nature\/43$/);
+  expect(context.pages()).toHaveLength(1);
+  await page.goto('/#/nature/preview-lake');
+  await expect(page.getByText('Scenic shore')).toBeVisible();
+  await page.goto('/#/dashboard');
+  await expect(page).toHaveURL(/#\/admin\?access=required$/);
+  await expect(page.getByText('Sign in as an administrator to open this page.')).toBeVisible();
 });

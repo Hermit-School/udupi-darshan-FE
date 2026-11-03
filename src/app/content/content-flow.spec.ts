@@ -102,13 +102,12 @@ describe('Public content rendering regressions', () => {
     expect(document.querySelector('.offcanvas-backdrop')).toBeNull();
     instance.dispose(); fixture.destroy(); fixture.nativeElement.remove();
   });
-  it('does not claim that an unconnected public submission was sent', () => {
+  it('builds an email draft only after the story form is complete', () => {
     const fixture=TestBed.createComponent(NavbarComponent); fixture.detectChanges();
-    const success=vi.spyOn(fixture.componentInstance,'showToast');
+    expect(fixture.componentInstance.storyDraft).toBeNull();
     fixture.componentInstance.form.setValue({name:'Fixture',email:'fixture@example.invalid',message:'Fixture story'});
-    fixture.componentInstance.onSubmit(); fixture.detectChanges();
-    expect(success).not.toHaveBeenCalled();
-    expect(fixture.nativeElement.textContent).toContain('Story submissions are currently unavailable.');
+    expect(decodeURIComponent(fixture.componentInstance.storyDraft!)).toContain('Fixture story');
+    expect(fixture.componentInstance.storyDraft).toMatch(/^mailto:udupidarshan@gmail.com\?/);
     fixture.destroy();
   });
   it('refreshes a pending search when public data finishes loading', () => {

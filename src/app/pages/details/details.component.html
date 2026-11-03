@@ -88,9 +88,13 @@
                   <p class="card-text">{{ item.description }}</p>
                 </div>
                 <div class="card-footer">
-                  <a *ngIf="item.link" [href]="item.link" target="_blank">
-                    <small class="text-small">View Details <i class='bi bi-arrow-right'></i></small>
-                  </a>
+                  @if (relatedLink(item.link); as destination) {
+                    @if (typeof destination === 'string') {
+                      <a [href]="destination">View details <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                    } @else {
+                      <a [routerLink]="destination">View details <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                    }
+                  }
                 </div>
               </div>
             </div>

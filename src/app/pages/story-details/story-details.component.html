@@ -33,7 +33,13 @@
               <p class="card-text">{{ item.description }}</p>
             </div>
             <div class="card-footer">
-              <a><small class="text-small">View Details <i class="bi bi-arrow-right"></i></small></a>
+              @if (shared.relatedLink(item.link); as destination) {
+                @if (typeof destination === 'string') {
+                  <a [href]="destination">View details</a>
+                } @else {
+                  <a [routerLink]="destination">View details</a>
+                }
+              }
             </div>
           </div>
         </div>

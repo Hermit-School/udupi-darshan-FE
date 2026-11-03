@@ -13,7 +13,7 @@ Deploy the backend endpoint before this frontend. New admin passwords may use 4â
 
 ## Current feature boundary
 
-The dashboard provides admin-only forms to publish Nature, Culture, Food, Stories, and Ads. Use existing public image URLs; the editor does not upload files. Public story submission remains separate. Deploy the backend migration and publishing endpoints before deploying this dashboard.
+The dashboard provides admin-only forms to publish Nature, Culture, Food, Stories, and Ads. Use existing public image URLs; the editor does not upload files. The public Write to us form opens an email draft and does not publish or send it automatically. Deploy the backend migration and publishing endpoints before deploying this dashboard.
 
 ## Verification
 
