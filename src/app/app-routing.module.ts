@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: ROUTES.FOOD.path, component: FoodComponent, data: { title: ROUTES.FOOD.title, metaDescription: ROUTES.FOOD.metaDescription } },
   { path: ROUTES.ADVERTISEMENTS.path, component: AdvertisementsComponent },
   { path: 'new-entry', loadComponent: () => import('./components/admin-dashboard-components/new-entry/new-entry.component').then(m => m.NewEntryComponent), canActivate: [adminGuard] },
-  { path: ROUTES.ADMIN.path, loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent) },
+  { path: ROUTES.ADMIN.path, loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent), data: { title: 'Admin sign in | Udupi Darshan', hidePublicChrome: true } },
   { path: ROUTES.LANDING.path, component: LandingPageComponent },
   { path: ROUTES.DETAILS.path, component: DetailsComponent },
   { path: ROUTES.NOT_FOUND.path, component: PagenotfoundComponent, data: { title: ROUTES.NOT_FOUND.title, metaDescription: ROUTES.NOT_FOUND.metaDescription } },

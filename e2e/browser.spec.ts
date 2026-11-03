@@ -92,3 +92,32 @@ test('a server role denial prevents access even after receiving a token', async 
   await page.goto('/#/admindashboard');
   await expect(page).toHaveURL(/#\/admin$/);
 });
+
+test('mobile admin sign-in guides the user through the two steps', async ({ page }) => {
+  await mockApi(page);
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto('/#/admin');
+  await expect(page.getByRole('heading', { name: 'Admin sign in' })).toBeVisible();
+  await expect(page.getByRole('navigation')).toHaveCount(0);
+  await expect(page.locator('[aria-current="step"]')).toHaveText(/Account/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(360);
+
+  await page.getByLabel('Username').fill('fixture-admin');
+  const password = page.getByLabel('Password', { exact: true });
+  await password.fill('fixture-password');
+  await page.getByRole('button', { name: 'Show password' }).click();
+  await expect(password).toHaveAttribute('type', 'text');
+  await page.getByRole('button', { name: 'Hide password' }).click();
+  await expect(password).toHaveAttribute('type', 'password');
+  await page.getByRole('button', { name: 'Send sign-in code' }).click();
+
+  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
+  await expect(page.locator('[aria-current="step"]')).toHaveText(/Verification/);
+  await expect(page.getByLabel('Email verification code')).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Verify and sign in' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Request a new code or change account' }).click();
+  await expect(password).toHaveValue('');
+  await page.getByRole('link', { name: 'Back to public site' }).click();
+  await expect(page).toHaveURL(/#\/home$/);
+  await expect(page.getByRole('navigation').first()).toBeVisible();
+});
