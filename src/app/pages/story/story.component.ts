@@ -1,3 +1,4 @@
+import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -5,7 +6,7 @@ import { Story } from 'src/app/models/story';
 import { StoryService } from 'src/app/services/story.service';
 import { Router, RouterLink } from '@angular/router';
 
-@Component({ standalone: true, imports: [CommonModule, RouterLink],
+@Component({ standalone: true, imports: [CommonModule, RouterLink, VisitorMotionDirective],
   selector: 'app-story',
   templateUrl: './story.component.html',
   styleUrls: ['./story.component.scss']

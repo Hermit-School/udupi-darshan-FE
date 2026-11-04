@@ -873,3 +873,54 @@ test('admin adds photos to a received story, retries safely and publishes the sa
   await expect(page.getByRole('button',{name:/Show photo/})).toHaveCount(3);
   await expect(page.getByText('private@example.invalid',{exact:true})).toHaveCount(0);
 });
+
+test('visitor motion follows the pointer, tracks scrolling and stops for reduced motion',async({page})=>{
+  await mockApi(page);await page.emulateMedia({reducedMotion:'no-preference'});await page.setViewportSize({width:1440,height:900});
+  await page.goto('/#/home');
+  const root=page.locator('main[udMotion]');
+  await expect(root.locator('.ud-reading-progress')).toHaveCount(1);
+  const hero=page.getByRole('link',{name:'Explore nature in Udupi',exact:true});
+  await hero.hover();await expect(hero).toHaveClass(/ud-spotlight-active/);
+  expect(await hero.evaluate(el=>el.style.getPropertyValue('--ud-pointer-x'))).not.toBe('');
+  await page.getByRole('link',{name:'Explore local ads'}).scrollIntoViewIfNeeded();
+  await expect.poll(()=>root.evaluate(el=>Number(el.style.getPropertyValue('--ud-scroll')))).toBeGreaterThan(.5);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await expect(root.locator('.ud-reading-progress')).toHaveCount(0);
+  await expect(hero).not.toHaveClass(/ud-spotlight-active/);
+  await expect.poll(()=>root.evaluate(el=>el.getAnimations({subtree:true}).filter(a=>a.playState==='running').length)).toBe(0);
+  await expect(page.getByRole('heading',{name:'Many sides. One Udupi.'})).toBeVisible();
+  for(const path of ['culture','food','story']){
+    await page.goto('/#/'+path);await expect(page.locator('main[udMotion]')).toBeVisible();await expect(page.locator('.ud-reading-progress')).toHaveCount(0);
+  }
+  await page.emulateMedia({reducedMotion:'no-preference'});await expect(page.locator('.ud-reading-progress')).toHaveCount(1);
+  await page.goto('/#/home');await expect(page.locator('.ud-reading-progress')).toHaveCount(1);
+});
+
+test('newly loaded collection cards reveal without blocking search or keyboard navigation',async({page})=>{
+  await mockApi(page);await page.emulateMedia({reducedMotion:'no-preference'});
+  let release!:()=>void;const responseReady=new Promise<void>(resolve=>{release=resolve;});
+  await page.route(api+'/v1/nature/getNature',async route=>{await responseReady;return route.fulfill({json:[
+    {id:41,name:'Coastal walk',label:'Beaches',location:'Udupi',descr:'A coast to explore.',images:[]},
+    {id:42,name:'Forest trail',label:'Trails',location:'Udupi',descr:'A trail to discover.',images:[]},
+  ]});});
+  await page.goto('/#/nature');await expect(page.getByRole('status').filter({hasText:'Loading places'})).toBeVisible();release();
+  const card=page.getByRole('link',{name:/Coastal walk/});
+  await expect(card).toBeVisible();
+  await expect.poll(()=>card.evaluate(el=>el.getAnimations().filter(a=>a.playState==='running').length)).toBeGreaterThan(0);
+  await card.focus();await expect(card).toBeFocused();
+  await expect.poll(()=>card.evaluate(el=>el.getAnimations().filter(a=>a.playState==='running').length)).toBe(0);
+  await page.getByRole('searchbox',{name:'Search nature',exact:true}).fill('forest');
+  await expect(page.getByRole('link',{name:/Forest trail/})).toBeVisible();await expect(card).toHaveCount(0);
+  await page.getByRole('searchbox',{name:'Search nature',exact:true}).fill('');
+  await expect(card).toBeVisible();await expect(page.getByRole('link',{name:/Forest trail/})).toBeVisible();
+});
+
+test('visitor content remains usable without IntersectionObserver support',async({page})=>{
+  await page.addInitScript(()=>{Object.defineProperty(window,'IntersectionObserver',{value:undefined,configurable:true});});
+  await mockApi(page);await page.goto('/#/home');
+  await expect(page.getByRole('heading',{name:/A little closer/})).toBeVisible();
+  await expect(page.getByRole('link',{name:'Explore nature in Udupi',exact:true})).toBeVisible();
+  await expect(page.locator('.ud-reading-progress')).toHaveCount(0);
+  await page.getByRole('link',{name:'Explore nature in Udupi',exact:true}).click();await expect(page).toHaveURL(/#\/nature$/);
+  await expect(page.getByRole('heading',{name:'A breath of fresh air.'})).toBeVisible();
+});

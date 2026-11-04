@@ -1,3 +1,4 @@
+import { VisitorMotionDirective } from './directives/visitor-motion.directive';
 import { StorySubmissionComponent } from './components/story-submission/story-submission.component';
 import { AuthInterceptor } from './services/Interceptor/AuthInterceptor';
 //Module Imports
@@ -49,6 +50,7 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
   imports: [
     BrowserModule,
     StorySubmissionComponent,
+    VisitorMotionDirective,
     AppRoutingModule,
     NgbCarouselModule,
     FormsModule,

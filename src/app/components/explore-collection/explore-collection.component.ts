@@ -1,3 +1,4 @@
+import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { CommonModule } from "@angular/common";
 import { Component, DestroyRef, Input, OnInit, inject } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -10,7 +11,7 @@ import { FoodService } from "src/app/services/food.service";
 @Component({
   selector: "app-explore-collection",
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, VisitorMotionDirective],
   templateUrl: "./explore-collection.component.html",
   styleUrls: ["./explore-collection.component.scss"],
 })

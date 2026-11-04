@@ -1,4 +1,4 @@
-<main class="ud-page">
+<main class="ud-page" udMotion>
   <div class="ud-wrap">
     <header class="ud-intro ud-enter">
       <p class="ud-eyebrow">Explore Udupi · {{ category }}</p>
@@ -64,7 +64,7 @@
         <div class="ud-grid">
           @for (item of filtered.slice(0, limit); track item.id) {
             <a
-              class="ud-card ud-enter"
+              class="ud-card"
               [routerLink]="['/details', category, item.id]"
               ><div class="ud-card-image">
                 @if (item.images && item.images[0]) {
