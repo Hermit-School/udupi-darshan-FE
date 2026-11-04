@@ -1,0 +1,110 @@
+import { SharedService } from "../../services/shared.service";
+import { Component, DestroyRef, inject } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Observable, switchMap, catchError, of } from "rxjs";
+import {
+  CommunityEvent,
+  EventsService,
+  eventEnded,
+  eventImage,
+  eventName,
+} from "../../services/events.service";
+import { VisitorMotionDirective } from "../../directives/visitor-motion.directive";
+@Component({
+  standalone: true,
+  imports: [CommonModule, RouterLink, VisitorMotionDirective],
+  selector: "app-events",
+  templateUrl: "./events.component.html",
+})
+export class EventsComponent {
+  readonly shared = inject(SharedService);
+  private service = inject(EventsService);
+  private route = inject(ActivatedRoute);
+  private destroy = inject(DestroyRef);
+  items: CommunityEvent[] = [];
+  selected: CommunityEvent | null = null;
+  loading = true;
+  error = false;
+  name = eventName;
+  image = eventImage;
+  ended = eventEnded;
+  constructor() {
+    this.route.paramMap
+      .pipe(
+        switchMap((params) => {
+          this.loading = true;
+          this.error = false;
+          const id = params.get("id");
+          const request: Observable<CommunityEvent | CommunityEvent[]> = id
+            ? this.service.get(Number(id))
+            : this.service.list();
+          return request.pipe(
+            catchError(() => {
+              this.error = true;
+              return of(null);
+            }),
+          );
+        }),
+        takeUntilDestroyed(this.destroy),
+      )
+      .subscribe({
+        next: (value) => {
+          this.loading = false;
+          if (!value) {
+            this.selected = null;
+            this.items = [];
+            return;
+          }
+          if (Array.isArray(value)) {
+            this.items = value;
+            this.selected = null;
+          } else {
+            this.selected = value;
+            this.shared.resolveRelatedLinks(
+              value.details.article?.dontMissThese,
+            );
+          }
+        },
+        error: () => {
+          this.loading = false;
+          this.error = true;
+        },
+      });
+  }
+  get informationUrl(): string | null {
+    try {
+      const url = new URL(this.selected?.details.article?.link || "");
+      return ["https:", "http:"].includes(url.protocol) &&
+        !url.username &&
+        !url.password &&
+        !this.shared.isSiteUrl(url)
+        ? url.href
+        : null;
+    } catch {
+      return null;
+    }
+  }
+  get upcoming() {
+    return this.items
+      .filter((e) => !eventEnded(e))
+      .sort((a, b) =>
+        (a.details.startsOn || "9999").localeCompare(
+          b.details.startsOn || "9999",
+        ),
+      );
+  }
+  get completed() {
+    return this.items
+      .filter(eventEnded)
+      .sort((a, b) =>
+        (b.details.endsOn || b.details.startsOn || "").localeCompare(
+          a.details.endsOn || a.details.startsOn || "",
+        ),
+      );
+  }
+  retry() {
+    location.reload();
+  }
+}

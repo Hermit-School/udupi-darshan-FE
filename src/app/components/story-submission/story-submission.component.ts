@@ -1,46 +1,46 @@
-import { validateStoryPhotos } from 'src/app/util/story-photos';
-import { CommonModule } from '@angular/common';
+import { validateStoryPhotos } from "src/app/util/story-photos";
+import { CommonModule } from "@angular/common";
 import {
   Component,
   ElementRef,
   EventEmitter,
   OnDestroy,
   Output,
-} from '@angular/core';
+} from "@angular/core";
 import {
   FormBuilder,
   ReactiveFormsModule,
   ValidatorFn,
   Validators,
-} from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { StorySubmissionsService } from 'src/app/services/story-submissions.service';
+} from "@angular/forms";
+import { Subscription } from "rxjs";
+import { StorySubmissionsService } from "src/app/services/story-submissions.service";
 
-type StoryField = 'title' | 'name' | 'email' | 'message';
+type StoryField = "title" | "name" | "email" | "message";
 const nonBlank: ValidatorFn = (control) =>
-  typeof control.value === 'string' && control.value.trim()
+  typeof control.value === "string" && control.value.trim()
     ? null
     : { required: true };
 const noNullCharacter: ValidatorFn = (control) =>
-  typeof control.value === 'string' && control.value.includes('\0')
+  typeof control.value === "string" && control.value.includes("\0")
     ? { invalidCharacters: true }
     : null;
 
 @Component({
-  selector: 'app-story-submission',
+  selector: "app-story-submission",
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './story-submission.component.html',
-  styleUrls: ['./story-submission.component.scss'],
+  templateUrl: "./story-submission.component.html",
+  styleUrls: ["./story-submission.component.scss"],
 })
 export class StorySubmissionComponent implements OnDestroy {
   @Output() busy = new EventEmitter<boolean>();
   @Output() close = new EventEmitter<void>();
   readonly form = this.fb.nonNullable.group({
-    title: ['', [nonBlank, noNullCharacter, Validators.maxLength(200)]],
-    name: ['', [nonBlank, noNullCharacter, Validators.maxLength(100)]],
+    title: ["", [noNullCharacter, Validators.maxLength(200)]],
+    name: ["", [nonBlank, noNullCharacter, Validators.maxLength(100)]],
     email: [
-      '',
+      "",
       [
         nonBlank,
         noNullCharacter,
@@ -49,18 +49,18 @@ export class StorySubmissionComponent implements OnDestroy {
         Validators.maxLength(255),
       ],
     ],
-    message: ['', [nonBlank, noNullCharacter, Validators.maxLength(5000)]],
+    message: ["", [nonBlank, noNullCharacter, Validators.maxLength(5000)]],
   });
   photos: { file: File; url: string }[] = [];
-  error = '';
-  photoError = '';
+  error = "";
+  photoError = "";
   submitting = false;
   submitted = false;
   attempted = false;
   validatingPhotos = false;
   private destroyed = false;
   private changes?: Subscription;
-  private key = '';
+  private key = "";
   private request?: Subscription;
   constructor(
     private fb: FormBuilder,
@@ -68,7 +68,7 @@ export class StorySubmissionComponent implements OnDestroy {
     private element: ElementRef<HTMLElement>,
   ) {
     this.changes = this.form.valueChanges.subscribe(() => {
-      this.error = '';
+      this.error = "";
     });
   }
 
@@ -76,18 +76,18 @@ export class StorySubmissionComponent implements OnDestroy {
     const control = this.form.controls[field];
     if (!control.touched && !this.attempted) return null;
     const labels = {
-      title: 'story title',
-      name: 'name',
-      email: 'email address',
-      message: 'story',
+      title: "story title",
+      name: "name",
+      email: "email address",
+      message: "story",
     };
-    if (control.hasError('required')) return `Enter your ${labels[field]}.`;
-    if (control.hasError('maxlength'))
-      return `Use ${control.getError('maxlength').requiredLength} characters or fewer.`;
-    if (control.hasError('invalidCharacters'))
-      return 'Remove invalid characters from this field.';
-    if (control.hasError('email') || control.hasError('pattern'))
-      return 'Enter a valid email address, such as name@example.com.';
+    if (control.hasError("required")) return `Enter your ${labels[field]}.`;
+    if (control.hasError("maxlength"))
+      return `Use ${control.getError("maxlength").requiredLength} characters or fewer.`;
+    if (control.hasError("invalidCharacters"))
+      return "Remove invalid characters from this field.";
+    if (control.hasError("email") || control.hasError("pattern"))
+      return "Enter a valid email address, such as name@example.com.";
     return null;
   }
 
@@ -98,16 +98,16 @@ export class StorySubmissionComponent implements OnDestroy {
   }
 
   clearPhotoError(): void {
-    this.photoError = '';
-    this.error = '';
+    this.photoError = "";
+    this.error = "";
   }
 
   private focusFirstError(): void {
-    const field = (['title', 'name', 'email', 'message'] as const).find(
+    const field = (["title", "name", "email", "message"] as const).find(
       (key) => this.form.controls[key].invalid,
     );
     this.element.nativeElement
-      .querySelector<HTMLElement>(field ? '#story-' + field : '#story-photos')
+      .querySelector<HTMLElement>(field ? "#story-" + field : "#story-photos")
       ?.focus();
   }
 
@@ -121,10 +121,10 @@ export class StorySubmissionComponent implements OnDestroy {
       return;
     const input = event.target as HTMLInputElement;
     const files = Array.from(input.files || []);
-    input.value = '';
+    input.value = "";
     if (!files.length) return;
-    this.photoError = '';
-    this.error = '';
+    this.photoError = "";
+    this.error = "";
     const unique = files.filter(
       (f) =>
         !this.photos.some(
@@ -151,29 +151,29 @@ export class StorySubmissionComponent implements OnDestroy {
   removePhoto(index: number): void {
     URL.revokeObjectURL(this.photos[index].url);
     this.photos.splice(index, 1);
-    this.photoError = '';
-    this.error = '';
+    this.photoError = "";
+    this.error = "";
   }
   submit(): void {
     if (this.submitting || this.validatingPhotos || this.submitted) return;
     this.attempted = true;
-    this.error = '';
+    this.error = "";
     this.form.markAllAsTouched();
     this.trimEmail();
     if (this.form.invalid || this.photoError) {
-      this.error = 'Please correct the highlighted fields before submitting.';
+      this.error = "Please correct the highlighted fields before submitting.";
       this.focusFirstError();
       return;
     }
     const value = this.form.getRawValue();
     const body = new FormData();
-    body.set('title', value.title.trim());
-    body.set('submittedBy', value.name.trim());
-    body.set('email', value.email.trim());
-    body.set('content', value.message.trim());
+    body.set("title", value.title.trim() || value.message.trim().slice(0, 80));
+    body.set("submittedBy", value.name.trim());
+    body.set("email", value.email.trim());
+    body.set("content", value.message.trim());
     this.key ||= crypto.randomUUID();
-    body.set('submissionKey', this.key);
-    for (const photo of this.photos) body.append('photos', photo.file);
+    body.set("submissionKey", this.key);
+    for (const photo of this.photos) body.append("photos", photo.file);
     this.submitting = true;
     this.busy.emit(true);
     this.request = this.stories.submit(body).subscribe({
@@ -187,11 +187,11 @@ export class StorySubmissionComponent implements OnDestroy {
         this.busy.emit(false);
         this.error =
           err.status === 413
-            ? 'These photos are too large. Use files under 5 MB each.'
+            ? "These photos are too large. Use files under 5 MB each."
             : err.status === 400
               ? err.error?.detail ||
-                'Check your story and photos, then try again.'
-              : 'Your story could not be submitted. Your draft is still here; please try again.';
+                "Check your story and photos, then try again."
+              : "Your story could not be submitted. Your draft is still here; please try again.";
       },
     });
   }
