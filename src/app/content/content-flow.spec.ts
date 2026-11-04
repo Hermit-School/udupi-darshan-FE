@@ -19,6 +19,7 @@ import { SearchComponent } from '../components/search/search.component';
 import { ListFilterPipe } from '../util/list-filter';
 import { AppModule } from '../app.module';
 import { AppComponent } from '../app.component';
+import { StorySubmissionComponent } from '../components/story-submission/story-submission.component';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 
 describe('Deployed content API contract', () => {
@@ -102,13 +103,20 @@ describe('Public content rendering regressions', () => {
     expect(document.querySelector('.offcanvas-backdrop')).toBeNull();
     instance.dispose(); fixture.destroy(); fixture.nativeElement.remove();
   });
-  it('builds an email draft only after the story form is complete', () => {
-    const fixture=TestBed.createComponent(NavbarComponent); fixture.detectChanges();
-    expect(fixture.componentInstance.storyDraft).toBeNull();
-    fixture.componentInstance.form.setValue({name:'Fixture',email:'fixture@example.invalid',message:'Fixture story'});
-    expect(decodeURIComponent(fixture.componentInstance.storyDraft!)).toContain('Fixture story');
-    expect(fixture.componentInstance.storyDraft).toMatch(/^mailto:udupidarshan@gmail.com\?/);
-    fixture.destroy();
+  it('submits a story to the API and confirms review without opening email', () => {
+    const fixture=TestBed.createComponent(StorySubmissionComponent); fixture.detectChanges();
+    fixture.componentInstance.submit(); expect(fixture.componentInstance.error).toContain('Please complete');
+    fixture.componentInstance.form.setValue({title:'A day in Udupi',name:'Fixture',email:'fixture@example.invalid',message:'Fixture story'});
+    fixture.componentInstance.submit();
+    const http=TestBed.inject(HttpTestingController);
+    const request=http.expectOne(`${API_BASE_URL}/v1/blogs/submissions`);
+    expect(request.request.body).toBeInstanceOf(FormData);
+    expect(request.request.body.get('content')).toBe('Fixture story');
+    expect(request.request.body.get('submittedBy')).toBe('Fixture');
+    request.flush({id:42,message:'Submitted'}); fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('submitted for admin review');
+    expect(fixture.nativeElement.querySelector('a[href^="mailto:"]')).toBeNull();
+    http.verify();fixture.destroy();
   });
   it('refreshes a pending search when public data finishes loading', () => {
     const shared=new SharedService(); let results: SearchEntry[]=[];
