@@ -22,6 +22,7 @@ const routes: Routes = [
   ...['nature', 'culture', 'food'].map(legacyCategory => ({
     path: legacyCategory + '/:id', loadComponent: () => import('./pages/details/details.component').then(m => m.DetailsComponent), data: { legacyCategory },
   })),
+  { path: 'admindashboard/stories', loadComponent: () => import('./pages/story-review/story-review.component').then(m => m.StoryReviewComponent), canActivate: [adminGuard], data: {title: 'Story submissions | Udupi Darshan', hidePublicChrome: true} },
   { path: 'dashboard', redirectTo: ROUTES.ADMIN_DASHBOARD.path, pathMatch: 'full' },
   { path: ROUTES.NOT_FOUND.path, component: PagenotfoundComponent, data: { title: ROUTES.NOT_FOUND.title, metaDescription: ROUTES.NOT_FOUND.metaDescription } },
   { path: ROUTES.FORGOT_PASSWORD.path, component: ForgotpasswordComponent },

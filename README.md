@@ -42,3 +42,11 @@ is unavailable. Public section and detail routes load their code on navigation.
 Firebase revalidates the HTML shell and caches only fingerprinted JS/CSS for
 long-term reuse. Deploy the backend index first to get the smaller search
 payload immediately.
+
+## Visitor story submissions
+
+Write to us opens a direct submission form, with a story title, credited name, private contact email, story text (up to 5,000 characters), and up to three optional JPEG/PNG photos (5 MiB each). Selected photos can be previewed and removed. The form retains the draft on failure and reuses a submission key for retries; no email app is opened.
+
+Admins use Dashboard → **Review story submissions** (`/#/admindashboard/stories`) to view pending, published and rejected stories. The review page shows full content and private photo previews, then lets the admin publish or reject. Only published stories and their photos are visible publicly; contact email remains private. Direct admin story creation remains available separately.
+
+Deploy the companion backend first: it provides the multipart submission API, protected moderation endpoints, and Flyway V4 durable photo storage in PostgreSQL. No Firebase Storage credentials are required. Verification for this change: 64 unit tests, 13 browser tests, dependency audit and production build passed; mobile modal actions remain visible while form fields scroll.

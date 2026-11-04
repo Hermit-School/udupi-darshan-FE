@@ -1,3 +1,4 @@
+import { StorySubmissionComponent } from './components/story-submission/story-submission.component';
 import { AuthInterceptor } from './services/Interceptor/AuthInterceptor';
 //Module Imports
 import { NgModule, provideZoneChangeDetection } from '@angular/core';
@@ -47,6 +48,7 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
   ],
   imports: [
     BrowserModule,
+    StorySubmissionComponent,
     AppRoutingModule,
     NgbCarouselModule,
     FormsModule,

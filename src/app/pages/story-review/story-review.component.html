@@ -1,0 +1,211 @@
+<div class="review-workspace">
+  <header class="review-bar">
+    <a routerLink="/admindashboard"
+      ><img
+        src="assets/images/static/horizontal_logo.svg"
+        alt="Udupi Darshan"
+        width="170"
+        height="38"
+    /></a>
+    <nav aria-label="Workspace actions">
+      <a routerLink="/admindashboard">← Dashboard</a
+      ><a routerLink="/story">View public stories ↗</a
+      ><button type="button" (click)="signOut()">Sign out</button>
+    </nav>
+  </header>
+  <main class="review-main">
+    <p class="eyebrow">Community contributions</p>
+    <h1>Story submissions</h1>
+    <p class="intro">
+      Read stories shared by visitors, review their photos, and choose what to
+      publish.
+    </p>
+    <div class="filters" aria-label="Filter submissions">
+      @for (tab of statuses; track tab) {
+        <button
+          type="button"
+          [attr.aria-pressed]="status === tab"
+          [disabled]="saving"
+          (click)="filter(tab)"
+        >
+          {{ label(tab) }}
+        </button>
+      }
+    </div>
+    @if (notice) {
+      <p class="notice" role="status">{{ notice }}</p>
+    }
+    <div class="review-layout">
+      <section class="submission-list" aria-label="Submitted stories">
+        <div class="list-heading">
+          <h2>{{ label(status) }}</h2>
+          <span>{{ queue.total }} {{ queue.total===1 ? 'story' : 'stories' }}</span>
+        </div>
+        <label for="queue-search" class="visually-hidden"
+          >Search this page</label
+        ><input
+          class="queue-search"
+          id="queue-search"
+          type="search"
+          placeholder="Search this page by title or author"
+          [value]="query"
+          (input)="query = $any($event.target).value"
+        />
+        @if (loading) {
+          <p role="status" class="empty">Loading submissions…</p>
+        } @else if (error) {
+          <div class="empty" role="alert">
+            <p>{{ error }}</p>
+            <button type="button" class="primary" (click)="load(queue.page)">
+              Try again
+            </button>
+          </div>
+        } @else {
+          @for (story of visible; track story.id) {
+            <button
+              type="button"
+              class="submission-row"
+              [class.selected]="selected?.id === story.id"
+              [attr.aria-pressed]="selected?.id === story.id"
+              [disabled]="saving"
+              (click)="open(story.id)"
+            >
+              <span class="row-meta"
+                >{{ story.submittedBy }} ·
+                {{ story.createdAt | date: 'mediumDate' }}</span
+              ><strong>{{ story.title }}</strong
+              ><span class="excerpt">{{ story.excerpt }}</span
+              ><span class="row-meta"
+                >{{ story.photoCount }}
+                {{ story.photoCount === 1 ? 'photo' : 'photos' }} · Open story
+                →</span
+              >
+            </button>
+          } @empty {
+            <p class="empty">
+              {{
+                query
+                  ? 'No stories match this search.'
+                  : 'No stories in this queue.'
+              }}
+            </p>
+          }
+        }
+        @if (queue.totalPages > 1) {
+          <nav class="pagination" aria-label="Submission pages">
+            <button
+              type="button"
+              [disabled]="loading || saving || queue.page === 0"
+              (click)="close(); load(queue.page - 1)"
+            >
+              Previous</button
+            ><span>{{ queue.page + 1 }} / {{ queue.totalPages }}</span
+            ><button
+              type="button"
+              [disabled]="
+                loading || saving || queue.page + 1 >= queue.totalPages
+              "
+              (click)="close(); load(queue.page + 1)"
+            >
+              Next
+            </button>
+          </nav>
+        }
+      </section>
+      <section
+        #reviewPanel
+        class="review-detail"
+        aria-label="Story review"
+        [attr.aria-busy]="detailLoading || saving"
+      >
+        @if (detailLoading) {
+          <p class="empty" role="status">Opening story…</p>
+        }
+        @if (selected; as story) {
+          <div class="detail-top">
+            <span class="status-badge">{{ label(story.status) }}</span
+            ><button type="button" [disabled]="saving" (click)="close()">
+              Close review
+            </button>
+          </div>
+          <h2>{{ story.title }}</h2>
+          <p class="byline">
+            By {{ story.submittedBy }} · {{ story.createdAt | date: 'medium' }}
+          </p>
+          <p class="contact">
+            Contact email (admin only):
+            <a [href]="'mailto:' + story.email">{{ story.email }}</a>
+          </p>
+          <div class="story-text">{{ story.content }}</div>
+          @if (photos.length) {
+            <h3>Submitted photos</h3>
+            <div class="review-photos">
+              @for (photo of photos; track $index) {
+                <figure>
+                  @if (photo.url) {
+                    <a
+                      [href]="photo.url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      [attr.aria-label]="'Open submitted photo ' + ($index + 1)"
+                      ><img
+                        [src]="photo.url"
+                        [alt]="'Submitted photo ' + ($index + 1)"
+                    /></a>
+                  } @else {
+                    <p>
+                      {{
+                        photo.failed
+                          ? 'Photo could not load. Reopen this story to retry.'
+                          : 'Loading photo…'
+                      }}
+                    </p>
+                  }
+                </figure>
+              }
+            </div>
+          }
+          <div class="decision">
+            @if (story.status === 'Submitted') {
+              <p>
+                Publishing makes this story, the author’s name, and these photos
+                visible to everyone. Their email stays private.
+              </p>
+              <div>
+                <button
+                  class="primary"
+                  type="button"
+                  [disabled]="saving || photosPending"
+                  (click)="decide('publish')"
+                >
+                  {{ saving ? 'Saving…' : 'Publish story' }}</button
+                ><button
+                  type="button"
+                  [disabled]="saving"
+                  (click)="decide('reject')"
+                >
+                  Reject story
+                </button>
+              </div>
+            } @else if (story.status === 'Published') {
+              <a class="public-link" [routerLink]="['/story', story.id]"
+                >View published story ↗</a
+              >
+            } @else {
+              <p>This story was rejected and is not visible publicly.</p>
+            }
+          </div>
+        } @else if (!detailLoading && !detailError) {
+          <div class="empty">
+            <i class="bi bi-journal-text" aria-hidden="true"></i>
+            <h2>Choose a story to review.</h2>
+            <p>Select a submission to see the full story and photos.</p>
+          </div>
+        }
+        @if (detailError) {
+          <p class="error" role="alert">{{ detailError }}</p>
+        }
+      </section>
+    </div>
+  </main>
+</div>

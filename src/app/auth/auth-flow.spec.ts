@@ -168,4 +168,18 @@ describe('Admin authentication contract', () => {
     approveAccess(token);
     expect(navigate).toHaveBeenCalledWith(['/admindashboard']); fixture.destroy();
   });
+  it('attaches credentials to private story reads but keeps public submissions anonymous', () => {
+    const token=signIn();
+    for(const path of ['/v1/blogs/admin/submissions','/v1/blogs/admin/photos/fixture']) {
+      client.get(API_BASE_URL+path).subscribe();
+      const request=http.expectOne(API_BASE_URL+path);
+      expect(request.request.headers.get('Authorization')).toBe('Bearer '+token);request.flush({});
+    }
+    client.post(API_BASE_URL+'/v1/blogs/submissions',new FormData()).subscribe({error:()=>{}});
+    const request=http.expectOne(API_BASE_URL+'/v1/blogs/submissions');
+    expect(request.request.headers.has('Authorization')).toBe(false);
+    request.flush('',{status:401,statusText:'Unauthorized'});
+    expect(auth.token).toBe(token);
+  });
+
 });
