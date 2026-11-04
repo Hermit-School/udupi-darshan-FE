@@ -1,69 +1,53 @@
 <main class="ud-page" udMotion>
   <div class="ud-wrap">
-    <div class="home-editorial">
-      <section class="home-intro ud-enter" aria-labelledby="home-title">
-        <p class="ud-eyebrow">Coastal Karnataka · Udupi Darshan</p>
-        <h1 id="home-title">
-          A little closer to<br /><span>the heart of Udupi.</span>
-        </h1>
-        <p class="ud-lead">
-          A journal of local places, flavours, traditions, and people. See Udupi
-          through its stories.
-        </p>
-        <div class="home-search"><app-search [inline]="true"></app-search></div>
-      </section>
-      <a
-        class="home-hero ud-enter"
-        data-spotlight
-        routerLink="/nature"
-        aria-label="Explore nature in Udupi"
-      >
-        <img
-          src="assets/images/a6.jpg"
-          srcset="assets/images/a6-480.jpg 480w, assets/images/a6.jpg 800w"
-          sizes="(max-width:540px) calc(100vw - 32px), (max-width:1248px) calc(100vw - 48px), 1200px"
-          alt="Waterfall surrounded by lush forest"
-          fetchpriority="high"
-          width="800"
-          height="600"
-        />
-        <div class="hero-copy">
-          <span class="hero-tag">Take the scenic route</span>
-          <h2>Make room for<br />a little wonder.</h2>
-          <span class="hero-action"
-            >Explore nature
-            <i class="bi bi-arrow-up-right" aria-hidden="true"></i
-          ></span>
-        </div>
-      </a>
-    </div>
-    @if (featured.length) {
-      <section
-        class="event-highlights ud-section"
-        aria-labelledby="home-events"
-      >
-        <div class="ud-section-head">
-          <div>
-            <p class="ud-eyebrow">On the community calendar</p>
-            <h2 id="home-events">Don’t miss a moment.</h2>
-          </div>
-          <a class="ud-link" routerLink="/events">All events →</a>
-        </div>
-        <div class="event-tape">
-          @for (event of featured; track event.id) {
-            <a [routerLink]="['/events', event.id]"
-              ><small>{{
-                event.details.startsOn
-                  ? (event.details.startsOn | date: "mediumDate")
-                  : "Coming soon"
-              }}</small
-              ><strong>{{ name(event) }}</strong
-              ><span>Event details →</span></a
-            >
-          }
-        </div>
-      </section>
-    }
+    <section class="home-intro ud-enter" aria-labelledby="home-title">
+      <p class="ud-eyebrow">Coastal Karnataka · Udupi Darshan</p>
+      <h1 id="home-title">
+        A little closer to<br /><span>the heart of Udupi.</span>
+      </h1>
+      <p class="ud-lead">
+        Find your next favourite place, discover local flavours, and see Udupi
+        through its stories.
+      </p>
+      <div class="home-search"><app-search [inline]="true"></app-search></div>
+      <div class="ud-chips" aria-label="Explore by interest">
+        <a class="ud-chip" routerLink="/nature"
+          ><i class="bi bi-tree" aria-hidden="true"></i> Nature</a
+        >
+        <a class="ud-chip" routerLink="/culture"
+          ><i class="bi bi-brightness-high" aria-hidden="true"></i> Culture</a
+        >
+        <a class="ud-chip" routerLink="/food"
+          ><i class="bi bi-cup-hot" aria-hidden="true"></i> Food</a
+        >
+        <a class="ud-chip" routerLink="/story"
+          ><i class="bi bi-journal-text" aria-hidden="true"></i> Stories</a
+        >
+      </div>
+    </section>
+    <a
+      class="home-hero ud-enter"
+      data-spotlight
+      routerLink="/nature"
+      aria-label="Explore nature in Udupi"
+    >
+      <img
+        src="assets/images/a6.jpg"
+        srcset="assets/images/a6-480.jpg 480w, assets/images/a6.jpg 800w"
+        sizes="(max-width:540px) calc(100vw - 32px), (max-width:1248px) calc(100vw - 48px), 1200px"
+        alt="Waterfall surrounded by lush forest"
+        fetchpriority="high"
+        width="800"
+        height="600"
+      />
+      <div class="hero-copy">
+        <span class="hero-tag">Take the scenic route</span>
+        <h2>Make room for<br />a little wonder.</h2>
+        <span class="hero-action"
+          >Explore nature <i class="bi bi-arrow-up-right" aria-hidden="true"></i
+        ></span>
+      </div>
+    </a>
     <section class="ud-section" aria-labelledby="discover-title">
       <div class="ud-section-head">
         <div>

@@ -98,7 +98,7 @@
               <h2>What to discover</h2>
               <ul>
                 @for (item of card.discover; track $index) {
-                  <li [innerHTML]="item"></li>
+                  <li>{{ item }}</li>
                 }
               </ul>
             </section>
@@ -108,7 +108,7 @@
               <h2>Good to know</h2>
               <ul>
                 @for (item of card.keyPoints; track $index) {
-                  <li [innerHTML]="item"></li>
+                  <li>{{ item }}</li>
                 }
               </ul>
             </section>
@@ -118,7 +118,7 @@
               <h2>Before you go</h2>
               <ul>
                 @for (item of card.impInfo; track $index) {
-                  <li [innerHTML]="item"></li>
+                  <li>{{ item }}</li>
                 }
               </ul>
             </section>
@@ -180,7 +180,7 @@
           }
         </aside>
       </div>
-      @if (sharedRelated.length) {
+      @if (card.dontMissThese && card.dontMissThese.length) {
         <section class="ud-section">
           <div class="ud-section-head">
             <div>
@@ -189,7 +189,7 @@
             </div>
           </div>
           <div class="ud-grid">
-            @for (item of sharedRelated; track $index) {
+            @for (item of card.dontMissThese; track $index) {
               <article class="ud-card">
                 @if (item.imageUrl) {
                   <div class="ud-card-image">
