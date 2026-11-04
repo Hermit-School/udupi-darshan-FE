@@ -23,56 +23,90 @@
     </button>
   </div>
 } @else {
-  <form [formGroup]="form" (ngSubmit)="submit()">
+  <form novalidate [formGroup]="form" (ngSubmit)="submit()">
     <div class="modal-body">
       <p>
         Share a memory, a discovery, or a little piece of Udupi. Our admin will
         review it before publishing.
       </p>
-      <fieldset [disabled]="submitting">
+      <p class="field-help">
+        All text fields are required. Photos are optional.
+      </p>
+      <fieldset [disabled]="submitting || validatingPhotos">
         <label for="story-title">Story title</label
         ><input
           id="story-title"
           class="form-control"
           formControlName="title"
+          [class.is-invalid]="!!validationMessage('title')"
+          [attr.aria-invalid]="!!validationMessage('title')"
+          aria-describedby="story-title-help story-title-error"
           maxlength="200"
           required
         />
+        <small id="story-title-help">Up to 200 characters.</small>
+        @if (validationMessage('title'); as message) {
+          <p id="story-title-error" class="field-error">{{ message }}</p>
+        }
         <label for="story-name">Name</label
         ><input
           id="story-name"
           class="form-control"
           formControlName="name"
+          [class.is-invalid]="!!validationMessage('name')"
+          [attr.aria-invalid]="!!validationMessage('name')"
+          aria-describedby="story-name-help story-name-error"
           maxlength="100"
           autocomplete="name"
           required
-        /><small>Your name will be credited with the story.</small>
+        /><small id="story-name-help"
+          >Your name will be credited with the story. Up to 100
+          characters.</small
+        >
+        @if (validationMessage('name'); as message) {
+          <p id="story-name-error" class="field-error">{{ message }}</p>
+        }
         <label for="story-email">Email</label
         ><input
           id="story-email"
           class="form-control"
           formControlName="email"
+          [class.is-invalid]="!!validationMessage('email')"
+          [attr.aria-invalid]="!!validationMessage('email')"
+          aria-describedby="story-email-help story-email-error"
+          (blur)="trimEmail()"
           type="email"
           maxlength="255"
           autocomplete="email"
           required
-        /><small>Only the admin can see your email.</small>
+        /><small id="story-email-help"
+          >Only the admin can see your email.</small
+        >
+        @if (validationMessage('email'); as message) {
+          <p id="story-email-error" class="field-error">{{ message }}</p>
+        }
         <label for="story-message">Your experience</label
         ><textarea
           id="story-message"
           class="form-control"
           formControlName="message"
+          [class.is-invalid]="!!validationMessage('message')"
+          [attr.aria-invalid]="!!validationMessage('message')"
+          aria-describedby="story-message-help story-message-error"
           rows="6"
           maxlength="5000"
           required
         ></textarea
-        ><small
+        ><small id="story-message-help"
           >{{ form.controls.message.value.length }} / 5000 characters</small
         >
+        @if (validationMessage('message'); as message) {
+          <p id="story-message-error" class="field-error">{{ message }}</p>
+        }
         <label for="story-photos">Photos (optional)</label>
         <p class="photo-help" id="photo-help">
-          Up to 3 JPEG or PNG photos, 5 MB each. Please use photos you have
-          permission to share.
+          Up to 3 JPEG or PNG photos, 5 MB and 20 megapixels each. Please use
+          photos you have permission to share.
         </p>
         <input
           id="story-photos"
@@ -80,11 +114,25 @@
           type="file"
           accept="image/jpeg,image/png"
           multiple
-          aria-describedby="photo-help"
+          aria-describedby="photo-help story-photo-error"
+          [class.is-invalid]="!!photoError"
+          [attr.aria-invalid]="!!photoError"
           (change)="selectPhotos($event)"
         />
         @if (photoError) {
-          <p class="form-error" role="alert">{{ photoError }}</p>
+          <p id="story-photo-error" class="form-error" role="alert">
+            {{ photoError }}
+          </p>
+          <button class="photo-reset" type="button" (click)="clearPhotoError()">
+            {{
+              photos.length
+                ? 'Keep current selection'
+                : 'Continue without photos'
+            }}
+          </button>
+        }
+        @if (validatingPhotos) {
+          <p class="field-help" role="status">Checking photos…</p>
         }
         <div class="photo-grid">
           @for (photo of photos; track photo.url; let i = $index) {
@@ -119,8 +167,18 @@
         (click)="close.emit()"
       >
         Close</button
-      ><button type="submit" class="story-primary" [disabled]="submitting">
-        {{ submitting ? 'Submitting…' : 'Submit story' }}
+      ><button
+        type="submit"
+        class="story-primary"
+        [disabled]="submitting || validatingPhotos"
+      >
+        {{
+          submitting
+            ? 'Submitting…'
+            : validatingPhotos
+              ? 'Checking photos…'
+              : 'Submit story'
+        }}
       </button>
     </div>
   </form>

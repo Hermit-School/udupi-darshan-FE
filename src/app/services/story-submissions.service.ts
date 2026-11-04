@@ -62,6 +62,16 @@ export class StorySubmissionsService {
       this.options,
     );
   }
+  addPhotos(id: number, files: readonly File[], uploadKey: string) {
+    const body = new FormData();
+    body.set('uploadKey', uploadKey);
+    for (const file of files) body.append('photos', file);
+    return this.http.post<StoryReview>(
+      this.base + '/admin/submissions/' + id + '/photos',
+      body,
+      this.options,
+    );
+  }
   photo(path: string) {
     const id = path.substring('/v1/blogs/photos/'.length);
     return this.http.get(

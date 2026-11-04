@@ -25,7 +25,7 @@
         <button
           type="button"
           [attr.aria-pressed]="status === tab"
-          [disabled]="saving"
+          [disabled]="busy"
           (click)="filter(tab)"
         >
           {{ label(tab) }}
@@ -39,7 +39,10 @@
       <section class="submission-list" aria-label="Submitted stories">
         <div class="list-heading">
           <h2>{{ label(status) }}</h2>
-          <span>{{ queue.total }} {{ queue.total===1 ? 'story' : 'stories' }}</span>
+          <span
+            >{{ queue.total }}
+            {{ queue.total === 1 ? 'story' : 'stories' }}</span
+          >
         </div>
         <label for="queue-search" class="visually-hidden"
           >Search this page</label
@@ -67,7 +70,7 @@
               class="submission-row"
               [class.selected]="selected?.id === story.id"
               [attr.aria-pressed]="selected?.id === story.id"
-              [disabled]="saving"
+              [disabled]="busy"
               (click)="open(story.id)"
             >
               <span class="row-meta"
@@ -95,16 +98,14 @@
           <nav class="pagination" aria-label="Submission pages">
             <button
               type="button"
-              [disabled]="loading || saving || queue.page === 0"
+              [disabled]="loading || busy || queue.page === 0"
               (click)="close(); load(queue.page - 1)"
             >
               Previous</button
             ><span>{{ queue.page + 1 }} / {{ queue.totalPages }}</span
             ><button
               type="button"
-              [disabled]="
-                loading || saving || queue.page + 1 >= queue.totalPages
-              "
+              [disabled]="loading || busy || queue.page + 1 >= queue.totalPages"
               (click)="close(); load(queue.page + 1)"
             >
               Next
@@ -116,7 +117,7 @@
         #reviewPanel
         class="review-detail"
         aria-label="Story review"
-        [attr.aria-busy]="detailLoading || saving"
+        [attr.aria-busy]="detailLoading || busy"
       >
         @if (detailLoading) {
           <p class="empty" role="status">Opening story…</p>
@@ -124,7 +125,7 @@
         @if (selected; as story) {
           <div class="detail-top">
             <span class="status-badge">{{ label(story.status) }}</span
-            ><button type="button" [disabled]="saving" (click)="close()">
+            ><button type="button" [disabled]="busy" (click)="close()">
               Close review
             </button>
           </div>
@@ -165,6 +166,84 @@
               }
             </div>
           }
+          @if (story.status === 'Submitted') {
+            <section class="add-photos" aria-labelledby="add-photos-title">
+              <h3 id="add-photos-title">Add photos to this story</h3>
+              <p id="admin-photo-help">
+                {{ story.photos.length }} of 3 photos attached. JPEG or PNG, up
+                to 5 MB and 20 megapixels each. Save new photos before
+                publishing.
+              </p>
+              @if (story.photos.length < 3) {
+                <label for="admin-story-photos">Add photos (optional)</label>
+                <input
+                  id="admin-story-photos"
+                  class="form-control"
+                  type="file"
+                  accept="image/jpeg,image/png"
+                  multiple
+                  [disabled]="busy"
+                  [attr.aria-invalid]="!!photoError"
+                  aria-describedby="admin-photo-help admin-photo-error"
+                  (change)="selectPhotos($event)"
+                />
+                @if (validatingPhotos) {
+                  <p role="status">Checking photos…</p>
+                }
+                @if (photoError) {
+                  <p class="error" id="admin-photo-error" role="alert">
+                    {{ photoError }}
+                  </p>
+                  <button
+                    type="button"
+                    [disabled]="busy"
+                    (click)="clearPhotoError()"
+                  >
+                    {{
+                      pendingPhotos.length
+                        ? 'Keep current selection'
+                        : 'Continue without new photos'
+                    }}
+                  </button>
+                }
+                <div class="review-photos pending-photos">
+                  @for (
+                    photo of pendingPhotos;
+                    track photo.url;
+                    let i = $index
+                  ) {
+                    <figure>
+                      <img [src]="photo.url" [alt]="'New photo ' + (i + 1)" />
+                      <figcaption>{{ photo.file.name }}</figcaption>
+                      <button
+                        type="button"
+                        [disabled]="busy"
+                        [attr.aria-label]="'Remove new photo ' + (i + 1)"
+                        (click)="removePendingPhoto(i)"
+                      >
+                        Remove
+                      </button>
+                    </figure>
+                  }
+                </div>
+                @if (pendingPhotos.length) {
+                  <button
+                    class="primary"
+                    type="button"
+                    [disabled]="busy || !!photoError"
+                    (click)="savePhotos()"
+                  >
+                    {{ uploading ? 'Saving photos…' : 'Save photos' }}
+                  </button>
+                }
+                @if (uploadError) {
+                  <p class="error" role="alert">{{ uploadError }}</p>
+                }
+              } @else {
+                <p>This story has reached the three-photo limit.</p>
+              }
+            </section>
+          }
           <div class="decision">
             @if (story.status === 'Submitted') {
               <p>
@@ -175,13 +254,18 @@
                 <button
                   class="primary"
                   type="button"
-                  [disabled]="saving || photosPending"
+                  [disabled]="
+                    busy ||
+                    photosPending ||
+                    pendingPhotos.length > 0 ||
+                    !!photoError
+                  "
                   (click)="decide('publish')"
                 >
                   {{ saving ? 'Saving…' : 'Publish story' }}</button
                 ><button
                   type="button"
-                  [disabled]="saving"
+                  [disabled]="busy"
                   (click)="decide('reject')"
                 >
                   Reject story

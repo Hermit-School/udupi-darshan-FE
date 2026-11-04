@@ -105,7 +105,7 @@ describe('Public content rendering regressions', () => {
   });
   it('submits a story to the API and confirms review without opening email', () => {
     const fixture=TestBed.createComponent(StorySubmissionComponent); fixture.detectChanges();
-    fixture.componentInstance.submit(); expect(fixture.componentInstance.error).toContain('Please complete');
+    fixture.componentInstance.submit(); expect(fixture.componentInstance.error).toContain('highlighted fields');
     fixture.componentInstance.form.setValue({title:'A day in Udupi',name:'Fixture',email:'fixture@example.invalid',message:'Fixture story'});
     fixture.componentInstance.submit();
     const http=TestBed.inject(HttpTestingController);

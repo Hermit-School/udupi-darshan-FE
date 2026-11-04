@@ -579,7 +579,7 @@ test('visitors submit up to three photos and retain their draft when submission 
     name: 'coast.png',
     mimeType: 'image/png',
     buffer: Buffer.from(
-      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=',
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4n8AAAAPBAWBAxZYxAAAAAElFTkSuQmCC',
       'base64',
     ),
   };
@@ -654,7 +654,7 @@ test('admin reviews private submissions and publishes approved stories to the pu
 }) => {
   await mockApi(page);
   const photo = Buffer.from(
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=',
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4n8AAAAPBAWBAxZYxAAAAAElFTkSuQmCC',
     'base64',
   );
   const stories = [
@@ -791,4 +791,85 @@ test('admin reviews private submissions and publishes approved stories to the pu
       .locator('img[src="' + api + '/v1/blogs/photos/fixture-photo"]')
       .first(),
   ).toBeVisible();
+});
+
+
+test('story form validates fields and photos inline before any submission',async({page})=>{
+  let submissions=0;
+  await mockApi(page);
+  await page.route(api+'/v1/blogs/submissions',route=>{submissions++;return route.fulfill({status:201,json:{id:42}});});
+  await page.setViewportSize({width:390,height:844});await page.goto('/#/home');
+  await page.getByRole('button',{name:'Open navigation'}).click();await page.getByRole('button',{name:'Write to us'}).click();
+  const form=page.getByRole('dialog',{name:'Tell us your story'});
+  const submit=form.getByRole('button',{name:'Submit story',exact:true});
+  await submit.click();
+  await expect(form.getByLabel('Story title')).toBeFocused();
+  for(const id of ['title','name','email','message'])await expect(form.locator('#story-'+id+'-error')).toContainText('Enter your');
+  expect(submissions).toBe(0);
+  await form.getByLabel('Story title').fill('   ');await form.getByLabel('Name',{exact:true}).fill('Visitor');await form.getByLabel('Email',{exact:true}).fill('visitor@example');await form.getByLabel('Your experience').fill('A walk in Udupi.');
+  await submit.click();await expect(form.locator('#story-title-error')).toBeVisible();await expect(form.locator('#story-email-error')).toContainText('valid email');expect(submissions).toBe(0);
+  await form.getByLabel('Story title').fill('A day in Udupi');await form.getByLabel('Email',{exact:true}).fill('visitor@example.com');
+  const photos=form.getByLabel('Photos (optional)',{exact:true});
+  await photos.setInputFiles({name:'notes.txt',mimeType:'text/plain',buffer:Buffer.from('not a photo')});
+  await expect(form.locator('#story-photo-error')).toContainText('JPEG or PNG');await submit.click();expect(submissions).toBe(0);
+  await photos.setInputFiles({name:'fake.png',mimeType:'image/png',buffer:Buffer.from('not an actual image')});
+  await expect(form.locator('#story-photo-error')).toContainText('readable JPEG or PNG');
+  await photos.setInputFiles({name:'oversized.png',mimeType:'image/png',buffer:Buffer.alloc(5*1024*1024+1)});
+  await expect(form.locator('#story-photo-error')).toContainText('5 MB');expect(submissions).toBe(0);
+  await form.getByRole('button',{name:'Continue without photos'}).click();
+  await expect(form.locator('#story-photo-error')).toHaveCount(0);await submit.click();
+  await expect(form.getByRole('status')).toContainText('submitted for admin review');expect(submissions).toBe(1);
+});
+
+test('admin adds photos to a received story, retries safely and publishes the saved gallery',async({page})=>{
+  await mockApi(page);
+
+  // Generate a valid image in the browser for the real client-side decoder.
+  await page.goto('/#/admin');
+  const encoded=await page.evaluate(()=>{const canvas=document.createElement('canvas');canvas.width=4;canvas.height=4;return canvas.toDataURL('image/png').split(',')[1];});
+  const photo={name:'admin-coast.png',mimeType:'image/png',buffer:Buffer.from(encoded,'base64')};
+  const story={id:84,title:'Received visitor story',content:'A visitor memory for admin review.',submittedBy:'Visitor',email:'private@example.invalid',createdAt:'2026-11-04 09:00:00',status:'Submitted',photos:['/v1/blogs/photos/visitor-photo']};
+  let uploads=0;const keys:string[]=[];
+  await page.route(api+'/v1/blogs/admin/**',async route=>{
+    expect(route.request().headers()['authorization']).toBe('Bearer '+token);
+    const path=new URL(route.request().url()).pathname;
+    if(path.includes('/admin/photos/'))return route.fulfill({contentType:'image/png',body:photo.buffer});
+    if(path.endsWith('/submissions/84/photos')){
+      expect(route.request().method()).toBe('POST');
+      const body=route.request().postDataBuffer()!.toString();expect(body.match(/filename=/g)||[]).toHaveLength(2);
+      keys.push(body.match(/name="uploadKey"\r\n\r\n([^\r]+)/)![1]);
+      if(++uploads===1)return route.fulfill({status:503,json:{detail:'Unavailable'}});
+      story.photos.push('/v1/blogs/photos/admin-photo-1','/v1/blogs/photos/admin-photo-2');return route.fulfill({json:story});
+    }
+    if(path.endsWith('/submissions/84/publish')){story.status='Published';return route.fulfill({json:{id:84,status:'Published'}});}
+    if(path.endsWith('/submissions/84'))return route.fulfill({json:story});
+    return route.fulfill({json:{items:story.status==='Submitted'?[{...story,excerpt:story.content,photoCount:story.photos.length}]:[],total:story.status==='Submitted'?1:0,page:0,totalPages:1}});
+  });
+  await page.route(api+'/v1/blogs/getBlogs/84',route=>{const {email,photos,...publicStory}=story;return route.fulfill({json:{...publicStory,images:photos,dontMissThese:[]}});});
+  await page.route(api+'/v1/blogs/photos/**',route=>route.fulfill({contentType:'image/png',body:photo.buffer}));
+  await signIn(page);await page.getByRole('link',{name:'Review story submissions'}).click();
+  await page.setViewportSize({width:390,height:844});await page.getByRole('button',{name:/Received visitor story/}).click();
+  const review=page.getByRole('region',{name:'Story review'});const input=review.getByLabel('Add photos (optional)',{exact:true});
+  await input.setInputFiles([photo,{...photo,name:'second.png'},{...photo,name:'third.png'}]);
+  await expect(review.locator('#admin-photo-error')).toContainText('up to 3');expect(uploads).toBe(0);
+  await input.setInputFiles([photo,{...photo,name:'second.png'}]);
+  await expect(review.getByRole('img',{name:/New photo/})).toHaveCount(2);
+  await expect(review.getByRole('button',{name:'Publish story',exact:true})).toBeDisabled();
+  await review.getByRole('button',{name:'Remove new photo 2'}).click();
+  await input.setInputFiles({...photo,name:'replacement.png'});
+  await review.getByRole('button',{name:'Save photos',exact:true}).click();
+  await expect(review.getByRole('alert')).toContainText('Your selection is still here');
+  await expect(review.getByRole('img',{name:/New photo/})).toHaveCount(2);
+  await review.getByRole('button',{name:'Save photos',exact:true}).click();
+  await expect(page.getByRole('status').filter({hasText:'Photos saved'})).toBeVisible();
+  await expect(review.getByRole('img',{name:/Submitted photo/})).toHaveCount(3);
+  await expect(review.getByRole('img',{name:/New photo/})).toHaveCount(0);
+  expect(keys).toHaveLength(2);expect(keys[0]).toBe(keys[1]);
+  await expect(review.getByText('This story has reached the three-photo limit.')).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);
+  await review.getByRole('button',{name:'Publish story',exact:true}).click();
+  await review.getByRole('link',{name:'View published story'}).click();
+  await expect(page).toHaveURL(/#\/story\/84$/);
+  await expect(page.getByRole('button',{name:/Show photo/})).toHaveCount(3);
+  await expect(page.getByText('private@example.invalid',{exact:true})).toHaveCount(0);
 });
