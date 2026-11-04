@@ -1,143 +1,227 @@
-<div class="container-fluid p-0">
-  <div class="heading-container">
-    <h1 class="heading-text text-white fw-bold">Do You Want To Advertise With Us?</h1>
-    <button class="btn " data-bs-toggle="modal" data-bs-target="#detailsModal">View Details</button>
-    <img src="assets/images/Vectorblob.svg" alt="Design Blob" class="design-blob">
-  </div>
-  @if (publishedAds.length) {
-    <section class="container py-4" aria-labelledby="published-ads">
-      <h2 id="published-ads">Local advertisements</h2>
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
-        @for (ad of publishedAds; track ad.id) {
-          <article class="col">
-            <div class="card h-100">
-              <img [src]="ad.imageUrl" alt="" class="card-img-top" loading="lazy" referrerpolicy="no-referrer">
-              <div class="card-body">
-                <h3 class="h5">{{ ad.title }}</h3>
-                @if (ad.link) { <a [href]="ad.link" target="_blank" rel="noopener noreferrer">Visit {{ ad.title }}</a> }
+<main class="ud-page">
+  <div class="ud-wrap">
+    <header class="ud-intro ud-enter">
+      <p class="ud-eyebrow">Around the neighbourhood</p>
+      <h1>Local connections.</h1>
+      <p class="ud-lead">
+        Discover businesses and advertisements from the community.
+      </p>
+      <button
+        class="ud-button"
+        data-bs-toggle="modal"
+        data-bs-target="#detailsModal"
+      >
+        Advertise with us
+      </button>
+    </header>
+    @if (publishedAds.length) {
+      <section class="container py-4" aria-labelledby="published-ads">
+        <h2 id="published-ads">Local advertisements</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+          @for (ad of publishedAds; track ad.id) {
+            <article class="col">
+              <div class="card h-100">
+                <img
+                  [src]="ad.imageUrl"
+                  alt=""
+                  class="card-img-top"
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                />
+                <div class="card-body">
+                  <h3 class="h5">{{ ad.title }}</h3>
+                  @if (ad.link) {
+                    <a
+                      [href]="ad.link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >Visit {{ ad.title }}</a
+                    >
+                  }
+                </div>
               </div>
-            </div>
-          </article>
-        }
-      </div>
-    </section>
-  }
-  <div class="container-fluid mt-4">
-    <div class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-4 g-4">
-      <div class="col" *ngFor="let image of images.slice(0, 4)">
-        <div class="card h-100">
-          <img loading="lazy" decoding="async" [src]="image.src" class="card-img-top" [alt]="image.alt">
+            </article>
+          }
+        </div>
+      </section>
+    }
+    <div class="container-fluid mt-4">
+      <div
+        class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-4 g-4"
+      >
+        <div class="col" *ngFor="let image of images.slice(0, 4)">
+          <div class="card h-100">
+            <img
+              loading="lazy"
+              decoding="async"
+              [src]="image.src"
+              class="card-img-top"
+              [alt]="image.alt"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="container-fluid mt-4">
-    <div class="row large">
-      <div class="col-lg-7">
-        <div class="card h-100">
-          <img [src]="largeImage?.src" class="card-img-top" [alt]="largeImage?.alt">
+    <div class="container-fluid mt-4">
+      <div class="row large">
+        <div class="col-lg-7">
+          <div class="card h-100">
+            <img
+              [src]="largeImage?.src"
+              class="card-img-top"
+              [alt]="largeImage?.alt"
+            />
+          </div>
         </div>
-      </div>
-      <div class="col-lg-5 small-img">
-        <div class="row row-cols-3 g-3">
-          <div class="col" *ngFor="let image of smallImages">
-            <div class="card h-100">
-              <img loading="lazy" decoding="async" [src]="image.src" class="card-img-top" [alt]="image.alt">
+        <div class="col-lg-5 small-img">
+          <div class="row row-cols-3 g-3">
+            <div class="col" *ngFor="let image of smallImages">
+              <div class="card h-100">
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  [src]="image.src"
+                  class="card-img-top"
+                  [alt]="image.alt"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="container-fluid mt-4">
+      <div
+        class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-6 g-4 small-cards"
+      >
+        <div class="col" *ngFor="let image of images.slice(11)">
+          <div class="card h-100">
+            <img
+              loading="lazy"
+              decoding="async"
+              [src]="image.src"
+              class="card-img-top"
+              [alt]="image.alt"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col">
+          <div class="card card-full-width">
+            <img
+              loading="lazy"
+              decoding="async"
+              src="assets/images/ads9.jpg"
+              class="card-img-top"
+              alt="Full Width Card Image"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row row-cols-md-2 mt-4 gap">
+        <div class="col-md-6">
+          <div class="card card-small-height">
+            <img
+              loading="lazy"
+              decoding="async"
+              src="assets/images/ads10.jpg"
+              class="card-img-top"
+              alt="Image 1"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card card-small-height">
+            <img
+              loading="lazy"
+              decoding="async"
+              src="assets/images/ads11.jpg"
+              class="card-img-top"
+              alt="Image 2"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="detailsModal"
+      tabindex="-1"
+      aria-labelledby="detailsModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detailsModalLabel">
+              Advertisement Details
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <td class="bold-text">Advertisement Types</td>
+                  <td class="bold-text">Price</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Banner: 468 x 60</td>
+                  <td>Rs 25500/page/yr</td>
+                </tr>
+                <tr>
+                  <td>Leaderboard: 728 x 90</td>
+                  <td>Rs 15500/page/yr</td>
+                </tr>
+                <tr>
+                  <td>Half Page: 300 x 600</td>
+                  <td>Rs 10500/page/yr</td>
+                </tr>
+                <tr>
+                  <td>Large Rectangle: 336 x 280</td>
+                  <td>Rs 5500/page/yr</td>
+                </tr>
+                <tr>
+                  <td>Medium Rectangle: 300 x 250</td>
+                  <td>Rs 4500/page/yr</td>
+                </tr>
+                <tr>
+                  <td>Square Pop-Up: 250 x 250</td>
+                  <td>Rs 2500/page/yr</td>
+                </tr>
+                <tr>
+                  <td>Vertical Banner: 120 x 240</td>
+                  <td>Rs 1500/page/yr</td>
+                </tr>
+                <tr>
+                  <td>Wide Skyscraper: 160X600</td>
+                  <td>Rs 500/page/yr</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="contact-text">
+              <span class="bold-text contact">Contact Us</span><br />
+              <span class="bold-text">Email:</span> {{ this.email }}<br />
+              <span class="bold-text">Phone number:</span> 8888881818818,
+              1234567890
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn1" data-bs-dismiss="modal">
+              Exit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="container-fluid mt-4">
-    <div class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-6 g-4 small-cards">
-      <div class="col" *ngFor="let image of images.slice(11)">
-        <div class="card h-100">
-          <img loading="lazy" decoding="async" [src]="image.src" class="card-img-top" [alt]="image.alt">
-        </div>
-      </div>
-    </div>
-    <div class="row mt-4">
-      <div class="col">
-        <div class="card card-full-width">
-          <img loading="lazy" decoding="async" src="assets/images/ads9.jpg" class="card-img-top" alt="Full Width Card Image">
-        </div>
-      </div>
-    </div>
-    <div class="row row-cols-md-2 mt-4 gap">
-      <div class="col-md-6">
-        <div class="card card-small-height">
-          <img loading="lazy" decoding="async" src="assets/images/ads10.jpg" class="card-img-top" alt="Image 1">
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card card-small-height">
-          <img loading="lazy" decoding="async" src="assets/images/ads11.jpg" class="card-img-top" alt="Image 2">
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal --> 
-  <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="detailsModalLabel">Advertisement Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <td class="bold-text">Advertisement Types</td>
-                <td class="bold-text">Price</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Banner: 468 x 60</td>
-                <td>Rs 25500/page/yr</td>
-              </tr>
-              <tr>
-                <td>Leaderboard: 728 x 90</td>
-                <td>Rs 15500/page/yr</td>
-              </tr>
-              <tr>
-                <td>Half Page: 300 x 600</td>
-                <td>Rs 10500/page/yr</td>
-              </tr>
-              <tr>
-                <td>Large Rectangle: 336 x 280</td>
-                <td>Rs 5500/page/yr</td>
-              </tr>
-              <tr>
-                <td>Medium Rectangle: 300 x 250</td>
-                <td>Rs 4500/page/yr</td>
-              </tr>
-              <tr>
-                <td>Square Pop-Up: 250 x 250</td>
-                <td>Rs 2500/page/yr</td>
-              </tr>
-              <tr>
-                <td>Vertical Banner: 120 x 240</td>
-                <td>Rs 1500/page/yr</td>
-              </tr>
-              <tr>
-                <td>Wide Skyscraper: 160X600</td>
-                <td>Rs 500/page/yr</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="contact-text">
-            <span class="bold-text contact">Contact Us</span><br>
-            <span class="bold-text">Email:</span> {{this.email}}<br>
-            <span class="bold-text">Phone number:</span> 8888881818818, 1234567890
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn1" data-bs-dismiss="modal">Exit</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+</main>

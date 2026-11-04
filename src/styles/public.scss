@@ -1,0 +1,264 @@
+// Shared public design system. Admin styles remain scoped to their existing views.
+:root {
+  --ud-orange: #ff6000;
+  --ud-ink: #222831;
+  --ud-muted: #62666d;
+  --ud-paper: #f7f5f3;
+  --ud-line: #e7e2dc;
+  --ud-accent: #9e3900;
+}
+.ud-page {
+  background: var(--ud-paper);
+  color: var(--ud-ink);
+  min-height: 65vh;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-bottom: 4rem;
+}
+.ud-wrap {
+  width: min(1200px, calc(100% - 3rem));
+  margin-inline: auto;
+}
+.ud-page h1 {
+  font-size: clamp(2.3rem, 5vw, 4rem);
+  letter-spacing: -0.045em;
+  font-weight: 750;
+  line-height: 1.08;
+}
+.ud-page h2 {
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+.ud-page h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.ud-page p {
+  line-height: 1.7;
+}
+.ud-eyebrow {
+  color: var(--ud-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+.ud-intro {
+  padding-block: 4rem 2.5rem;
+  max-width: 760px;
+}
+.ud-lead {
+  font-size: 1.1rem;
+  color: var(--ud-muted);
+  max-width: 55ch;
+}
+.ud-section {
+  margin-top: 3.5rem;
+}
+.ud-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.ud-section-head p {
+  margin: 0;
+  color: var(--ud-muted);
+}
+.ud-link {
+  color: var(--ud-accent);
+  text-underline-offset: 4px;
+  font-weight: 600;
+}
+.ud-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: var(--ud-ink);
+  border: 1px solid var(--ud-ink);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+.ud-button:hover {
+  background: #3b434f;
+  color: white;
+  transform: translateY(-2px);
+}
+.ud-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
+}
+.ud-button.secondary {
+  background: white;
+  color: var(--ud-ink);
+  border-color: var(--ud-line);
+}
+.ud-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.ud-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--ud-line);
+  border-radius: 999px;
+  min-height: 44px;
+  background: white;
+  color: var(--ud-ink);
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.ud-chip:hover {
+  border-color: var(--ud-orange);
+  color: var(--ud-accent);
+}
+.ud-chip[aria-pressed="true"] {
+  background: var(--ud-ink);
+  border-color: var(--ud-ink);
+  color: white;
+}
+.ud-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+.ud-card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid var(--ud-line);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  color: var(--ud-ink);
+  text-decoration: none;
+  transition:
+    transform 0.24s,
+    box-shadow 0.24s;
+  min-width: 0;
+}
+.ud-card:hover {
+  color: var(--ud-ink);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px #22283112;
+}
+.ud-card img {
+  width: 100%;
+  aspect-ratio: 1.5;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+.ud-card:hover img {
+  transform: scale(1.035);
+}
+.ud-card-image {
+  overflow: hidden;
+  background: #ede8e2;
+}
+.ud-card-body {
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.ud-card-body p {
+  color: var(--ud-muted);
+}
+.ud-card-body .ud-link {
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+.ud-card-placeholder {
+  aspect-ratio: 1.5;
+  background: #eee8e1;
+  display: grid;
+  place-items: center;
+  color: var(--ud-accent);
+  font-size: 2rem;
+}
+.ud-status {
+  padding: 2rem;
+  background: white;
+  border: 1px solid var(--ud-line);
+  border-radius: 1rem;
+  text-align: center;
+}
+.ud-field {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--ud-line);
+  border-radius: 0.8rem;
+  padding: 0.75rem 1rem;
+  background: white;
+  color: var(--ud-ink);
+}
+.ud-page :where(a, button, input, summary):focus-visible {
+  outline: 3px solid var(--ud-accent);
+  outline-offset: 4px;
+}
+.ud-enter {
+  animation: ud-enter 0.55s ease-out both;
+}
+@keyframes ud-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 800px) {
+  .ud-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 540px) {
+  .ud-wrap {
+    width: calc(100% - 2rem);
+  }
+  .ud-intro {
+    padding-block: 2.5rem 1.5rem;
+  }
+  .ud-grid {
+    grid-template-columns: 1fr;
+  }
+  .ud-section-head {
+    align-items: start;
+    flex-direction: column;
+  }
+  .ud-section {
+    margin-top: 2.5rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ud-page *,
+  .ud-page *::before,
+  .ud-page *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.ud-page :where(h1, h2, h3, p, a, li) {
+  overflow-wrap: anywhere;
+}

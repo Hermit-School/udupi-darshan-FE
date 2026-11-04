@@ -1,73 +1,171 @@
+<button type="button" class="skip-link" (click)="skipToContent()">
+  Skip to content
+</button>
 <nav class="navbar navbar-expand-lg sticky-top custom-navbar-height">
   <div class="container-fluid">
     <a class="navbar-brand brand-margin" href="#" routerLink="/home">
-      <img src="assets/images/static/horizontal_logo.svg" alt="Udupi Darshan Logo" style="height: 30px;">
+      <img
+        src="assets/images/static/horizontal_logo.svg"
+        alt="Udupi Darshan Logo"
+        style="height: 30px"
+      />
     </a>
 
-    <app-search></app-search>
-    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Open navigation">
+    @if (!isHome) {
+      <app-search></app-search>
+    }
+    <button
+      class="navbar-toggler d-lg-none"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasNavbar"
+      aria-controls="offcanvasNavbar"
+      aria-label="Open navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarTogglerDemo02">
+    <div
+      class="collapse navbar-collapse d-none d-lg-flex"
+      id="navbarTogglerDemo02"
+    >
       <ul class="navbar-nav me-auto align-items-lg-center">
         <!-- F026 FE BY sulaxmi(from) -->
         <li class="nav-item">
-          <a class="nav-link" [ngClass]="{'active-link': isRouteActive('/nature')}" routerLink="/nature"
-            aria-current="page">Nature</a>
+          <a
+            class="nav-link"
+            [ngClass]="{ 'active-link': isRouteActive('/nature') }"
+            routerLink="/nature"
+            [attr.aria-current]="isRouteActive('/nature') ? 'page' : null"
+            >Nature</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" [ngClass]="{'active-link': isRouteActive('/culture')}"
-            routerLink="/culture" aria-current="page" href="#">Culture</a>
+          <a
+            class="nav-link ms-lg-3 ms-xl-5"
+            [ngClass]="{ 'active-link': isRouteActive('/culture') }"
+            routerLink="/culture"
+            [attr.aria-current]="isRouteActive('/culture') ? 'page' : null"
+            href="#"
+            >Culture</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/food" [ngClass]="{'active-link': isRouteActive('/food')}"
-            aria-current="page" href="#">Food</a>
+          <a
+            class="nav-link ms-lg-3 ms-xl-5"
+            routerLink="/food"
+            [attr.aria-current]="isRouteActive('/food') ? 'page' : null"
+            [ngClass]="{ 'active-link': isRouteActive('/food') }"
+            href="#"
+            >Food</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/story" routerLinkActive="active-link"
-            [routerLinkActiveOptions]="{ exact: false }" aria-current="page" href="#">Stories</a>
+          <a
+            class="nav-link ms-lg-3 ms-xl-5"
+            routerLink="/story"
+            routerLinkActive="active-link"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: false }"
+            href="#"
+            >Stories</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link ms-lg-3 ms-xl-5" routerLink="/advertisements" routerLinkActive="active-link"
-            [routerLinkActiveOptions]="{ exact: false }" aria-current="page" href="#">Advertisement</a>
+          <a
+            class="nav-link ms-lg-3 ms-xl-5"
+            routerLink="/advertisements"
+            routerLinkActive="active-link"
+            ariaCurrentWhenActive="page"
+            [routerLinkActiveOptions]="{ exact: false }"
+            href="#"
+            >Local ads</a
+          >
         </li>
         <li class="nav-item">
-          <button class="btn ms-lg-3 ms-xl-5" type="button" (click)="openStoryForm()">Write to
-            us</button>
+          <button
+            class="btn ms-lg-3 ms-xl-5"
+            type="button"
+            (click)="openStoryForm()"
+          >
+            Write to us
+          </button>
         </li>
       </ul>
     </div>
   </div>
   <!-- TO -->
 
-  <div class="offcanvas offcanvas-end d-lg-none d-block" tabindex="-1" id="offcanvasNavbar" #mobileMenu
-    aria-labelledby="offcanvasNavbarLabel">
+  <div
+    class="offcanvas offcanvas-end d-lg-none d-block"
+    tabindex="-1"
+    id="offcanvasNavbar"
+    #mobileMenu
+    aria-labelledby="offcanvasNavbarLabel"
+  >
     <div class="offcanvas-header">
       <h5 id="offcanvasNavbarLabel">Explore Udupi</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close navigation"></button>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close navigation"
+      ></button>
     </div>
     <div class="offcanvas-body">
       <ul class="navbar-nav me-auto align-items-lg-center">
         <li class="nav-item">
-          <a class="nav-link color" routerLink="/nature" href="#" (click)="closeOffcanvas()">Nature</a>
+          <a
+            class="nav-link color"
+            routerLink="/nature"
+            [attr.aria-current]="isRouteActive('/nature') ? 'page' : null"
+            href="#"
+            (click)="closeOffcanvas()"
+            >Nature</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link color" routerLink="/culture" href="#" (click)="closeOffcanvas()">Culture</a>
+          <a
+            class="nav-link color"
+            routerLink="/culture"
+            [attr.aria-current]="isRouteActive('/culture') ? 'page' : null"
+            href="#"
+            (click)="closeOffcanvas()"
+            >Culture</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link color" routerLink="/food" href="#" (click)="closeOffcanvas()">Food</a>
+          <a
+            class="nav-link color"
+            routerLink="/food"
+            [attr.aria-current]="isRouteActive('/food') ? 'page' : null"
+            href="#"
+            (click)="closeOffcanvas()"
+            >Food</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link color" routerLink="/story" href="#" (click)="closeOffcanvas()">Stories</a>
+          <a
+            class="nav-link color"
+            routerLink="/story"
+            href="#"
+            (click)="closeOffcanvas()"
+            >Stories</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link color" routerLink="/advertisements" href="#"
-            (click)="closeOffcanvas()">Advertisement</a>
+          <a
+            class="nav-link color"
+            routerLink="/advertisements"
+            href="#"
+            (click)="closeOffcanvas()"
+            >Local ads</a
+          >
         </li>
         <li class="nav-item">
-          <button class="btn" type="button" (click)="openStoryForm()">Write to us</button>
+          <button class="btn" type="button" (click)="openStoryForm()">
+            Write to us
+          </button>
         </li>
       </ul>
     </div>
@@ -77,26 +175,62 @@
 <ng-template #storyForm let-dialog>
   <div class="modal-header">
     <h2 class="modal-title h5" id="story-form-title">Tell us your story</h2>
-    <button type="button" class="btn-close" aria-label="Close story form" (click)="dialog.dismiss()"></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close story form"
+      (click)="dialog.dismiss()"
+    ></button>
   </div>
   <div class="modal-body">
-    <p>Write your story below, then open an email draft to send it. You can attach photos in your email app.</p>
+    <p>
+      Write your story below, then open an email draft to send it. You can
+      attach photos in your email app.
+    </p>
     <form [formGroup]="form">
       <label for="story-name" class="form-label">Name</label>
-      <input id="story-name" class="form-control mb-3" formControlName="name" maxlength="100" autocomplete="name" required>
+      <input
+        id="story-name"
+        class="form-control mb-3"
+        formControlName="name"
+        maxlength="100"
+        autocomplete="name"
+        required
+      />
       <label for="story-message" class="form-label">Your experience</label>
-      <textarea id="story-message" class="form-control" formControlName="message" rows="5" maxlength="1500" required></textarea>
-      <p class="small text-muted mt-1">{{ form.controls.message.value.length }} / 1500 characters</p>
+      <textarea
+        id="story-message"
+        class="form-control"
+        formControlName="message"
+        rows="5"
+        maxlength="1500"
+        required
+      ></textarea>
+      <p class="small text-muted mt-1">
+        {{ form.controls.message.value.length }} / 1500 characters
+      </p>
       <label for="story-email" class="form-label">Email</label>
-      <input id="story-email" class="form-control" formControlName="email" type="email" maxlength="255" autocomplete="email" required>
+      <input
+        id="story-email"
+        class="form-control"
+        formControlName="email"
+        type="email"
+        maxlength="255"
+        autocomplete="email"
+        required
+      />
     </form>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-exit" type="button" (click)="dialog.dismiss()">Close</button>
+    <button class="btn btn-exit" type="button" (click)="dialog.dismiss()">
+      Close
+    </button>
     @if (storyDraft; as draft) {
       <a class="btn btn-submit" [href]="draft">Open email draft</a>
     } @else {
-      <button class="btn btn-submit" type="button" disabled>Open email draft</button>
+      <button class="btn btn-submit" type="button" disabled>
+        Open email draft
+      </button>
     }
   </div>
 </ng-template>

@@ -1,106 +1,225 @@
-<div class="details">
-  <p *ngIf="loading" role="status">Loading destination…</p>
-  <p *ngIf="error" role="alert">{{ error }}</p>
-  <div class="container-fluid">
-    <div *ngIf="card">
-      <div class="heading-container mb-4">
-        <h1 class="title">{{ card.name }}</h1>
+<main class="ud-page">
+  <div class="ud-wrap">
+    @if (loading) {
+      <p class="ud-status" role="status">Loading destination…</p>
+    }
+    @if (error) {
+      <div class="ud-status" role="alert">
+        <h1>Something’s missing.</h1>
+        <p>{{ error }}</p>
+        <a class="ud-button" routerLink="/home">Back to exploring</a>
       </div>
-      <div class="container1">
-        <section class="image-gallery" *ngIf="card.images">
-          <div id="carouselExample" class="carousel slide" data-bs-ride="carousel"
-            (slid.bs.carousel)="onSlideChange($event)">
-            <div class="carousel-inner">
-              <div *ngFor="let image of card.images; let i = index" class="carousel-item" [class.active]="i === 0">
-                <img [src]="image" [alt]="card.name" class="d-block w-100">
-              </div>
+    }
+    @if (card) {
+      <header class="ud-intro ud-enter">
+        <a class="ud-link" [routerLink]="['/', currentCategory]"
+          >← Back to {{ currentCategory }}</a
+        >
+        <p class="ud-eyebrow detail-category">
+          {{ card.label || currentCategory }}
+        </p>
+        <h1>{{ card.name }}</h1>
+        @if (card.location) {
+          <p class="ud-lead">
+            <i class="bi bi-geo-alt" aria-hidden="true"></i> {{ card.location }}
+          </p>
+        }
+      </header>
+      @if (card.images && card.images.length) {
+        <section
+          class="destination-gallery"
+          aria-label="Destination photographs"
+        >
+          @for (
+            image of [card.images[currentSlideIndex]];
+            track currentSlideIndex
+          ) {
+            <img
+              class="gallery-main"
+              [src]="image"
+              [alt]="card.name + ' — photo ' + (currentSlideIndex + 1)"
+              width="1200"
+              height="650"
+              fetchpriority="high"
+            />
+          }
+          @if (card.images.length > 1) {
+            <div class="gallery-controls">
+              <button
+                type="button"
+                (click)="onPrevClick()"
+                [disabled]="currentSlideIndex === 0"
+                aria-label="Previous photo"
+              >
+                <i class="bi bi-arrow-left" aria-hidden="true"></i></button
+              ><span role="status"
+                >{{ currentSlideIndex + 1 }} / {{ card.images.length }}</span
+              ><button
+                type="button"
+                (click)="onNextClick()"
+                [disabled]="currentSlideIndex === card.images.length - 1"
+                aria-label="Next photo"
+              >
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </button>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev"
-              (click)="onPrevClick()" [disabled]="currentSlideIndex === 0">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next"
-              (click)="onNextClick()" [disabled]="currentSlideIndex === (card.images.length - 1)">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-          <div class="image-overlay" [ngClass]="{ 'active': isOverlayActive }">
-            <div class="image-info">
-              <span>{{ currentSlideIndex + 1 }}/{{ card.images.length }}</span>
-            </div>
-          </div>
+          }
         </section>
-      </div>
-      <div *ngIf="card" class="card-details">
-        <p>
-        <div class="para">
-          {{ card.descr }}
-          <section class="tips">
-            <h2 class="bold fw-bold">Tips</h2>
-            <ul>
-              <li *ngFor="let tip of card.keyPoints">
-                {{ tip }}
-              </li>
-            </ul>
+        @if (card.images.length > 1) {
+          <div class="gallery-thumbnails" aria-label="Choose a photograph">
+            @for (image of card.images; track $index) {
+              <button
+                type="button"
+                (click)="currentSlideIndex = $index"
+                [attr.aria-pressed]="currentSlideIndex === $index"
+                [attr.aria-label]="'Show photo ' + ($index + 1)"
+              >
+                <img
+                  [src]="image"
+                  alt=""
+                  loading="lazy"
+                  width="100"
+                  height="72"
+                />
+              </button>
+            }
+          </div>
+        }
+      }
+      <div class="destination-layout">
+        <article class="destination-copy">
+          <section>
+            <p class="ud-eyebrow">Get to know the place</p>
+            <h2>Overview</h2>
+            <p class="long-copy">{{ card.descr }}</p>
           </section>
-          <section class="discover">
-            <h2 class="bold fw-bold">Discover</h2>
-            <ul>
-              <li *ngFor="let item of card.discover">
-                {{ item }}
-              </li>
-            </ul>
-          </section>
-          <section class="important-info">
-            <h2 class="bold fw-bold">Important Information</h2>
-            <ul>
-              <li *ngFor="let info of card.impInfo">
-                {{ info }}
-              </li>
-            </ul>
-          </section>
-          <section class="how-to-visit">
-            <h2 class="bold fw-bold">How To Visit?</h2>
-            <p *ngIf="card.howToVisit?.byCar">By Car: {{ card.howToVisit?.byCar }}</p>
-            <p *ngIf="card.howToVisit?.byPublic">By Public Transport: {{ card.howToVisit?.byPublic }}</p>
-            <p *ngIf="card.howToVisit?.byBike">By Bike: {{ card.howToVisit?.byBike }}</p>
-          </section>
-          <section class="timings">
-            <h2 class="bold fw-bold">Timings</h2>
+          @if (card.discover && card.discover.length) {
+            <section>
+              <h2>What to discover</h2>
+              <ul>
+                @for (item of card.discover; track $index) {
+                  <li>{{ item }}</li>
+                }
+              </ul>
+            </section>
+          }
+          @if (card.keyPoints && card.keyPoints.length) {
+            <section>
+              <h2>Good to know</h2>
+              <ul>
+                @for (item of card.keyPoints; track $index) {
+                  <li>{{ item }}</li>
+                }
+              </ul>
+            </section>
+          }
+          @if (card.impInfo && card.impInfo.length) {
+            <section>
+              <h2>Before you go</h2>
+              <ul>
+                @for (item of card.impInfo; track $index) {
+                  <li>{{ item }}</li>
+                }
+              </ul>
+            </section>
+          }
+          @if (
+            card.howToVisit?.byCar ||
+            card.howToVisit?.byPublic ||
+            card.howToVisit?.byBike
+          ) {
+            <section>
+              <h2>How to get there</h2>
+              @if (card.howToVisit?.byCar) {
+                <details open>
+                  <summary>By car</summary>
+                  <p>{{ card.howToVisit?.byCar }}</p>
+                </details>
+              }
+              @if (card.howToVisit?.byPublic) {
+                <details>
+                  <summary>By public transport</summary>
+                  <p>{{ card.howToVisit?.byPublic }}</p>
+                </details>
+              }
+              @if (card.howToVisit?.byBike) {
+                <details>
+                  <summary>By bike</summary>
+                  <p>{{ card.howToVisit?.byBike }}</p>
+                </details>
+              }
+            </section>
+          }
+        </article>
+        <aside class="visit-panel">
+          <p class="ud-eyebrow">Plan your visit</p>
+          <h2>A little preparation.<br />A better day out.</h2>
+          @if (card.location) {
+            <h3>Location</h3>
+            <p>{{ card.location }}</p>
+            <a
+              class="ud-button"
+              [href]="mapUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Find on Google Maps ↗</a
+            >
+          }
+          @if (card.timings) {
+            <h3>Visiting hours</h3>
             <p>{{ card.timings }}</p>
-          </section>
-          <section class="external-link">
-            <h2 class="bold fw-bold">More Information</h2>
-            <a [href]="card.link" target="_blank">{{ card.link }}</a>
-          </section>
-        </div>
-        <h1 class="bold fw-bold">Don't Miss These: </h1>
-        <div class="card-container">
-          <div class="row1">
-            <div *ngFor="let item of card.dontMissThese" class="col">
-              <div class="card h-100">
-                <img [src]="item.imageUrl" class="card-img-top" [alt]="item.name">
-                <div class="card-body">
-                  <h5 class="card-title">{{ item.name }}</h5>
-                  <hr>
-                  <p class="card-text">{{ item.description }}</p>
-                </div>
-                <div class="card-footer">
+          }
+          @if (informationUrl; as url) {
+            <a
+              class="ud-link"
+              [href]="url"
+              target="_blank"
+              rel="noopener noreferrer"
+              >More information ↗</a
+            >
+          }
+        </aside>
+      </div>
+      @if (card.dontMissThese && card.dontMissThese.length) {
+        <section class="ud-section">
+          <div class="ud-section-head">
+            <div>
+              <p class="ud-eyebrow">Keep exploring</p>
+              <h2>Don’t miss these.</h2>
+            </div>
+          </div>
+          <div class="ud-grid">
+            @for (item of card.dontMissThese; track $index) {
+              <article class="ud-card">
+                @if (item.imageUrl) {
+                  <div class="ud-card-image">
+                    <img
+                      [src]="item.imageUrl"
+                      [alt]="item.name"
+                      loading="lazy"
+                      width="600"
+                      height="400"
+                    />
+                  </div>
+                }
+                <div class="ud-card-body">
+                  <h3>{{ item.name }}</h3>
+                  <p>{{ item.description }}</p>
                   @if (relatedLink(item.link); as destination) {
-                    @if (typeof destination === 'string') {
-                      <a [href]="destination">View details <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                    @if (typeof destination === "string") {
+                      <a class="ud-link" [href]="destination">View details</a>
                     } @else {
-                      <a [routerLink]="destination">View details <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                      <a class="ud-link" [routerLink]="destination"
+                        >View details</a
+                      >
                     }
                   }
                 </div>
-              </div>
-            </div>
+              </article>
+            }
           </div>
-        </div>
-      </div>
-    </div>
+        </section>
+      }
+    }
   </div>
-</div>
+</main>

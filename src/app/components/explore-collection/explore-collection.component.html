@@ -1,0 +1,137 @@
+<main class="ud-page">
+  <div class="ud-wrap">
+    <header class="ud-intro ud-enter">
+      <p class="ud-eyebrow">Explore Udupi · {{ category }}</p>
+      <h1>{{ copy[category].title }}</h1>
+      <p class="ud-lead">{{ copy[category].intro }}</p>
+    </header>
+    <section aria-label="Browse destinations">
+      <div class="collection-tools">
+        <div class="collection-search">
+          <label [for]="category + '-search'" class="visually-hidden"
+            >Search {{ category }}</label
+          ><i class="bi bi-search" aria-hidden="true"></i
+          ><input
+            class="ud-field"
+            [id]="category + '-search'"
+            type="search"
+            [placeholder]="'Search ' + category + ' by name or location'"
+            [value]="query"
+            (input)="search($event)"
+          />
+        </div>
+        <a class="ud-link" routerLink="/home"
+          >Explore another side of Udupi ↗</a
+        >
+      </div>
+      <div class="ud-chips" aria-label="Filter by collection">
+        <button
+          class="ud-chip"
+          type="button"
+          [attr.aria-pressed]="selected === 'All'"
+          (click)="filter('All')"
+        >
+          All
+        </button>
+        @for (label of labels; track label) {
+          <button
+            class="ud-chip"
+            type="button"
+            [attr.aria-pressed]="selected === label"
+            (click)="filter(label)"
+          >
+            {{ label }}
+          </button>
+        }
+      </div>
+      @if (loading) {
+        <p class="ud-status results-note" role="status">
+          Loading places to explore…
+        </p>
+      } @else if (failed) {
+        <div class="ud-status results-note" role="alert">
+          <h2>We couldn’t load these places.</h2>
+          <p>Please check your connection and try again.</p>
+          <button type="button" class="ud-button" (click)="load()">
+            Try again
+          </button>
+        </div>
+      } @else {
+        <p class="results-note" role="status">
+          {{ filtered.length }}
+          {{ filtered.length === 1 ? "place" : "places" }} to explore
+        </p>
+        <div class="ud-grid">
+          @for (item of filtered.slice(0, limit); track item.id) {
+            <a
+              class="ud-card ud-enter"
+              [routerLink]="['/details', category, item.id]"
+              ><div class="ud-card-image">
+                @if (item.images && item.images[0]) {
+                  <img
+                    [src]="item.images[0]"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    width="600"
+                    height="400"
+                  />
+                } @else {
+                  <div class="ud-card-placeholder">
+                    <i class="bi bi-compass" aria-hidden="true"></i>
+                  </div>
+                }
+              </div>
+              <div class="ud-card-body">
+                <p class="ud-eyebrow">{{ item.label || category }}</p>
+                <h2 class="place-name">{{ item.name }}</h2>
+                @if (item.location) {
+                  <p class="place-location">
+                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                    {{ item.location }}
+                  </p>
+                }
+                <p class="place-description">{{ item.descr }}</p>
+                <span class="ud-link">Explore this place ↗</span>
+              </div></a
+            >
+          }
+        </div>
+        @if (!filtered.length) {
+          <div class="ud-status">
+            <h2>
+              {{
+                items.length
+                  ? "No places match your search."
+                  : "More discoveries are on their way."
+              }}
+            </h2>
+            <p>
+              {{
+                items.length
+                  ? "Try another name or explore all collections."
+                  : "Check back for new places to explore."
+              }}
+            </p>
+            @if (items.length) {
+              <button class="ud-button" type="button" (click)="reset()">
+                Clear filters
+              </button>
+            }
+          </div>
+        }
+        @if (filtered.length > limit) {
+          <div class="load-more">
+            <button
+              class="ud-button secondary"
+              type="button"
+              (click)="limit = limit + 12"
+            >
+              Show more places
+            </button>
+          </div>
+        }
+      }
+    </section>
+  </div>
+</main>

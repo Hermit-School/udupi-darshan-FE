@@ -1,35 +1,47 @@
-<div class="container-fluid p-0">
-    <div class="col-12 col-sm-8 col-md-6 col-lg-4 heading-container">
-        <h2 class="heading-text text-white fw-bold">Read Stories Written By Various Travellers</h2>
-        <img src="assets/images/Vectorblob.svg" alt="Design Blob" class="design-blob">
-    </div>
-    @if (!loading && !stories.length) {
-        <p class="container py-4" role="status">{{ failed ? 'Stories could not load. Please try again later.' : 'No stories have been published yet.' }}</p>
+<main class="ud-page">
+  <div class="ud-wrap">
+    <header class="ud-intro ud-enter">
+      <p class="ud-eyebrow">The people. The places. The memories.</p>
+      <h1>Udupi, in their words.</h1>
+      <p class="ud-lead">
+        A collection of experiences and discoveries, shared by travellers and
+        locals.
+      </p>
+    </header>
+    @if (loading) {
+      <p class="ud-status" role="status">Loading stories…</p>
     }
-    <div *ngFor="let chunk of chunkedStories" class="card-container1">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 ">
-            <div class="col" *ngFor="let story of chunk">
-                <a [routerLink]="['/story', story.id]" class="card-footer-link">
-                    <div class="card ">
-                        <img *ngIf="story.images?.[0] as image" [src]="image" alt="" class="square-image" loading="lazy">
-                        <div class="card-body">
-                            <div class="text-container">
-                                <p class="name-text">{{ story.title }}</p>
-                                <p class="author-text">By {{ story.submittedBy }}</p>
-                                <div class="line"></div>
-                                <div class="additional-content">
-                                    <p class="text-content">{{ getTruncatedContent(story.content, 60) }}</p>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-
-                                <p class="footer-text">Read Full Blog <i class="bi bi-arrow-right"></i></p>
-
-                            </div>
-                        </div>
-                    </div>
-                </a>
+    @if (!loading && !stories.length) {
+      <p class="ud-status" role="status">
+        {{
+          failed
+            ? "Stories could not load. Please try again later."
+            : "No stories have been published yet."
+        }}
+      </p>
+    }
+    <div class="ud-grid">
+      @for (story of stories; track story.id) {
+        <a class="ud-card" [routerLink]="['/story', story.id]">
+          @if (story.images && story.images[0]; as image) {
+            <div class="ud-card-image">
+              <img
+                [src]="image"
+                alt=""
+                loading="lazy"
+                width="600"
+                height="400"
+              />
             </div>
-        </div>
+          }
+          <div class="ud-card-body">
+            <p class="ud-eyebrow">By {{ story.submittedBy }}</p>
+            <h2 class="story-title">{{ story.title }}</h2>
+            <p>{{ getTruncatedContent(story.content, 140) }}</p>
+            <span class="ud-link">Read the story ↗</span>
+          </div></a
+        >
+      }
     </div>
-</div>
+  </div>
+</main>
