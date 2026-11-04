@@ -1,3 +1,4 @@
+import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
@@ -13,7 +14,7 @@ import {
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, VisitorMotionDirective],
   selector: "app-details",
   templateUrl: "./details.component.html",
   styleUrls: ["./details.component.scss"],

@@ -1,3 +1,4 @@
+import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DestroyRef, inject } from '@angular/core';
@@ -6,7 +7,7 @@ import { API_BASE_URL } from 'src/constants/routes';
 import { Component, OnInit } from '@angular/core';
 import { AdvertisementsService } from 'src/app/services/advertisements.service';
 
-@Component({ standalone: true, imports: [CommonModule],
+@Component({ standalone: true, imports: [CommonModule, VisitorMotionDirective],
   selector: 'app-advertisements',
   templateUrl: './advertisements.component.html',
   styleUrls: ['./advertisements.component.scss']

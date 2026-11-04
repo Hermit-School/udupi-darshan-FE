@@ -1,0 +1,203 @@
+// Visitor-only motion: short sequences, compositor-friendly properties, no animation dependency.
+.ud-reading-progress {
+  position: fixed;
+  z-index: 1001;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6000, #ffb47e);
+  transform: scaleX(var(--ud-scroll, 0));
+  transform-origin: left;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .home-intro.ud-enter {
+    animation: none;
+  }
+  .home-intro > * {
+    animation: ud-intro-rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  .home-intro > :nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .home-intro > :nth-child(3) {
+    animation-delay: 0.16s;
+  }
+  .home-intro > :nth-child(4) {
+    animation-delay: 0.24s;
+  }
+  .home-intro > :nth-child(5) {
+    animation-delay: 0.32s;
+  }
+  .home-intro:focus-within > * {
+    animation: none;
+  }
+  .home-intro h1 span {
+    position: relative;
+    display: inline-block;
+  }
+  .home-intro h1 span::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.08em;
+    height: 0.08em;
+    border-radius: 100%;
+    background: #ff600030;
+    transform-origin: left;
+    animation: ud-line-draw 0.8s 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  .home-hero.ud-enter {
+    animation: ud-hero-arrive 0.9s 0.15s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  .home-hero > img {
+    animation: ud-scene-settle 3.6s cubic-bezier(0.2, 0.65, 0.3, 1) backwards;
+  }
+  .hero-copy > * {
+    animation: ud-intro-rise 0.85s 0.35s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  .hero-copy > :nth-child(2) {
+    animation-delay: 0.45s;
+  }
+  .hero-copy > :nth-child(3) {
+    animation-delay: 0.55s;
+  }
+  .home-hero:focus-visible * {
+    animation: none;
+  }
+  .home-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(
+      350px circle at var(--ud-pointer-x, 50%) var(--ud-pointer-y, 50%),
+      #fff5e52e,
+      transparent 72%
+    );
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+  .home-hero.ud-spotlight-active::before {
+    opacity: 1;
+  }
+  .ud-card .ud-link {
+    position: relative;
+    align-self: flex-start;
+  }
+  .ud-card .ud-link::after {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 2px;
+    background: var(--ud-orange);
+    margin-top: 0.5rem;
+    transform: scaleX(0.25);
+    transform-origin: left;
+    transition: transform 0.35s;
+  }
+  .ud-card:is(:hover, :focus-visible) .ud-link::after {
+    transform: scaleX(1);
+  }
+  .ud-button i,
+  .ud-chip i,
+  .hero-action i {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .ud-button:is(:hover, :focus-visible) i {
+    transform: translateX(4px);
+  }
+  .ud-chip:is(:hover, :focus-visible) i {
+    transform: rotate(-10deg) translateY(-2px);
+  }
+  .home-hero:is(:hover, :focus-visible) .hero-action i {
+    transform: translate(4px, -4px);
+  }
+  .ud-card {
+    transition:
+      transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.35s,
+      border-color 0.35s;
+  }
+  .ud-card:focus-visible {
+    transform: translateY(-5px);
+  }
+  .ud-card:is(:hover, :focus-visible) {
+    border-color: #d7a480;
+    box-shadow: 0 20px 40px #22283116;
+  }
+  .ud-card img {
+    transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .ud-card:focus-visible img {
+    transform: scale(1.035);
+  }
+  .food-art i {
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .ud-card:is(:hover, :focus-visible) .food-art i {
+    transform: translateY(-5px) rotate(-6deg);
+  }
+  .story-banner {
+    position: relative;
+    overflow: hidden;
+  }
+  .story-banner::before {
+    content: '';
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border: 1px solid #ff600025;
+    border-radius: 50%;
+    right: -65px;
+    top: -90px;
+    pointer-events: none;
+    transition: transform 0.7s;
+  }
+  .story-banner:hover::before {
+    transform: scale(1.25);
+  }
+}
+@keyframes ud-intro-rise {
+  from {
+    opacity: 0.1;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ud-line-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes ud-hero-arrive {
+  from {
+    opacity: 0.15;
+    transform: translate3d(0, 22px, 0) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ud-scene-settle {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ud-reading-progress {
+    display: none;
+  }
+}

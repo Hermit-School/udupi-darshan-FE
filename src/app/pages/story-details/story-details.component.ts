@@ -1,3 +1,4 @@
+import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { CommonModule } from "@angular/common";
 import { SharedService } from "src/app/services/shared.service";
 import { Component, DestroyRef, OnInit, inject } from "@angular/core";
@@ -8,7 +9,7 @@ import { Story } from "src/app/models/story";
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, VisitorMotionDirective],
   selector: "app-story-details",
   templateUrl: "./story-details.component.html",
   styleUrls: ["./story-details.component.scss"],

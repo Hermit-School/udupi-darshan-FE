@@ -49,8 +49,14 @@ Write to us opens a direct submission form, with a story title, credited name, p
 
 Admins use Dashboard → **Review story submissions** (`/#/admindashboard/stories`) to view pending, published and rejected stories. The review page shows full content and private photo previews, then lets the admin publish or reject. Only published stories and their photos are visible publicly; contact email remains private. Direct admin story creation remains available separately.
 
-Deploy the companion backend first: it provides the multipart submission API, protected moderation endpoints, and Flyway V4 durable photo storage in PostgreSQL. No Firebase Storage credentials are required. Verification for this change: 80 unit tests, 15 browser tests, dependency audit and production build passed; mobile modal actions remain visible while form fields scroll.
+Deploy the companion backend first: it provides the multipart submission API, protected moderation endpoints, and Flyway V4 durable photo storage in PostgreSQL. No Firebase Storage credentials are required. Verification for this change: 80 unit tests, 18 browser tests, dependency audit and production build passed; mobile modal actions remain visible while form fields scroll.
 
 The story form shows field-specific errors after blur or submit, rejects whitespace-only text, validates email format and length limits, and focuses the first invalid field. Photo selection checks actual JPEG/PNG contents, successful image decoding, the 5 MiB file limit and 20-megapixel limit before adding previews. Invalid selections block submission until corrected or explicitly dismissed; existing selected photos and the written draft are preserved.
 
 Admins can add photos to received stories while they are **Awaiting review**. Select images in **Add photos to this story**, preview/remove pending selections, and choose **Save photos** before publishing. Existing visitor photos are kept and the three-photo total still applies. Failed saves retain the selection and reuse the upload key on retry. Deploy the matching backend before exposing this UI.
+
+## Visitor motion
+
+Public pages share a lightweight motion layer: a brief cinematic homepage entrance, a slow image settle, staggered viewport reveals, a pointer-following hero light, responsive card/button feedback, and a thin reading-progress line. No animation library, extra image assets, autoplay carousel, scrolling override, or perpetual animation loop is added.
+
+Motion uses passive, frame-throttled browser events outside Angular change detection. Observers/listeners are removed on navigation. Keyboard focus cancels an in-flight reveal, reduced-motion preference changes immediately cancel animations, and content stays visible when animation/observer APIs are unavailable. The admin workspace and submission workflow keep their existing interaction behaviour.
