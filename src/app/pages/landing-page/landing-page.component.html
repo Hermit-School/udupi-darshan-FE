@@ -1,8 +1,126 @@
-<div class="container-fluid">
-  <app-carousel></app-carousel>
-  <app-advertisement></app-advertisement>
-  <app-card-container></app-card-container>
-  <app-bento></app-bento>
-  <app-advertisement></app-advertisement>
-  <app-blogs></app-blogs>
-</div>
+<main class="ud-page">
+  <div class="ud-wrap">
+    <section class="home-intro ud-enter" aria-labelledby="home-title">
+      <p class="ud-eyebrow">Coastal Karnataka · Udupi Darshan</p>
+      <h1 id="home-title">
+        A little closer to<br /><span>the heart of Udupi.</span>
+      </h1>
+      <p class="ud-lead">
+        Find your next favourite place, discover local flavours, and see Udupi
+        through its stories.
+      </p>
+      <div class="home-search"><app-search [inline]="true"></app-search></div>
+      <div class="ud-chips" aria-label="Explore by interest">
+        <a class="ud-chip" routerLink="/nature"
+          ><i class="bi bi-tree" aria-hidden="true"></i> Nature</a
+        >
+        <a class="ud-chip" routerLink="/culture"
+          ><i class="bi bi-brightness-high" aria-hidden="true"></i> Culture</a
+        >
+        <a class="ud-chip" routerLink="/food"
+          ><i class="bi bi-cup-hot" aria-hidden="true"></i> Food</a
+        >
+        <a class="ud-chip" routerLink="/story"
+          ><i class="bi bi-journal-text" aria-hidden="true"></i> Stories</a
+        >
+      </div>
+    </section>
+    <a
+      class="home-hero ud-enter"
+      routerLink="/nature"
+      aria-label="Explore nature in Udupi"
+    >
+      <img
+        src="assets/images/a6.jpg"
+        srcset="assets/images/a6-480.jpg 480w, assets/images/a6.jpg 800w"
+        sizes="(max-width:540px) calc(100vw - 32px), (max-width:1248px) calc(100vw - 48px), 1200px"
+        alt="Waterfall surrounded by lush forest"
+        fetchpriority="high"
+        width="800"
+        height="600"
+      />
+      <div class="hero-copy">
+        <span class="hero-tag">Take the scenic route</span>
+        <h2>Make room for<br />a little wonder.</h2>
+        <span class="hero-action"
+          >Explore nature <i class="bi bi-arrow-up-right" aria-hidden="true"></i
+        ></span>
+      </div>
+    </a>
+    <section class="ud-section" aria-labelledby="discover-title">
+      <div class="ud-section-head">
+        <div>
+          <p class="ud-eyebrow">Find your kind of day</p>
+          <h2 id="discover-title">Many sides. One Udupi.</h2>
+          <p>Start with what you love. Let the rest surprise you.</p>
+        </div>
+      </div>
+      <div class="ud-grid">
+        <a class="ud-card" routerLink="/nature"
+          ><div class="ud-card-image">
+            <img
+              src="assets/images/bl2.webp"
+              alt="A glimpse of the coast"
+              loading="lazy"
+              decoding="async"
+              width="600"
+              height="400"
+            />
+          </div>
+          <div class="ud-card-body">
+            <p class="ud-eyebrow">Out in the open</p>
+            <h3>Nature &amp; the coast</h3>
+            <p>Beaches, forest trails and places to slow down.</p>
+            <span class="ud-link">Explore nature ↗</span>
+          </div></a
+        >
+        <a class="ud-card" routerLink="/culture"
+          ><div class="ud-card-image">
+            <img
+              src="assets/images/c2.jpg"
+              alt="Udupi's cultural heritage"
+              loading="lazy"
+              decoding="async"
+              width="600"
+              height="400"
+            />
+          </div>
+          <div class="ud-card-body">
+            <p class="ud-eyebrow">Rooted in tradition</p>
+            <h3>Culture &amp; heritage</h3>
+            <p>Discover temples, celebrations and living traditions.</p>
+            <span class="ud-link">Explore culture ↗</span>
+          </div></a
+        >
+        <a class="ud-card" routerLink="/food"
+          ><div class="ud-card-placeholder food-art">
+            <i class="bi bi-cup-hot" aria-hidden="true"></i
+            ><span>Flavours of Udupi</span>
+          </div>
+          <div class="ud-card-body">
+            <p class="ud-eyebrow">Make a day of it</p>
+            <h3>Food &amp; local stops</h3>
+            <p>Find somewhere to eat while you explore the town.</p>
+            <span class="ud-link">Explore food ↗</span>
+          </div></a
+        >
+      </div>
+    </section>
+    <section class="story-banner ud-section">
+      <div>
+        <p class="ud-eyebrow">Through a local lens</p>
+        <h2>Every visit has a story.</h2>
+        <p>
+          Discover experiences shared by the people who know and love Udupi.
+        </p>
+      </div>
+      <a class="ud-button" routerLink="/story"
+        >Read the stories <i class="bi bi-arrow-right" aria-hidden="true"></i
+      ></a>
+    </section>
+    <aside class="home-local">
+      <span>Discover local businesses and community advertisements.</span
+      ><a class="ud-link" routerLink="/advertisements">Explore local ads ↗</a>
+    </aside>
+  </div>
+</main>
