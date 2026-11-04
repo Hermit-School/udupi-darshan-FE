@@ -1,0 +1,48 @@
+.collection-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.collection-search {
+  position: relative;
+  width: min(100%, 460px);
+}
+.collection-search i {
+  position: absolute;
+  top: 14px;
+  left: 1rem;
+  color: var(--ud-muted);
+}
+.collection-search input {
+  padding-left: 2.75rem;
+}
+.results-note {
+  margin: 2rem 0 1.25rem;
+  color: var(--ud-muted);
+  font-size: 0.9rem;
+}
+.ud-card-body .place-name {
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+.place-location {
+  font-size: 0.85rem;
+}
+.place-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.load-more {
+  text-align: center;
+  margin-top: 2rem;
+}
+@media (max-width: 650px) {
+  .collection-tools {
+    align-items: start;
+    flex-direction: column;
+  }
+}
