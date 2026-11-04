@@ -1,0 +1,127 @@
+<div class="modal-header">
+  <h2 class="modal-title h5" id="story-form-title">Tell us your story</h2>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close story form"
+    [disabled]="submitting"
+    (click)="close.emit()"
+  ></button>
+</div>
+@if (submitted) {
+  <div class="modal-body success" role="status">
+    <i class="bi bi-check-circle" aria-hidden="true"></i>
+    <h3>Thank you for sharing.</h3>
+    <p>
+      Your story has been submitted for admin review. It will appear on the
+      website once it is approved.
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="story-primary" (click)="close.emit()">
+      Done
+    </button>
+  </div>
+} @else {
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="modal-body">
+      <p>
+        Share a memory, a discovery, or a little piece of Udupi. Our admin will
+        review it before publishing.
+      </p>
+      <fieldset [disabled]="submitting">
+        <label for="story-title">Story title</label
+        ><input
+          id="story-title"
+          class="form-control"
+          formControlName="title"
+          maxlength="200"
+          required
+        />
+        <label for="story-name">Name</label
+        ><input
+          id="story-name"
+          class="form-control"
+          formControlName="name"
+          maxlength="100"
+          autocomplete="name"
+          required
+        /><small>Your name will be credited with the story.</small>
+        <label for="story-email">Email</label
+        ><input
+          id="story-email"
+          class="form-control"
+          formControlName="email"
+          type="email"
+          maxlength="255"
+          autocomplete="email"
+          required
+        /><small>Only the admin can see your email.</small>
+        <label for="story-message">Your experience</label
+        ><textarea
+          id="story-message"
+          class="form-control"
+          formControlName="message"
+          rows="6"
+          maxlength="5000"
+          required
+        ></textarea
+        ><small
+          >{{ form.controls.message.value.length }} / 5000 characters</small
+        >
+        <label for="story-photos">Photos (optional)</label>
+        <p class="photo-help" id="photo-help">
+          Up to 3 JPEG or PNG photos, 5 MB each. Please use photos you have
+          permission to share.
+        </p>
+        <input
+          id="story-photos"
+          class="form-control"
+          type="file"
+          accept="image/jpeg,image/png"
+          multiple
+          aria-describedby="photo-help"
+          (change)="selectPhotos($event)"
+        />
+        @if (photoError) {
+          <p class="form-error" role="alert">{{ photoError }}</p>
+        }
+        <div class="photo-grid">
+          @for (photo of photos; track photo.url; let i = $index) {
+            <figure>
+              <img [src]="photo.url" [alt]="'Selected photo ' + (i + 1)" />
+              <figcaption>{{ photo.file.name }}</figcaption>
+              <button
+                type="button"
+                [attr.aria-label]="'Remove photo ' + (i + 1)"
+                (click)="removePhoto(i)"
+              >
+                Remove
+              </button>
+            </figure>
+          }
+        </div>
+        <small>{{ photos.length }} / 3 photos selected</small>
+      </fieldset>
+      @if (error) {
+        <p class="form-error" role="alert">{{ error }}</p>
+      }
+      <p class="submission-note">
+        Submitting allows Udupi Darshan to publish your story, credited name,
+        and selected photos after review.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="story-secondary"
+        [disabled]="submitting"
+        (click)="close.emit()"
+      >
+        Close</button
+      ><button type="submit" class="story-primary" [disabled]="submitting">
+        {{ submitting ? 'Submitting…' : 'Submit story' }}
+      </button>
+    </div>
+  </form>
+}

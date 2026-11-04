@@ -1,0 +1,115 @@
+:host {
+  display: block;
+  color: #222831;
+}
+.modal-header,
+.modal-footer {
+  border-color: #e7e2dc;
+}
+.modal-body {
+  padding: 1.5rem;
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin: 1.1rem 0 0.4rem;
+}
+input,
+textarea {
+  border-radius: 0.7rem;
+}
+input:focus,
+textarea:focus {
+  border-color: #9e3900;
+  box-shadow: 0 0 0 3px #ff600020;
+}
+small,
+.photo-help,
+.submission-note {
+  color: #62666d;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+.submission-note {
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+}
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+figure {
+  margin: 0;
+  min-width: 0;
+}
+figure img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 0.7rem;
+}
+figcaption {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  margin: 0.4rem 0;
+}
+figure button {
+  background: white;
+  border: 1px solid #ded8d0;
+  border-radius: 0.5rem;
+  min-height: 40px;
+  font-size: 0.8rem;
+  width: 100%;
+}
+.story-primary,
+.story-secondary {
+  min-height: 44px;
+  border-radius: 999px;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #222831;
+}
+.story-primary {
+  color: white;
+  background: #222831;
+}
+.story-secondary {
+  color: #222831;
+  background: white;
+  border-color: #ded8d0;
+}
+button:disabled {
+  opacity: 0.55;
+}
+button:focus-visible {
+  outline: 3px solid #9e3900;
+  outline-offset: 3px;
+}
+.form-error {
+  color: #9c2525;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+.success {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+}
+.success i {
+  color: #9e3900;
+  font-size: 2.5rem;
+}
+.success h3 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+p {
+  line-height: 1.65;
+}
+
+:host { display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+form { display:flex; flex-direction:column; min-height:0; }
+.modal-body { flex:1 1 auto; min-height:0; overflow-y:auto; }
+.modal-header,.modal-footer { flex-shrink:0; }

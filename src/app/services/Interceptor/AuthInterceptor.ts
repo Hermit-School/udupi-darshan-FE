@@ -13,7 +13,9 @@ export class AuthInterceptor implements HttpInterceptor {
     const authEndpoint = /\/v1\/(?:admin\/sign-in|login|generateOTP|verifyOTP|jwt\/generate|jwt\/validate)(?:\?|$)/.test(req.url);
     // Public reads must keep working if a session expires. Never send credentials to other hosts/assets.
     const publicHealth = req.method === 'GET' && /\/actuator\/health(?:[/?]|$)/.test(req.url);
-    const protectedRequest = api && !authEndpoint && !publicHealth && (req.method !== 'GET' || req.url.includes('/actuator/'));
+    const publicSubmission = req.method === 'POST' && req.url === `${API_BASE_URL}/v1/blogs/submissions`;
+    const adminRead = req.url.startsWith(`${API_BASE_URL}/v1/blogs/admin/`);
+    const protectedRequest = api && !authEndpoint && !publicHealth && !publicSubmission && (req.method !== 'GET' || req.url.includes('/actuator/') || adminRead);
     const token = protectedRequest ? this.auth.token : null;
     const outgoing = token && !req.headers.has('Authorization') ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
     return next.handle(outgoing).pipe(catchError((error: HttpErrorResponse) => {

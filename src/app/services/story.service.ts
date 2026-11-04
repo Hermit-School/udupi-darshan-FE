@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Story } from 'src/app/models/story';
 import { Environment } from '../../constants/routes';
 
@@ -13,11 +13,15 @@ export class StoryService {
   constructor(private http: HttpClient) { }
 
   getAllStories(): Observable<Story[]> {
-    return this.http.get<Story[]>(this.apiUrl);
+    return this.http.get<Story[]>(this.apiUrl).pipe(map(items => items.map(item => this.withPhotoUrls(item))));
   }
 
   getStoryById(id: number): Observable<Story> {
-    return this.http.get<Story>(`${this.apiUrl}/${id}`);
+    return this.http.get<Story>(`${this.apiUrl}/${id}`).pipe(map(item => this.withPhotoUrls(item)));
+  }
+
+  private withPhotoUrls(story:Story):Story {
+    return {...story,images:(story.images || []).map(path=>path.startsWith('/v1/blogs/photos/')?Environment.production+path:path)};
   }
 
   addStory(story: Story): Observable<Story> {

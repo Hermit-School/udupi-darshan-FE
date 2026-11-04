@@ -14,7 +14,7 @@ export class CacheInterceptor implements HttpInterceptor {
   constructor(private cacheService: CacheService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.context.get(BACKGROUND_REQUEST)) return next.handle(req);
+    if (req.context.get(BACKGROUND_REQUEST) && req.method === 'GET') return next.handle(req);
     // Only cache GET requests
     if (req.method !== 'GET' || req.headers.has('Authorization')) {
       return next.handle(req).pipe(tap(event => {
