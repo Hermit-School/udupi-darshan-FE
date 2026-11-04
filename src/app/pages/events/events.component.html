@@ -13,6 +13,9 @@
         <p class="ud-eyebrow">
           {{ ended(event) ? "Completed event" : "Around Udupi" }}
         </p>
+        @if (event.details.article?.label) {
+          <p>{{ event.details.article?.label }}</p>
+        }
         <h1>{{ name(event) }}</h1>
         <p class="ud-lead">{{ event.details.article?.location }}</p>
         @if (event.details.startsOn) {
@@ -75,7 +78,48 @@
             <p>{{ directions.byBike }}</p>
           }
         }
+        @if (informationUrl; as url) {
+          <a
+            class="ud-button"
+            [href]="url"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Event website ↗</a
+          >
+        }
       </article>
+      @if (shared.mappedRelated(event.details.article?.dontMissThese).length) {
+        <section class="ud-section">
+          <h2>Keep exploring.</h2>
+          <div class="ud-grid">
+            @for (
+              item of shared.mappedRelated(
+                event.details.article?.dontMissThese
+              );
+              track item.link
+            ) {
+              <a class="ud-card" [routerLink]="shared.relatedLink(item.link)">
+                @if (item.imageUrl) {
+                  <div class="ud-card-image">
+                    <img
+                      [src]="item.imageUrl"
+                      [alt]="item.name"
+                      width="600"
+                      height="400"
+                      loading="lazy"
+                    />
+                  </div>
+                }
+                <div class="ud-card-body">
+                  <h3>{{ item.name }}</h3>
+                  <p>{{ item.description }}</p>
+                  <span class="ud-link">View details →</span>
+                </div></a
+              >
+            }
+          </div>
+        </section>
+      }
     } @else {
       <header class="ud-intro">
         <p class="ud-eyebrow">Gather. Celebrate. Belong.</p>

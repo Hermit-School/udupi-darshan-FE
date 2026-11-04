@@ -1158,6 +1158,7 @@ test("events show upcoming and past gatherings, with featured events on home", a
           name: "Coastal festival",
           location: "Malpe",
           descr: "A day of music.",
+          link: "https://example.invalid/festival",
           images: ["/assets/images/a6.jpg"],
         },
         startsOn: "2099-11-10",
@@ -1207,20 +1208,19 @@ test("events show upcoming and past gatherings, with featured events on home", a
     .click();
   await expect(page).toHaveURL(/#\/events\/1$/);
   await expect(page.getByText("A day of music.")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Event website ↗" }),
+  ).toHaveAttribute("href", "https://example.invalid/festival");
   await page.getByRole("link", { name: "← All events" }).click();
-  const upcoming = page
-    .locator("section")
-    .filter({
-      has: page.getByRole("heading", {
-        name: "Upcoming & announced",
-        exact: true,
-      }),
-    });
-  const past = page
-    .locator("section")
-    .filter({
-      has: page.getByRole("heading", { name: "Past events", exact: true }),
-    });
+  const upcoming = page.locator("section").filter({
+    has: page.getByRole("heading", {
+      name: "Upcoming & announced",
+      exact: true,
+    }),
+  });
+  const past = page.locator("section").filter({
+    has: page.getByRole("heading", { name: "Past events", exact: true }),
+  });
   await expect(upcoming).toContainText("Coastal festival");
   await expect(upcoming).toContainText("Unannounced gathering");
   await expect(upcoming).not.toContainText("Heritage gathering");

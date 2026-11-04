@@ -1,3 +1,4 @@
+import { SharedService } from "../../services/shared.service";
 import { Component, DestroyRef, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute, RouterLink } from "@angular/router";
@@ -18,6 +19,7 @@ import { VisitorMotionDirective } from "../../directives/visitor-motion.directiv
   templateUrl: "./events.component.html",
 })
 export class EventsComponent {
+  readonly shared = inject(SharedService);
   private service = inject(EventsService);
   private route = inject(ActivatedRoute);
   private destroy = inject(DestroyRef);
@@ -58,13 +60,31 @@ export class EventsComponent {
           if (Array.isArray(value)) {
             this.items = value;
             this.selected = null;
-          } else this.selected = value;
+          } else {
+            this.selected = value;
+            this.shared.resolveRelatedLinks(
+              value.details.article?.dontMissThese,
+            );
+          }
         },
         error: () => {
           this.loading = false;
           this.error = true;
         },
       });
+  }
+  get informationUrl(): string | null {
+    try {
+      const url = new URL(this.selected?.details.article?.link || "");
+      return ["https:", "http:"].includes(url.protocol) &&
+        !url.username &&
+        !url.password &&
+        !this.shared.isSiteUrl(url)
+        ? url.href
+        : null;
+    } catch {
+      return null;
+    }
   }
   get upcoming() {
     return this.items
