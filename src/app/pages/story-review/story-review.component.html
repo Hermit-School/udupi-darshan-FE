@@ -41,7 +41,7 @@
           <h2>{{ label(status) }}</h2>
           <span
             >{{ queue.total }}
-            {{ queue.total === 1 ? "story" : "stories" }}</span
+            {{ queue.total === 1 ? 'story' : 'stories' }}</span
           >
         </div>
         <label for="queue-search" class="visually-hidden"
@@ -75,12 +75,12 @@
             >
               <span class="row-meta"
                 >{{ story.submittedBy }} ·
-                {{ story.createdAt | date: "mediumDate" }}</span
+                {{ story.createdAt | date: 'mediumDate' }}</span
               ><strong>{{ story.title }}</strong
               ><span class="excerpt">{{ story.excerpt }}</span
               ><span class="row-meta"
                 >{{ story.photoCount }}
-                {{ story.photoCount === 1 ? "photo" : "photos" }} · Open story
+                {{ story.photoCount === 1 ? 'photo' : 'photos' }} · Open story
                 →</span
               >
             </button>
@@ -88,8 +88,8 @@
             <p class="empty">
               {{
                 query
-                  ? "No stories match this search."
-                  : "No stories in this queue."
+                  ? 'No stories match this search.'
+                  : 'No stories in this queue.'
               }}
             </p>
           }
@@ -131,11 +131,11 @@
           </div>
           <h2>{{ story.title }}</h2>
           <p class="byline">
-            By {{ story.submittedBy }} · {{ story.createdAt | date: "medium" }}
+            By {{ story.submittedBy }} · {{ story.createdAt | date: 'medium' }}
           </p>
           <p class="contact">
             Contact email (admin only):
-            <span>{{ story.email }}</span>
+            <a [href]="'mailto:' + story.email">{{ story.email }}</a>
           </p>
           <div class="story-text">{{ story.content }}</div>
           @if (photos.length) {
@@ -157,8 +157,8 @@
                     <p>
                       {{
                         photo.failed
-                          ? "Photo could not load. Reopen this story to retry."
-                          : "Loading photo…"
+                          ? 'Photo could not load. Reopen this story to retry.'
+                          : 'Loading photo…'
                       }}
                     </p>
                   }
@@ -166,7 +166,7 @@
               }
             </div>
           }
-          @if (story.status === "Submitted") {
+          @if (story.status === 'Submitted') {
             <section class="add-photos" aria-labelledby="add-photos-title">
               <h3 id="add-photos-title">Add photos to this story</h3>
               <p id="admin-photo-help">
@@ -201,8 +201,8 @@
                   >
                     {{
                       pendingPhotos.length
-                        ? "Keep current selection"
-                        : "Continue without new photos"
+                        ? 'Keep current selection'
+                        : 'Continue without new photos'
                     }}
                   </button>
                 }
@@ -233,7 +233,7 @@
                     [disabled]="busy || !!photoError"
                     (click)="savePhotos()"
                   >
-                    {{ uploading ? "Saving photos…" : "Save photos" }}
+                    {{ uploading ? 'Saving photos…' : 'Save photos' }}
                   </button>
                 }
                 @if (uploadError) {
@@ -245,7 +245,7 @@
             </section>
           }
           <div class="decision">
-            @if (story.status === "Submitted") {
+            @if (story.status === 'Submitted') {
               <p>
                 Publishing makes this story, the author’s name, and these photos
                 visible to everyone. Their email stays private.
@@ -262,7 +262,7 @@
                   "
                   (click)="decide('publish')"
                 >
-                  {{ saving ? "Saving…" : "Publish story" }}</button
+                  {{ saving ? 'Saving…' : 'Publish story' }}</button
                 ><button
                   type="button"
                   [disabled]="busy"
@@ -271,7 +271,7 @@
                   Reject story
                 </button>
               </div>
-            } @else if (story.status === "Published") {
+            } @else if (story.status === 'Published') {
               <a class="public-link" [routerLink]="['/story', story.id]"
                 >View published story ↗</a
               >

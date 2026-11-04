@@ -1,27 +1,13 @@
 <main class="editor" aria-labelledby="editor-title">
   <header>
-    <a routerLink="/admindashboard"
-      ><i class="bi bi-arrow-left" aria-hidden="true"></i> Dashboard</a
-    >
+    <a routerLink="/admindashboard"><i class="bi bi-arrow-left" aria-hidden="true"></i> Dashboard</a>
     <div class="intro">
       <span>ADMIN WORKSPACE</span>
-      <h1 id="editor-title">{{ editId ? "Edit" : "Add" }} {{ type.title }}</h1>
-      <p>
-        Enter the details below. Publishing makes this entry visible on the
-        website.
-      </p>
+      <h1 id="editor-title">Add {{ type.title }}</h1>
+      <p>Enter the details below. Publishing makes this entry visible on the website.</p>
     </div>
   </header>
 
-  @if (loading) {
-    <p class="panel" role="status">Loading listing…</p>
-  }
-  @if (loadError) {
-    <div class="panel" role="alert">
-      <p>{{ loadError }}</p>
-      <button (click)="loadExisting()">Try again</button>
-    </div>
-  }
   @if (published) {
     <section class="panel success" role="status">
       <h2>Published successfully</h2>
@@ -29,236 +15,63 @@
       <a routerLink="/admindashboard">Return to dashboard</a>
     </section>
   } @else {
-    <form
-      [formGroup]="form"
-      (ngSubmit)="publish()"
-      [attr.aria-busy]="busy || loading"
-    >
+    <form [formGroup]="form" (ngSubmit)="publish()" [attr.aria-busy]="busy">
       <section class="panel" aria-labelledby="basic-title">
         <h2 id="basic-title">Basic details</h2>
         <p class="hint">Fields marked * are required.</p>
         <div class="fields">
-          <label
-            >{{ destination ? "Place name" : "Title" }}
-            {{ event ? "(optional)" : "*" }}
-            <input
-              formControlName="title"
-              maxlength="255"
-              [required]="!event"
-            />
+          <label>{{ destination ? 'Place name' : 'Title' }} *
+            <input formControlName="title" maxlength="255" required>
           </label>
-          @if (destination || event) {
-            @if (destination) {
-              <label
-                >Section *
-                <select formControlName="label" required>
-                  <option value="">Choose a section</option>
-                  @for (label of type.labels; track label) {
-                    <option [value]="label">{{ label }}</option>
-                  }
-                </select>
-              </label>
-            }
-            <label
-              >Location<input
-                formControlName="location"
-                maxlength="255"
-                placeholder="e.g. Malpe, Udupi"
-            /></label>
-            <label
-              >Opening hours or best time to visit<input
-                formControlName="timings"
-                maxlength="10000"
-            /></label>
-          }
-          @if (event) {
-            <label
-              >Start date<input type="date" formControlName="startsOn" /></label
-            ><label
-              >End date<input
-                type="date"
-                formControlName="endsOn"
-                [min]="form.controls.startsOn.value" /></label
-            ><label class="wide"
-              ><span
-                ><input type="checkbox" formControlName="featured" /> Keep this
-                event featured after it ends</span
-              ><small
-                >Upcoming events appear automatically on the home page.</small
-              ></label
-            >
+          @if (destination) {
+            <label>Section *
+              <select formControlName="label" required>
+                <option value="">Choose a section</option>
+                @for (label of type.labels; track label) { <option [value]="label">{{ label }}</option> }
+              </select>
+            </label>
+            <label>Location<input formControlName="location" maxlength="255" placeholder="e.g. Malpe, Udupi"></label>
+            <label>Opening hours or best time to visit<input formControlName="timings" maxlength="10000"></label>
           }
           @if (story) {
-            <label
-              >Author name *<input
-                formControlName="author"
-                maxlength="255"
-                required
-            /></label>
-            <label
-              >Contact email * <small>Private; not shown on the website.</small>
-              <input
-                type="email"
-                formControlName="email"
-                maxlength="255"
-                required
-              />
+            <label>Author name *<input formControlName="author" maxlength="255" required></label>
+            <label>Contact email * <small>Private; not shown on the website.</small>
+              <input type="email" formControlName="email" maxlength="255" required>
             </label>
           }
           @if (!ad) {
-            <label class="wide"
-              >{{ story ? "Story text *" : "Description" }}
-              <textarea
-                formControlName="description"
-                rows="5"
-                [attr.maxlength]="10000"
-                [attr.aria-describedby]="story ? 'story-count' : null"
-                [required]="story"
-              ></textarea>
-              @if (event) {
-                <label
-                  >Start date<input
-                    type="date"
-                    formControlName="startsOn" /></label
-                ><label
-                  >End date<input
-                    type="date"
-                    formControlName="endsOn"
-                    [min]="form.controls.startsOn.value" /></label
-                ><label class="wide"
-                  ><span
-                    ><input type="checkbox" formControlName="featured" /> Keep
-                    this event featured after it ends</span
-                  ><small
-                    >Upcoming events appear automatically on the home
-                    page.</small
-                  ></label
-                >
-              }
-              @if (story) {
-                <small id="story-count"
-                  >{{ form.controls.description.value.length }} / 10000
-                  characters</small
-                >
-              }
+            <label class="wide">{{ story ? 'Story text *' : 'Description' }}
+              <textarea formControlName="description" rows="5" [attr.maxlength]="story ? 555 : 10000" [attr.aria-describedby]="story ? 'story-count' : null" [required]="story"></textarea>
+              @if (story) { <small id="story-count">{{ form.controls.description.value.length }} / 555 characters</small> }
             </label>
           }
-          <label class="wide"
-            >{{
-              destination
-                ? "Website or map link *"
-                : "Destination link (optional)"
-            }}
-            <input
-              formControlName="link"
-              maxlength="255"
-              inputmode="url"
-              placeholder="https://…"
-              [required]="destination"
-            />
+          <label class="wide">{{ destination ? 'Website or map link *' : 'Destination link (optional)' }}
+            <input formControlName="link" maxlength="255" inputmode="url" placeholder="https://…" [required]="destination">
           </label>
           @if (ad) {
-            <label
-              >Ad width (pixels)<input
-                type="number"
-                formControlName="width"
-                min="100"
-                max="2000" /></label
-            ><label
-              >Ad height (pixels)<input
-                type="number"
-                formControlName="height"
-                min="60"
-                max="2000"
-            /></label>
-            <label class="wide"
-              >Image URL *
-              <small>Use a public HTTPS link to the ad artwork.</small>
-              <input
-                type="url"
-                formControlName="imageUrl"
-                maxlength="255"
-                placeholder="https://…"
-                required
-              />
+            <label class="wide">Image URL * <small>Use a public HTTPS link to the ad artwork.</small>
+              <input type="url" formControlName="imageUrl" maxlength="255" placeholder="https://…" required>
             </label>
           } @else {
-            <label class="wide"
-              >Image URLs
-              <small
-                >One image URL per line, up to {{ event ? 5 : 20 }}. Put the
-                main image first.</small
-              >
-              <textarea
-                formControlName="images"
-                rows="3"
-                placeholder="https://…"
-              ></textarea>
-            </label>
-          }
-          @if (event) {
-            <label class="wide"
-              >Upload event photos (optional)<small
-                >Up to 5 in total, including URLs. JPEG or PNG, up to 5 MB each.
-                Photos save after the event.</small
-              ><input
-                type="file"
-                accept="image/jpeg,image/png"
-                multiple
-                (change)="selectPhotos($event)"
-                [disabled]="busy"
-              />
-              @for (photo of pendingPhotos; track $index) {
-                <small>{{ photo.name }}</small>
-              }
-              @if (pendingPhotos.length) {
-                <button
-                  type="button"
-                  (click)="pendingPhotos = []; photoError = ''"
-                  [disabled]="busy"
-                >
-                  Remove selected photos
-                </button>
-              }
-              @if (photoError) {
-                <small role="alert">{{ photoError }}</small>
-              }
+            <label class="wide">Image URLs <small>One image URL per line, up to 20. Put the main image first.</small>
+              <textarea formControlName="images" rows="3" placeholder="https://…"></textarea>
             </label>
           }
         </div>
       </section>
 
-      @if (destination || event) {
+      @if (destination) {
         <details class="panel">
           <summary>Visitor information <small>Optional</small></summary>
           <div class="fields">
             @for (item of lists; track item.key) {
-              <label class="wide"
-                >{{ item.label }} <small>One item per line.</small>
+              <label class="wide">{{ item.label }} <small>One item per line.</small>
                 <textarea [formControlName]="item.key" rows="2"></textarea>
               </label>
             }
-            <label
-              >Directions by bike<textarea
-                formControlName="byBike"
-                rows="2"
-                maxlength="10000"
-              ></textarea>
-            </label>
-            <label
-              >Directions by car<textarea
-                formControlName="byCar"
-                rows="2"
-                maxlength="10000"
-              ></textarea>
-            </label>
-            <label
-              >Public transport<textarea
-                formControlName="byPublic"
-                rows="2"
-                maxlength="10000"
-              ></textarea>
-            </label>
+            <label>Directions by bike<textarea formControlName="byBike" rows="2" maxlength="10000"></textarea></label>
+            <label>Directions by car<textarea formControlName="byCar" rows="2" maxlength="10000"></textarea></label>
+            <label>Public transport<textarea formControlName="byPublic" rows="2" maxlength="10000"></textarea></label>
           </div>
         </details>
       }
@@ -268,82 +81,21 @@
           @for (item of related.controls; track item; let i = $index) {
             <fieldset class="fields related" [formGroupName]="i">
               <legend>Related place {{ i + 1 }}</legend>
-              <label class="wide"
-                >Choose an existing article<select
-                  (change)="chooseRelated(i, $event)"
-                  [disabled]="busy"
-                >
-                  <option value="">
-                    Select an article to fill these fields
-                  </option>
-                  @for (
-                    choice of relatedChoices;
-                    track choice.category + "/" + choice.id
-                  ) {
-                    <option [value]="choice.category + '/' + choice.id">
-                      {{ choice.category }} · {{ choice.name }}
-                    </option>
-                  }</select
-                ><small
-                  >Only existing articles appear in “Don’t miss these”.</small
-                ></label
-              >
-              <label
-                >Name *<input formControlName="name" maxlength="255" required
-              /></label>
-              <label
-                >Link<input
-                  formControlName="link"
-                  maxlength="255"
-                  inputmode="url"
-              /></label>
-              <label
-                >Image URL<input
-                  formControlName="imageUrl"
-                  maxlength="255"
-                  inputmode="url"
-              /></label>
-              <label class="wide"
-                >Description<textarea
-                  formControlName="description"
-                  rows="2"
-                  maxlength="10000"
-                ></textarea>
-              </label>
-              <button
-                class="secondary"
-                type="button"
-                (click)="related.removeAt(i)"
-              >
-                Remove related place {{ i + 1 }}
-              </button>
+              <label>Name *<input formControlName="name" maxlength="255" required></label>
+              <label>Link<input formControlName="link" maxlength="255" inputmode="url"></label>
+              <label>Image URL<input formControlName="imageUrl" maxlength="255" inputmode="url"></label>
+              <label class="wide">Description<textarea formControlName="description" rows="2" maxlength="10000"></textarea></label>
+              <button class="secondary" type="button" (click)="related.removeAt(i)">Remove related place {{ i + 1 }}</button>
             </fieldset>
           }
-          <button
-            class="secondary"
-            type="button"
-            (click)="addRelated()"
-            [disabled]="related.length >= 50"
-          >
-            Add a related place
-          </button>
+          <button class="secondary" type="button" (click)="addRelated()" [disabled]="related.length >= 50">Add a related place</button>
         </details>
       }
 
-      @if (error) {
-        <p class="error" role="alert">{{ error }}</p>
-      }
+      @if (error) { <p class="error" role="alert">{{ error }}</p> }
       <footer class="actions">
         <a routerLink="/admindashboard">Cancel</a>
-        <button
-          class="primary"
-          type="submit"
-          [disabled]="busy || loading || !!loadError || !!photoError"
-        >
-          {{
-            busy ? "Publishing…" : (editId ? "Save " : "Publish ") + type.title
-          }}
-        </button>
+        <button class="primary" type="submit" [disabled]="busy">{{ busy ? 'Publishing…' : 'Publish ' + type.title }}</button>
       </footer>
     </form>
   }

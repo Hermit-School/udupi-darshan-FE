@@ -30,11 +30,10 @@
         review it before publishing.
       </p>
       <p class="field-help">
-        Your name, email, and experience are required. The title and photos are
-        optional.
+        All text fields are required. Photos are optional.
       </p>
       <fieldset [disabled]="submitting || validatingPhotos">
-        <label for="story-title">Story title (optional)</label
+        <label for="story-title">Story title</label
         ><input
           id="story-title"
           class="form-control"
@@ -43,9 +42,10 @@
           [attr.aria-invalid]="!!validationMessage('title')"
           aria-describedby="story-title-help story-title-error"
           maxlength="200"
+          required
         />
         <small id="story-title-help">Up to 200 characters.</small>
-        @if (validationMessage("title"); as message) {
+        @if (validationMessage('title'); as message) {
           <p id="story-title-error" class="field-error">{{ message }}</p>
         }
         <label for="story-name">Name</label
@@ -63,7 +63,7 @@
           >Your name will be credited with the story. Up to 100
           characters.</small
         >
-        @if (validationMessage("name"); as message) {
+        @if (validationMessage('name'); as message) {
           <p id="story-name-error" class="field-error">{{ message }}</p>
         }
         <label for="story-email">Email</label
@@ -82,7 +82,7 @@
         /><small id="story-email-help"
           >Only the admin can see your email.</small
         >
-        @if (validationMessage("email"); as message) {
+        @if (validationMessage('email'); as message) {
           <p id="story-email-error" class="field-error">{{ message }}</p>
         }
         <label for="story-message">Your experience</label
@@ -100,7 +100,7 @@
         ><small id="story-message-help"
           >{{ form.controls.message.value.length }} / 5000 characters</small
         >
-        @if (validationMessage("message"); as message) {
+        @if (validationMessage('message'); as message) {
           <p id="story-message-error" class="field-error">{{ message }}</p>
         }
         <label for="story-photos">Photos (optional)</label>
@@ -126,8 +126,8 @@
           <button class="photo-reset" type="button" (click)="clearPhotoError()">
             {{
               photos.length
-                ? "Keep current selection"
-                : "Continue without photos"
+                ? 'Keep current selection'
+                : 'Continue without photos'
             }}
           </button>
         }
@@ -174,10 +174,10 @@
       >
         {{
           submitting
-            ? "Submitting…"
+            ? 'Submitting…'
             : validatingPhotos
-              ? "Checking photos…"
-              : "Submit story"
+              ? 'Checking photos…'
+              : 'Submit story'
         }}
       </button>
     </div>

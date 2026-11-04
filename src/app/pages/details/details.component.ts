@@ -1,4 +1,4 @@
-import { VisitorMotionDirective } from "src/app/directives/visitor-motion.directive";
+import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
@@ -137,29 +137,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
   get informationUrl(): string | null {
     try {
       const url = new URL(this.card?.link || "");
-      return ["http:", "https:"].includes(url.protocol) &&
-        !this.shared.isSiteUrl(url)
-        ? url.href
-        : null;
+      return ["http:", "https:"].includes(url.protocol) ? url.href : null;
     } catch {
       return null;
     }
-  }
-
-  get sharedRelated() {
-    return this.shared
-      .mappedRelated(this.card?.dontMissThese)
-      .filter((item) => {
-        const route = this.shared.relatedLink(item.link);
-        return (
-          Array.isArray(route) &&
-          route[0] === "/details" &&
-          !(
-            route[1] === this.currentCategory &&
-            Number(route[2]) === this.card?.id
-          )
-        );
-      });
   }
 
   relatedLink(link?: string): string | string[] | null {
