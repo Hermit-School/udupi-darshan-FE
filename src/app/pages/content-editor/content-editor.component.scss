@@ -1,32 +1,202 @@
-:host { display: block; min-height: 100svh; background: #f7f5f3; color: #222831; font-family: system-ui, sans-serif; }
-.editor { width: min(calc(100% - 2rem), 54rem); margin: auto; padding: 1.25rem 0 3rem; }
-a { color: #9e3900; font-weight: 700; text-underline-offset: .22em; }
-.intro { margin: 1rem 0; padding: clamp(1.2rem, 4vw, 2rem); border-radius: 1rem; background: #222831; color: white; }
-.intro span { color: #ffb486; font-size: .72rem; font-weight: 750; letter-spacing: .14em; }
-h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 750; margin: .3rem 0; }
-.intro p { margin: 0; color: #e0e3e7; }
-.panel { padding: clamp(1rem, 4vw, 1.6rem); margin-bottom: 1rem; border: 1px solid #e8e2de; border-radius: .85rem; background: white; }
-h2, summary { font-size: 1.2rem; font-weight: 750; }
-summary { cursor: pointer; }
-summary small { display: inline; margin-left: .5rem; }
-.hint, small { color: #555d68; font-size: .85rem; }
-small { display: block; font-weight: 400; }
-.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-details .fields { margin-top: 1rem; }
-.wide { grid-column: 1 / -1; }
-label { display: grid; align-content: start; gap: .35rem; font-size: .9rem; font-weight: 700; }
-input, select, textarea { width: 100%; min-height: 2.75rem; padding: .6rem .7rem; border: 1px solid #a8a29d; border-radius: .55rem; background: white; color: #222831; font: inherit; font-weight: 400; }
-textarea { resize: vertical; }
-.ng-touched.ng-invalid { border-color: #a03524; }
-:where(input, textarea, select, button, a, summary):focus-visible { outline: 3px solid #9e3900; outline-offset: 3px; }
-.actions { display: flex; justify-content: flex-end; align-items: center; gap: 1rem; }
-.primary, .secondary { border-radius: .55rem; min-height: 2.75rem; padding: .6rem 1rem; font-weight: 700; }
-.primary { border: 0; background: #ff6000; color: #191d24; }
-.primary:disabled { opacity: .6; }
-.secondary { border: 1px solid #a8a29d; background: white; color: #222831; }
-details > .secondary { margin-top: .75rem; }
-.related { border-bottom: 1px solid #e8e2de; padding-bottom: 1rem; }
-legend { font-size: 1rem; font-weight: 750; }
-.error { background: #fff0ea; color: #872d20; border-radius: .55rem; padding: .75rem; }
-.success { border-left: .3rem solid #ff6000; }
-@media (max-width: 560px) { .fields { grid-template-columns: 1fr; } }
+:host {
+  display: block;
+  min-height: 100svh;
+  background: #f7f5f3;
+  color: #222831;
+  font-family: system-ui, sans-serif;
+}
+.editor {
+  width: min(calc(100% - 2rem), 54rem);
+  margin: auto;
+  padding: 1.25rem 0 3rem;
+}
+a {
+  color: #9e3900;
+  font-weight: 700;
+  text-underline-offset: 0.22em;
+}
+.intro {
+  margin: 1rem 0;
+  padding: clamp(1.2rem, 4vw, 2rem);
+  border-radius: 1rem;
+  background: #222831;
+  color: white;
+}
+.intro span {
+  color: #ffb486;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+}
+h1 {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 750;
+  margin: 0.3rem 0;
+}
+.intro p {
+  margin: 0;
+  color: #e0e3e7;
+}
+.panel {
+  padding: clamp(1rem, 4vw, 1.6rem);
+  margin-bottom: 1rem;
+  border: 1px solid #e8e2de;
+  border-radius: 0.85rem;
+  background: white;
+}
+h2,
+summary {
+  font-size: 1.2rem;
+  font-weight: 750;
+}
+summary {
+  cursor: pointer;
+}
+summary small {
+  display: inline;
+  margin-left: 0.5rem;
+}
+.hint,
+small {
+  color: #555d68;
+  font-size: 0.85rem;
+}
+small {
+  display: block;
+  font-weight: 400;
+}
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+details .fields {
+  margin-top: 1rem;
+}
+.wide {
+  grid-column: 1 / -1;
+}
+label {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #a8a29d;
+  border-radius: 0.55rem;
+  background: white;
+  color: #222831;
+  font: inherit;
+  font-weight: 400;
+}
+textarea {
+  resize: vertical;
+}
+.ng-touched.ng-invalid {
+  border-color: #a03524;
+}
+:where(input, textarea, select, button, a, summary):focus-visible {
+  outline: 3px solid #9e3900;
+  outline-offset: 3px;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+.primary,
+.secondary {
+  border-radius: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0.6rem 1rem;
+  font-weight: 700;
+}
+.primary {
+  border: 0;
+  background: #ff6000;
+  color: #191d24;
+}
+.primary:disabled {
+  opacity: 0.6;
+}
+.secondary {
+  border: 1px solid #a8a29d;
+  background: white;
+  color: #222831;
+}
+details > .secondary {
+  margin-top: 0.75rem;
+}
+.related {
+  border-bottom: 1px solid #e8e2de;
+  padding-bottom: 1rem;
+}
+legend {
+  font-size: 1rem;
+  font-weight: 750;
+}
+.error {
+  background: #fff0ea;
+  color: #872d20;
+  border-radius: 0.55rem;
+  padding: 0.75rem;
+}
+.success {
+  border-left: 0.3rem solid #ff6000;
+}
+@media (max-width: 560px) {
+  .fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.manager-search {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+.manager-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid #e7e2dc;
+}
+.manager-row > div {
+  flex: 1;
+  min-width: 0;
+}
+.manager-row h2 {
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+}
+.manager-row p {
+  margin: 0;
+}
+.manager-row button {
+  border: 1px solid #b8aba2;
+  border-radius: 0.5rem;
+  background: white;
+  padding: 0.5rem;
+}
+.delete-confirm {
+  position: sticky;
+  bottom: 1rem;
+  box-shadow: 0 4px 24px #22283120;
+  border: 2px solid #ff6000;
+}
+.editor > nav {
+  margin: 1rem 0;
+}
+input[type="checkbox"] {
+  width: auto;
+  min-height: 0;
+}

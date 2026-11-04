@@ -1,0 +1,131 @@
+<main class="ud-page" udMotion>
+  <div class="ud-wrap">
+    @if (loading) {
+      <p role="status" class="ud-status">Loading events…</p>
+    } @else if (error) {
+      <div role="alert" class="ud-status">
+        <h1>Events could not load.</h1>
+        <button class="ud-button" (click)="retry()">Try again</button>
+      </div>
+    } @else if (selected; as event) {
+      <a class="ud-link" routerLink="/events">← All events</a>
+      <header class="ud-intro">
+        <p class="ud-eyebrow">
+          {{ ended(event) ? "Completed event" : "Around Udupi" }}
+        </p>
+        <h1>{{ name(event) }}</h1>
+        <p class="ud-lead">{{ event.details.article?.location }}</p>
+        @if (event.details.startsOn) {
+          <p>
+            {{ event.details.startsOn | date: "longDate" }}
+            @if (
+              event.details.endsOn &&
+              event.details.endsOn !== event.details.startsOn
+            ) {
+              – {{ event.details.endsOn | date: "longDate" }}
+            }
+          </p>
+        }
+        <p>{{ event.details.article?.timings }}</p>
+      </header>
+      <div class="event-gallery">
+        @for (photo of event.details.article?.images || []; track $index) {
+          <img
+            [src]="image(photo)"
+            [alt]="name(event) + ' — photo ' + ($index + 1)"
+            loading="lazy"
+            width="800"
+            height="600"
+          />
+        }
+      </div>
+      <article class="event-copy">
+        <p class="long-copy">{{ event.details.article?.descr }}</p>
+        @for (
+          section of [
+            { title: "Good to know", items: event.details.article?.keyPoints },
+            { title: "Discover", items: event.details.article?.discover },
+            {
+              title: "Important information",
+              items: event.details.article?.impInfo,
+            },
+          ];
+          track section.title
+        ) {
+          @if (section.items?.length) {
+            <h2>{{ section.title }}</h2>
+            <ul>
+              @for (item of section.items; track $index) {
+                <li [innerHTML]="item"></li>
+              }
+            </ul>
+          }
+        }
+        @if (event.details.article?.howToVisit; as directions) {
+          @if (directions.byCar) {
+            <h2>By car</h2>
+            <p>{{ directions.byCar }}</p>
+          }
+          @if (directions.byPublic) {
+            <h2>Public transport</h2>
+            <p>{{ directions.byPublic }}</p>
+          }
+          @if (directions.byBike) {
+            <h2>By bike</h2>
+            <p>{{ directions.byBike }}</p>
+          }
+        }
+      </article>
+    } @else {
+      <header class="ud-intro">
+        <p class="ud-eyebrow">Gather. Celebrate. Belong.</p>
+        <h1>What’s happening in Udupi.</h1>
+        <p class="ud-lead">
+          Upcoming gatherings and moments our community has shared.
+        </p>
+      </header>
+      @for (
+        group of [
+          { title: "Upcoming & announced", items: upcoming },
+          { title: "Past events", items: completed },
+        ];
+        track group.title
+      ) {
+        <section class="ud-section">
+          <h2>{{ group.title }}</h2>
+          <div class="ud-grid">
+            @for (event of group.items; track event.id) {
+              <a class="ud-card" [routerLink]="['/events', event.id]">
+                @if (event.details.article?.images?.[0]; as photo) {
+                  <div class="ud-card-image">
+                    <img
+                      [src]="image(photo)"
+                      alt=""
+                      width="600"
+                      height="400"
+                      loading="lazy"
+                    />
+                  </div>
+                }
+                <div class="ud-card-body">
+                  <p class="ud-eyebrow">
+                    {{
+                      event.details.startsOn
+                        ? (event.details.startsOn | date: "mediumDate")
+                        : "Date to be announced"
+                    }}
+                  </p>
+                  <h3>{{ name(event) }}</h3>
+                  <p>{{ event.details.article?.location }}</p>
+                  <span class="ud-link">Read about this event →</span>
+                </div></a
+              >
+            } @empty {
+              <p>No {{ group.title.toLowerCase() }} yet. Check back soon.</p>
+            }
+          </div>
+        </section>
+      }
+    }
+  </div>
+</main>

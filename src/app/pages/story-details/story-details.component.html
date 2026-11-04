@@ -48,11 +48,14 @@
         }
       }
       <article class="story-content">{{ story.content }}</article>
-      @if (story.dontMissThese.length) {
+      @if (shared.mappedRelated(story.dontMissThese).length) {
         <section class="ud-section">
           <h2>Keep exploring.</h2>
           <div class="ud-grid">
-            @for (item of story.dontMissThese; track $index) {
+            @for (
+              item of shared.mappedRelated(story.dontMissThese);
+              track $index
+            ) {
               <article class="ud-card">
                 @if (item.imageUrl) {
                   <div class="ud-card-image">

@@ -262,3 +262,140 @@
 .ud-page :where(h1, h2, h3, p, a, li) {
   overflow-wrap: anywhere;
 }
+
+.sponsored {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem 24px;
+  border-top: 1px solid #e7e2dc;
+}
+.ad-strip {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.ad-strip article {
+  max-width: 100%;
+}
+.ad-strip img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.ad-strip p {
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+  color: #555d68;
+}
+.event-tape {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 4px 4px 1rem;
+  scroll-snap-type: x proximity;
+}
+.event-tape a {
+  flex: 0 0 min(80vw, 300px);
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  background: #fff0e6;
+  color: #222831;
+  border: 1px solid #f3d7c4;
+  border-radius: 1rem;
+  text-decoration: none;
+  scroll-snap-align: start;
+}
+.event-tape small {
+  color: #853300;
+}
+.event-tape strong {
+  font-size: 1.2rem;
+}
+.event-gallery {
+  display: flex;
+  gap: 1rem;
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+}
+.event-gallery img {
+  width: min(80vw, 700px);
+  height: auto;
+  object-fit: cover;
+  scroll-snap-align: start;
+  border-radius: 1rem;
+}
+.event-copy {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+.home-search {
+  max-width: 640px;
+  margin-inline: auto;
+}
+.event-highlights {
+  border-radius: 1rem;
+}
+.ad-mosaic {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.ad-mosaic > article {
+  max-width: 100%;
+}
+.ad-mosaic .card {
+  height: auto !important;
+}
+.ad-mosaic img {
+  object-fit: contain;
+  width: 100%;
+  height: auto;
+}
+
+.home-editorial {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+  padding-top: 2.5rem;
+}
+.home-editorial .home-intro {
+  padding: 1.5rem 0;
+}
+.home-editorial h1 {
+  font-size: clamp(2.2rem, 4.2vw, 3.75rem);
+}
+.home-editorial .home-hero {
+  height: 510px;
+}
+.home-editorial .hero-copy {
+  left: 1.5rem;
+  bottom: 1.5rem;
+}
+.home-editorial .hero-copy h2 {
+  font-size: 2.1rem;
+}
+.home-editorial .home-search {
+  margin-left: 0;
+}
+.home-editorial .ud-lead {
+  font-size: 1.1rem;
+}
+@media (max-width: 800px) {
+  .home-editorial {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding-top: 0;
+  }
+  .home-editorial .home-intro {
+    padding-top: 2.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .home-editorial .home-hero {
+    height: 350px;
+  }
+}

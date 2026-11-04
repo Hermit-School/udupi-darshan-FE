@@ -17,12 +17,17 @@
     @if (publishedAds.length) {
       <section class="container py-4" aria-labelledby="published-ads">
         <h2 id="published-ads">Local advertisements</h2>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+        <div class="ad-mosaic">
           @for (ad of publishedAds; track ad.id) {
-            <article class="col">
+            <article [style.width.px]="ad.width || 300">
               <div class="card h-100">
                 <img
                   [src]="ad.imageUrl"
+                  [attr.width]="ad.width || 300"
+                  [attr.height]="ad.height || 250"
+                  [style.aspect-ratio]="
+                    (ad.width || 300) + ' / ' + (ad.height || 250)
+                  "
                   alt=""
                   class="card-img-top"
                   loading="lazy"

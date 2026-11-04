@@ -24,8 +24,7 @@
   color: #222831;
 }
 .search-input input:focus-visible {
-  outline: 2px solid #9e3900;
-  outline-offset: 2px;
+  outline: none;
 }
 .search-dropdown {
   position: absolute;
