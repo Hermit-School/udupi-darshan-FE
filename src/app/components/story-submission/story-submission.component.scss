@@ -109,7 +109,43 @@ p {
   line-height: 1.65;
 }
 
-:host { display:flex; flex-direction:column; min-height:0; overflow:hidden; }
-form { display:flex; flex-direction:column; min-height:0; }
-.modal-body { flex:1 1 auto; min-height:0; overflow-y:auto; }
-.modal-header,.modal-footer { flex-shrink:0; }
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+.modal-header,
+.modal-footer {
+  flex-shrink: 0;
+}
+
+.field-error {
+  color: #9c2525;
+  font-size: 0.85rem;
+  margin: 0.35rem 0 0;
+}
+.field-help {
+  color: #62666d;
+  font-size: 0.8rem;
+}
+.photo-reset {
+  background: white;
+  border: 1px solid #ded8d0;
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  min-height: 44px;
+}
+.is-invalid {
+  border-color: #9c2525;
+}
