@@ -1,3 +1,4 @@
+import { validateStoryPhotos } from 'src/app/util/story-photos';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -133,53 +134,16 @@ export class StorySubmissionComponent implements OnDestroy {
             p.file.lastModified === f.lastModified,
         ),
     );
-    if (this.photos.length + unique.length > 3) {
-      this.photoError = 'Choose up to 3 photos in total.';
-      return;
-    }
-    if (
-      unique.some(
-        (f) =>
-          !['image/jpeg', 'image/png'].includes(f.type) ||
-          f.size === 0 ||
-          f.size > 5 * 1024 * 1024,
-      )
-    ) {
-      this.photoError = 'Choose JPEG or PNG photos, at most 5 MB each.';
-      return;
-    }
     if (!unique.length) return;
     this.validatingPhotos = true;
     try {
-      for (const file of unique) {
-        const header = new Uint8Array(await file.slice(0, 8).arrayBuffer());
-        const png = [137, 80, 78, 71, 13, 10, 26, 10].every(
-          (value, index) => header[index] === value,
-        );
-        const jpeg =
-          header[0] === 255 && header[1] === 216 && header[2] === 255;
-        if (!(file.type === 'image/png' ? png : jpeg))
-          throw new Error('format');
-        const image = await createImageBitmap(file);
-        try {
-          if (
-            !image.width ||
-            !image.height ||
-            image.width * image.height > 20_000_000
-          )
-            throw new Error('dimensions');
-        } finally {
-          image.close();
-        }
-      }
+      await validateStoryPhotos(unique, this.photos.length);
       if (!this.destroyed)
         this.photos.push(
           ...unique.map((file) => ({ file, url: URL.createObjectURL(file) })),
         );
-    } catch {
-      if (!this.destroyed)
-        this.photoError =
-          'Choose readable JPEG or PNG photos, up to 20 megapixels each. No new photos were added.';
+    } catch (error) {
+      if (!this.destroyed) this.photoError = (error as Error).message;
     } finally {
       this.validatingPhotos = false;
     }

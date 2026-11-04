@@ -1,3 +1,4 @@
+import { validateStoryPhotos } from 'src/app/util/story-photos';
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
@@ -31,6 +32,17 @@ export class StoryReviewComponent implements OnDestroy {
   saving = false;
   notice = '';
   photos: { url: string; failed: boolean }[] = [];
+  pendingPhotos: { file: File; url: string }[] = [];
+  photoError = '';
+  uploadError = '';
+  validatingPhotos = false;
+  uploading = false;
+  private uploadKey = '';
+  private destroyed = false;
+  private uploadRequest?: Subscription;
+  get busy(): boolean {
+    return this.saving || this.uploading || this.validatingPhotos;
+  }
   private listRequest?: Subscription;
   private detailRequest?: Subscription;
   private actionRequest?: Subscription;
@@ -69,7 +81,7 @@ export class StoryReviewComponent implements OnDestroy {
     });
   }
   filter(status: ReviewStatus): void {
-    if (this.saving) return;
+    if (this.busy) return;
     this.status = status;
     this.query = '';
     this.close();
@@ -77,7 +89,7 @@ export class StoryReviewComponent implements OnDestroy {
     this.load();
   }
   open(id: number): void {
-    if (this.saving) return;
+    if (this.busy) return;
     this.close();
     this.detailLoading = true;
     const request = new Subscription();
@@ -124,11 +136,12 @@ export class StoryReviewComponent implements OnDestroy {
     );
   }
   close(): void {
-    if (this.saving) return;
+    if (this.busy) return;
     this.detailRequest?.unsubscribe();
     this.selected = null;
     this.detailLoading = false;
     this.detailError = '';
+    this.clearPendingPhotos();
     for (const p of this.photos)
       if (p.url.startsWith('blob:')) URL.revokeObjectURL(p.url);
     this.photos = [];
@@ -136,9 +149,12 @@ export class StoryReviewComponent implements OnDestroy {
   decide(decision: 'publish' | 'reject'): void {
     if (
       !this.selected ||
-      this.saving ||
+      this.busy ||
       this.selected.status !== 'Submitted' ||
-      (decision === 'publish' && this.photosPending)
+      (decision === 'publish' &&
+        (this.photosPending ||
+          this.pendingPhotos.length > 0 ||
+          !!this.photoError))
     )
       return;
     const story = this.selected;
@@ -149,6 +165,7 @@ export class StoryReviewComponent implements OnDestroy {
       next: () => {
         this.saving = false;
         story.status = decision === 'publish' ? 'Published' : 'Rejected';
+        this.clearPendingPhotos();
         this.notice =
           decision === 'publish'
             ? 'Story published. It is now visible on the website.'
@@ -164,11 +181,110 @@ export class StoryReviewComponent implements OnDestroy {
       },
     });
   }
+  async selectPhotos(event: Event): Promise<void> {
+    if (this.busy || !this.selected || this.selected.status !== 'Submitted')
+      return;
+    const input = event.target as HTMLInputElement;
+    const files = Array.from(input.files || []);
+    input.value = '';
+    if (!files.length) return;
+    const unique = files.filter(
+      (file) =>
+        !this.pendingPhotos.some(
+          (p) =>
+            p.file.name === file.name &&
+            p.file.size === file.size &&
+            p.file.lastModified === file.lastModified,
+        ),
+    );
+    this.photoError = '';
+    this.uploadError = '';
+    if (!unique.length) return;
+    this.validatingPhotos = true;
+    try {
+      await validateStoryPhotos(
+        unique,
+        this.selected.photos.length + this.pendingPhotos.length,
+      );
+      if (!this.destroyed) {
+        this.pendingPhotos.push(
+          ...unique.map((file) => ({ file, url: URL.createObjectURL(file) })),
+        );
+        this.uploadKey = '';
+      }
+    } catch (error) {
+      if (!this.destroyed) this.photoError = (error as Error).message;
+    } finally {
+      this.validatingPhotos = false;
+    }
+  }
+  removePendingPhoto(index: number): void {
+    if (this.busy) return;
+    URL.revokeObjectURL(this.pendingPhotos[index].url);
+    this.pendingPhotos.splice(index, 1);
+    this.photoError = '';
+    this.uploadError = '';
+    this.uploadKey = '';
+  }
+  clearPhotoError(): void {
+    this.photoError = '';
+  }
+  private clearPendingPhotos(): void {
+    for (const photo of this.pendingPhotos) URL.revokeObjectURL(photo.url);
+    this.pendingPhotos = [];
+    this.photoError = '';
+    this.uploadError = '';
+    this.uploadKey = '';
+  }
+  savePhotos(): void {
+    if (
+      this.busy ||
+      !this.selected ||
+      this.selected.status !== 'Submitted' ||
+      !this.pendingPhotos.length ||
+      this.photoError
+    )
+      return;
+    const id = this.selected.id;
+    this.uploadKey ||= crypto.randomUUID();
+    this.uploading = true;
+    this.uploadError = '';
+    this.notice = '';
+    this.uploadRequest = this.stories
+      .addPhotos(
+        id,
+        this.pendingPhotos.map((p) => p.file),
+        this.uploadKey,
+      )
+      .subscribe({
+        next: () => {
+          this.uploading = false;
+          this.clearPendingPhotos();
+          this.notice = 'Photos saved. Review them before publishing.';
+          this.open(id);
+          this.load(this.queue.page);
+        },
+        error: (err) => {
+          this.uploading = false;
+          this.uploadError =
+            err.status === 400
+              ? err.error?.detail ||
+                'Check the photo limit and refresh the story if it has been reviewed.'
+              : err.status === 413
+                ? 'These photos are too large. Use files under 5 MB each.'
+                : 'Photos could not be saved. Your selection is still here; please try again.';
+        },
+      });
+  }
   signOut(): void {
     this.auth.logout().subscribe({ error: () => {} });
     void this.router.navigate(['/admin']);
   }
   ngOnDestroy(): void {
+    this.destroyed = true;
+    this.uploadRequest?.unsubscribe();
+    this.uploading = false;
+    this.validatingPhotos = false;
     this.listRequest?.unsubscribe();
     this.actionRequest?.unsubscribe();
     this.saving = false;

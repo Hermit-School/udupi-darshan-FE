@@ -261,3 +261,34 @@ figure p {
 .review-detail {
   scroll-margin-top: 1rem;
 }
+
+.add-photos {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e6e0d8;
+}
+.add-photos p,
+.add-photos label {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.add-photos input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0.5rem 0 1rem;
+}
+.pending-photos {
+  margin: 1rem 0;
+}
+.pending-photos figcaption {
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pending-photos button {
+  width: 100%;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+}
