@@ -1,3 +1,4 @@
+import { MediaImageInterceptor } from './services/Interceptor/MediaImageInterceptor';
 import { VisitorMotionDirective } from './directives/visitor-motion.directive';
 import { StorySubmissionComponent } from './components/story-submission/story-submission.component';
 import { AuthInterceptor } from './services/Interceptor/AuthInterceptor';
@@ -62,6 +63,7 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
   ],
   providers: [provideZoneChangeDetection(), { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: MediaImageInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

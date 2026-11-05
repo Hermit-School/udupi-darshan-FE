@@ -38,7 +38,7 @@
       [attr.aria-busy]="busy || loading"
     >
       <fieldset
-        [disabled]="busy || loading || !!loadError"
+        [disabled]="busy || loading || uncertain || !!loadError"
         style="border: 0; padding: 0; min-width: 0"
       >
         <section class="panel" aria-labelledby="basic-title">
@@ -143,60 +143,17 @@
                 [required]="destination"
               />
             </label>
-            @if (ad) {
-              <label class="wide"
-                >Image URL *
-                <small>Use a public HTTPS link to the ad artwork.</small>
-                <input
-                  type="url"
-                  formControlName="imageUrl"
-                  maxlength="255"
-                  placeholder="https://…"
-                  required
-                />
-              </label>
-            } @else {
-              <label class="wide"
-                >Image URLs
-                <small
-                  >One image URL per line, up to {{ event ? 5 : 20 }}. Put the
-                  main image first.</small
-                >
-                <textarea
-                  formControlName="images"
-                  rows="3"
-                  placeholder="https://…"
-                ></textarea>
-              </label>
-            }
-            @if (event) {
-              <label class="wide"
-                >Upload event photos (optional)<small
-                  >Up to 5 photos in total, including image URLs. JPEG or PNG, 5
-                  MB and 20 megapixels each.</small
-                ><input
-                  type="file"
-                  accept="image/jpeg,image/png"
-                  multiple
-                  (change)="selectPhotos($event)"
-                />
-                @for (photo of pendingPhotos; track $index) {
-                  <small>{{ photo.name }}</small>
-                }
-                @if (photoError) {
-                  <small role="alert">{{ photoError }}</small>
-                }
-                @if (pendingPhotos.length || photoError) {
-                  <button
-                    type="button"
-                    class="secondary"
-                    (click)="clearPhotos()"
-                  >
-                    Clear photo selection
-                  </button>
-                }
-              </label>
-            }
+            <div class="wide">
+              <h2>{{ ad ? "Advertisement image" : "Photos" }}</h2>
+              <app-image-picker
+                [items]="photos"
+                (itemsChange)="photos = $event"
+                [limit]="photoLimit"
+                [label]="ad ? 'Ad image' : 'Record photos'"
+                [remainingUploads]="remainingUploads"
+                [disabled]="busy || loading || uncertain"
+              ></app-image-picker>
+            </div>
           </div>
         </section>
 
@@ -249,12 +206,16 @@
                     maxlength="255"
                     inputmode="url"
                 /></label>
-                <label
-                  >Image URL<input
-                    formControlName="imageUrl"
-                    maxlength="255"
-                    inputmode="url"
-                /></label>
+                <div class="wide">
+                  <app-image-picker
+                    [items]="relatedPhotos(item)"
+                    (itemsChange)="setRelatedPhotos(item, $event)"
+                    [limit]="1"
+                    [label]="'Related place ' + (i + 1) + ' image'"
+                    [remainingUploads]="remainingUploads"
+                    [disabled]="busy || loading || uncertain"
+                  ></app-image-picker>
+                </div>
                 <label class="wide"
                   >Description<textarea
                     formControlName="description"
@@ -265,7 +226,7 @@
                 <button
                   class="secondary"
                   type="button"
-                  (click)="related.removeAt(i)"
+                  (click)="removeRelated(i)"
                 >
                   Remove related place {{ i + 1 }}
                 </button>
@@ -295,7 +256,7 @@
         <button
           class="primary"
           type="submit"
-          [disabled]="busy || loading || !!loadError || !!photoError"
+          [disabled]="busy || loading || !!loadError || imageBusy"
         >
           {{
             busy ? "Saving…" : editId ? "Save changes" : "Publish " + type.title
