@@ -158,114 +158,36 @@ test('mobile admin sign-in guides the user with a single form', async ({
   await expect(page.getByRole('navigation').first()).toBeVisible();
 });
 
-test('admin can publish each content type from its own form', async ({
-  page,
-}) => {
-  await mockApi(page);
-  const endpoints = {
-    Nature: '/v1/nature/postNature',
-    Culture: '/v1/culture/postCulture',
-    Food: '/v1/food/postFood',
-    Story: '/v1/blogs/admin/publish',
-    Ad: '/v1/ads',
-  };
-  const requests: { path: string; body: Record<string, unknown> }[] = [];
-  for (const path of Object.values(endpoints)) {
-    await page.route(api + path, async (route) => {
-      const headers = {
-        'access-control-allow-origin': '*',
-        'access-control-allow-headers': 'authorization, content-type',
-        'access-control-allow-methods': 'POST, OPTIONS',
-      };
-      if (route.request().method() === 'OPTIONS')
-        return route.fulfill({ status: 204, headers });
-      expect(route.request().method()).toBe('POST');
-      expect(route.request().headers()['authorization']).toBe(
-        'Bearer ' + token,
-      );
-      requests.push({ path, body: route.request().postDataJSON() });
-      return path === endpoints.Culture
-        ? route.fulfill({ headers, body: 'Success' })
-        : route.fulfill({ headers, json: { id: requests.length } });
-    });
-  }
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/#/admin');
-  await signIn(page);
-
-  for (const [kind, path] of Object.entries(endpoints)) {
-    await page
-      .getByRole('link', {
-        name: new RegExp(
-          'Add ' +
-            (kind === 'Ad' ? 'Ads' : kind === 'Story' ? 'Stories' : kind),
-        ),
-      })
-      .click();
-    await expect(
-      page.getByRole('heading', { name: 'Add ' + kind }),
-    ).toBeVisible();
-    expect(
-      await page.evaluate(() => document.documentElement.scrollWidth),
-    ).toBe(390);
-    const publish = page.getByRole('button', {
-      name: 'Publish ' + kind,
-      exact: true,
-    });
-    if (kind === 'Nature') {
-      await publish.click();
-      await expect(page.getByRole('alert')).toContainText('required fields');
-      expect(requests).toHaveLength(0);
-    }
-    if (kind === 'Story') {
-      await page.getByLabel('Title').fill('Market morning');
-      await page.getByLabel('Author name').fill('Editor');
-      await page.getByLabel('Contact email').fill('editor@example.invalid');
-      await page.getByLabel('Story text').fill('A walk through Udupi market.');
-    } else if (kind === 'Ad') {
-      await page.getByLabel('Title').fill('Local market');
-      await page
-        .getByLabel('Image URL')
-        .fill('https://example.invalid/market.jpg');
-    } else {
-      await page.getByLabel('Place name').fill(kind + ' entry');
-      await page.getByLabel('Section').selectOption({ index: 1 });
-      await page
-        .getByLabel('Website or map link')
-        .fill('https://example.invalid/place');
-      if (kind === 'Nature') {
-        await page
-          .getByText('Related places', { exact: false })
-          .first()
-          .click();
-        await page.getByRole('button', { name: 'Add a related place' }).click();
-        await page
-          .getByRole('group', { name: 'Related place 1' })
-          .getByLabel('Name')
-          .fill('Nearby beach');
-      }
-    }
-    await publish.click();
-    await expect(page.getByRole('status')).toContainText(
-      'Published successfully',
-    );
-    expect(requests.at(-1)?.path).toBe(path);
-    await page.getByRole('link', { name: 'Return to dashboard' }).click();
-  }
-  expect(requests).toHaveLength(5);
-  expect(requests[0].body).toMatchObject({
-    category: 'Nature',
-    label: 'Best Of Nature',
-    dontMissThese: [{ name: 'Nearby beach' }],
-  });
-  expect(requests[3].body).toMatchObject({
-    submittedBy: 'Editor',
-    email: 'editor@example.invalid',
-  });
-  expect(requests[4].body).toMatchObject({
-    title: 'Local market',
-    imageUrl: 'https://example.invalid/market.jpg',
-  });
+function multipartRecord(request:import('@playwright/test').Request){
+ const body=request.postDataBuffer()!.toString('utf8');
+ return {data:JSON.parse(body.match(/name="data"\r\n\r\n([\s\S]*?)\r\n--/)![1]),key:body.match(/name="requestKey"\r\n\r\n([^\r]+)/)![1],body};
+}
+const adminPng=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==','base64');
+const photoFile=(name='photo.png')=>({name,mimeType:'image/png',buffer:adminPng});
+test('admin publishes each content type using uploaded images instead of URLs',async({page})=>{
+ await mockApi(page);const requests:{kind:string;data:any}[]=[];
+ await page.route(api+'/v1/admin/content/*',route=>{
+  expect(route.request().method()).toBe('POST');expect(route.request().headers()['authorization']).toBe('Bearer '+token);
+  const parsed=multipartRecord(route.request()),kind=route.request().url().split('/').at(-1)!;requests.push({kind,data:parsed.data});
+  expect(parsed.body).toContain('filename="photo.png"');return route.fulfill({json:{id:requests.length,kind}});
+ });
+ await page.setViewportSize({width:390,height:844});await page.goto('/#/admin');await signIn(page);
+ for(const [label,kind] of [['Nature','nature'],['Culture','culture'],['Food','food'],['Stories','story'],['Ads','ads']]){
+  await page.getByRole('link',{name:new RegExp('Add '+label)}).click();const name=kind==='story'?'Story':kind==='ads'?'Ad':label;
+  await expect(page.getByRole('heading',{name:'Add '+name,exact:true})).toBeVisible();await expect(page.locator('[formcontrolname="images"],[formcontrolname="imageUrl"]')).toHaveCount(0);
+  const publish=page.getByRole('button',{name:'Publish '+name,exact:true});
+  if(kind==='nature'){await publish.click();await expect(page.getByRole('alert')).toContainText('required fields');expect(requests).toHaveLength(0);}
+  await page.getByLabel(kind==='story'||kind==='ads'?'Title':'Place name',{exact:false}).fill('New '+kind);
+  if(['nature','culture','food'].includes(kind)){await page.getByLabel('Section').selectOption({index:1});await page.getByLabel('Website or map link').fill('https://example.invalid/place');}
+  if(kind==='story'){await page.getByLabel('Author name').fill('Editor');await page.getByLabel('Contact email').fill('editor@example.invalid');await page.getByLabel('Story text').fill('A walk through Udupi.');}
+  await page.getByLabel(kind==='ads'?'Ad image':'Record photos',{exact:true}).setInputFiles(photoFile());
+  await expect(page.getByRole('group',{name:(kind==='ads'?'Ad image':'Record photos')+' gallery',exact:true}).locator('figure')).toHaveCount(1);
+  if(kind==='nature'){await page.getByText('Related places',{exact:false}).first().click();await page.getByRole('button',{name:'Add a related place'}).click();await page.getByRole('group',{name:'Related place 1',exact:true}).getByLabel('Name').fill('Nearby beach');await page.getByLabel('Related place 1 image',{exact:true}).setInputFiles(photoFile('related.png'));}
+  await publish.click();await expect(page.getByRole('heading',{name:'Published successfully',exact:true})).toBeVisible();await page.getByRole('link',{name:'Return to dashboard'}).click();
+ }
+ expect(requests.map(r=>r.kind)).toEqual(['nature','culture','food','story','ads']);
+ expect(requests[0].data.images[0]).toMatch(/^upload:/);expect(requests[0].data.dontMissThese[0].imageUrl).toMatch(/^upload:/);
+ expect(requests[3].data).toMatchObject({submittedBy:'Editor',email:'editor@example.invalid'});expect(requests[4].data.imageUrl).toMatch(/^upload:/);
 });
 
 test('mobile Write to us opens the restored form and closes cleanly', async ({
@@ -938,10 +860,8 @@ test('dashboard edit cards open prefilled forms and save all five existing recor
  await page.route(api+'/v1/blogs/admin/content/41',route=>{expect(route.request().headers()['authorization']).toBe('Bearer '+token);return route.fulfill({headers,json:{content:story,email:'author@example.invalid'}});});
  const ad={id:41,title:'Existing ad',imageUrl:'https://example.invalid/ad.jpg',link:'https://example.invalid/shop'};
  await page.route(api+'/v1/ads',route=>route.fulfill({headers,json:[ad]}));await page.route(api+'/v1/ads/41',route=>route.fulfill({headers,json:ad}));
- for(const path of ['/v1/nature/updateNature/41','/v1/culture/updateCulture/41','/v1/food/updateFood/41','/v1/blogs/updateBlogs/41','/v1/ads/41'])await page.route(api+path,route=>{
-  if(route.request().method()==='OPTIONS')return route.fulfill({headers,status:204});
-  if(route.request().method()==='GET')return route.fulfill({headers,json:ad});
-  expect(route.request().method()).toBe('PUT');expect(route.request().headers()['authorization']).toBe('Bearer '+token);const body=route.request().postDataJSON();saves.push({path,body});return route.fulfill({headers,json:{...body,id:41}});
+ await page.route(api+'/v1/admin/content/*/41',route=>{
+  expect(route.request().method()).toBe('POST');expect(route.request().headers()['authorization']).toBe('Bearer '+token);const body=multipartRecord(route.request()).data;saves.push({path:route.request().url(),body});return route.fulfill({json:{id:41}});
  });
  await page.goto('/#/admin');await signIn(page);
  for(const [label,kind] of [['Nature','nature'],['Culture','culture'],['Food','food'],['Stories','story'],['Ads','ads']]){
@@ -950,7 +870,7 @@ test('dashboard edit cards open prefilled forms and save all five existing recor
   await page.getByRole('link',{name:'Edit '+recordName,exact:true}).click();
   const title=page.getByLabel(kind==='story'||kind==='ads'?'Title':'Place name');await expect(title).toHaveValue(recordName);await title.fill('Updated '+kind);
   if(kind==='story'){await expect(page.getByLabel('Contact email')).toHaveValue('author@example.invalid');await expect(page.getByLabel('Author name')).toHaveValue('Original author');}
-  if(!['story','ads'].includes(kind)){await expect(page.getByLabel('Section')).toHaveValue('Legacy section');await expect(page.getByLabel('Image URLs')).toHaveValue('/assets/original.jpg');}
+  if(!['story','ads'].includes(kind)){await expect(page.getByLabel('Section')).toHaveValue('Legacy section');await expect(page.getByRole('group',{name:'Record photos gallery',exact:true}).locator('figure')).toHaveCount(1);}
   await page.getByRole('button',{name:'Save changes',exact:true}).click();await expect(page.getByRole('heading',{name:'Changes saved',exact:true})).toBeVisible();await page.getByRole('link',{name:'Return to dashboard'}).click();
  }
  expect(saves).toHaveLength(5);expect(saves[0].body).toMatchObject({name:'Updated nature',keyPoints:['Existing highlight'],images:['/assets/original.jpg'],dontMissThese:[{name:'Related place'}]});expect(saves[3].body).toMatchObject({title:'Updated story',status:'Published',email:'author@example.invalid',images:['/assets/story.jpg']});expect(saves[4].body).toMatchObject({title:'Updated ads',imageUrl:'https://example.invalid/ad.jpg'});
@@ -963,13 +883,15 @@ test('visitors browse upcoming and past events without changing the home page',a
  const upcoming=page.locator('section').filter({has:page.getByRole('heading',{name:'Upcoming & announced',exact:true})});const past=page.locator('section').filter({has:page.getByRole('heading',{name:'Past events',exact:true})});await expect(upcoming).toContainText('Coastal music');await expect(upcoming).not.toContainText('Heritage gathering');await expect(past).toContainText('Heritage gathering');await upcoming.getByRole('link').click();await expect(page.getByRole('heading',{name:'Coastal music',exact:true})).toBeVisible();await expect(page.getByText('Music by the sea.')).toBeVisible();await expect(page.getByRole('link',{name:'Event website ↗'})).toHaveAttribute('href','https://example.invalid/event');await expect(page.locator('body')).toHaveJSProperty('scrollWidth',390);
 });
 
-test('admin creates an event with five photos and retries a failed upload without duplicate records',async({page})=>{
- await mockApi(page);let creates=0,uploads=0;const keys:string[]=[];const headers={'access-control-allow-origin':'*','access-control-allow-headers':'authorization, content-type','access-control-allow-methods':'GET,POST,PUT,OPTIONS'};
- await page.route(api+'/v1/events',route=>{if(route.request().method()==='OPTIONS')return route.fulfill({headers,status:204});if(route.request().method()==='GET')return route.fulfill({headers,json:[]});creates++;expect(route.request().headers()['authorization']).toBe('Bearer '+token);return route.fulfill({headers,json:{id:81}});});
- await page.route(api+'/v1/events/81',route=>route.fulfill({headers,json:{id:81}}));
- await page.route(api+'/v1/events/81/photos',route=>{if(route.request().method()==='OPTIONS')return route.fulfill({headers,status:204});expect(route.request().headers()['authorization']).toBe('Bearer '+token);uploads++;const data=route.request().postDataBuffer()!.toString('latin1');expect((data.match(/filename="photo/g)||[]).length).toBe(5);keys.push(data.match(/name="uploadKey"\r\n\r\n([^\r]+)/)![1]);return route.fulfill({headers,status:uploads===1?503:200,json:{id:81}});});
+test('admin saves five event photos atomically and retries an uncertain response safely',async({page})=>{
+ await mockApi(page);let attempts=0;const keys:string[]=[];const payloads:any[]=[];
+ await page.route(api+'/v1/admin/content/events',route=>{
+  expect(route.request().headers()['authorization']).toBe('Bearer '+token);attempts++;const parsed=multipartRecord(route.request());keys.push(parsed.key);payloads.push(parsed.data);expect((parsed.body.match(/filename="photo/g)||[]).length).toBe(5);return route.fulfill({status:attempts===1?503:200,json:{id:81,kind:'events'}});
+ });
  await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Events/}).click();await page.getByLabel('Title').fill('Music in Udupi');await page.getByLabel('Start date').fill('2099-11-10');await page.getByLabel('End date').fill('2099-11-11');
- const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==','base64');const photos=page.getByLabel('Upload event photos (optional)');await photos.setInputFiles(Array.from({length:6},(_,i)=>({name:'photo'+i+'.png',mimeType:'image/png',buffer:png})));await expect(page.getByRole('alert')).toContainText('up to 5');expect(creates).toBe(0);await photos.setInputFiles(Array.from({length:5},(_,i)=>({name:'photo'+i+'.png',mimeType:'image/png',buffer:png})));await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Event details were saved');await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully'})).toBeVisible();expect(creates).toBe(1);expect(uploads).toBe(2);expect(keys[0]).toBe(keys[1]);
+ const photos=page.getByLabel('Record photos',{exact:true});await photos.setInputFiles(Array.from({length:6},(_,i)=>photoFile('photo'+i+'.png')));await expect(page.getByRole('alert')).toContainText('up to 5');expect(attempts).toBe(0);
+ await photos.setInputFiles(Array.from({length:5},(_,i)=>photoFile('photo'+i+'.png')));await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Saving could not be confirmed');await expect(page.getByLabel('Title')).toBeDisabled();
+ await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully'})).toBeVisible();expect(attempts).toBe(2);expect(keys[0]).toBe(keys[1]);expect(payloads[0]).toEqual(payloads[1]);expect(payloads[0].article.images).toHaveLength(5);
 });
 
 test('animated loading page clears after success and failure and respects reduced motion',async({page})=>{
@@ -977,4 +899,16 @@ test('animated loading page clears after success and failure and respects reduce
  await page.route(api+'/v1/nature/getNature',async route=>{await pending;await route.fulfill({json:[]});});
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/#/nature');const loader=page.getByRole('status',{name:'Loading content',exact:true});await expect(loader).toBeVisible();await expect(loader.locator('.orbit-one')).toHaveCSS('animation-name','none');release();await expect(loader).toBeHidden();
  let fail!:()=>void;const failed=new Promise<void>(resolve=>fail=resolve);await page.route(api+'/v1/food/getFood',async route=>{await failed;await route.fulfill({status:503,json:{}});});await page.getByRole('link',{name:'Food',exact:true}).first().click();await expect(loader).toBeVisible();await expect(page.getByRole('heading',{name:'Follow your appetite.'})).toBeVisible();await expect(page.getByRole('link',{name:'Udupi Darshan Logo'})).toBeEnabled();fail();await expect(loader).toBeHidden();await expect(page.getByRole('alert')).toBeVisible();
+});
+
+test('admin removes and replaces saved images, chooses a main photo and saves the final gallery',async({page})=>{
+ await mockApi(page);let saved:any;const original={id:51,name:'Beach record',category:'Nature',label:'Beach List',link:'/beach',images:['assets/images/a6.jpg','assets/images/c2.jpg'],keyPoints:[],discover:[],impInfo:[],dontMissThese:[],howToVisit:null};
+ await page.route(api+'/v1/nature/getNature',r=>r.fulfill({json:[original]}));await page.route(api+'/v1/nature/51',r=>r.fulfill({json:original}));await page.route(api+'/v1/admin/content/nature/51',r=>{saved=multipartRecord(r.request()).data;return r.fulfill({json:{id:51,kind:'nature'}});});
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Edit Nature/}).click();await page.getByRole('link',{name:'Edit Beach record',exact:true}).click();const gallery=page.getByRole('group',{name:'Record photos gallery',exact:true});await expect(gallery.locator('figure')).toHaveCount(2);
+ await gallery.getByRole('button',{name:'Remove record photos photo 1',exact:true}).click();await expect(gallery.locator('figure')).toHaveCount(1);await page.getByLabel('Record photos',{exact:true}).setInputFiles(photoFile());await expect(gallery.locator('figure')).toHaveCount(2);await gallery.getByRole('button',{name:'Use record photos photo 2 as main',exact:true}).click();await page.getByRole('button',{name:'Save changes',exact:true}).click();await expect(page.getByRole('heading',{name:'Changes saved'})).toBeVisible();expect(saved.images).toHaveLength(2);expect(saved.images[0]).toMatch(/^upload:/);expect(saved.images[1]).toBe('assets/images/c2.jpg');expect(saved.images).not.toContain('assets/images/a6.jpg');
+});
+
+test('removing an advertisement image requires a replacement before saving',async({page})=>{
+ await mockApi(page);let saves=0;const ad={id:17,title:'Local ad',imageUrl:'assets/images/c2.jpg',link:''};await page.route(api+'/v1/ads',r=>r.fulfill({json:[ad]}));await page.route(api+'/v1/ads/17',r=>r.fulfill({json:ad}));await page.route(api+'/v1/admin/content/ads/17',r=>{saves++;expect(multipartRecord(r.request()).data.imageUrl).toMatch(/^upload:/);return r.fulfill({json:{id:17}});});
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Edit Ads/}).click();await page.getByRole('link',{name:'Edit Local ad',exact:true}).click();await page.getByRole('button',{name:'Remove ad image photo 1',exact:true}).click();await page.getByRole('button',{name:'Save changes'}).click();await expect(page.getByRole('alert')).toContainText('Choose an image');expect(saves).toBe(0);await page.getByLabel('Ad image',{exact:true}).setInputFiles(photoFile());await page.getByRole('button',{name:'Save changes'}).click();await expect(page.getByRole('heading',{name:'Changes saved'})).toBeVisible();expect(saves).toBe(1);
 });

@@ -1,0 +1,93 @@
+<section class="picker" role="group" [attr.aria-label]="label + ' gallery'">
+  <p class="help" [id]="helpId">
+    {{
+      limit === 1
+        ? "Choose one image."
+        : "Up to " + limit + " photos; the first is the main photo."
+    }}
+    JPEG or PNG, up to 5 MB and 20 megapixels each. Upload up to 5 new photos
+    per save.
+  </p>
+  <div class="photos">
+    @for (photo of items; track photo.id; let i = $index) {
+      <figure>
+        @if (!broken.has(photo.id)) {
+          <img
+            [src]="photo.preview"
+            [alt]="label + ' photo ' + (i + 1)"
+            (error)="broken.add(photo.id)"
+            width="240"
+            height="170"
+          />
+        } @else {
+          <div class="missing">
+            Preview unavailable. You can keep or remove this image.
+          </div>
+        }
+        <figcaption>
+          <span>{{
+            photo.file ? "New upload" : i === 0 ? "Main photo" : "Saved photo"
+          }}</span>
+          <div>
+            <button
+              type="button"
+              [disabled]="disabled || validating"
+              (click)="remove(i)"
+              [attr.aria-label]="
+                'Remove ' + label.toLowerCase() + ' photo ' + (i + 1)
+              "
+            >
+              Remove
+            </button>
+            @if (i > 0) {
+              <button
+                type="button"
+                [disabled]="disabled || validating"
+                (click)="main(i)"
+                [attr.aria-label]="
+                  'Use ' +
+                  label.toLowerCase() +
+                  ' photo ' +
+                  (i + 1) +
+                  ' as main'
+                "
+              >
+                Make main
+              </button>
+            }
+          </div>
+        </figcaption>
+      </figure>
+    }
+  </div>
+  <label class="choose"
+    >{{ limit === 1 && items.length ? "Replace image" : "Choose photos"
+    }}<input
+      type="file"
+      accept="image/jpeg,image/png"
+      [multiple]="limit > 1"
+      [attr.aria-label]="label"
+      [attr.aria-describedby]="helpId"
+      [disabled]="
+        disabled || validating || (limit > 1 && items.length >= limit)
+      "
+      (change)="select($event)"
+  /></label>
+  @if (validating) {
+    <p role="status">Checking photos…</p>
+  }
+  @if (error) {
+    <p class="error" role="alert">{{ error }}</p>
+    <button
+      type="button"
+      [disabled]="disabled || validating"
+      (click)="error = ''"
+    >
+      Keep current selection
+    </button>
+  }
+  <p class="hint">
+    {{ items.length }} / {{ limit }} selected. Uploads and removals apply when
+    you save.
+  </p>
+</section>

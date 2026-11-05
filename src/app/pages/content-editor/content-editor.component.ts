@@ -1,6 +1,13 @@
-import { validateStoryPhotos } from "../../util/story-photos";
+import { ImagePickerComponent } from "../../components/image-picker/image-picker.component";
+import { EditorPhoto, existingPhoto } from "../../util/media-image";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Component, DestroyRef, inject } from "@angular/core";
+import {
+  Component,
+  DestroyRef,
+  inject,
+  ViewChildren,
+  QueryList,
+} from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
   AbstractControl,
@@ -9,7 +16,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { finalize, map } from "rxjs";
+import { finalize, timeout } from "rxjs";
 import { API_BASE_URL } from "src/constants/routes";
 
 const TYPES = {
@@ -43,7 +50,7 @@ const lines = (value: string) =>
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, ImagePickerComponent],
   selector: "app-content-editor",
   templateUrl: "./content-editor.component.html",
   styleUrls: ["./content-editor.component.scss"],
@@ -62,11 +69,38 @@ export class ContentEditorComponent {
   readonly editId = Number(this.route.snapshot.paramMap.get("id")) || null;
   loading = false;
   loadError = "";
-  pendingPhotos: File[] = [];
-  photoError = "";
+  @ViewChildren(ImagePickerComponent) pickers?: QueryList<ImagePickerComponent>;
+  photos: EditorPhoto[] = [];
+  private relatedPhotoMap = new Map<AbstractControl, EditorPhoto[]>();
+  uncertain = false;
+  private requestKey = crypto.randomUUID();
+  get imageBusy() {
+    return this.pickers?.some((picker) => picker.validating) || false;
+  }
+  get remainingUploads() {
+    return 5 - this.allPhotos().filter((photo) => photo.file).length;
+  }
+  get photoLimit() {
+    return this.ad ? 1 : this.event ? 5 : 20;
+  }
+  relatedPhotos(group: AbstractControl) {
+    return this.relatedPhotoMap.get(group) || [];
+  }
+  setRelatedPhotos(group: AbstractControl, photos: EditorPhoto[]) {
+    this.relatedPhotoMap.set(group, photos);
+  }
+  private allPhotos() {
+    return [
+      ...this.photos,
+      ...Array.from(this.relatedPhotoMap.values()).flat(),
+    ];
+  }
+  private releasePreviews() {
+    this.allPhotos()
+      .filter((photo) => photo.file)
+      .forEach((photo) => URL.revokeObjectURL(photo.preview));
+  }
   private eventFeatured: boolean | null = null;
-  private savedEventId: number | null = null;
-  private uploadKey = crypto.randomUUID();
   private storyStatus = "Published";
   readonly ad = this.kind === "ads";
   readonly lists = [
@@ -95,10 +129,8 @@ export class ContentEditorComponent {
         ? [required, Validators.maxLength(255)]
         : [Validators.maxLength(255)],
     ],
-    imageUrl: ["", this.ad ? [required, Validators.maxLength(255)] : []],
     startsOn: [""],
     endsOn: [""],
-    images: [""],
     timings: ["", Validators.maxLength(10000)],
     keyPoints: [""],
     discover: [""],
@@ -118,6 +150,7 @@ export class ContentEditorComponent {
   }
 
   constructor() {
+    this.destroyRef.onDestroy(() => this.releasePreviews());
     if (this.editId) this.loadExisting();
   }
   loadExisting() {
@@ -148,8 +181,6 @@ export class ContentEditorComponent {
             author: value.submittedBy || "",
             email: response.email || "",
             link: value.link || "",
-            imageUrl: value.imageUrl || "",
-            images: (value.images || []).join("\n"),
             timings: value.timings || "",
             keyPoints: (value.keyPoints || []).join("\n"),
             discover: (value.discover || []).join("\n"),
@@ -160,6 +191,15 @@ export class ContentEditorComponent {
             startsOn: response.details?.startsOn || "",
             endsOn: response.details?.endsOn || "",
           });
+          this.releasePreviews();
+          this.relatedPhotoMap.clear();
+          this.photos = (
+            this.ad
+              ? value.imageUrl
+                ? [value.imageUrl]
+                : []
+              : value.images || []
+          ).map(existingPhoto);
           this.eventFeatured = response.details?.featured ?? null;
           this.storyStatus = value.status || "Published";
           this.related.clear();
@@ -167,6 +207,10 @@ export class ContentEditorComponent {
             const group = this.relatedPlace();
             group.patchValue(item);
             this.related.push(group);
+            this.relatedPhotoMap.set(
+              group,
+              item.imageUrl ? [existingPhoto(item.imageUrl)] : [],
+            );
           }
           this.loading = false;
         },
@@ -177,36 +221,6 @@ export class ContentEditorComponent {
         },
       });
   }
-  async selectPhotos(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const files = Array.from(input.files || []);
-    input.value = "";
-    if (!files.length) return;
-    this.busy = true;
-    this.photoError = "";
-    try {
-      await validateStoryPhotos(
-        files,
-        lines(this.form.controls.images.value).length,
-        5,
-      );
-      this.pendingPhotos = files;
-      this.uploadKey = crypto.randomUUID();
-    } catch (error) {
-      this.photoError =
-        error instanceof Error
-          ? error.message
-          : "These photos could not be checked.";
-    } finally {
-      this.busy = false;
-    }
-  }
-  clearPhotos() {
-    this.pendingPhotos = [];
-    this.photoError = "";
-    this.uploadKey = crypto.randomUUID();
-  }
-
   private readKind(): Kind {
     const key = this.route.snapshot.paramMap.get("type");
     return key && Object.hasOwn(TYPES, key) ? (key as Kind) : "nature";
@@ -221,39 +235,56 @@ export class ContentEditorComponent {
     });
   }
   addRelated() {
-    if (this.related.length < 50) this.related.push(this.relatedPlace());
+    if (this.related.length < 50) {
+      const group = this.relatedPlace();
+      this.related.push(group);
+      this.relatedPhotoMap.set(group, []);
+    }
   }
 
+  removeRelated(index: number) {
+    const group = this.related.at(index);
+    this.relatedPhotos(group)
+      .filter((photo) => photo.file)
+      .forEach((photo) => URL.revokeObjectURL(photo.preview));
+    this.relatedPhotoMap.delete(group);
+    this.related.removeAt(index);
+  }
   publish() {
     if (
       this.busy ||
       this.loading ||
       this.loadError ||
-      this.photoError ||
-      this.published
+      this.published ||
+      this.imageBusy
     )
       return;
     this.error = "";
+    if (this.pickers?.some((picker) => !!picker.error)) {
+      this.error = "Correct the photo selection before saving.";
+      return;
+    }
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.error =
-        "Check the required fields and any character limits before publishing.";
+        "Check the required fields and character limits before saving.";
+      return;
+    }
+    if (this.ad && !this.photos.length) {
+      this.error = "Choose an image for this advertisement.";
+      return;
+    }
+    if (this.photos.length > this.photoLimit || this.remainingUploads < 0) {
+      this.error =
+        "Too many photos selected. Upload up to 5 new photos per save.";
       return;
     }
     const v = this.form.getRawValue();
-    const images = lines(v.images);
-    if (
-      this.event &&
-      (images.length + this.pendingPhotos.length > 5 ||
-        (v.startsOn && v.endsOn && v.endsOn < v.startsOn))
-    ) {
-      this.error =
-        "Use up to 5 event photos and an end date on or after the start date.";
+    if (this.event && v.startsOn && v.endsOn && v.endsOn < v.startsOn) {
+      this.error = "The end date must be on or after the start date.";
       return;
     }
     if (
-      images.length > 20 ||
-      images.some((image) => image.length > 255) ||
       this.lists.some(
         ({ key }) =>
           lines(v[key]).length > 50 ||
@@ -261,17 +292,18 @@ export class ContentEditorComponent {
       )
     ) {
       this.error =
-        "Use up to 20 image URLs and 50 lines per list. Each line must be 255 characters or fewer.";
+        "Use up to 50 lines per list, with 255 characters or fewer per line.";
       return;
     }
-    const link = v.link.trim();
-    const dontMissThese = v.related.map((item) => ({
+    const images = this.photos.map((photo) => photo.source);
+    const dontMissThese = v.related.map((item, index) => ({
       name: item.name.trim(),
       description: item.description.trim(),
-      imageUrl: item.imageUrl.trim(),
       link: item.link.trim(),
+      imageUrl: this.relatedPhotos(this.related.at(index))[0]?.source || "",
     }));
-    const title = v.title.trim();
+    const title = v.title.trim(),
+      link = v.link.trim();
     const article = {
       name: title,
       label: v.label,
@@ -298,25 +330,7 @@ export class ContentEditorComponent {
           featured: this.eventFeatured,
         }
       : this.destination
-        ? {
-            name: title,
-            category: this.type.title,
-            label: v.label,
-            location: v.location.trim(),
-            descr: v.description.trim(),
-            timings: v.timings.trim(),
-            link,
-            images,
-            dontMissThese,
-            keyPoints: lines(v.keyPoints),
-            discover: lines(v.discover),
-            impInfo: lines(v.impInfo),
-            howToVisit: {
-              byBike: v.byBike.trim(),
-              byCar: v.byCar.trim(),
-              byPublic: v.byPublic.trim(),
-            },
-          }
+        ? { ...article, category: this.type.title }
         : this.story
           ? {
               title,
@@ -328,81 +342,56 @@ export class ContentEditorComponent {
               dontMissThese,
               ...(this.editId ? { status: this.storyStatus } : {}),
             }
-          : { title, imageUrl: v.imageUrl.trim(), link };
+          : { title, imageUrl: images[0] || "", link };
+    const data = new FormData();
+    data.append("data", JSON.stringify(payload));
+    data.append("requestKey", this.requestKey);
+    for (const photo of this.allPhotos())
+      if (photo.file)
+        data.append("file_" + photo.id, photo.file, photo.file.name);
     this.busy = true;
-    const id = this.editId || this.savedEventId;
-    const updatePath = this.event
-      ? "/v1/events/" + id
-      : this.ad
-        ? "/v1/ads/" + id
-        : this.story
-          ? "/v1/blogs/updateBlogs/" + id
-          : "/v1/" + this.kind + "/update" + this.type.title + "/" + id;
-    const url = API_BASE_URL + (id ? updatePath : this.type.url);
-    const confirmation =
-      this.kind === "culture" && !id
-        ? this.http
-            .post(url, payload, { responseType: "text" })
-            .pipe(map((value) => value === "Success"))
-        : (id
-            ? this.http.put<{ id: number }>(url, payload)
-            : this.http.post<{ id: number }>(url, payload)
-          ).pipe(
-            map((value) => {
-              if (this.event && value?.id) this.savedEventId = value.id;
-              return !!value && Number.isSafeInteger(value.id) && value.id > 0;
-            }),
-          );
-    confirmation
+    this.http
+      .post<{ id: number; kind: string }>(
+        API_BASE_URL +
+          "/v1/admin/content/" +
+          this.kind +
+          (this.editId ? "/" + this.editId : ""),
+        data,
+      )
       .pipe(
+        timeout(90000),
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => {
-          if (!this.event || !this.pendingPhotos.length || this.error)
-            this.busy = false;
-        }),
+        finalize(() => (this.busy = false)),
       )
       .subscribe({
-        next: (confirmed) => {
-          if (!confirmed) {
-            this.error =
-              "The server did not confirm publication. Check the public page before trying again.";
+        next: (result) => {
+          if (!result || !Number.isSafeInteger(result.id) || result.id <= 0) {
+            this.uncertain = true;
+            this.error = "Saving could not be confirmed. Retry the same save.";
             return;
           }
-          if (this.event && this.pendingPhotos.length) {
-            const data = new FormData();
-            data.append("uploadKey", this.uploadKey);
-            for (const photo of this.pendingPhotos)
-              data.append("files", photo, photo.name);
-            this.http
-              .post(
-                API_BASE_URL +
-                  "/v1/events/" +
-                  (this.editId || this.savedEventId) +
-                  "/photos",
-                data,
-              )
-              .pipe(
-                takeUntilDestroyed(this.destroyRef),
-                finalize(() => (this.busy = false)),
-              )
-              .subscribe({
-                next: () => {
-                  this.pendingPhotos = [];
-                  this.published = title;
-                },
-                error: () =>
-                  (this.error =
-                    "Event details were saved, but photos could not be confirmed. Save again to retry the same upload safely."),
-              });
-          } else this.published = title;
+          this.uncertain = false;
+          this.published = title;
+          this.releasePreviews();
         },
-        error: (err: HttpErrorResponse) => {
+        error: (err: unknown) => {
+          if (
+            !(err instanceof HttpErrorResponse) ||
+            err.status === 0 ||
+            err.status >= 500
+          ) {
+            this.uncertain = true;
+            this.error =
+              "Saving could not be confirmed. Retry without changing the selection; the same save will not create duplicate records.";
+            return;
+          }
+          this.uncertain = false;
           this.error =
             err.status === 400 && typeof err.error?.detail === "string"
               ? err.error.detail
               : err.status === 401 || err.status === 403
-                ? "Sign in with an administrator account to publish."
-                : "Publication could not be confirmed. Check the public page before trying again.";
+                ? "Sign in with an administrator account to save."
+                : "The record could not be saved. Please try again.";
         },
       });
   }
