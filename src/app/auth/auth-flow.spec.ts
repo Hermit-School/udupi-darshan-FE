@@ -61,6 +61,14 @@ describe('Admin authentication contract', () => {
       expect(req.request.headers.has('Authorization')).toBe(false); req.flush([]);
     }
   });
+  it('sends the admin token for dashboard counts and expires a rejected session', () => {
+    const token = signIn();
+    client.get(`${API_BASE_URL}/v1/admin/statistics`).subscribe({error: () => {}});
+    const request = http.expectOne(`${API_BASE_URL}/v1/admin/statistics`);
+    expect(request.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
+    request.flush({}, {status: 401, statusText: 'Unauthorized'});
+    expect(auth.token).toBeNull();
+  });
   it('clears the session when a protected API request rejects the token', () => {
     signIn(); client.post(`${API_BASE_URL}/v1/food/postFood`, {}).subscribe({ error: () => {} });
     http.expectOne(`${API_BASE_URL}/v1/food/postFood`).flush('', { status: 401, statusText: 'Unauthorized' });

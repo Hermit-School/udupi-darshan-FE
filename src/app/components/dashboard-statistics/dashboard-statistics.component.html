@@ -1,0 +1,17 @@
+<section aria-labelledby="statistics-title" [attr.aria-busy]="loading">
+  <div class="heading">
+    <div><h2 id="statistics-title">Content at a glance</h2><p>Saved records across your website.</p></div>
+    <button type="button" (click)="refresh()" [disabled]="loading"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i> {{ failed ? 'Retry counts' : 'Refresh counts' }}</button>
+  </div>
+  @if (loading) { <p class="status" role="status">Loading content counts…</p> }
+  @if (failed) { <p class="status error" role="status">Content counts could not load. Retry to see the latest totals.</p> }
+  <div class="statistics">
+    @for (card of cards; track card.key) {
+      <article class="stat" [attr.aria-label]="card.title + ' count'">
+        <i [class]="'icon bi bi-' + card.icon" aria-hidden="true"></i>
+        <strong class="number">{{ counts ? (counts[card.key] | number:'1.0-0') : '—' }}</strong>
+        <h3>{{ card.title }}</h3><p>{{ card.detail }}</p>
+      </article>
+    }
+  </div>
+</section>
