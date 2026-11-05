@@ -1,8 +1,11 @@
+:host *, :host *::before, :host *::after { box-sizing: border-box; }
 :host {
   display: block;
   width: 100%;
+  min-width: 0;
 }
 .picker {
+  grid-template-columns: minmax(0, 1fr);
   display: grid;
   gap: 0.8rem;
 }
@@ -64,6 +67,8 @@ button {
   font-weight: 650;
 }
 input {
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
   padding: 0.7rem;
   border: 1px dashed #ba9a82;

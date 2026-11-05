@@ -1,3 +1,5 @@
+:host *, :host *::before, :host *::after { box-sizing: border-box; }
+fieldset { min-width: 0; }
 :host { display: block; min-height: 100svh; background: #f7f5f3; color: #222831; font-family: system-ui, sans-serif; }
 .editor { width: min(calc(100% - 2rem), 54rem); margin: auto; padding: 1.25rem 0 3rem; }
 a { color: #9e3900; font-weight: 700; text-underline-offset: .22em; }
