@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { DashboardStatisticsComponent } from '../../components/dashboard-statistics/dashboard-statistics.component';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DashboardStatisticsComponent],
   selector: 'app-admindashboard',
   templateUrl: './admindashboard.component.html',
   styleUrls: ['./admindashboard.component.scss'],

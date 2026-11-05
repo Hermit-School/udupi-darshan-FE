@@ -42,6 +42,10 @@ async function mockApi(page: Page, allowAdmin = true) {
         body: '{}',
       });
     }
+    if (path === '/v1/admin/statistics') {
+      expect(request.headers()['authorization']).toBe('Bearer ' + token);
+      return route.fulfill({ headers, json: { nature: 36, culture: 18, food: 19, stories: 3, events: 0, ads: 2 } });
+    }
     if (method === 'GET') {
       expect(request.headers()['authorization']).toBeUndefined();
       return route.fulfill({ headers, json: [] });
@@ -912,4 +916,30 @@ test('admin removes and replaces saved images, chooses a main photo and saves th
 test('removing an advertisement image requires a replacement before saving',async({page})=>{
  await mockApi(page);let saves=0;const ad={id:17,title:'Local ad',imageUrl:'assets/images/c2.jpg',link:''};await page.route(api+'/v1/ads',r=>r.fulfill({json:[ad]}));await page.route(api+'/v1/ads/17',r=>r.fulfill({json:ad}));await page.route(api+'/v1/admin/content/ads/17',r=>{saves++;expect(multipartRecord(r.request()).data.imageUrl).toMatch(/^upload:/);return r.fulfill({json:{id:17}});});
  await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Edit Ads/}).click();await page.getByRole('link',{name:'Edit Local ad',exact:true}).click();await page.getByRole('button',{name:'Remove ad image photo 1',exact:true}).click();await page.getByRole('button',{name:'Save changes'}).click();await expect(page.getByRole('alert')).toContainText('Choose an image');expect(saves).toBe(0);await page.getByLabel('Ad image',{exact:true}).setInputFiles(photoFile());await page.getByRole('button',{name:'Save changes'}).click();await expect(page.getByRole('heading',{name:'Changes saved'})).toBeVisible();expect(saves).toBe(1);
+});
+
+
+test('dashboard statistics show live totals and retry failures without misleading zeroes', async ({page}) => {
+ await mockApi(page);
+ let attempts = 0;
+ await page.route(api+'/v1/admin/statistics', route => {
+  expect(route.request().headers()['authorization']).toBe('Bearer '+token);
+  attempts++;
+  if (attempts===1) return route.fulfill({status:503,json:{}});
+  return route.fulfill({json:{nature:42,culture:18,food:19,stories:3,events:0,ads:2}});
+ });
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/#/admin'); await signIn(page);
+ const statistics=page.getByRole('region',{name:'Content at a glance'});
+ await expect(statistics.getByRole('status')).toContainText('could not load');
+ await expect(statistics.locator('.number')).toHaveText(['—','—','—','—','—','—']);
+ await statistics.getByRole('button',{name:'Retry counts'}).click();
+ await expect(statistics.locator('.number')).toHaveText(['42','18','19','3','0','2']);
+ await expect(statistics.getByRole('article',{name:'Stories count'})).toContainText('Published stories');
+ await expect(page.getByRole('link',{name:/Add Nature/})).toBeVisible();
+ await expect(page.getByRole('link',{name:/Edit Nature/})).toBeVisible();
+ expect(await statistics.evaluate(el=>el.getBoundingClientRect().right<=window.innerWidth)).toBe(true);
+ await statistics.screenshot({path:test.info().outputPath('statistics-mobile.png')});
+ await page.setViewportSize({width:1440,height:1000});
+ await statistics.screenshot({path:test.info().outputPath('statistics-desktop.png')});
 });
