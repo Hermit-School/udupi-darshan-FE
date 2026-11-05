@@ -2,10 +2,11 @@
 export async function validateStoryPhotos(
   files: readonly File[],
   existingCount: number,
+  limit=3,
 ): Promise<void> {
-  if (existingCount + files.length > 3)
+  if (existingCount + files.length > limit)
     throw new Error(
-      'Choose up to 3 photos in total, including photos already attached.',
+      `Choose up to ${limit} photos in total, including photos already attached.`,
     );
   if (
     files.some(

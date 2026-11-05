@@ -1,0 +1,77 @@
+<main class="manager">
+  <header>
+    <a routerLink="/admindashboard">← Dashboard</a>
+    <p class="eyebrow">ADMIN WORKSPACE</p>
+    <h1>Edit {{ section.title }}</h1>
+    <p>Find an existing record and open its form to make changes.</p>
+  </header>
+  <section class="records">
+    <div class="toolbar">
+      <label
+        >Search {{ section.title.toLowerCase()
+        }}<input
+          type="search"
+          [(ngModel)]="query"
+          (ngModelChange)="page = 1"
+          placeholder="Search by name or location" /></label
+      ><a class="primary" [routerLink]="['/new-entry', kind]"
+        >Add new {{ section.title.toLowerCase() }}</a
+      >
+    </div>
+    @if (loading) {
+      <p role="status">Loading records…</p>
+    } @else if (error) {
+      <div role="alert">
+        <p>{{ error }}</p>
+        <button type="button" (click)="load()">Try again</button>
+      </div>
+    } @else {
+      <p class="count">
+        {{ filtered.length }} {{ filtered.length === 1 ? "record" : "records" }}
+      </p>
+      @for (item of visible; track item.id) {
+        <article class="record">
+          <div>
+            <h2>{{ name(item) }}</h2>
+            <p>{{ item.location || item.details?.article?.location }}</p>
+          </div>
+          <a
+            class="edit"
+            [routerLink]="['/edit-entry', kind, item.id]"
+            [attr.aria-label]="'Edit ' + name(item)"
+            >Edit <i class="bi bi-pencil-square" aria-hidden="true"></i
+          ></a>
+        </article>
+      } @empty {
+        <div class="empty">
+          <h2>{{ query ? "No matching records" : "No records yet" }}</h2>
+          <p>
+            {{
+              query
+                ? "Try another name or location."
+                : "Add a new record to get started."
+            }}
+          </p>
+        </div>
+      }
+      @if (pages > 1) {
+        <nav aria-label="Record pages">
+          <button
+            type="button"
+            [disabled]="page === 1"
+            (click)="page = page - 1"
+          >
+            Previous</button
+          ><span>{{ page }} / {{ pages }}</span
+          ><button
+            type="button"
+            [disabled]="page === pages"
+            (click)="page = page + 1"
+          >
+            Next
+          </button>
+        </nav>
+      }
+    }
+  </section>
+</main>

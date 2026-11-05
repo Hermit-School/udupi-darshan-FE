@@ -924,3 +924,57 @@ test('visitor content remains usable without IntersectionObserver support',async
   await page.getByRole('link',{name:'Explore nature in Udupi',exact:true}).click();await expect(page).toHaveURL(/#\/nature$/);
   await expect(page.getByRole('heading',{name:'A breath of fresh air.'})).toBeVisible();
 });
+
+test('dashboard edit cards open prefilled forms and save all five existing record types',async({page})=>{
+ await mockApi(page);const saves:any[]=[];
+ const headers={'access-control-allow-origin':'*','access-control-allow-headers':'authorization, content-type','access-control-allow-methods':'GET,PUT,OPTIONS'};
+ const destination=(kind:string)=>({id:41,name:'Existing '+kind,category:kind[0].toUpperCase()+kind.slice(1),label:'Legacy section',location:'Udupi',descr:'Saved description',link:'/old-record',images:['/assets/original.jpg'],keyPoints:['Existing highlight'],discover:[],impInfo:[],dontMissThese:[{name:'Related place',description:'Related content',imageUrl:'',link:'/related'}],howToVisit:{byBike:'Cycle path',byCar:'Road',byPublic:'Bus'},timings:'Morning'});
+ for(const kind of ['nature','culture','food']){
+  await page.route(api+'/v1/'+kind+'/get'+kind[0].toUpperCase()+kind.slice(1),route=>route.fulfill({headers,json:[destination(kind)]}));
+  await page.route(api+'/v1/'+kind+'/41',route=>route.fulfill({headers,json:destination(kind)}));
+ }
+ const story={id:41,title:'Existing story',content:'A previously published experience.',submittedBy:'Original author',status:'Published',images:['/assets/story.jpg'],dontMissThese:[],link:''};
+ await page.route(api+'/v1/blogs/getBlogs',route=>route.fulfill({headers,json:[story]}));
+ await page.route(api+'/v1/blogs/admin/content/41',route=>{expect(route.request().headers()['authorization']).toBe('Bearer '+token);return route.fulfill({headers,json:{content:story,email:'author@example.invalid'}});});
+ const ad={id:41,title:'Existing ad',imageUrl:'https://example.invalid/ad.jpg',link:'https://example.invalid/shop'};
+ await page.route(api+'/v1/ads',route=>route.fulfill({headers,json:[ad]}));await page.route(api+'/v1/ads/41',route=>route.fulfill({headers,json:ad}));
+ for(const path of ['/v1/nature/updateNature/41','/v1/culture/updateCulture/41','/v1/food/updateFood/41','/v1/blogs/updateBlogs/41','/v1/ads/41'])await page.route(api+path,route=>{
+  if(route.request().method()==='OPTIONS')return route.fulfill({headers,status:204});
+  if(route.request().method()==='GET')return route.fulfill({headers,json:ad});
+  expect(route.request().method()).toBe('PUT');expect(route.request().headers()['authorization']).toBe('Bearer '+token);const body=route.request().postDataJSON();saves.push({path,body});return route.fulfill({headers,json:{...body,id:41}});
+ });
+ await page.goto('/#/admin');await signIn(page);
+ for(const [label,kind] of [['Nature','nature'],['Culture','culture'],['Food','food'],['Stories','story'],['Ads','ads']]){
+  await page.getByRole('link',{name:new RegExp('Edit '+label)}).click();await expect(page.getByRole('heading',{name:'Edit '+label,exact:true})).toBeVisible();
+  const recordName=kind==='story'?'Existing story':kind==='ads'?'Existing ad':'Existing '+kind;
+  await page.getByRole('link',{name:'Edit '+recordName,exact:true}).click();
+  const title=page.getByLabel(kind==='story'||kind==='ads'?'Title':'Place name');await expect(title).toHaveValue(recordName);await title.fill('Updated '+kind);
+  if(kind==='story'){await expect(page.getByLabel('Contact email')).toHaveValue('author@example.invalid');await expect(page.getByLabel('Author name')).toHaveValue('Original author');}
+  if(!['story','ads'].includes(kind)){await expect(page.getByLabel('Section')).toHaveValue('Legacy section');await expect(page.getByLabel('Image URLs')).toHaveValue('/assets/original.jpg');}
+  await page.getByRole('button',{name:'Save changes',exact:true}).click();await expect(page.getByRole('heading',{name:'Changes saved',exact:true})).toBeVisible();await page.getByRole('link',{name:'Return to dashboard'}).click();
+ }
+ expect(saves).toHaveLength(5);expect(saves[0].body).toMatchObject({name:'Updated nature',keyPoints:['Existing highlight'],images:['/assets/original.jpg'],dontMissThese:[{name:'Related place'}]});expect(saves[3].body).toMatchObject({title:'Updated story',status:'Published',email:'author@example.invalid',images:['/assets/story.jpg']});expect(saves[4].body).toMatchObject({title:'Updated ads',imageUrl:'https://example.invalid/ad.jpg'});
+});
+
+test('visitors browse upcoming and past events without changing the home page',async({page})=>{
+ await mockApi(page);const events=[{id:1,details:{article:{name:'Coastal music',location:'Malpe',descr:'Music by the sea.',images:['assets/images/a6.jpg'],link:'https://example.invalid/event'},startsOn:'2099-12-10',endsOn:'2099-12-10'}},{id:2,details:{article:{name:'Heritage gathering'},startsOn:'2020-01-01',endsOn:'2020-01-02'}}];
+ await page.route(api+'/v1/events',route=>route.fulfill({json:events}));await page.route(api+'/v1/events/1',route=>route.fulfill({json:events[0]}));
+ await page.setViewportSize({width:390,height:844});await page.goto('/#/home');await expect(page.locator('.home-editorial')).toHaveCount(0);await page.getByRole('button',{name:'Open navigation'}).click();await page.getByRole('dialog',{name:'Explore Udupi'}).getByRole('link',{name:'Events',exact:true}).click();
+ const upcoming=page.locator('section').filter({has:page.getByRole('heading',{name:'Upcoming & announced',exact:true})});const past=page.locator('section').filter({has:page.getByRole('heading',{name:'Past events',exact:true})});await expect(upcoming).toContainText('Coastal music');await expect(upcoming).not.toContainText('Heritage gathering');await expect(past).toContainText('Heritage gathering');await upcoming.getByRole('link').click();await expect(page.getByRole('heading',{name:'Coastal music',exact:true})).toBeVisible();await expect(page.getByText('Music by the sea.')).toBeVisible();await expect(page.getByRole('link',{name:'Event website ↗'})).toHaveAttribute('href','https://example.invalid/event');await expect(page.locator('body')).toHaveJSProperty('scrollWidth',390);
+});
+
+test('admin creates an event with five photos and retries a failed upload without duplicate records',async({page})=>{
+ await mockApi(page);let creates=0,uploads=0;const keys:string[]=[];const headers={'access-control-allow-origin':'*','access-control-allow-headers':'authorization, content-type','access-control-allow-methods':'GET,POST,PUT,OPTIONS'};
+ await page.route(api+'/v1/events',route=>{if(route.request().method()==='OPTIONS')return route.fulfill({headers,status:204});if(route.request().method()==='GET')return route.fulfill({headers,json:[]});creates++;expect(route.request().headers()['authorization']).toBe('Bearer '+token);return route.fulfill({headers,json:{id:81}});});
+ await page.route(api+'/v1/events/81',route=>route.fulfill({headers,json:{id:81}}));
+ await page.route(api+'/v1/events/81/photos',route=>{if(route.request().method()==='OPTIONS')return route.fulfill({headers,status:204});expect(route.request().headers()['authorization']).toBe('Bearer '+token);uploads++;const data=route.request().postDataBuffer()!.toString('latin1');expect((data.match(/filename="photo/g)||[]).length).toBe(5);keys.push(data.match(/name="uploadKey"\r\n\r\n([^\r]+)/)![1]);return route.fulfill({headers,status:uploads===1?503:200,json:{id:81}});});
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Events/}).click();await page.getByLabel('Title').fill('Music in Udupi');await page.getByLabel('Start date').fill('2099-11-10');await page.getByLabel('End date').fill('2099-11-11');
+ const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==','base64');const photos=page.getByLabel('Upload event photos (optional)');await photos.setInputFiles(Array.from({length:6},(_,i)=>({name:'photo'+i+'.png',mimeType:'image/png',buffer:png})));await expect(page.getByRole('alert')).toContainText('up to 5');expect(creates).toBe(0);await photos.setInputFiles(Array.from({length:5},(_,i)=>({name:'photo'+i+'.png',mimeType:'image/png',buffer:png})));await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Event details were saved');await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully'})).toBeVisible();expect(creates).toBe(1);expect(uploads).toBe(2);expect(keys[0]).toBe(keys[1]);
+});
+
+test('animated loading page clears after success and failure and respects reduced motion',async({page})=>{
+ await mockApi(page);let release!:()=>void;const pending=new Promise<void>(resolve=>release=resolve);
+ await page.route(api+'/v1/nature/getNature',async route=>{await pending;await route.fulfill({json:[]});});
+ await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/#/nature');const loader=page.getByRole('status',{name:'Loading content',exact:true});await expect(loader).toBeVisible();await expect(loader.locator('.orbit-one')).toHaveCSS('animation-name','none');release();await expect(loader).toBeHidden();
+ let fail!:()=>void;const failed=new Promise<void>(resolve=>fail=resolve);await page.route(api+'/v1/food/getFood',async route=>{await failed;await route.fulfill({status:503,json:{}});});await page.getByRole('link',{name:'Food',exact:true}).first().click();await expect(loader).toBeVisible();await expect(page.getByRole('heading',{name:'Follow your appetite.'})).toBeVisible();await expect(page.getByRole('link',{name:'Udupi Darshan Logo'})).toBeEnabled();fail();await expect(loader).toBeHidden();await expect(page.getByRole('alert')).toBeVisible();
+});
