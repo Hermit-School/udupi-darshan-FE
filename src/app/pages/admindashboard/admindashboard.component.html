@@ -17,7 +17,7 @@
       <div>
         <span class="eyebrow">UDUPI DARSHAN</span>
         <h1 id="dashboard-title">Admin dashboard</h1>
-        <p>Add new content to the website.</p>
+        <p>Add content or update existing records on the website.</p>
       </div>
       <img src="assets/images/static/temple.svg" alt="" width="316" height="186">
     </section>
@@ -41,5 +41,6 @@
         }
       </div>
     </section>
+    <section aria-labelledby="edit-title" class="edit-section"><div class="section-heading"><div><h2 id="edit-title">Edit existing records</h2><p>Choose a section, find a record, and update its details.</p></div></div><div class="sections">@for(section of sections;track section.path){<a class="section-card" [routerLink]="['/admindashboard/content',section.path.split('/').pop()]"><i [class]="'tile-icon bi bi-'+section.icon" aria-hidden="true"></i><h3>{{section.title}}</h3><p>Find a record and update its details.</p><span>Edit {{section.title}} <i class="bi bi-pencil-square" aria-hidden="true"></i></span></a>}</div></section>
   </main>
 </div>
