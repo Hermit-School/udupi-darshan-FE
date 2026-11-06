@@ -32,3 +32,5 @@ legend { font-size: 1rem; font-weight: 750; }
 .error { background: #fff0ea; color: #872d20; border-radius: .55rem; padding: .75rem; }
 .success { border-left: .3rem solid #ff6000; }
 @media (max-width: 560px) { .fields { grid-template-columns: 1fr; } }
+
+.trending-control{display:flex;align-items:center;gap:.6rem;margin:1rem 0}.trending-control input{width:1.2rem;min-height:1.2rem;accent-color:#ff6000}.actions{flex-wrap:wrap}

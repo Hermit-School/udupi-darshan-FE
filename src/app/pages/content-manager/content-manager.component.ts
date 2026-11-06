@@ -1,3 +1,4 @@
+import { DeleteRecordComponent } from '../../components/delete-record/delete-record.component';
 import { Component, DestroyRef, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { RouterLink, ActivatedRoute } from "@angular/router";
@@ -23,7 +24,7 @@ interface RecordSummary {
 }
 @Component({
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, DeleteRecordComponent],
   selector: "app-content-manager",
   templateUrl: "./content-manager.component.html",
   styleUrls: ["./content-manager.component.scss"],
@@ -54,6 +55,8 @@ export class ContentManagerComponent {
         this.load();
       });
   }
+  get canDelete(){return ['nature','culture','food','story'].includes(this.kind);}
+  removed(id:number){this.items=this.items.filter(item=>item.id!==id);this.page=Math.min(this.page,this.pages);}
   name(item: RecordSummary) {
     return (
       item.name ||

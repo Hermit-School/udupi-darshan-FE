@@ -2,13 +2,15 @@
 
 The dashboard keeps its existing Add cards and adds a matching **Edit existing records** section. Each edit card opens a searchable, paginated list, then the existing form with saved values filled in. Saving updates the existing record ID with one multipart request. Loading failures block saving an empty form. Original images, related places, legacy section labels and story publication state are retained unless edited. Story contact emails are loaded through the protected admin endpoint and remain absent from public responses.
 
-The story editor manages published records; visitor submissions still use the existing review workspace. No delete action is added to the dashboard.
+The story editor manages published records; visitor submissions still use the existing review workspace. Nature, Culture, Food and Stories now offer Delete in both the record list and loaded edit form. A named confirmation dialog explains that deletion is permanent; cancel performs no request. Failed/uncertain requests keep the dialog open for retry, and successful deletion updates the list or returns the editor to it. The backend removes legacy uploaded story-photo rows in the same transaction as the story.
 
 ## Public Events
 
 Visitors can open Events from desktop/mobile navigation or the footer, browse upcoming and past events, and open details with dates, location, photos, description and visitor information. Dates are grouped using Udupi's calendar date. Undated announcements remain in the upcoming group. Empty and failed requests have clear messages and retry controls. Event reads time out after 20 seconds so loading can recover from a stalled request.
 
 Admins use Add Events / Edit Events cards to maintain content. Events reuse the existing V5 schema, which was preserved during the rollback; no previously applied migration is modified. Up to five photos can be uploaded as JPEG/PNG files. Uploaded files are limited to 5 MiB and 20 megapixels, decoded and re-encoded on the server. The 26 MiB multipart request budget accommodates five maximum-size files. Metadata, uploads and removals commit together. A save key and transaction lock make retries safe without creating duplicate records. An uncertain response keeps the selection fixed until the same save is retried.
+
+Admins can mark an Event as trending. Its existing `featured` field controls a labelled fire badge on the public card and detail page; completed events never show the badge. This is an editorial selection rather than an analytics calculation. Official event posters are contained within cards so titles and dates are not cropped.
 
 ## Loading experience
 
