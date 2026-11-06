@@ -84,6 +84,7 @@ test('mobile visitors can navigate to public content and unknown routes land on 
   const menu = page.getByRole('dialog', { name: 'Explore Udupi' });
   await menu.getByRole('link', { name: 'Nature', exact: true }).click();
   await expect(page).toHaveURL(/#\/nature$/);
+  await expect(page.locator('app-navbar app-search')).toHaveCount(0);
   await expect(page).toHaveTitle(/Nature in Udupi/);
   await expect(menu).toBeHidden();
   await page.goto('/#/missing-route');
@@ -303,6 +304,7 @@ test('search loads one compact index on demand and legacy links stay in the same
   await expect(result).toBeVisible();
   await result.click();
   await expect(page).toHaveURL(/#\/details\/nature\/42$/);
+  await expect(page.locator('app-navbar app-search')).toHaveCount(0);
   await expect(page.getByText('Scenic shore')).toBeVisible();
   expect(indexReads).toBe(1);
   expect(detailReads).toBe(1);
@@ -345,6 +347,7 @@ test('search falls back only on demand when the backend has no index yet', async
     );
   }
   await page.goto('/#/home');
+  await expect(page.locator('app-navbar app-search')).toHaveCount(0);
   const search = page.getByRole('searchbox', { name: 'Search destinations' });
   await expect(search).toBeVisible();
   expect(listingReads).toBe(0);

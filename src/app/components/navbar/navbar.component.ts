@@ -25,10 +25,6 @@ export class NavbarComponent implements OnDestroy {
     private dialogs: NgbModal,
   ) {}
 
-  get isHome(): boolean {
-    return ['/', '/home'].includes(this.router.url.split('?')[0]);
-  }
-
   isRouteActive(route: string): boolean {
     return this.router.url.includes(route);
   }
