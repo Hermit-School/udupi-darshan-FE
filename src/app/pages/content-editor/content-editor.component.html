@@ -44,6 +44,7 @@
         <section class="panel" aria-labelledby="basic-title">
           <h2 id="basic-title">Basic details</h2>
           <p class="hint">Fields marked * are required.</p>
+          @if(event){<p class="hint">Only add events held within Udupi district. Include the venue and town in the location.</p>}
           @if(event){<label class="trending-control"><input type="checkbox" formControlName="trending">🔥 Mark as trending</label>}
           <div class="fields">
             <label
