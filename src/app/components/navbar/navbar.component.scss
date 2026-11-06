@@ -21,9 +21,6 @@
   height: 36px !important;
   max-width: 190px;
 }
-app-search {
-  width: 230px;
-}
 .navbar-collapse {
   flex-grow: 0;
 }
@@ -112,17 +109,11 @@ app-search {
   outline-offset: 4px;
 }
 @media (max-width: 1199px) {
-  app-search {
-    width: 190px;
-  }
   .navbar-nav {
     gap: 0.8rem;
   }
 }
 @media (max-width: 991px) {
-  app-search {
-    width: auto;
-  }
   .navbar > .container-fluid {
     padding-inline: 1rem;
     gap: 0.5rem;
