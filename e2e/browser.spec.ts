@@ -954,9 +954,9 @@ for (const section of ['nature','culture','food','story']) {
   const related=[
    {name:'Nearby cafe',description:'Related visitor information',imageUrl:'assets/images/ads2.png',link:''},
    {name:'Another stop',description:'Useful nearby information',imageUrl:'assets/images/custom-promo.png',link:''},
-   {name:'Scenic beach',description:'A real destination photo',imageUrl:'assets/images/a6.jpg',link:''},
+   {name:'Scenic beach',description:'A real destination photo',imageUrl:'assets/images/a6.jpg',link:'/details/nature/63'},
   ];
-  const record={id:62,name:'Test destination',title:'Test story',category:section,content:'Story text',submittedBy:'Visitor',descr:'Destination description',images:[],keyPoints:[],discover:[],impInfo:[],dontMissThese:related,howToVisit:null,link:''};
+  const record={id:62,name:'Test destination',title:'Test story',category:section,content:'Story text',submittedBy:'Visitor',descr:'Destination description',images:['assets/images/c2.jpg','assets/images/a6.jpg'],keyPoints:[],discover:[],impInfo:[],dontMissThese:related,howToVisit:null,link:''};
   await page.route(api+(section==='story'?'/v1/blogs/getBlogs/62':`/v1/${section}/62`),r=>r.fulfill({json:record}));
   await page.goto(section==='story'?'/#/story/62':`/#/details/${section}/62`);
   const recommendations=page.locator('section.ud-section').filter({has:page.getByRole('heading',{name:section==='story'?'Keep exploring.':'Don’t miss these.',exact:true})});
@@ -965,6 +965,15 @@ for (const section of ['nature','culture','food','story']) {
   const photo=recommendations.getByRole('img',{name:'Scenic beach',exact:true});
   await expect(photo).toHaveAttribute('src','assets/images/a6.jpg');
   await expect(recommendations.getByRole('img')).toHaveCount(1);
+  await expect(recommendations.getByText('Related visitor information',{exact:true})).toBeVisible();
+  await expect(recommendations.getByRole('link',{name:'View details'})).toHaveAttribute('href','#/details/nature/63');
+  await expect(page.getByRole('heading',{level:1,name:section==='story'?'Test story':'Test destination',exact:true})).toHaveCount(1);
+  await expect(page.getByText(section==='story'?'Story text':'Destination description',{exact:true})).toBeVisible();
+  const mainPhoto=page.locator(section==='story'?'.story-cover':'.gallery-main');
+  await expect(mainPhoto).toHaveAttribute('src','assets/images/c2.jpg');
+  await page.getByRole('button',{name:section==='story'?'Show photo 2':'Next photo',exact:true}).click();
+  await expect(mainPhoto).toHaveAttribute('src','assets/images/a6.jpg');
+
   expect(requestedImages.some(url=>url.includes('ads2.png')||url.includes('custom-promo.png'))).toBe(false);
  });
 }
