@@ -54,10 +54,10 @@
           <div class="ud-grid">
             @for (item of story.dontMissThese; track $index) {
               <article class="ud-card">
-                @if (item.imageUrl) {
+                @if (relatedPhotos.imageUrl(item.imageUrl); as image) {
                   <div class="ud-card-image">
                     <img
-                      [src]="item.imageUrl"
+                      [src]="image"
                       [alt]="item.name"
                       loading="lazy"
                       width="600"
