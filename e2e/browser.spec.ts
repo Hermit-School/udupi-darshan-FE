@@ -989,3 +989,52 @@ test('advertisement photos remain visible on the dedicated advertisements page',
  await expect(ad.locator('img')).toHaveAttribute('src','assets/images/ads2.png');
  await expect(ad.locator('img')).toBeVisible();
 });
+
+for(const [kind,path] of [['nature','/nature/getNature'],['culture','/culture/getCulture'],['food','/food/getFood'],['story','/blogs/getBlogs']]){
+ test(`admin confirms ${kind} deletion, can cancel, and can retry a failure`,async({page})=>{
+  await mockApi(page);let attempts=0;
+  await page.route(api+'/v1'+path,r=>r.fulfill({json:[{id:91,name:'Record to delete',title:'Record to delete'}]}));
+  const endpoint=kind==='story'?'/blogs/deleteBlogs/91':`/${kind}/delete${kind[0].toUpperCase()+kind.slice(1)}/91`;
+  await page.route(api+'/v1'+endpoint,r=>{expect(r.request().method()).toBe('DELETE');expect(r.request().headers()['authorization']).toBe('Bearer '+token);attempts++;return r.fulfill({status:attempts===1?503:204});});
+  await page.goto('/#/admin');await signIn(page);
+  await page.getByRole('link',{name:new RegExp('Edit '+(kind==='story'?'Stories':kind[0].toUpperCase()+kind.slice(1)))}).click();
+  await page.getByRole('button',{name:'Delete Record to delete',exact:true}).click();
+  const dialog=page.getByRole('dialog',{name:'Delete record',exact:true});
+  await expect(dialog).toContainText('cannot be undone');await dialog.getByRole('button',{name:'Keep record'}).click();expect(attempts).toBe(0);
+  await page.getByRole('button',{name:'Delete Record to delete',exact:true}).click();await dialog.getByRole('button',{name:'Delete permanently'}).click();
+  await expect(dialog.getByRole('alert')).toContainText('could not be confirmed');
+  await dialog.getByRole('button',{name:'Delete permanently'}).click();await expect(dialog).not.toBeVisible();
+  await expect(page.getByRole('heading',{name:'No records yet'})).toBeVisible();expect(attempts).toBe(2);
+ });
+}
+
+test('trending fire badge appears only on selected current events and their details',async({page})=>{
+ await mockApi(page);
+ const event=(id:number,name:string,date:string,featured:boolean)=>({id,details:{article:{name,location:'Udupi',images:[]},startsOn:date,endsOn:date,featured}});
+ const current=event(71,'Trending gathering','2999-12-01',true);
+ await page.route(api+'/v1/events',r=>r.fulfill({json:[current,event(72,'Regular gathering','2999-12-02',false),event(73,'Old gathering','2000-01-01',true)]}));
+ await page.route(api+'/v1/events/71',r=>r.fulfill({json:current}));
+ await page.goto('/#/events');await expect(page.locator('.trending-badge')).toHaveCount(1);
+ await page.getByRole('link').filter({has:page.getByRole('heading',{name:'Trending gathering',exact:true})}).click();
+ await expect(page.locator('.trending-badge')).toHaveText('Trending');await expect(page.locator('.trending-badge .bi-fire')).toHaveCount(1);
+});
+
+test('admin can mark an event as trending when publishing',async({page})=>{
+ await mockApi(page);let saved:any;
+ await page.route(api+'/v1/admin/content/events',r=>{saved=multipartRecord(r.request()).data;return r.fulfill({json:{id:75,kind:'events'}});});
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Events/}).click();
+ await page.getByLabel('Title',{exact:false}).fill('New gathering');await page.getByRole('checkbox',{name:/Mark as trending/}).check();
+ await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully'})).toBeVisible();expect(saved.featured).toBe(true);
+});
+
+test('a loaded edit form offers confirmed deletion and returns to its record list',async({page})=>{
+ await mockApi(page);let removed=false;
+ const record={id:92,name:'Editable place',category:'Nature',label:'Beach List',link:'/place',images:[],dontMissThese:[],keyPoints:[],discover:[],impInfo:[]};
+ await page.route(api+'/v1/nature/getNature',r=>r.fulfill({json:removed?[]:[record]}));
+ await page.route(api+'/v1/nature/92',r=>r.fulfill({json:record}));
+ await page.route(api+'/v1/nature/deleteNature/92',r=>{removed=true;return r.fulfill({status:204});});
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Edit Nature/}).click();await page.getByRole('link',{name:'Edit Editable place',exact:true}).click();
+ await expect(page.getByLabel('Place name')).toHaveValue('Editable place');await page.getByRole('button',{name:'Delete Editable place',exact:true}).click();
+ await page.getByRole('dialog',{name:'Delete record',exact:true}).getByRole('button',{name:'Delete permanently'}).click();
+ await expect(page).toHaveURL(/#\/admindashboard\/content\/nature$/);await expect(page.getByRole('heading',{name:'No records yet'})).toBeVisible();
+});

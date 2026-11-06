@@ -29,6 +29,7 @@ export class EventsComponent {
   name = eventName;
   image = eventImage;
   ended = eventEnded;
+  trending(event: CommunityEvent){return event.details.featured === true && !eventEnded(event); }
   constructor() {
     this.route.paramMap
       .pipe(

@@ -44,6 +44,7 @@
         <section class="panel" aria-labelledby="basic-title">
           <h2 id="basic-title">Basic details</h2>
           <p class="hint">Fields marked * are required.</p>
+          @if(event){<label class="trending-control"><input type="checkbox" formControlName="trending">🔥 Mark as trending</label>}
           <div class="fields">
             <label
               >{{ destination ? "Place name" : "Title" }} *
@@ -247,6 +248,7 @@
         <p class="error" role="alert">{{ error }}</p>
       }
       <footer class="actions">
+        @if(editId && !ad && !event){<app-delete-record [kind]="kind" [id]="editId" [name]="recordName" [disabled]="busy || loading || uncertain || !!loadError || imageBusy" (deleted)="removed()"></app-delete-record>}
         <a
           [routerLink]="
             editId ? ['/admindashboard/content', kind] : ['/admindashboard']

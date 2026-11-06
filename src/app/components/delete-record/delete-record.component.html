@@ -1,0 +1,6 @@
+<button class="delete" type="button" [disabled]="disabled || busy" (click)="open()" [attr.aria-label]="'Delete ' + name"><i class="bi bi-trash" aria-hidden="true"></i> Delete</button>
+<dialog #confirmation aria-label="Delete record" (cancel)="busy ? $event.preventDefault() : null">
+ <h2>Delete this record?</h2><p><strong>{{name}}</strong> will be permanently removed from the website. This cannot be undone.</p>
+ @if(error){<p role="alert">{{error}}</p>}
+ <div class="actions"><button type="button" (click)="cancel()" [disabled]="busy">Keep record</button><button class="delete" type="button" (click)="remove()" [disabled]="busy">{{busy ? 'Deleting…' : 'Delete permanently'}}</button></div>
+</dialog>

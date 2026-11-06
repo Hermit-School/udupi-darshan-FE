@@ -1,3 +1,4 @@
+import { DeleteRecordComponent } from '../../components/delete-record/delete-record.component';
 import { ImagePickerComponent } from "../../components/image-picker/image-picker.component";
 import { EditorPhoto, existingPhoto } from "../../util/media-image";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
@@ -15,7 +16,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { finalize, timeout } from "rxjs";
 import { API_BASE_URL } from "src/constants/routes";
 
@@ -50,7 +51,7 @@ const lines = (value: string) =>
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ImagePickerComponent],
+  imports: [ReactiveFormsModule, RouterLink, ImagePickerComponent, DeleteRecordComponent],
   selector: "app-content-editor",
   templateUrl: "./content-editor.component.html",
   styleUrls: ["./content-editor.component.scss"],
@@ -60,6 +61,9 @@ export class ContentEditorComponent {
   private readonly http = inject(HttpClient);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  recordName = "";
+  removed(){void this.router.navigate(["/admindashboard/content",this.kind]);}
   readonly kind: Kind = this.readKind();
   readonly type = TYPES[this.kind];
   readonly labelOptions: string[] = this.type.labels;
@@ -100,7 +104,7 @@ export class ContentEditorComponent {
       .filter((photo) => photo.file)
       .forEach((photo) => URL.revokeObjectURL(photo.preview));
   }
-  private eventFeatured: boolean | null = null;
+
   private storyStatus = "Published";
   readonly ad = this.kind === "ads";
   readonly lists = [
@@ -109,6 +113,7 @@ export class ContentEditorComponent {
     { key: "impInfo", label: "Important information" },
   ] as const;
   readonly form = this.fb.group({
+    trending: [false],
     title: ["", [required, Validators.maxLength(255)]],
     label: ["", this.destination ? [required] : []],
     location: ["", Validators.maxLength(255)],
@@ -173,6 +178,7 @@ export class ContentEditorComponent {
             : this.event
               ? response.details.article || {}
               : response;
+          this.recordName = value.name || value.title || "this record";
           this.form.patchValue({
             title: value.name || value.title || "",
             label: value.label || "",
@@ -200,7 +206,7 @@ export class ContentEditorComponent {
                 : []
               : value.images || []
           ).map(existingPhoto);
-          this.eventFeatured = response.details?.featured ?? null;
+          this.form.controls.trending.setValue(response.details?.featured === true);
           this.storyStatus = value.status || "Published";
           this.related.clear();
           for (const item of value.dontMissThese || []) {
@@ -327,7 +333,7 @@ export class ContentEditorComponent {
           article,
           startsOn: v.startsOn || null,
           endsOn: v.endsOn || null,
-          featured: this.eventFeatured,
+          featured: v.trending,
         }
       : this.destination
         ? { ...article, category: this.type.title }

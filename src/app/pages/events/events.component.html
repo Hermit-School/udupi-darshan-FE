@@ -11,8 +11,9 @@
       <a class="ud-link" routerLink="/events">← All events</a>
       <header class="ud-intro">
         <p class="ud-eyebrow">
-          {{ ended(event) ? "Completed event" : "Around Udupi" }}
+          {{ ended(event) ? "Completed event" : "Around Udupi & Mangaluru" }}
         </p>
+        @if(trending(event)){<span class="trending-badge"><i class="bi bi-fire" aria-hidden="true"></i> Trending</span>}
         <h1>{{ name(event) }}</h1>
         <p class="ud-lead">{{ event.details.article?.location }}</p>
         @if (event.details.startsOn) {
@@ -88,7 +89,7 @@
     } @else {
       <header class="ud-intro">
         <p class="ud-eyebrow">Gather. Celebrate. Belong.</p>
-        <h1>What’s happening in Udupi.</h1>
+        <h1>What’s happening around Udupi &amp; Mangaluru.</h1>
         <p class="ud-lead">
           Upcoming gatherings and moments our community has shared.
         </p>
@@ -124,6 +125,7 @@
                         : "Date to be announced"
                     }}
                   </p>
+                  @if(trending(event)){<span class="trending-badge"><i class="bi bi-fire" aria-hidden="true"></i> Trending</span>}
                   <h3>{{ name(event) }}</h3>
                   <p>{{ event.details.article?.location }}</p>
                   <span class="ud-link">Read about this event →</span>
