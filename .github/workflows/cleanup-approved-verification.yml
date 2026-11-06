@@ -1,0 +1,121 @@
+name: Approved obsolete artifact cleanup
+on:
+  push:
+    branches: [release-v1]
+    paths: [.github/workflows/cleanup-approved-verification.yml]
+permissions:
+  actions: write
+jobs:
+  cleanup:
+    if: github.repository_owner == 'Hermit-School'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Delete only approved superseded verification artifacts
+        env:
+          CLEANUP_TOKEN: ${{ github.token }}
+          CLEANUP_REPOSITORY: ${{ github.repository }}
+        shell: python
+        run: |
+          import concurrent.futures
+          import datetime
+          import json
+          import os
+          import time
+          import urllib.error
+          import urllib.request
+          
+          ALLOWED = {
+              "Hermit-School/udupi-darshan-FE": "frontend-verification",
+              "Hermit-School/Udupi-darshan-BE": "backend-verification",
+          }
+          
+          def choose_candidates(artifacts, runs, name):
+              matching = sorted(
+                  [a for a in artifacts if a["name"] == name and not a["expired"]],
+                  key=lambda a: (a["created_at"], a["id"]), reverse=True,
+              )
+              keep = {a["id"] for a in matching[:3]}
+              for branch in ("main", "release-v1"):
+                  latest = next((a for a in matching if runs[a["workflow_run"]["id"]]["head_branch"] == branch), None)
+                  if latest:
+                      keep.add(latest["id"])
+              return [a for a in matching if a["id"] not in keep and runs[a["workflow_run"]["id"]]["status"] == "completed"]
+          
+          def main():
+              repo = os.environ["CLEANUP_REPOSITORY"]
+              if repo not in ALLOWED:
+                  raise RuntimeError("Repository is outside the approved cleanup scope")
+              token = os.environ["CLEANUP_TOKEN"]
+              root = "https://api.github.com/repos/" + repo
+          
+              def api(path, method="GET"):
+                  request = urllib.request.Request(root + path, method=method, headers={
+                      "Authorization": "Bearer " + token,
+                      "Accept": "application/vnd.github+json",
+                      "X-GitHub-Api-Version": "2022-11-28",
+                      "User-Agent": "UdupiDarshan-approved-artifact-cleanup",
+                  })
+                  with urllib.request.urlopen(request, timeout=45) as response:
+                      data = response.read()
+                      return json.loads(data) if data else None
+          
+              artifacts = []
+              for page in range(1, 101):
+                  batch = api("/actions/artifacts?per_page=100&page=" + str(page))["artifacts"]
+                  artifacts.extend(batch)
+                  if len(batch) < 100:
+                      break
+              else:
+                  raise RuntimeError("Artifact pagination exceeded the safety limit")
+          
+              matching = [a for a in artifacts if a["name"] == ALLOWED[repo] and not a["expired"]]
+              run_ids = sorted({a["workflow_run"]["id"] for a in matching})
+              with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+                  runs = dict(pool.map(lambda run_id: (run_id, api("/actions/runs/" + str(run_id))), run_ids))
+              candidates = choose_candidates(artifacts, runs, ALLOWED[repo])
+              print("Approved cleanup plan:", json.dumps({
+                  "repository": repo,
+                  "artifact_name": ALLOWED[repo],
+                  "candidate_count": len(candidates),
+                  "candidate_bytes": sum(a["size_in_bytes"] for a in candidates),
+                  "candidate_ids": [a["id"] for a in candidates],
+                  "preserved_ids": [a["id"] for a in matching if a not in candidates],
+              }), flush=True)
+          
+              deleted = []
+              skipped = []
+              for artifact in candidates:
+                  run_id = artifact["workflow_run"]["id"]
+                  # Recheck immediately before each deletion: a rerun may have started.
+                  if api("/actions/runs/" + str(run_id))["status"] != "completed":
+                      skipped.append(artifact["id"])
+                      continue
+                  try:
+                      api("/actions/artifacts/" + str(artifact["id"]), method="DELETE")
+                  except urllib.error.HTTPError as error:
+                      if error.code == 404:
+                          skipped.append(artifact["id"])
+                          continue
+                      raise
+                  deleted.append({"id": artifact["id"], "run_id": run_id, "bytes": artifact["size_in_bytes"]})
+                  print("Deleted", json.dumps(deleted[-1]), flush=True)
+                  time.sleep(1.1)
+          
+              report = {
+                  "repository": repo,
+                  "completed_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                  "deleted_count": len(deleted),
+                  "deleted_bytes": sum(a["bytes"] for a in deleted),
+                  "deleted": deleted,
+                  "skipped_ids": skipped,
+                  "preserved_latest_production_release_and_active_runs": True,
+              }
+              print("CLEANUP_RESULT=" + json.dumps(report), flush=True)
+              summary = "## Approved obsolete-artifact cleanup\n\nDeleted **{}** superseded `{}` artifacts, freeing **{:.1f} MB**.\n\nLatest production/release evidence, the newest three verification artifacts, active runs, and every other artifact type were preserved. Workflow history and deployed applications were not changed.\n".format(
+                  len(deleted), ALLOWED[repo], report["deleted_bytes"] / 1_000_000)
+              with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as output:
+                  output.write(summary)
+          
+          if __name__ == "__main__":
+              main()
