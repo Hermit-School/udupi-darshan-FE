@@ -1,3 +1,4 @@
+import { RelatedPhotosService } from 'src/app/services/related-photos.service';
 import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { CommonModule } from "@angular/common";
 import { SharedService } from "src/app/services/shared.service";
@@ -25,6 +26,7 @@ export class StoryDetailsComponent implements OnInit {
     private storyService: StoryService,
     private route: ActivatedRoute,
     readonly shared: SharedService,
+    readonly relatedPhotos: RelatedPhotosService,
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +40,7 @@ export class StoryDetailsComponent implements OnInit {
             this.story = data;
             this.loading = false;
             this.shared.resolveRelatedLinks(data.dontMissThese);
+            this.relatedPhotos.prepare(data.dontMissThese);
           },
           error: () => {
             this.loading = false;

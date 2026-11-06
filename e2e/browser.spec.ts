@@ -943,3 +943,37 @@ test('dashboard statistics show live totals and retry failures without misleadin
  await page.setViewportSize({width:1440,height:1000});
  await statistics.screenshot({path:test.info().outputPath('statistics-desktop.png')});
 });
+
+
+for (const section of ['nature','culture','food','story']) {
+ test(`Keep exploring excludes ad photos in ${section} while retaining genuine related photos`, async ({page}) => {
+  await mockApi(page);
+  const requestedImages:string[]=[];
+  page.on('request', request => {if(request.resourceType()==='image') requestedImages.push(request.url());});
+  await page.route(api+'/v1/ads',r=>r.fulfill({json:[{id:1,title:'Advertisement',imageUrl:'assets/images/custom-promo.png'}]}));
+  const related=[
+   {name:'Nearby cafe',description:'Related visitor information',imageUrl:'assets/images/ads2.png',link:''},
+   {name:'Another stop',description:'Useful nearby information',imageUrl:'assets/images/custom-promo.png',link:''},
+   {name:'Scenic beach',description:'A real destination photo',imageUrl:'assets/images/a6.jpg',link:''},
+  ];
+  const record={id:62,name:'Test destination',title:'Test story',category:section,content:'Story text',submittedBy:'Visitor',descr:'Destination description',images:[],keyPoints:[],discover:[],impInfo:[],dontMissThese:related,howToVisit:null,link:''};
+  await page.route(api+(section==='story'?'/v1/blogs/getBlogs/62':`/v1/${section}/62`),r=>r.fulfill({json:record}));
+  await page.goto(section==='story'?'/#/story/62':`/#/details/${section}/62`);
+  const recommendations=page.locator('section.ud-section').filter({has:page.getByRole('heading',{name:section==='story'?'Keep exploring.':'Don’t miss these.',exact:true})});
+  await expect(recommendations.getByRole('heading',{name:'Nearby cafe',exact:true})).toBeVisible();
+  await expect(recommendations.getByRole('heading',{name:'Another stop',exact:true})).toBeVisible();
+  const photo=recommendations.getByRole('img',{name:'Scenic beach',exact:true});
+  await expect(photo).toHaveAttribute('src','assets/images/a6.jpg');
+  await expect(recommendations.getByRole('img')).toHaveCount(1);
+  expect(requestedImages.some(url=>url.includes('ads2.png')||url.includes('custom-promo.png'))).toBe(false);
+ });
+}
+
+test('advertisement photos remain visible on the dedicated advertisements page', async ({page}) => {
+ await mockApi(page);
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:[{id:1,title:'Local business advertisement',imageUrl:'assets/images/ads2.png'}]}));
+ await page.goto('/#/advertisements');
+ const ad=page.getByRole('article').filter({has:page.getByRole('heading',{name:'Local business advertisement'})});
+ await expect(ad.locator('img')).toHaveAttribute('src','assets/images/ads2.png');
+ await expect(ad.locator('img')).toBeVisible();
+});

@@ -1,3 +1,4 @@
+import { RelatedPhotosService } from 'src/app/services/related-photos.service';
 import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
@@ -36,6 +37,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private cultureService: CultureService,
     private foodService: FoodService,
     private shared: SharedService,
+    readonly relatedPhotos: RelatedPhotosService,
   ) {}
   ngOnInit(): void {
     this.routeSubscription = this.route.params.subscribe((params) => {
@@ -74,6 +76,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.card = card;
         this.loading = false;
         this.shared.resolveRelatedLinks(card.dontMissThese);
+        this.relatedPhotos.prepare(card.dontMissThese);
       },
       error: () => {
         this.loading = false;
@@ -115,7 +118,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
               ? "Unable to load this destination. Please try again."
               : "Destination not found.";
           this.loading = false;
-          if (card) this.shared.resolveRelatedLinks(card.dontMissThese);
+          if (card) {
+            this.shared.resolveRelatedLinks(card.dontMissThese);
+            this.relatedPhotos.prepare(card.dontMissThese);
+          }
         },
         error: () => {
           this.loading = false;
