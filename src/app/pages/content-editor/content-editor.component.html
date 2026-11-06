@@ -72,8 +72,9 @@
                 </label>
               }
               <label
-                >Location<input
+                >Location{{ event ? " *" : "" }}<input
                   formControlName="location"
+                  [required]="event"
                   maxlength="255"
                   placeholder="e.g. Malpe, Udupi"
               /></label>
@@ -84,6 +85,13 @@
               /></label>
             }
             @if (event) {
+              <p class="hint">District: Udupi</p>
+              <label>Taluk *
+                <select formControlName="taluk" required>
+                  <option value="">Choose the venue’s taluk</option>
+                  @for (taluk of eventTaluks; track taluk) {<option [value]="taluk">{{ taluk }}</option>}
+                </select>
+              </label>
               <label
                 >Start date<input
                   type="date"

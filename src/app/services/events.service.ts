@@ -10,6 +10,8 @@ export interface CommunityEvent {
     startsOn: string | null;
     endsOn: string | null;
     featured: boolean | null;
+    district?: string | null;
+    taluk?: string | null;
   };
 }
 export const eventName = (event: CommunityEvent) =>

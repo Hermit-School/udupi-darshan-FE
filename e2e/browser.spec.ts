@@ -896,7 +896,7 @@ test('admin saves five event photos atomically and retries an uncertain response
  await page.route(api+'/v1/admin/content/events',route=>{
   expect(route.request().headers()['authorization']).toBe('Bearer '+token);attempts++;const parsed=multipartRecord(route.request());keys.push(parsed.key);payloads.push(parsed.data);expect((parsed.body.match(/filename="photo/g)||[]).length).toBe(5);return route.fulfill({status:attempts===1?503:200,json:{id:81,kind:'events'}});
  });
- await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Events/}).click();await page.getByLabel('Title').fill('Music in Udupi');await page.getByLabel('Start date').fill('2099-11-10');await page.getByLabel('End date').fill('2099-11-11');
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Events/}).click();await page.getByLabel('Title').fill('Music in Udupi');await page.getByLabel('Location', {exact:false}).fill('Ajjarkad Stadium, Udupi');await page.getByLabel('Taluk').selectOption('Udupi');await page.getByLabel('Start date').fill('2099-11-10');await page.getByLabel('End date').fill('2099-11-11');
  const photos=page.getByLabel('Record photos',{exact:true});await photos.setInputFiles(Array.from({length:6},(_,i)=>photoFile('photo'+i+'.png')));await expect(page.getByRole('alert')).toContainText('up to 5');expect(attempts).toBe(0);
  await photos.setInputFiles(Array.from({length:5},(_,i)=>photoFile('photo'+i+'.png')));await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Saving could not be confirmed');await expect(page.getByLabel('Title')).toBeDisabled();
  await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully'})).toBeVisible();expect(attempts).toBe(2);expect(keys[0]).toBe(keys[1]);expect(payloads[0]).toEqual(payloads[1]);expect(payloads[0].article.images).toHaveLength(5);
@@ -1023,8 +1023,8 @@ test('admin can mark an event as trending when publishing',async({page})=>{
  await mockApi(page);let saved:any;
  await page.route(api+'/v1/admin/content/events',r=>{saved=multipartRecord(r.request()).data;return r.fulfill({json:{id:75,kind:'events'}});});
  await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Events/}).click();
- await page.getByLabel('Title',{exact:false}).fill('New gathering');await page.getByRole('checkbox',{name:/Mark as trending/}).check();
- await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully'})).toBeVisible();expect(saved.featured).toBe(true);
+ await page.getByLabel('Title',{exact:false}).fill('New gathering');await page.getByLabel('Location',{exact:false}).fill('Community hall, Kapu');await page.getByLabel('Taluk').selectOption('Kapu');await page.getByRole('checkbox',{name:/Mark as trending/}).check();
+ await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully'})).toBeVisible();expect(saved.featured).toBe(true);expect(saved.district).toBe('Udupi');expect(saved.taluk).toBe('Kapu');
 });
 
 test('a loaded edit form offers confirmed deletion and returns to its record list',async({page})=>{
@@ -1037,4 +1037,54 @@ test('a loaded edit form offers confirmed deletion and returns to its record lis
  await expect(page.getByLabel('Place name')).toHaveValue('Editable place');await page.getByRole('button',{name:'Delete Editable place',exact:true}).click();
  await page.getByRole('dialog',{name:'Delete record',exact:true}).getByRole('button',{name:'Delete permanently'}).click();
  await expect(page).toHaveURL(/#\/admindashboard\/content\/nature$/);await expect(page.getByRole('heading',{name:'No records yet'})).toBeVisible();
+});
+
+
+test('admin offers the current Nature and Culture categories and preserves legacy labels', async ({page}) => {
+ await mockApi(page);
+ await page.goto('/#/admin');await signIn(page);
+ await expect(page.getByRole('heading',{name:'Admin dashboard',exact:true})).toBeVisible();
+ await page.getByRole('link',{name:/Add Nature/}).click();
+ await expect(page.getByLabel('Section')).toHaveCount(1);
+ await expect(page.getByLabel('Section').locator('option')).toHaveText(['Choose a section','Parks','Hills','Lakes','Rivers','Beaches','Waterfalls','Wildlife','Activities','Islands']);
+ await page.goto('/#/admindashboard');
+ await page.getByRole('link',{name:/Add Culture/}).click();
+ await expect(page.getByLabel('Section').locator('option')).toHaveText(['Choose a section','Temples','Mosques','Churches','Religious Architecture','Native Art','Historical Places','Traditions','Festivals']);
+ await page.route(api+'/v1/culture/98',r=>r.fulfill({json:{id:98,name:'Existing temple',label:'Mathas',link:'/temple',images:[]}}));
+ await page.goto('/#/admindashboard');
+ await expect(page.getByRole('heading',{name:'Admin dashboard',exact:true})).toBeVisible();
+ await page.goto('/#/edit-entry/culture/98');
+ await expect(page.getByLabel('Section')).toHaveValue('Mathas');
+ await expect(page.getByLabel('Section').getByRole('option',{name:'Temples',exact:true})).toHaveCount(1);
+});
+
+test('admin requires an allowed Udupi taluk and venue before saving an event', async ({page}) => {
+ await mockApi(page);let saved:any;let calls=0;
+ await page.route(api+'/v1/admin/content/events',r=>{calls++;saved=multipartRecord(r.request()).data;return r.fulfill({json:{id:84,kind:'events'}});});
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Events/}).click();
+ await page.getByLabel('Title',{exact:false}).fill('Local celebration');
+ await page.getByRole('button',{name:'Publish Event',exact:true}).click();expect(calls).toBe(0);
+ await expect(page.getByLabel('Taluk').locator('option')).toHaveText(['Choose the venue’s taluk','Udupi','Kapu','Brahmavara','Kundapura','Byndoor','Karkala','Hebri']);
+ await page.getByLabel('Taluk').selectOption('Hebri');await page.getByRole('button',{name:'Publish Event',exact:true}).click();expect(calls).toBe(0);
+ await page.getByLabel('Location',{exact:false}).fill('Community hall, Hebri');
+ await page.getByRole('button',{name:'Publish Event',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully'})).toBeVisible();
+ expect(saved.district).toBe('Udupi');expect(saved.taluk).toBe('Hebri');expect(saved.article.location).toBe('Community hall, Hebri');
+});
+
+
+test('admin can review and correct an unclassified legacy event through protected inventory', async ({page}) => {
+ await mockApi(page);
+ const legacy={id:92,details:{article:{name:'Legacy community event',location:'Town hall, Hebri',images:[]}}};
+ let reads=0;let saved:any;
+ await page.route(api+'/v1/admin/events',r=>{expect(r.request().headers()['authorization']).toMatch(/^Bearer /);reads++;return r.fulfill({json:[legacy]});});
+ await page.route(api+'/v1/admin/events/92',r=>{expect(r.request().headers()['authorization']).toMatch(/^Bearer /);reads++;return r.fulfill({json:legacy});});
+ await page.route(api+'/v1/admin/content/events/92',r=>{saved=multipartRecord(r.request()).data;return r.fulfill({json:{id:92,kind:'events'}});});
+ await page.goto('/#/admin');await signIn(page);
+ await page.getByRole('link',{name:/Edit Events/}).click();
+ await page.getByRole('link',{name:'Edit Legacy community event',exact:true}).click();
+ await expect(page.getByLabel('Taluk')).toHaveValue('');
+ await page.getByLabel('Taluk').selectOption('Hebri');
+ await page.getByRole('button',{name:'Save changes',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'Changes saved'})).toBeVisible();
+ expect(reads).toBe(2);expect(saved.district).toBe('Udupi');expect(saved.taluk).toBe('Hebri');
 });
