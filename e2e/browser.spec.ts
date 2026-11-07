@@ -1221,3 +1221,27 @@ test('homepage conflict preserves local choices and prevents overwriting another
  await page.getByRole('link',{name:'← Admin dashboard',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Design your homepage'})).toBeVisible();
 });
+
+
+test('a delayed custom homepage never flashes the original layout',async({page})=>{
+ await mockApi(page);
+ let release!:()=>void;const pending=new Promise<void>(resolve=>release=resolve);
+ await page.route(api+'/v1/landing-layout',async route=>{await pending;await route.fulfill({json:{configured:true,title:'Owner-selected homepage',intro:'Local favourites',sectionTitle:'Chosen for you',hero:null,features:[],sponsors:[]}});});
+ await page.addInitScript(()=>{(window as any).originalHomepageSeen=false;new MutationObserver(()=>{if(document.querySelector('.home-intro'))(window as any).originalHomepageSeen=true;}).observe(document,{subtree:true,childList:true});});
+ await page.goto('/#/home');
+ await expect(page.getByRole('status')).toContainText('Loading your Udupi homepage');
+ await expect(page.locator('.home-intro')).toHaveCount(0);
+ release();
+ await expect(page.getByRole('heading',{name:'Owner-selected homepage',exact:true})).toBeVisible();
+ expect(await page.evaluate(()=>(window as any).originalHomepageSeen)).toBe(false);
+ await expect(page.locator('.home-skeleton')).toHaveCount(0);
+});
+
+test('homepage read failures allow retry without flashing the default layout',async({page})=>{
+ await mockApi(page);let attempts=0;
+ await page.route(api+'/v1/landing-layout',route=>{attempts++;return attempts===1?route.fulfill({status:503,json:{}}):route.fulfill({json:{configured:false}});});
+ await page.goto('/#/home');await expect(page.getByRole('alert')).toContainText('Unable to load the homepage');
+ await expect(page.locator('.home-intro')).toHaveCount(0);
+ await page.getByRole('button',{name:'Try again',exact:true}).click();
+ await expect(page.locator('.home-intro')).toBeVisible();expect(attempts).toBe(2);
+});
