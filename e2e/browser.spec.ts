@@ -1088,3 +1088,43 @@ test('admin can review and correct an unclassified legacy event through protecte
  await expect(page.getByRole('heading',{name:'Changes saved'})).toBeVisible();
  expect(reads).toBe(2);expect(saved.district).toBe('Udupi');expect(saved.taluk).toBe('Hebri');
 });
+
+
+test('mobile navigation releases its backdrop when switching to desktop', async ({page}) => {
+ await mockApi(page);await page.setViewportSize({width:390,height:844});await page.goto('/#/home');
+ await page.getByRole('button',{name:'Open navigation'}).click();
+ await expect(page.locator('.offcanvas-backdrop')).toBeVisible();
+ await page.setViewportSize({width:1280,height:900});
+ await expect(page.locator('.offcanvas-backdrop')).toHaveCount(0);
+ await page.locator('app-navbar .navbar-collapse').getByRole('link',{name:'Nature',exact:true}).click();
+ await expect(page).toHaveURL(/#\/nature$/);
+});
+
+
+test('failed page download offers recovery and reaches the intended page', async ({page}) => {
+ await mockApi(page);await page.goto('/#/home');
+ await expect(page.locator('app-navbar')).toBeVisible();
+ await page.route('**/chunk-*.js',route=>route.abort('failed'));
+ await page.locator('app-navbar .navbar-collapse').getByRole('link',{name:'Culture',exact:true}).click();
+ await expect(page.getByRole('alert')).toContainText('Unable to open this page');
+ await expect(page.locator('#loading-animation')).toBeHidden();
+ await page.unroute('**/chunk-*.js');
+ await page.getByRole('button',{name:'Reload page',exact:true}).click();
+ await expect(page).toHaveURL(/#\/culture$/);
+ await expect(page.getByRole('heading',{name:'Traditions worth discovering.',exact:true})).toBeVisible();
+});
+
+
+test('a stalled content request does not block navigation to another section', async ({page}) => {
+ await mockApi(page);
+ let release!:()=>void;const stalled=new Promise<void>(resolve=>release=resolve);
+ await page.route(api+'/v1/nature/getNature',async route=>{await stalled;try{await route.fulfill({json:[]});}catch{}});
+ try {
+  await page.goto('/#/nature');
+  await expect(page.locator('app-explore-collection [role="status"]')).toBeVisible();
+  await page.locator('app-navbar .navbar-collapse').getByRole('link',{name:'Culture',exact:true}).click();
+  await expect(page).toHaveURL(/#\/culture$/);
+  await expect(page.getByRole('heading',{name:'Traditions worth discovering.',exact:true})).toBeVisible();
+  await expect(page.locator('#loading-animation')).toBeHidden();
+ } finally { release(); }
+});

@@ -1,3 +1,4 @@
+import { RouteRecoveryComponent } from './components/route-recovery/route-recovery.component';
 import { MediaImageInterceptor } from './services/Interceptor/MediaImageInterceptor';
 import { VisitorMotionDirective } from './directives/visitor-motion.directive';
 import { StorySubmissionComponent } from './components/story-submission/story-submission.component';
@@ -50,6 +51,7 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
   ],
   imports: [
     BrowserModule,
+    RouteRecoveryComponent,
     StorySubmissionComponent,
     VisitorMotionDirective,
     AppRoutingModule,
