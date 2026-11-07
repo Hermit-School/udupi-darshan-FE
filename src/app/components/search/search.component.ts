@@ -6,11 +6,12 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { SearchEntry, SharedService } from "src/app/services/shared.service";
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [RouterLink],
   selector: "app-search",
   templateUrl: "./search.component.html",
   styleUrls: ["./search.component.scss"],

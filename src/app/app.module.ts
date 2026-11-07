@@ -47,11 +47,11 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
     ForgotpasswordComponent,
     LoadingComponent,
     DashboardrequesttableComponent,
-    ListFilterPipe,
-    SearchComponent
+    ListFilterPipe
   ],
   imports: [
     BrowserModule,
+    SearchComponent,
     HomepageViewComponent,
     RouteRecoveryComponent,
     StorySubmissionComponent,
