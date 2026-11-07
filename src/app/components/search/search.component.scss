@@ -24,8 +24,7 @@
   color: #222831;
 }
 .search-input input:focus-visible {
-  outline: 2px solid #9e3900;
-  outline-offset: 2px;
+  outline: none;
 }
 .search-dropdown {
   position: absolute;
@@ -92,8 +91,11 @@
   display: none !important;
 }
 .search-input:focus-within {
-  outline: 2px solid #9e3900;
-  outline-offset: 2px;
+  outline: none;
+}
+// Keep keyboard focus visible without adding a colored border.
+.search-input:has(input:focus-visible) {
+  background: #f7f5f3;
 }
 
 .search-dropdown {
