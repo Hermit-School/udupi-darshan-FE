@@ -812,7 +812,7 @@ test('visitor motion follows the pointer, tracks scrolling and stops for reduced
   const hero=page.getByRole('link',{name:'Explore nature in Udupi',exact:true});
   await hero.hover();await expect(hero).toHaveClass(/ud-spotlight-active/);
   expect(await hero.evaluate(el=>el.style.getPropertyValue('--ud-pointer-x'))).not.toBe('');
-  await page.getByRole('link',{name:'Explore local ads'}).scrollIntoViewIfNeeded();
+  await page.locator('.home-local').getByRole('link',{name:'Support local'}).scrollIntoViewIfNeeded();
   await expect.poll(()=>root.evaluate(el=>Number(el.style.getPropertyValue('--ud-scroll')))).toBeGreaterThan(.5);
   await page.emulateMedia({reducedMotion:'reduce'});
   await expect(root.locator('.ud-reading-progress')).toHaveCount(0);
