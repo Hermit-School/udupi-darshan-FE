@@ -1,0 +1,20 @@
+<main class="editor-shell">
+ <header class="editor-header"><div><a routerLink="/admindashboard">← Admin dashboard</a><p class="eyebrow">YOUR WEBSITE, YOUR STORY</p><h1>Design your homepage</h1><p>Choose what visitors see first. Arrange your cards, check the preview, then publish.</p></div><div class="save-actions"><span>{{dirty?'Unsaved changes':published?'Published homepage · saved draft':'Draft'}}</span><button type="button" (click)="save()" [disabled]="loading||busy||conflict">Save draft</button><button type="button" class="primary" (click)="save(true)" [disabled]="loading||busy||conflict">{{busy?'Saving…':'Publish homepage'}}</button></div></header>
+ @if(error){<div role="alert" class="message error">{{error}}@if(conflict||!layout){<button type="button" (click)="reload()">Reload saved draft</button>}</div>}
+ @if(notice){<p role="status" class="message">{{notice}}</p>}
+ @if(loading){<p role="status">Loading your homepage and card library…</p>}
+ @if(layout && !loading){
+  <div class="workspace"><aside class="library" aria-label="Card library"><h2>Card library <span>{{cards.length}}</span></h2><p>Drag a card into the preview, or choose where it should appear. Moving a card does not edit the original article.</p>
+   <label>Find a card<input type="search" [(ngModel)]="query" placeholder="Search by name or place"></label><label>Content type<select aria-label="Content type" [(ngModel)]="kind">@for(type of kinds;track type){<option [value]="type">{{type==='all'?'All content':type==='story'?'Stories':type}}</option>}</select></label>
+   <div class="library-list">@for(card of filtered;track key(card)){<article class="library-card" draggable="true" (dragstart)="drag($event,card)" [class.selected]="selected(card)">
+    <div class="library-image">@if(card.image){<img [src]="image(card.image)" [alt]="card.title" loading="lazy" width="180" height="120">}@else{<span>No photo</span>}</div><div class="library-copy"><small>{{card.kind}}@if(selected(card)){ · On homepage}</small><h3>{{card.title}}</h3></div>
+    <div class="card-actions">@if(card.kind==='ads'){<button type="button" (click)="add(card,'sponsors')" [disabled]="busy">Add to Sponsored</button>}@else{<button type="button" (click)="add(card,'hero')" [disabled]="busy">Set as spotlight</button><button type="button" (click)="add(card,'features')" [disabled]="busy">Add to featured</button>}</div>
+   </article>}@empty{<p>No cards match your search.</p>}</div>
+  </aside>
+  <section class="canvas" aria-label="Homepage layout editor"><div class="canvas-bar"><div><h2>Homepage preview</h2><p>Drag cards to rearrange. Use ↑ and ↓ on touchscreens or with a keyboard.</p></div><div role="group" aria-label="Preview size"><button type="button" [attr.aria-pressed]="!mobile" (click)="mobile=false">Desktop</button><button type="button" [attr.aria-pressed]="mobile" (click)="mobile=true">Mobile</button></div></div>
+   <fieldset [disabled]="busy"><legend>Page introduction</legend><label>Headline<input maxlength="120" [(ngModel)]="layout.title" (ngModelChange)="changed()"></label><label>Introduction<textarea rows="2" maxlength="400" [(ngModel)]="layout.intro" (ngModelChange)="changed()"></textarea></label><label>Featured section heading<input maxlength="100" [(ngModel)]="layout.sectionTitle" (ngModelChange)="changed()"></label></fieldset>
+   @if(missing){<p role="alert" class="message error">{{missing}} selected card(s) are no longer published.<button type="button" (click)="removeMissing()">Remove unavailable cards</button></p>}
+   <div class="preview-frame" [class.mobile]="mobile"><div class="mock-nav"><img src="assets/images/static/horizontal_logo.svg" alt="Udupi Darshan"><span>Homepage preview</span></div><app-homepage-view [view]="preview" [editing]="true" (action)="action($event)" (cardDrop)="drop($event)"></app-homepage-view></div>
+  </section></div>
+ }
+</main>
