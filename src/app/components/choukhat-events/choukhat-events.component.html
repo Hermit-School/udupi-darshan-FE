@@ -1,0 +1,23 @@
+<section class="ud-section choukhat-section" aria-labelledby="choukhat-title">
+ <header class="choukhat-heading"><div><p class="ud-eyebrow">Creative community · Manipal</p><h2 id="choukhat-title">Choukhat events</h2><p>Workshops and gatherings listed by Choukhat, refreshed every 24 hours.</p></div><a class="ud-link" [href]="source" target="_blank" rel="noopener noreferrer">View Choukhat’s listings ↗</a></header>
+ @if(feed?.updatedAt){<p class="updated">Last updated {{feed!.updatedAt | date:'medium'}}@if(feed!.stale){ · Showing the last saved listings while Choukhat’s updates are unavailable.}</p>}
+ @if(loading && !feed){<p role="status">Loading Choukhat events…</p>}
+ @if(failed || (feed && !feed.updatedAt)){<p role="status" class="feed-notice">Choukhat’s latest listings could not be checked. You can view their website directly.<button type="button" (click)="retry()" [disabled]="loading">Try again</button></p>}
+ @for(group of [{past:false,items:upcoming},{past:true,items:past}];track group.past){
+  @if(group.items.length){
+   @if(group.past){<h3 class="past-heading">Recent Choukhat events</h3>}
+   <div class="ud-grid">
+    @for(event of group.items;track event.id){<article class="ud-card" [class.past-event]="group.past">
+     @if(event.image){<div class="ud-card-image"><img [src]="event.image" [alt]="event.title+' poster'" loading="lazy" width="600" height="400"></div>}
+     <div class="ud-card-body"><p class="ud-eyebrow">{{event.date | date:'longDate'}}@if(group.past){ · Past event}</p><h3>{{event.title}}</h3>
+      @if(event.time){<p class="event-fact"><i class="bi bi-clock" aria-hidden="true"></i> {{event.time}}</p>}
+      @if(event.fee){<p class="event-fact">Entry fee: {{event.fee}}</p>}
+      <p class="event-venue">{{event.venue}}</p><p>{{event.description}}</p>
+      @if(!group.past && event.registrationUrl){<a class="ud-link" [href]="event.registrationUrl" target="_blank" rel="noopener noreferrer">Register with Choukhat ↗</a>}
+      <a class="source-credit" [href]="source" target="_blank" rel="noopener noreferrer">Source: Choukhat</a>
+     </div></article>}
+   </div>
+  }
+ }
+ @if(feed?.updatedAt && !upcoming.length && !loading){<p class="feed-notice">No upcoming Choukhat events are listed right now. Check back for new announcements.</p>}
+</section>

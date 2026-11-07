@@ -1,3 +1,4 @@
+import { ChoukhatEventsComponent } from '../../components/choukhat-events/choukhat-events.component';
 import { Component, DestroyRef, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute, RouterLink } from "@angular/router";
@@ -13,7 +14,7 @@ import {
 import { VisitorMotionDirective } from "../../directives/visitor-motion.directive";
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, VisitorMotionDirective],
+  imports: [CommonModule, RouterLink, VisitorMotionDirective, ChoukhatEventsComponent],
   selector: "app-events",
   templateUrl: "./events.component.html",
   styleUrls: ["./events.component.scss"],
@@ -24,6 +25,7 @@ export class EventsComponent {
   private destroy = inject(DestroyRef);
   items: CommunityEvent[] = [];
   selected: CommunityEvent | null = null;
+  showChoukhat=true;
   loading = true;
   error = false;
   name = eventName;
@@ -37,6 +39,7 @@ export class EventsComponent {
           this.loading = true;
           this.error = false;
           const id = params.get("id");
+          this.showChoukhat=!id;
           const request: Observable<CommunityEvent | CommunityEvent[]> = id
             ? this.service.get(Number(id))
             : this.service.list();

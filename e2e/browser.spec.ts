@@ -1261,3 +1261,36 @@ for(const width of [1280,390]){
   expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(width);
  });
 }
+
+
+test('Choukhat events stay separate, show source details and refresh after 24 hours',async({page})=>{
+ await mockApi(page);await page.clock.install({time:new Date('2026-11-07T06:00:00Z')});let reads=0;
+ await page.route(api+'/v1/events',r=>r.fulfill({json:[{id:8,details:{article:{name:'Local sports meet'},startsOn:'2099-11-15',endsOn:null}}]}));
+ await page.route(api+'/v1/events/choukhat',r=>{reads++;return r.fulfill({json:{sourceUrl:'https://www.choukhat.in/events-in-manipal',updatedAt:'2026-11-07T05:00:00Z',nextRefreshAt:'2026-11-08T05:00:00Z',stale:false,events:[
+  {id:'upcoming',title:reads===1?'Candle Painting Workshop':'Updated Candle Painting Workshop',date:'2099-11-08',time:'4:00-6:00 pm',fee:'499/-',description:'Create and paint your own candle.',image:'assets/images/a6.jpg',registrationUrl:'https://forms.gle/example',venue:'Choukhat, Manipal'},
+  {id:'past',title:'Past lantern workshop',date:'2001-11-06',time:'6:00-8:00pm',fee:'399/-',description:'A completed workshop.',image:null,registrationUrl:'https://forms.gle/past',venue:'Choukhat, Manipal'}]}});});
+ await page.goto('/#/events');
+ const section=page.getByRole('region',{name:'Choukhat events',exact:true});
+ await expect(section.getByRole('heading',{name:'Candle Painting Workshop',exact:true})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Local sports meet',exact:true})).toBeVisible();
+ await expect(section.getByText('Entry fee: 499/-', {exact:true})).toBeVisible();
+ await expect(section.getByRole('link',{name:'Register with Choukhat'})).toHaveAttribute('href','https://forms.gle/example');
+ await expect(section.getByRole('link',{name:'Register with Choukhat'})).toHaveCount(1);
+ await expect(section.getByRole('heading',{name:'Recent Choukhat events'})).toBeVisible();
+ expect(reads).toBe(1);await page.clock.fastForward(24*60*60*1000);
+ await expect(section.getByRole('heading',{name:'Updated Candle Painting Workshop',exact:true})).toBeVisible();expect(reads).toBe(2);
+ await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);
+});
+
+test('an unavailable Choukhat source does not break the other event listings',async({page})=>{
+ await mockApi(page);
+ await page.route(api+'/v1/events',r=>r.fulfill({json:[{id:8,details:{article:{name:'Local sports meet'},startsOn:'2099-11-15',endsOn:null}}]}));
+ let reads=0;
+ await page.route(api+'/v1/events/choukhat',r=>{reads++;return reads===1?r.fulfill({status:503,json:{}}):r.fulfill({json:{sourceUrl:'https://www.choukhat.in/events-in-manipal',updatedAt:'2026-11-01T05:00:00Z',nextRefreshAt:'2026-11-02T05:00:00Z',stale:true,events:[{id:'cached',title:'Saved Choukhat listing',date:'2099-11-08',time:'4pm',fee:'Free',description:'Last successful listing',image:null,registrationUrl:null,venue:'Choukhat, Manipal'}]}});});
+ await page.goto('/#/events');const section=page.getByRole('region',{name:'Choukhat events',exact:true});
+ await expect(page.getByRole('heading',{name:'Local sports meet',exact:true})).toBeVisible();
+ await expect(section.getByRole('status')).toContainText('latest listings could not be checked');
+ await section.getByRole('button',{name:'Try again',exact:true}).click();
+ await expect(section.getByRole('heading',{name:'Saved Choukhat listing'})).toBeVisible();
+ await expect(section.getByText(/Showing the last saved listings/)).toBeVisible();
+});
