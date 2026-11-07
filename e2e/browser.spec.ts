@@ -1245,3 +1245,19 @@ test('homepage read failures allow retry without flashing the default layout',as
  await page.getByRole('button',{name:'Try again',exact:true}).click();
  await expect(page.locator('.home-intro')).toBeVisible();expect(attempts).toBe(2);
 });
+
+
+for(const width of [1280,390]){
+ test('custom homepage includes working destination search at '+width+'px',async({page})=>{
+  await mockApi(page);await page.setViewportSize({width,height:900});let searches=0;
+  await page.route(api+'/v1/landing-layout',r=>r.fulfill({json:{configured:true,title:'Our Udupi',intro:'Handpicked places',sectionTitle:'Favourites',hero:null,features:[],sponsors:[]}}));
+  await page.route(api+'/v1/destination-search',r=>{searches++;return r.fulfill({json:[{id:42,name:'Malpe Beach',category:'Nature',summary:'A sandy beach in Udupi'}]});});
+  await page.goto('/#/home');
+  const search=page.getByRole('searchbox',{name:'Search destinations',exact:true});
+  await expect(search).toBeVisible();expect(searches).toBe(0);
+  await expect(page.locator('app-navbar app-search')).toHaveCount(0);
+  await search.fill('Malpe');await expect(page.getByRole('link',{name:/Malpe Beach/})).toBeVisible();
+  await search.press('Enter');await expect(page).toHaveURL(/#\/details\/nature\/42$/);expect(searches).toBe(1);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(width);
+ });
+}

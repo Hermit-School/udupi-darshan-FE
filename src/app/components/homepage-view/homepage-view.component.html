@@ -1,5 +1,6 @@
 <div class="homepage" [class.editing]="editing">
  <header class="home-heading"><p class="eyebrow">Coastal Karnataka · Udupi Darshan</p><h1>{{view.title}}</h1><p>{{view.intro}}</p>
+  <div class="home-search">@if(editing){<input class="search-preview" type="search" placeholder="Search destinations" aria-label="Search destinations (preview)" disabled>}@else{<app-search [inline]="true"></app-search>}</div>
   <nav aria-label="Explore by interest">@for(kind of ['nature','culture','food','story','events'];track kind){<a [routerLink]="editing?null:['/'+kind]">{{kind==='story'?'Stories':kind}}</a>}</nav>
  </header>
  @for(section of sections;track section.zone){
