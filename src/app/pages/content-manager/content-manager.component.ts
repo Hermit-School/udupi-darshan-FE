@@ -12,7 +12,7 @@ const sections = {
   food: { title: "Food", path: "/food/getFood" },
   story: { title: "Stories", path: "/blogs/getBlogs" },
   ads: { title: "Ads", path: "/ads" },
-  events: { title: "Events", path: "/events" },
+  events: { title: "Events", path: "/admin/events" },
 };
 type Kind = keyof typeof sections;
 interface RecordSummary {

@@ -24,12 +24,12 @@ const TYPES = {
   nature: {
     title: "Nature",
     url: "/v1/nature/postNature",
-    labels: ["Best Of Nature", "Activity List", "Wildlife List", "Beach List"],
+    labels: ["Parks", "Hills", "Lakes", "Rivers", "Beaches", "Waterfalls", "Wildlife", "Activities", "Islands"],
   },
   culture: {
     title: "Culture",
     url: "/v1/culture/postCulture",
-    labels: ["Rathotsavas", "Mathas", "Festivals", "Beach list"],
+    labels: ["Temples", "Mosques", "Churches", "Religious Architecture", "Native Art", "Historical Places", "Traditions", "Festivals"],
   },
   food: {
     title: "Food",
@@ -112,11 +112,13 @@ export class ContentEditorComponent {
     { key: "discover", label: "Things to discover" },
     { key: "impInfo", label: "Important information" },
   ] as const;
+  readonly eventTaluks = ["Udupi", "Kapu", "Brahmavara", "Kundapura", "Byndoor", "Karkala", "Hebri"];
   readonly form = this.fb.group({
+    taluk: ["", this.event ? [required, (control: AbstractControl) => this.eventTaluks.includes(control.value) ? null : { taluk: true }] : []],
     trending: [false],
     title: ["", [required, Validators.maxLength(255)]],
     label: ["", this.destination ? [required] : []],
-    location: ["", Validators.maxLength(255)],
+    location: ["", this.event ? [required, Validators.maxLength(255)] : [Validators.maxLength(255)]],
     description: [
       "",
       this.story
@@ -164,7 +166,7 @@ export class ContentEditorComponent {
     const path = this.story
       ? "/v1/blogs/admin/content/" + this.editId
       : this.event
-        ? "/v1/events/" + this.editId
+        ? "/v1/admin/events/" + this.editId
         : this.ad
           ? "/v1/ads/" + this.editId
           : "/v1/" + this.kind + "/" + this.editId;
@@ -194,6 +196,7 @@ export class ContentEditorComponent {
             byBike: value.howToVisit?.byBike || "",
             byCar: value.howToVisit?.byCar || "",
             byPublic: value.howToVisit?.byPublic || "",
+            taluk: response.details?.taluk || "",
             startsOn: response.details?.startsOn || "",
             endsOn: response.details?.endsOn || "",
           });
@@ -331,6 +334,8 @@ export class ContentEditorComponent {
     const payload = this.event
       ? {
           article,
+          district: "Udupi",
+          taluk: v.taluk,
           startsOn: v.startsOn || null,
           endsOn: v.endsOn || null,
           featured: v.trending,
