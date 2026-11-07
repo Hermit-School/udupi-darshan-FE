@@ -1,3 +1,4 @@
+import { HomepageViewComponent } from './components/homepage-view/homepage-view.component';
 import { RouteRecoveryComponent } from './components/route-recovery/route-recovery.component';
 import { MediaImageInterceptor } from './services/Interceptor/MediaImageInterceptor';
 import { VisitorMotionDirective } from './directives/visitor-motion.directive';
@@ -51,6 +52,7 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
   ],
   imports: [
     BrowserModule,
+    HomepageViewComponent,
     RouteRecoveryComponent,
     StorySubmissionComponent,
     VisitorMotionDirective,

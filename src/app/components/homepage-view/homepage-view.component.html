@@ -1,0 +1,29 @@
+<div class="homepage" [class.editing]="editing">
+ <header class="home-heading"><p class="eyebrow">Coastal Karnataka · Udupi Darshan</p><h1>{{view.title}}</h1><p>{{view.intro}}</p>
+  <nav aria-label="Explore by interest">@for(kind of ['nature','culture','food','story','events'];track kind){<a [routerLink]="editing?null:['/'+kind]">{{kind==='story'?'Stories':kind}}</a>}</nav>
+ </header>
+ @for(section of sections;track section.zone){
+  @if(editing || cards(section.zone).length){
+   <section class="home-section" [class.spotlight]="section.zone==='hero'" [class.sponsors]="section.zone==='sponsors'" [attr.aria-label]="section.title" (dragover)="allow($event)" (drop)="drop($event,section.zone,cards(section.zone).length)">
+    @if(section.zone!=='hero' || editing){<div class="section-heading"><h2>{{section.zone==='features'?view.sectionTitle:section.title}}</h2>@if(editing){<span>{{cards(section.zone).length}} / {{section.limit}}</span>}</div>}
+    <div class="home-grid">
+     @for(card of cards(section.zone);track card.kind+':'+card.id;let i=$index){
+      <article class="home-card" [attr.draggable]="editing" (dragstart)="drag($event,card,section.zone,i)" (dragover)="allow($event)" (drop)="drop($event,section.zone,i)">
+       <a [routerLink]="editing?null:card.href" [attr.tabindex]="editing?-1:null">
+        <div class="photo">@if(card.image){<img [src]="image(card.image)" [alt]="card.title" [attr.loading]="section.zone==='hero'?'eager':'lazy'" width="800" height="500">}@else{<span class="photo-placeholder">Udupi Darshan</span>}</div>
+        <div class="copy"><p class="eyebrow">{{card.kind==='ads'?'Advertisement':card.kind==='story'?'Stories':card.kind}}</p><h3>{{card.title}}</h3><p>{{card.summary}}</p>@if(!editing){<span class="read">Explore ↗</span>}</div>
+       </a>
+       @if(editing){<div class="card-tools"><span class="drag-hint" aria-hidden="true">⠿ Drag to arrange</span>
+        @if(section.zone!=='hero'){<button type="button" [disabled]="i===0" [attr.aria-label]="'Move '+card.title+' up'" (click)="edit('up',section.zone,i)">↑</button><button type="button" [disabled]="i===cards(section.zone).length-1" [attr.aria-label]="'Move '+card.title+' down'" (click)="edit('down',section.zone,i)">↓</button>}
+        <button type="button" [attr.aria-label]="'Remove '+card.title" (click)="edit('remove',section.zone,i)">Remove</button>
+        @if(card.images.length>1){<label>Cover photo for {{card.title}}<select [attr.aria-label]="'Cover photo for '+card.title" [ngModel]="card.images.indexOf(card.image||'')" (ngModelChange)="edit('photo',section.zone,i,+$event)">@for(photo of card.images;track $index){<option [value]="$index">Photo {{$index+1}}</option>}</select></label>}
+       </div>}
+      </article>
+     }
+    </div>
+    @if(editing){<div class="drop-slot" (dragover)="allow($event)" (drop)="drop($event,section.zone,cards(section.zone).length)">{{section.zone==='sponsors'?'Drop advertisements here':section.zone==='hero'?'Drop one card here for the main spotlight':'Drop cards here to add them to this section'}}<small>You can also use the buttons in the card library.</small></div>}
+   </section>
+  }
+ }
+ <footer class="browse"><span>More to discover</span><a [routerLink]="editing?null:'/nature'">Nature</a><a [routerLink]="editing?null:'/culture'">Culture</a><a [routerLink]="editing?null:'/food'">Food</a><a [routerLink]="editing?null:'/story'">Stories</a><a [routerLink]="editing?null:'/events'">Events</a></footer>
+</div>

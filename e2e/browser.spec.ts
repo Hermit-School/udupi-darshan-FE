@@ -1128,3 +1128,96 @@ test('a stalled content request does not block navigation to another section', a
   await expect(page.locator('#loading-animation')).toBeHidden();
  } finally { release(); }
 });
+
+
+async function mockHomepage(page:Page){
+ await mockApi(page);
+ const cards=['nature','culture','food','story','events','ads'].map((kind,i)=>({kind,id:i+1,title:['Beach spotlight','Heritage temple','Local lunch','Coastal memory','Community festival','Local sponsor'][i],summary:'A carefully chosen local experience.',images:['assets/images/a6.jpg','assets/images/c2.jpg'],image:'assets/images/a6.jpg',href:kind==='ads'?'/advertisements':kind==='story'?'/story/'+(i+1):kind==='events'?'/events/'+(i+1):'/details/'+kind+'/'+(i+1)}));
+ let state={version:0,published:false,draft:{title:'Owner’s Udupi',intro:'Handpicked places and stories.',sectionTitle:'Our favourites',hero:null as any,features:[] as any[],sponsors:[] as any[]}};
+ let published:any=null;let saves=0;
+ const view=()=>published?{configured:true,...published,hero:resolve(published.hero),features:published.features.map(resolve),sponsors:published.sponsors.map(resolve)}:{configured:false};
+ const resolve=(r:any)=>{if(!r)return null;const c=cards.find(c=>c.kind===r.kind&&c.id===r.id)!;return {...c,image:c.images[r.imageIndex]};};
+ await page.route(api+'/v1/admin/landing-layout**',route=>{
+  expect(route.request().headers()['authorization']).toBe('Bearer '+token);
+  const path=new URL(route.request().url()).pathname;
+  if(path.endsWith('/cards'))return route.fulfill({json:cards});
+  if(route.request().method()==='GET')return route.fulfill({json:state});
+  const body=route.request().postDataJSON();
+  if(body.version!==state.version)return route.fulfill({status:409,json:{detail:'Conflict'}});
+  if(path.endsWith('/draft')){state={...state,draft:body.layout,version:state.version+1};saves++;}
+  if(path.endsWith('/publish')){published=structuredClone(state.draft);state={...state,published:true,version:state.version+1};}
+  return route.fulfill({json:state});
+ });
+ await page.route(api+'/v1/landing-layout',route=>{expect(route.request().headers()['authorization']).toBeUndefined();return route.fulfill({json:view()});});
+ return {get state(){return state;},get saves(){return saves;}};
+}
+
+test('admin arranges cards and photos in a saved homepage draft, then publishes the same layout',async({page},testInfo)=>{
+ const home=await mockHomepage(page);
+ await page.goto('/#/admin');await signIn(page);
+ await page.getByRole('link',{name:'Customize homepage',exact:false}).click();
+ await expect(page.getByRole('heading',{name:'Design your homepage'})).toBeVisible();
+ const library=page.getByRole('complementary',{name:'Card library'});
+ await expect(library.locator('.library-card')).toHaveCount(6);
+ const pick=(name:string)=>library.locator('.library-card').filter({has:page.getByRole('heading',{name,exact:true})});
+ await pick('Beach spotlight').getByRole('button',{name:'Set as spotlight'}).click();
+ await pick('Local lunch').getByRole('button',{name:'Add to featured'}).click();
+ await pick('Heritage temple').getByRole('button',{name:'Add to featured'}).click();
+ await pick('Coastal memory').getByRole('button',{name:'Add to featured'}).click();
+ const preview=page.locator('app-homepage-view');
+ await preview.getByRole('button',{name:'Move Heritage temple up'}).click();
+ await preview.getByLabel('Cover photo for Beach spotlight').selectOption('1');
+ await pick('Local sponsor').dragTo(preview.locator('.sponsors .drop-slot'));
+ await expect(preview.locator('.home-section').filter({has:page.getByRole('heading',{name:'Our favourites',exact:true})}).locator('h3')).toHaveText(['Heritage temple','Local lunch','Coastal memory']);
+ await page.getByLabel('Headline',{exact:true}).fill('The owner’s guide to Udupi');
+ await page.evaluate(()=>window.scrollTo(0,0));
+ await page.screenshot({path:testInfo.outputPath('homepage-editor-preview.png'),fullPage:true});
+ await page.getByRole('button',{name:'Save draft',exact:true}).click();
+ await expect(page.getByRole('status')).toContainText('Draft saved');expect(home.state.published).toBe(false);
+ await page.reload();
+ await expect(page.getByRole('heading',{name:'Admin sign in',exact:true})).toBeVisible();
+ await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();
+ await expect(page.getByLabel('Headline',{exact:true})).toHaveValue('The owner’s guide to Udupi');
+ await expect(preview.getByLabel('Cover photo for Beach spotlight')).toHaveValue('1');
+ const featureCards=preview.locator('.home-section').filter({has:page.getByRole('heading',{name:'Our favourites',exact:true})}).locator('.home-card');
+ await featureCards.nth(2).dragTo(featureCards.nth(0));
+ await expect(featureCards.locator('h3')).toHaveText(['Coastal memory','Heritage temple','Local lunch']);
+ await page.getByRole('button',{name:'Publish homepage',exact:true}).click();
+ await expect(page.getByRole('status')).toContainText('Homepage published');expect(home.state.published).toBe(true);
+ await page.goto('/#/home');
+ await expect(page.getByRole('heading',{name:'The owner’s guide to Udupi',exact:true})).toBeVisible();
+ await expect(page.locator('.home-section').filter({has:page.getByRole('heading',{name:'Our favourites',exact:true})}).locator('h3')).toHaveText(['Coastal memory','Heritage temple','Local lunch']);
+ await expect(page.getByRole('img',{name:'Beach spotlight'})).toHaveAttribute('src','assets/images/c2.jpg');
+ await expect(page.getByRole('button',{name:/Remove Beach/})).toHaveCount(0);
+ await page.getByRole('link').filter({has:page.getByRole('heading',{name:'Heritage temple',exact:true})}).click();
+ await expect(page).toHaveURL(/#\/details\/culture\/2$/);
+});
+
+test('homepage editor rejects misplaced ads, filters the library and works on a phone',async({page})=>{
+ await mockHomepage(page);await page.setViewportSize({width:390,height:844});
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();
+ const library=page.getByRole('complementary',{name:'Card library'});
+ await page.getByLabel('Content type',{exact:true}).selectOption('food');await expect(library.locator('.library-card')).toHaveCount(1);
+ await page.getByLabel('Content type',{exact:true}).selectOption('all');
+ const ad=library.locator('.library-card').filter({has:page.getByRole('heading',{name:'Local sponsor',exact:true})});
+ // Drag/drop placement is validated independently of the library buttons.
+ const transfer=await page.evaluateHandle(()=>{const data=new DataTransfer();data.setData('text/plain',JSON.stringify({kind:'ads',id:6}));return data;});
+ await page.locator('app-homepage-view .home-section').filter({has:page.getByRole('heading',{name:'Our favourites',exact:true})}).locator('.drop-slot').dispatchEvent('drop',{dataTransfer:transfer});
+ await expect(page.getByRole('alert')).toContainText('Place advertisements in the Sponsored section');
+ await expect(page.locator('app-homepage-view .home-card')).toHaveCount(0);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);
+});
+
+
+test('homepage conflict preserves local choices and prevents overwriting another editor',async({page})=>{
+ await mockHomepage(page);await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();
+ await page.getByLabel('Headline',{exact:true}).fill('Keep my local draft');
+ await page.route(api+'/v1/admin/landing-layout/draft',route=>route.fulfill({status:409,json:{detail:'Conflict'}}));
+ await page.getByRole('button',{name:'Save draft',exact:true}).click();
+ await expect(page.getByRole('alert')).toContainText('Another editor changed this homepage');
+ await expect(page.getByLabel('Headline',{exact:true})).toHaveValue('Keep my local draft');
+ await expect(page.getByRole('button',{name:'Publish homepage',exact:true})).toBeDisabled();
+ page.once('dialog',dialog=>dialog.dismiss());
+ await page.getByRole('link',{name:'← Admin dashboard',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'Design your homepage'})).toBeVisible();
+});

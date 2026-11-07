@@ -9,6 +9,7 @@ import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.c
 
 
 const routes: Routes = [
+  {path:'admindashboard/homepage',loadComponent:()=>import('./pages/homepage-editor/homepage-editor.component').then(m=>m.HomepageEditorComponent),canActivate:[adminGuard],canDeactivate:[(component: import('./pages/homepage-editor/homepage-editor.component').HomepageEditorComponent)=>!component.dirty && !component.busy || confirm('Leave the homepage editor? Unsaved changes will be lost.')],data:{hidePublicChrome:true,title:'Design homepage | Udupi Darshan'}},
   { path: ROUTES.HOME.path, component: LandingPageComponent, data: { title: ROUTES.HOME.title, metaDescription: ROUTES.HOME.metaDescription } },
   { path: ROUTES.NATURE.path, loadComponent: () => import('./pages/nature/nature.component').then(m => m.NatureComponent), data: { title: ROUTES.NATURE.title, metaDescription: ROUTES.NATURE.metaDescription } },
   { path: ROUTES.CULTURE.path, loadComponent: () => import('./pages/culture/culture.component').then(m => m.CultureComponent), data: { title: ROUTES.CULTURE.title, metaDescription: ROUTES.CULTURE.metaDescription } },
