@@ -1,4 +1,11 @@
-@if(layout?.configured){<main class="ud-page" udMotion><div class="ud-wrap"><app-homepage-view [view]="layout!"></app-homepage-view></div></main>}@else{
+@if(loading){
+ <main class="ud-page home-loading" aria-busy="true"><div class="ud-wrap">
+  <p role="status">Loading your Udupi homepage…</p>
+  <div class="home-skeleton" aria-hidden="true"><div class="skeleton-title"></div><div class="skeleton-copy"></div><div class="skeleton-hero"></div></div>
+ </div></main>
+}@else if(failed){
+ <main class="ud-page"><div class="ud-wrap ud-status" role="alert"><h1>Unable to load the homepage.</h1><p>Please check your connection and try again.</p><button type="button" class="ud-button" (click)="load()">Try again</button></div></main>
+}@else if(layout?.configured){<main class="ud-page" udMotion><div class="ud-wrap"><app-homepage-view [view]="layout!"></app-homepage-view></div></main>}@else{
 <main class="ud-page" udMotion>
   <div class="ud-wrap">
     <section class="home-intro ud-enter" aria-labelledby="home-title">

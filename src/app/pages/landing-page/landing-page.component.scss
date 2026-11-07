@@ -118,3 +118,10 @@ h1 span {
   font-size: 1rem;
   font-weight: 600;
 }
+
+.home-loading { min-height:70vh; padding-top:3rem; }
+.home-loading [role=status] { color:var(--ud-muted); }
+.home-skeleton > div { background:#eee7df; border-radius:.8rem; margin:1rem 0; }
+.skeleton-title { width:70%; height:4.5rem; }
+.skeleton-copy { width:55%; height:1.5rem; }
+.skeleton-hero { height:clamp(220px,35vw,440px); }
