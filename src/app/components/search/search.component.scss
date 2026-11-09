@@ -91,9 +91,10 @@
   display: none !important;
 }
 .search-input:focus-within {
-  outline: none;
+  outline: 2px solid #343a40;
+  outline-offset: 3px;
 }
-// Keep keyboard focus visible without adding a colored border.
+// Highlight the entire search control for mouse and keyboard users.
 .search-input:has(input:focus-visible) {
   background: #f7f5f3;
 }

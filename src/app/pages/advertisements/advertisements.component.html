@@ -2,7 +2,7 @@
   <div class="ud-wrap">
     <header class="ud-intro ud-enter">
       <p class="ud-eyebrow">Around the neighbourhood</p>
-      <h1>Local connections.</h1>
+      <h1>{{ detailId && publishedAds.length ? publishedAds[0].title : 'Local connections.' }}</h1>
       <p class="ud-lead">
         Discover businesses and advertisements from the community.
       </p>
@@ -21,22 +21,24 @@
           @for (ad of publishedAds; track ad.id) {
             <article class="col">
               <div class="card h-100">
-                <img
+                <a [href]="external(ad) ? external(ad) : '#/advertisements/' + ad.id" [attr.target]="external(ad) ? '_blank' : null" rel="noopener noreferrer" [attr.aria-label]="'View ' + ad.title"><img
                   [src]="ad.imageUrl"
                   alt=""
-                  class="card-img-top"
+                  class="card-img-top" [style.object-fit]="detailId ? 'contain' : 'cover'"
                   loading="lazy"
                   referrerpolicy="no-referrer"
-                />
+                /></a>
                 <div class="card-body">
                   <h3 class="h5">{{ ad.title }}</h3>
-                  @if (ad.link) {
+                  @if (external(ad)) {
                     <a
-                      [href]="ad.link"
+                      [href]="external(ad)"
                       target="_blank"
                       rel="noopener noreferrer"
                       >Visit {{ ad.title }}</a
                     >
+                  } @else if (!detailId) {
+                    <a [routerLink]="internal(ad)">View {{ ad.title }}</a>
                   }
                 </div>
               </div>
@@ -45,105 +47,10 @@
         </div>
       </section>
     }
-    <div class="container-fluid mt-4">
-      <div
-        class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-4 g-4"
-      >
-        <div class="col" *ngFor="let image of images.slice(0, 4)">
-          <div class="card h-100">
-            <img
-              loading="lazy"
-              decoding="async"
-              [src]="image.src"
-              class="card-img-top"
-              [alt]="image.alt"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container-fluid mt-4">
-      <div class="row large">
-        <div class="col-lg-7">
-          <div class="card h-100">
-            <img
-              [src]="largeImage?.src"
-              class="card-img-top"
-              [alt]="largeImage?.alt"
-            />
-          </div>
-        </div>
-        <div class="col-lg-5 small-img">
-          <div class="row row-cols-3 g-3">
-            <div class="col" *ngFor="let image of smallImages">
-              <div class="card h-100">
-                <img
-                  loading="lazy"
-                  decoding="async"
-                  [src]="image.src"
-                  class="card-img-top"
-                  [alt]="image.alt"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container-fluid mt-4">
-      <div
-        class="row row-cols-2 row-cols-sm-2 row-cols-xs-2 row-cols-md-2 row-cols-lg-6 g-4 small-cards"
-      >
-        <div class="col" *ngFor="let image of images.slice(11)">
-          <div class="card h-100">
-            <img
-              loading="lazy"
-              decoding="async"
-              [src]="image.src"
-              class="card-img-top"
-              [alt]="image.alt"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row mt-4">
-        <div class="col">
-          <div class="card card-full-width">
-            <img
-              loading="lazy"
-              decoding="async"
-              src="assets/images/ads9.jpg"
-              class="card-img-top"
-              alt="Full Width Card Image"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row row-cols-md-2 mt-4 gap">
-        <div class="col-md-6">
-          <div class="card card-small-height">
-            <img
-              loading="lazy"
-              decoding="async"
-              src="assets/images/ads10.jpg"
-              class="card-img-top"
-              alt="Image 1"
-            />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card card-small-height">
-            <img
-              loading="lazy"
-              decoding="async"
-              src="assets/images/ads11.jpg"
-              class="card-img-top"
-              alt="Image 2"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    @if (loading) { <p role="status">Loading advertisements…</p> }
+    @if (error) { <p role="alert">{{ error }}</p> }
+    @if (!loading && !error && !publishedAds.length) { <p>New local businesses will appear here soon.</p> }
+    @if (detailId) { <a routerLink="/advertisements">← Back to Support local</a> }
     <!-- Modal -->
     <div
       class="modal fade"

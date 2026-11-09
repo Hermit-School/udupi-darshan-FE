@@ -188,7 +188,7 @@ export class ContentEditorComponent {
             description: value.descr || value.content || "",
             author: value.submittedBy || "",
             email: response.email || "",
-            link: value.link || "",
+            link: this.ad ? (value.externalLink ?? value.link ?? "") : value.link || "",
             timings: value.timings || "",
             keyPoints: (value.keyPoints || []).join("\n"),
             discover: (value.discover || []).join("\n"),
@@ -353,7 +353,7 @@ export class ContentEditorComponent {
               dontMissThese,
               ...(this.editId ? { status: this.storyStatus } : {}),
             }
-          : { title, imageUrl: images[0] || "", link };
+          : { title, imageUrl: images[0] || "", externalLink: link };
     const data = new FormData();
     data.append("data", JSON.stringify(payload));
     data.append("requestKey", this.requestKey);

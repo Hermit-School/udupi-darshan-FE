@@ -1,11 +1,10 @@
 import { SearchComponent } from '../search/search.component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { HomeCard, HomeView, Zone } from '../../services/homepage.service';
 import { imagePreview } from '../../util/media-image';
 export interface HomeAction {type:'remove'|'up'|'down'|'photo';zone:Zone;index:number;photo?:number;}
-@Component({selector:'app-homepage-view',standalone:true,imports:[RouterLink,FormsModule,SearchComponent],templateUrl:'./homepage-view.component.html',styleUrls:['./homepage-view.component.scss']})
+@Component({selector:'app-homepage-view',standalone:true,imports:[FormsModule,SearchComponent],templateUrl:'./homepage-view.component.html',styleUrls:['./homepage-view.component.scss']})
 export class HomepageViewComponent {
  @Input({required:true}) view!:HomeView;
  @Input() editing=false;
