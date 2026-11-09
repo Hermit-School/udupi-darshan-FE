@@ -1,3 +1,4 @@
+import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 import { HomepageViewComponent } from './components/homepage-view/homepage-view.component';
 import { RouteRecoveryComponent } from './components/route-recovery/route-recovery.component';
 import { MediaImageInterceptor } from './services/Interceptor/MediaImageInterceptor';
@@ -65,7 +66,7 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
     HttpClientModule,
     NgbPaginationModule
   ],
-  providers: [provideZoneChangeDetection(), { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  providers: [{provide:DATE_PIPE_DEFAULT_OPTIONS,useValue:{timezone:'+0530'}}, provideZoneChangeDetection(), { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: MediaImageInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }

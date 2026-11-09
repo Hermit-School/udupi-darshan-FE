@@ -1,3 +1,4 @@
+import { istDay, istToday } from '../util/ist-date';
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { timeout } from "rxjs";
@@ -16,15 +17,11 @@ export interface CommunityEvent {
 }
 export const eventName = (event: CommunityEvent) =>
   event.details.article?.name?.trim() || "Community event";
-export const eventEnded = (event: CommunityEvent) =>
-  !!(event.details.endsOn || event.details.startsOn) &&
-  (event.details.endsOn || event.details.startsOn)! <
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Kolkata",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).format(new Date());
+export const eventEnded = (event: CommunityEvent) => {
+  const value=event.details.endsOn || event.details.startsOn;
+  const day=value ? istDay(value) : null;
+  return !!day && day<istToday();
+};
 export function eventImage(url: string): string {
   return url.startsWith("/v1/events/photos/") ? API_BASE_URL + url : url;
 }
