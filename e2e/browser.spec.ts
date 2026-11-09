@@ -1318,7 +1318,7 @@ test('support local displays only managed ads and routes to external or internal
  await expect(page.locator('main img')).toHaveAttribute('src','assets/images/c2.jpg');
  await page.getByRole('link',{name:'Back to Support local',exact:false}).click();
  await expect(page.locator('main img')).toHaveCount(2);
- await expect(page.locator('footer a[href="https://www.choukhat.in"]')).toHaveText('choukhat');
+ await expect(page.locator('footer a[href="https://www.choukhat.in"]')).toHaveText('Choukhat');
 });
 
 test('support local does not restore bundled ads when the database is empty or unavailable', async ({page}) => {
