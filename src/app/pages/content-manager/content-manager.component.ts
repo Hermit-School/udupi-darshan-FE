@@ -1,4 +1,3 @@
-import { EventBadgeComponent } from '../../components/event-badge/event-badge.component';
 import { DeleteRecordComponent } from '../../components/delete-record/delete-record.component';
 import { Component, DestroyRef, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
@@ -25,7 +24,7 @@ interface RecordSummary {
 }
 @Component({
   standalone: true,
-  imports: [EventBadgeComponent, RouterLink, FormsModule, DeleteRecordComponent],
+  imports: [RouterLink, FormsModule, DeleteRecordComponent],
   selector: "app-content-manager",
   templateUrl: "./content-manager.component.html",
   styleUrls: ["./content-manager.component.scss"],

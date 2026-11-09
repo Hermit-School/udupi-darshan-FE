@@ -32,7 +32,7 @@
       @for (item of visible; track item.id) {
         <article class="record">
           <div>
-            @if(kind==='events'){<app-event-badge [date]="item.details?.startsOn" [endDate]="item.details?.endsOn"></app-event-badge>}<h2>{{ name(item) }}</h2>
+            <h2>{{ name(item) }}</h2>
             <p>{{ item.location || item.details?.article?.location }}</p>
           </div>
           @if(canDelete){<app-delete-record [kind]="kind" [id]="item.id" [name]="name(item)" (deleted)="removed(item.id)"></app-delete-record>}

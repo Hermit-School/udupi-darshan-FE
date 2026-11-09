@@ -1,4 +1,3 @@
-import { EventBadgeComponent } from '../../components/event-badge/event-badge.component';
 import { Component, DestroyRef, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -7,7 +6,7 @@ import { forkJoin, finalize, switchMap } from 'rxjs';
 import { HomepageService, HomeCard, HomeLayout, HomeRef, HomeView, Zone } from '../../services/homepage.service';
 import { HomepageViewComponent, HomeAction } from '../../components/homepage-view/homepage-view.component';
 import { imagePreview } from '../../util/media-image';
-@Component({standalone:true,selector:'app-homepage-editor',imports:[EventBadgeComponent,FormsModule,RouterLink,HomepageViewComponent],templateUrl:'./homepage-editor.component.html',styleUrls:['./homepage-editor.component.scss']})
+@Component({standalone:true,selector:'app-homepage-editor',imports:[FormsModule,RouterLink,HomepageViewComponent],templateUrl:'./homepage-editor.component.html',styleUrls:['./homepage-editor.component.scss']})
 export class HomepageEditorComponent {
  private api=inject(HomepageService);private destroy=inject(DestroyRef);
  cards:HomeCard[]=[];layout:HomeLayout|null=null;version=0;published=false;loading=true;busy=false;dirty=false;

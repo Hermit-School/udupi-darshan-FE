@@ -54,6 +54,7 @@ export class DashboardrequesttableComponent implements OnInit {
 
     // Format the date using Intl.DateTimeFormat (optional)
     let formattedDate = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Kolkata',
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',

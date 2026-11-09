@@ -14,17 +14,16 @@
           {{ ended(event) ? "Completed event" : "Udupi district" }}
         </p>
         @if(trending(event)){<span class="trending-badge"><i class="bi bi-fire" aria-hidden="true"></i> Trending</span>}
-        <app-event-badge [date]="event.details.startsOn" [endDate]="event.details.endsOn"></app-event-badge>
         <h1>{{ name(event) }}</h1>
         <p class="ud-lead">{{ event.details.article?.location }}</p>
         @if (event.details.startsOn) {
           <p>
-            {{ event.details.startsOn | date: "longDate" }}
+            {{ event.details.startsOn | istDate }}
             @if (
               event.details.endsOn &&
               event.details.endsOn !== event.details.startsOn
             ) {
-              – {{ event.details.endsOn | date: "longDate" }}
+              – {{ event.details.endsOn | istDate }}
             }
           </p>
         }
@@ -120,11 +119,10 @@
                   </div>
                 }
                 <div class="ud-card-body">
-                  <app-event-badge [date]="event.details.startsOn" [endDate]="event.details.endsOn"></app-event-badge>
                   <p class="ud-eyebrow">
                     {{
                       event.details.startsOn
-                        ? (event.details.startsOn | date: "mediumDate")
+                        ? (event.details.startsOn | istDate)
                         : "Date to be announced"
                     }}
                   </p>

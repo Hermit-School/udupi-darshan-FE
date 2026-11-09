@@ -1277,9 +1277,7 @@ test('Choukhat events stay separate, show source details and refresh after 24 ho
  await page.goto('/#/events');
  const section=page.getByRole('region',{name:'Choukhat events',exact:true});
  await expect(section.getByRole('heading',{name:'Candle Painting Workshop',exact:true})).toBeVisible();
- await expect(section.locator('app-event-badge').first()).toHaveText('Event8 Nov');
- await expect(section.locator('app-event-badge').first().locator('.text-bg-primary')).toHaveText('Event');
- await expect(section.locator('app-event-badge').last().locator('.text-bg-secondary')).toHaveText('Event');
+ await expect(section.locator('app-event-badge')).toHaveCount(0);
  await expect(page.locator('img[src*="choukhat-wordmark"]')).toHaveCount(0);
  const heading=section.getByRole('heading',{name:'Choukhat events',exact:true});
  await expect(heading.locator('img')).toHaveCount(1);
@@ -1383,7 +1381,7 @@ test('homepage sponsor cards preserve external websites and internal detail page
  await expect(page.getByRole('link').filter({has:page.getByRole('heading',{name:'Internal sponsor',exact:true})})).toHaveAttribute('href','#/advertisements/2');
 });
 
-test('event date badges agree on homepage and detail pages across the India midnight boundary',async({page})=>{
+test('homepage badges and detail dates agree in IST, with badges only on the landing page',async({page})=>{
  await mockApi(page);await page.clock.install({time:new Date('2026-11-08T20:00:00Z')});
  const card={kind:'events',id:77,title:'Community festival',summary:'A local gathering.',images:[],image:null,href:'/events/77',eventDate:'2026-11-09',eventEndDate:'2026-11-10'};
  await page.route(api+'/v1/landing-layout',r=>r.fulfill({json:{configured:true,title:'Discover Udupi',intro:'Local discoveries',sectionTitle:'Featured',hero:card,features:[],sponsors:[]}}));
@@ -1395,7 +1393,26 @@ test('event date badges agree on homepage and detail pages across the India midn
  await expect(badge.locator('.text-bg-warning')).toHaveText('Event');
  await page.getByRole('link').filter({has:page.getByRole('heading',{name:'Community festival',exact:true})}).click();
  await expect(page).toHaveURL(/#\/events\/77$/);
- await expect(badge.locator('time')).toHaveText('9 Nov');
- await expect(badge.locator('time')).toHaveAttribute('datetime','2026-11-09');
- await expect(badge.locator('.text-bg-warning')).toHaveText('Event');
+ await expect(page.locator('app-event-badge')).toHaveCount(0);
+ await expect(page.locator('main')).toContainText('9 Nov 2026');
 });
+
+for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
+ test('landing page fills missing dates from the event API and uses IST in '+timezoneId,async({browser})=>{
+  const context=await browser.newContext({timezoneId,baseURL:'http://127.0.0.1:4173'});const page=await context.newPage();
+  try{
+   await mockApi(page);await page.clock.install({time:new Date('2026-11-08T20:00:00Z')});
+   const card={kind:'events',id:77,title:'Community festival',summary:'Local gathering',images:[],image:null,href:'/events/77'};
+   const details={article:{name:'Community festival',location:'Udupi'},startsOn:'2026-11-08T20:00:00Z',endsOn:'2026-11-10'};
+   await page.route(api+'/v1/landing-layout',r=>r.fulfill({json:{configured:true,title:'Discover Udupi',intro:'Local discoveries',sectionTitle:'Featured',hero:card,features:[],sponsors:[]}}));
+   await page.route(api+'/v1/events',r=>r.fulfill({json:[{id:77,details}]}));
+   await page.route(api+'/v1/events/77',r=>r.fulfill({json:{id:77,details}}));
+   await page.goto('/#/home');await expect(page.locator('app-event-badge time')).toHaveText('9 Nov');
+   await expect(page.locator('app-event-badge .text-bg-warning')).toHaveText('Event');
+   await page.getByRole('link').filter({has:page.getByRole('heading',{name:'Community festival',exact:true})}).click();
+   await expect(page.locator('main')).toContainText('9 Nov 2026');await expect(page.locator('app-event-badge')).toHaveCount(0);
+   await page.getByRole('link',{name:'All events',exact:false}).click();await expect(page.getByRole('heading',{name:'Community festival',exact:true})).toBeVisible();
+   await expect(page.locator('main')).toContainText('9 Nov 2026');await expect(page.locator('app-event-badge')).toHaveCount(0);
+  }finally{await context.close();}
+ });
+}
