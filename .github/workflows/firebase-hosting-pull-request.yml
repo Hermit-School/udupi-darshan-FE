@@ -4,11 +4,12 @@
 name: Create Build on PR
 'on':
   pull_request:
-  push:
-    branches: [release-v1]
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: frontend-pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   build_and_preview:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
@@ -29,12 +30,3 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Test the production build in Chromium
         run: npm run test:e2e
-      - name: Retain frontend verification
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-verification
-          retention-days: 2
-          path: |
-            test-results/
-            dist/udupi-darshan-fe/
