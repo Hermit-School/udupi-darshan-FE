@@ -21,7 +21,7 @@
           @for (ad of publishedAds; track ad.id) {
             <article class="col">
               <div class="card h-100">
-                <a [href]="external(ad) ? external(ad) : '#/advertisements/' + ad.id" [attr.target]="external(ad) ? '_blank' : null" rel="noopener noreferrer" [attr.aria-label]="'View ' + ad.title"><img
+                <a [href]="external(ad) ? external(ad) : '#' + internal(ad)" [attr.target]="external(ad) ? '_blank' : null" rel="noopener noreferrer" [attr.aria-label]="'View ' + ad.title"><img
                   [src]="ad.imageUrl"
                   alt=""
                   class="card-img-top" [style.object-fit]="detailId ? 'contain' : 'cover'"
@@ -30,6 +30,7 @@
                 /></a>
                 <div class="card-body">
                   <h3 class="h5">{{ ad.title }}</h3>
+                  @if (detailId && ad.description) { <p class="ad-description" style="white-space: pre-wrap">{{ ad.description }}</p> }
                   @if (external(ad)) {
                     <a
                       [href]="external(ad)"

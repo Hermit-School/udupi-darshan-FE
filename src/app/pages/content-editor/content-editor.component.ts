@@ -81,6 +81,10 @@ export class ContentEditorComponent {
   get imageBusy() {
     return this.pickers?.some((picker) => picker.validating) || false;
   }
+  get adPagePath() {
+    const slug=this.form.controls.internalLink.value.trim().toLowerCase().replace(/\s+/g,'-');
+    return slug ? '/#/advertisements/' + slug : '';
+  }
   get remainingUploads() {
     return 5 - this.allPhotos().filter((photo) => photo.file).length;
   }
@@ -119,6 +123,7 @@ export class ContentEditorComponent {
     title: ["", [required, Validators.maxLength(255)]],
     label: ["", this.destination ? [required] : []],
     location: ["", this.event ? [required, Validators.maxLength(255)] : [Validators.maxLength(255)]],
+    internalLink: ["", [Validators.maxLength(100), Validators.pattern(/^[a-zA-Z][a-zA-Z0-9]*(?:[ -][a-zA-Z0-9]+)*$/)]],
     description: [
       "",
       this.story
@@ -185,7 +190,8 @@ export class ContentEditorComponent {
             title: value.name || value.title || "",
             label: value.label || "",
             location: value.location || "",
-            description: value.descr || value.content || "",
+            description: value.description || value.descr || value.content || "",
+            internalLink: value.internalLink || (this.ad ? "ad-" + this.editId : ""),
             author: value.submittedBy || "",
             email: response.email || "",
             link: this.ad ? (value.externalLink ?? value.link ?? "") : value.link || "",
@@ -279,6 +285,10 @@ export class ContentEditorComponent {
         "Check the required fields and character limits before saving.";
       return;
     }
+    if (this.ad && !this.form.controls.link.value.trim() && !this.form.controls.internalLink.value.trim()) {
+      this.error = "Enter an internal link for this advertisement, or provide an external website.";
+      return;
+    }
     if (this.ad && !this.photos.length) {
       this.error = "Choose an image for this advertisement.";
       return;
@@ -353,7 +363,7 @@ export class ContentEditorComponent {
               dontMissThese,
               ...(this.editId ? { status: this.storyStatus } : {}),
             }
-          : { title, imageUrl: images[0] || "", externalLink: link };
+          : { title, imageUrl: images[0] || "", externalLink: link, internalLink: v.internalLink.trim(), description: v.description.trim() };
     const data = new FormData();
     data.append("data", JSON.stringify(payload));
     data.append("requestKey", this.requestKey);

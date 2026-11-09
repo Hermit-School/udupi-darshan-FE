@@ -15,7 +15,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 export class AdvertisementsComponent implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly destroyRef = inject(DestroyRef);
-  publishedAds: { id: number; title: string; imageUrl: string; link?: string; externalLink?: string; internalLink?: string }[] = [];
+  publishedAds: { id: number; title: string; imageUrl: string; link?: string; externalLink?: string; internalLink?: string; description?: string }[] = [];
   private readonly route = inject(ActivatedRoute);
   readonly detailId = this.route.snapshot.paramMap.get('id');
   loading = true;
@@ -26,10 +26,10 @@ export class AdvertisementsComponent implements OnInit {
     const value = ad.externalLink ?? ad.link;
     try { return value && new URL(value).protocol === 'https:' ? value : null; } catch { return null; }
   }
-  internal(ad: {id: number}): string { return '/advertisements/' + ad.id; }
+  internal(ad: {id: number; internalLink?: string}): string { return '/advertisements/' + (ad.internalLink || ad.id); }
 
   ngOnInit(): void {
-    this.http.get<any>(API_BASE_URL + '/v1/ads' + (this.detailId ? '/' + encodeURIComponent(this.detailId) : ''))
+    this.http.get<any>(API_BASE_URL + '/v1/ads' + (this.detailId ? (/^\d+$/.test(this.detailId) ? '/' : '/page/') + encodeURIComponent(this.detailId) : ''))
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => { this.publishedAds = this.detailId ? [result] : result; this.loading = false; },
