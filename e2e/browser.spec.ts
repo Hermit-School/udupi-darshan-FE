@@ -1342,3 +1342,15 @@ test('advertisement editor separates optional external website from generated in
  await expect(page.getByLabel('Internal link',{exact:true})).toHaveValue('/advertisements/45');
  await expect(page.getByLabel('Internal link',{exact:true})).toHaveAttribute('readonly','');
 });
+
+test('homepage sponsor cards preserve external websites and internal detail pages',async({page})=>{
+ await mockApi(page);
+ const card=(id:number,title:string,href:string)=>({kind:'ads',id,title,summary:'Local business',images:['assets/images/a6.jpg'],image:'assets/images/a6.jpg',href});
+ await page.route(api+'/v1/landing-layout',r=>r.fulfill({json:{configured:true,title:'Discover Udupi',intro:'Local discoveries',sectionTitle:'Featured',hero:null,features:[],sponsors:[card(1,'External sponsor','HTTPS://example.org/shop'),card(2,'Internal sponsor','/advertisements/2')]}}));
+ await page.goto('/#/home');
+ const external=page.getByRole('link').filter({has:page.getByRole('heading',{name:'External sponsor',exact:true})});
+ await expect(external).toHaveAttribute('href','HTTPS://example.org/shop');
+ await expect(external).toHaveAttribute('target','_blank');
+ await expect(external).toHaveAttribute('rel','noopener noreferrer');
+ await expect(page.getByRole('link').filter({has:page.getByRole('heading',{name:'Internal sponsor',exact:true})})).toHaveAttribute('href','#/advertisements/2');
+});
