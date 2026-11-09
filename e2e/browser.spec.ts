@@ -1255,6 +1255,10 @@ for(const width of [1280,390]){
   await page.goto('/#/home');
   const search=page.getByRole('searchbox',{name:'Search destinations',exact:true});
   await expect(search).toBeVisible();expect(searches).toBe(0);
+ await search.focus();await expect(search).toBeFocused();
+ await expect(page.locator('.home-search .search-input')).toHaveCSS('outline-style','solid');
+ await expect(page.locator('.home-search .search-input')).toHaveCSS('outline-width','2px');
+ await expect(page.locator('app-homepage-view nav[aria-label="Explore by interest"], app-homepage-view footer.browse')).toHaveCount(0);
   await expect(page.locator('app-navbar app-search')).toHaveCount(0);
   await search.fill('Malpe');await expect(page.getByRole('link',{name:/Malpe Beach/})).toBeVisible();
   await search.press('Enter');await expect(page).toHaveURL(/#\/details\/nature\/42$/);expect(searches).toBe(1);
@@ -1293,4 +1297,60 @@ test('an unavailable Choukhat source does not break the other event listings',as
  await section.getByRole('button',{name:'Try again',exact:true}).click();
  await expect(section.getByRole('heading',{name:'Saved Choukhat listing'})).toBeVisible();
  await expect(section.getByText(/Showing the last saved listings/)).toBeVisible();
+});
+
+
+test('support local displays only managed ads and routes to external or internal destinations', async ({page}) => {
+ await mockApi(page);
+ const ads=[{id:31,title:'Local cafe',imageUrl:'assets/images/a6.jpg',externalLink:'https://example.org/cafe',internalLink:'/advertisements/31'}, {id:32,title:'Community shop',imageUrl:'assets/images/c2.jpg',externalLink:'',internalLink:'/advertisements/32'}];
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:ads}));
+ await page.route(api+'/v1/ads/32',r=>r.fulfill({json:ads[1]}));
+ await page.goto('/#/advertisements');
+ await expect(page.getByRole('link',{name:'Visit Local cafe',exact:true})).toHaveAttribute('href','https://example.org/cafe');
+ await expect(page.locator('main img')).toHaveCount(2);
+ await page.getByRole('link',{name:'View Community shop',exact:true}).last().click();
+ await expect(page).toHaveURL(/advertisements\/32$/);
+ await expect(page.getByRole('heading',{level:1})).toHaveText('Community shop');
+ await expect(page.locator('main img')).toHaveCount(1);
+ await expect(page.locator('main img')).toHaveAttribute('src','assets/images/c2.jpg');
+ await page.getByRole('link',{name:'Back to Support local',exact:false}).click();
+ await expect(page.locator('main img')).toHaveCount(2);
+ await expect(page.locator('footer a[href="https://www.choukhat.in"]')).toHaveText('choukhat');
+});
+
+test('support local does not restore bundled ads when the database is empty or unavailable', async ({page}) => {
+ await mockApi(page);
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:[]}));
+ await page.goto('/#/advertisements');
+ await expect(page.getByText('New local businesses will appear here soon.')).toBeVisible();
+ await expect(page.locator('main img')).toHaveCount(0);
+ await page.route(api+'/v1/ads',r=>r.fulfill({status:503,json:{}}));
+ await page.reload();
+ await expect(page.getByRole('alert')).toContainText('could not be loaded');
+ await expect(page.locator('main img')).toHaveCount(0);
+});
+
+
+test('advertisement editor separates optional external website from generated internal page',async({page})=>{
+ await mockApi(page);
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:[{id:45,title:'Editable sponsor'}]}));
+ await page.route(api+'/v1/ads/45',r=>r.fulfill({json:{id:45,title:'Editable sponsor',imageUrl:'https://example.org/ad.jpg',externalLink:'https://example.org/shop',internalLink:'/advertisements/45'}}));
+ await page.goto('/#/admin');await signIn(page);
+ await page.getByRole('link',{name:/Edit Ads/}).click();
+ await page.getByRole('link',{name:'Edit Editable sponsor',exact:true}).click();
+ await expect(page.getByLabel('External link (optional)',{exact:true})).toHaveValue('https://example.org/shop');
+ await expect(page.getByLabel('Internal link',{exact:true})).toHaveValue('/advertisements/45');
+ await expect(page.getByLabel('Internal link',{exact:true})).toHaveAttribute('readonly','');
+});
+
+test('homepage sponsor cards preserve external websites and internal detail pages',async({page})=>{
+ await mockApi(page);
+ const card=(id:number,title:string,href:string)=>({kind:'ads',id,title,summary:'Local business',images:['assets/images/a6.jpg'],image:'assets/images/a6.jpg',href});
+ await page.route(api+'/v1/landing-layout',r=>r.fulfill({json:{configured:true,title:'Discover Udupi',intro:'Local discoveries',sectionTitle:'Featured',hero:null,features:[],sponsors:[card(1,'External sponsor','HTTPS://example.org/shop'),card(2,'Internal sponsor','/advertisements/2')]}}));
+ await page.goto('/#/home');
+ const external=page.getByRole('link').filter({has:page.getByRole('heading',{name:'External sponsor',exact:true})});
+ await expect(external).toHaveAttribute('href','HTTPS://example.org/shop');
+ await expect(external).toHaveAttribute('target','_blank');
+ await expect(external).toHaveAttribute('rel','noopener noreferrer');
+ await expect(page.getByRole('link').filter({has:page.getByRole('heading',{name:'Internal sponsor',exact:true})})).toHaveAttribute('href','#/advertisements/2');
 });

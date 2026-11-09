@@ -1,7 +1,6 @@
 <div class="homepage" [class.editing]="editing">
  <header class="home-heading"><p class="eyebrow">Coastal Karnataka · Udupi Darshan</p><h1>{{view.title}}</h1><p>{{view.intro}}</p>
   <div class="home-search">@if(editing){<input class="search-preview" type="search" placeholder="Search destinations" aria-label="Search destinations (preview)" disabled>}@else{<app-search [inline]="true"></app-search>}</div>
-  <nav aria-label="Explore by interest">@for(kind of ['nature','culture','food','story','events'];track kind){<a [routerLink]="editing?null:['/'+kind]">{{kind==='story'?'Stories':kind}}</a>}</nav>
  </header>
  @for(section of sections;track section.zone){
   @if(editing || cards(section.zone).length){
@@ -10,7 +9,7 @@
     <div class="home-grid">
      @for(card of cards(section.zone);track card.kind+':'+card.id;let i=$index){
       <article class="home-card" [attr.draggable]="editing" (dragstart)="drag($event,card,section.zone,i)" (dragover)="allow($event)" (drop)="drop($event,section.zone,i)">
-       <a [routerLink]="editing?null:card.href" [attr.tabindex]="editing?-1:null">
+       <a [attr.href]="editing ? null : card.href.toLowerCase().startsWith('https://') ? card.href : '#' + card.href" [attr.target]="!editing && card.href.toLowerCase().startsWith('https://') ? '_blank' : null" rel="noopener noreferrer" [attr.tabindex]="editing?-1:null">
         <div class="photo">@if(card.image){<img [src]="image(card.image)" [alt]="card.title" [attr.loading]="section.zone==='hero'?'eager':'lazy'" width="800" height="500">}@else{<span class="photo-placeholder">Udupi Darshan</span>}</div>
         <div class="copy"><p class="eyebrow">{{card.kind==='ads'?'Advertisement':card.kind==='story'?'Stories':card.kind}}</p><h3>{{card.title}}</h3><p>{{card.summary}}</p>@if(!editing){<span class="read">Explore ↗</span>}</div>
        </a>
@@ -26,5 +25,4 @@
    </section>
   }
  }
- <footer class="browse"><span>More to discover</span><a [routerLink]="editing?null:'/nature'">Nature</a><a [routerLink]="editing?null:'/culture'">Culture</a><a [routerLink]="editing?null:'/food'">Food</a><a [routerLink]="editing?null:'/story'">Stories</a><a [routerLink]="editing?null:'/events'">Events</a></footer>
 </div>
