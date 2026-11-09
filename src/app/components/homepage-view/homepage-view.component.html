@@ -11,7 +11,7 @@
       <article class="home-card" [attr.draggable]="editing" (dragstart)="drag($event,card,section.zone,i)" (dragover)="allow($event)" (drop)="drop($event,section.zone,i)">
        <a [attr.href]="editing ? null : card.href.toLowerCase().startsWith('https://') ? card.href : '#' + card.href" [attr.target]="!editing && card.href.toLowerCase().startsWith('https://') ? '_blank' : null" rel="noopener noreferrer" [attr.tabindex]="editing?-1:null">
         <div class="photo">@if(card.image){<img [src]="image(card.image)" [alt]="card.title" [attr.loading]="section.zone==='hero'?'eager':'lazy'" width="800" height="500">}@else{<span class="photo-placeholder">Udupi Darshan</span>}</div>
-        <div class="copy"><p class="eyebrow">{{card.kind==='ads'?'Advertisement':card.kind==='story'?'Stories':card.kind}}</p><h3>{{card.title}}</h3><p>{{card.summary}}</p>@if(!editing){<span class="read">Explore ↗</span>}</div>
+        <div class="copy">@if(card.kind==='events'){<app-event-badge [date]="card.eventDate" [endDate]="card.eventEndDate"></app-event-badge>}<p class="eyebrow">{{card.kind==='ads'?'Advertisement':card.kind==='story'?'Stories':card.kind}}</p><h3>{{card.title}}</h3><p>{{card.summary}}</p>@if(!editing){<span class="read">Explore ↗</span>}</div>
        </a>
        @if(editing){<div class="card-tools"><span class="drag-hint" aria-hidden="true">⠿ Drag to arrange</span>
         @if(section.zone!=='hero'){<button type="button" [disabled]="i===0" [attr.aria-label]="'Move '+card.title+' up'" (click)="edit('up',section.zone,i)">↑</button><button type="button" [disabled]="i===cards(section.zone).length-1" [attr.aria-label]="'Move '+card.title+' down'" (click)="edit('down',section.zone,i)">↓</button>}
