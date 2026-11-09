@@ -1,3 +1,4 @@
+import { EventBadgeComponent } from '../../components/event-badge/event-badge.component';
 import { ChoukhatEventsComponent } from '../../components/choukhat-events/choukhat-events.component';
 import { Component, DestroyRef, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -14,7 +15,7 @@ import {
 import { VisitorMotionDirective } from "../../directives/visitor-motion.directive";
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, VisitorMotionDirective, ChoukhatEventsComponent],
+  imports: [EventBadgeComponent, CommonModule, RouterLink, VisitorMotionDirective, ChoukhatEventsComponent],
   selector: "app-events",
   templateUrl: "./events.component.html",
   styleUrls: ["./events.component.scss"],

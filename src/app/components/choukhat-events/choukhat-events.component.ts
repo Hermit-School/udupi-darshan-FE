@@ -1,3 +1,4 @@
+import { EventBadgeComponent } from '../event-badge/event-badge.component';
 import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpContext } from '@angular/common/http';
@@ -7,7 +8,7 @@ import { API_BASE_URL } from 'src/constants/routes';
 import { BACKGROUND_REQUEST } from '../../services/background-request';
 export interface ChoukhatEvent {id:string;title:string;date:string;time:string;fee:string;description:string;image:string|null;registrationUrl:string|null;venue:string;}
 export interface ChoukhatFeed {sourceUrl:string;updatedAt:string|null;nextRefreshAt:string|null;stale:boolean;events:ChoukhatEvent[];}
-@Component({standalone:true,selector:'app-choukhat-events',imports:[CommonModule],templateUrl:'./choukhat-events.component.html',styleUrls:['./choukhat-events.component.scss']})
+@Component({standalone:true,selector:'app-choukhat-events',imports:[EventBadgeComponent,CommonModule],templateUrl:'./choukhat-events.component.html',styleUrls:['./choukhat-events.component.scss']})
 export class ChoukhatEventsComponent {
  readonly source='https://www.choukhat.in/events-in-manipal';
  private http=inject(HttpClient);private destroy=inject(DestroyRef);private refresh=new Subject<void>();
