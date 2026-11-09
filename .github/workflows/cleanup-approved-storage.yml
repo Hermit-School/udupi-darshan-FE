@@ -1,0 +1,47 @@
+name: Cleanup approved obsolete artifacts
+on:
+  push:
+    branches: [release-v1]
+    paths: [.github/workflows/cleanup-approved-storage.yml]
+permissions:
+  contents: read
+  actions: write
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Delete only the explicitly approved superseded downloads
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+        run: |
+          python3 - <<'PYTHON'
+          import json, os, urllib.request, urllib.error
+          expected = 'Hermit-School/udupi-darshan-FE'
+          assert os.environ['GH_REPOSITORY'] == expected
+          approved = [{"id":13562122015,"name":"frontend-verification","size":10796489,"run":42342484143},{"id":13562626271,"name":"frontend-verification","size":10796446,"run":42342490236},{"id":13562270497,"name":"frontend-verification","size":10796459,"run":42341741286},{"id":13561702225,"name":"frontend-verification","size":10796440,"run":42341736149},{"id":13561164312,"name":"frontend-verification","size":10796493,"run":42341030575},{"id":13561328971,"name":"frontend-verification","size":10796448,"run":42341024691},{"id":13561710359,"name":"frontend-verification","size":10791283,"run":42340376476},{"id":13561137967,"name":"frontend-verification","size":10791306,"run":42340371341},{"id":13560023913,"name":"frontend-verification","size":10790137,"run":42338205451},{"id":13560028778,"name":"frontend-verification","size":10790727,"run":42338193766},{"id":13559526553,"name":"frontend-verification","size":10027650,"run":42335683021},{"id":13558629039,"name":"frontend-verification","size":10027663,"run":42335678414},{"id":13474769373,"name":"frontend-verification","size":10026282,"run":42158453612}]
+          total = 0; deleted = 0; missing = 0
+          def call(path, method='GET'):
+              request = urllib.request.Request('https://api.github.com/repos/'+expected+path, method=method,
+                  headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'], 'Accept':'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'})
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  body=response.read()
+                  return json.loads(body) if body else None
+          for item in approved:
+              try: actual=call('/actions/artifacts/'+str(item['id']))
+              except urllib.error.HTTPError as error:
+                  if error.code == 404:
+                      missing += 1; print('Already absent:',item['id']); continue
+                  raise
+              assert actual['id']==item['id'] and actual['name']==item['name'] and actual['size_in_bytes']==item['size']
+              assert actual['workflow_run']['id']==item['run']
+              assert actual['name'] in ['backend-verification','frontend-verification','deployment-smoke']
+              call('/actions/artifacts/'+str(item['id']),'DELETE')
+              total += item['size']; deleted += 1
+              print('Deleted approved artifact:',item['id'],item['name'],item['size'],'bytes')
+          result={'deleted':deleted,'already_absent':missing,'deleted_bytes':total,'approved':len(approved)}
+          print(json.dumps(result))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as report:
+              report.write('Approved obsolete artifact cleanup: '+json.dumps(result)+'\n')
+          PYTHON
