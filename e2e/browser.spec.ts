@@ -1277,6 +1277,15 @@ test('Choukhat events stay separate, show source details and refresh after 24 ho
  await page.goto('/#/events');
  const section=page.getByRole('region',{name:'Choukhat events',exact:true});
  await expect(section.getByRole('heading',{name:'Candle Painting Workshop',exact:true})).toBeVisible();
+ const heading=section.getByRole('heading',{name:'Choukhat events',exact:true});
+ await expect(heading.locator('img')).toHaveCount(2);
+ for(const logo of await heading.locator('img').all()){
+  await expect(logo).toBeVisible();await expect(logo).toHaveCSS('mix-blend-mode','multiply');
+  expect(await logo.evaluate((image:HTMLImageElement)=>image.complete && image.naturalWidth>0)).toBe(true);
+  expect(await logo.evaluate(image=>image.getBoundingClientRect().height)).toBeCloseTo(await heading.evaluate(h=>parseFloat(getComputedStyle(h).fontSize)),1);
+ }
+ const headings=page.locator('main h2');await expect(headings).toHaveText(['Upcoming & announced','Choukhat events','Past events']);
+
  await expect(page.getByRole('heading',{name:'Local sports meet',exact:true})).toBeVisible();
  await expect(section.getByText('Entry fee: 499/-', {exact:true})).toBeVisible();
  await expect(section.getByRole('link',{name:'Register with Choukhat'})).toHaveAttribute('href','https://forms.gle/example');
@@ -1284,7 +1293,8 @@ test('Choukhat events stay separate, show source details and refresh after 24 ho
  await expect(section.getByRole('heading',{name:'Recent Choukhat events'})).toBeVisible();
  expect(reads).toBe(1);await page.clock.fastForward(24*60*60*1000);
  await expect(section.getByRole('heading',{name:'Updated Candle Painting Workshop',exact:true})).toBeVisible();expect(reads).toBe(2);
- await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);
+ for(const width of [320,390]){await page.setViewportSize({width,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(width);}
+ await page.screenshot({path:'test-results/choukhat-events-mobile.png',fullPage:true});
 });
 
 test('an unavailable Choukhat source does not break the other event listings',async({page})=>{

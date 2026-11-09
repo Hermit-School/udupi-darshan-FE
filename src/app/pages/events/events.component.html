@@ -101,6 +101,7 @@
         ];
         track group.title
       ) {
+        @if (group.title === "Past events" && showChoukhat) { <app-choukhat-events></app-choukhat-events> }
         <section class="ud-section">
           <h2>{{ group.title }}</h2>
           <div class="ud-grid">
@@ -138,6 +139,6 @@
         </section>
       }
     }
-    @if(showChoukhat){<app-choukhat-events></app-choukhat-events>}
+    @if(showChoukhat && error){<app-choukhat-events></app-choukhat-events>}
   </div>
 </main>
