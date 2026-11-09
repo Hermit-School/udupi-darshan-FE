@@ -121,9 +121,8 @@
                 />
               </label>
             }
-            @if (!ad) {
               <label class="wide"
-                >{{ story ? "Story text *" : "Description" }}
+                >{{ story ? "Story text *" : ad ? "Advertisement details" : "Description" }}
                 <textarea
                   formControlName="description"
                   rows="5"
@@ -138,7 +137,6 @@
                   >
                 }
               </label>
-            }
             <label class="wide"
               >{{
                 destination
@@ -155,8 +153,9 @@
             </label>
             @if (ad) {
               <label class="wide">Internal link
-                <input readonly aria-label="Internal link" [value]="editId ? '/advertisements/' + editId : 'Generated when the advertisement is saved'" aria-describedby="ad-internal-help" />
-                <small id="ad-internal-help">Opens automatically when no external website is provided.</small>
+                <input formControlName="internalLink" aria-label="Internal link" maxlength="100" placeholder="e.g. coastal-cafe" aria-describedby="ad-internal-help" />
+                <small id="ad-internal-help">Start with a letter; use a unique name with letters, numbers, spaces or hyphens. Opens when no external website is provided.</small>
+                @if (adPagePath) { <small>Page address: {{ adPagePath }}</small> }
               </label>
             }
             <div class="wide">
