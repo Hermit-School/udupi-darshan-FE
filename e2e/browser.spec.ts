@@ -1424,7 +1424,7 @@ for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
     return route.fulfill({ body: 'If this email belongs to an eligible administrator, a code has been sent.' });
   });
   await page.route(api + '/v1/admin/email/sign-in', route => {
-    expect(route.request().postDataJSON()).toEqual({ email: 'tejasvisacharya@gmail.com', code: '123456' });
+    expect(route.request().postDataJSON()).toEqual({ email: 'tejasvisacharya@gmail.com', code: 'a1b2c3d4e5f60718293a4b5c6d7e8f90' });
     return route.fulfill({ body: token });
   });
   await page.goto('/#/admin');
@@ -1433,7 +1433,7 @@ for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
   await page.getByLabel('Admin email address').fill('tejasvisacharya@gmail.com');
   await page.getByRole('button', { name: 'Send email code' }).click();
   await expect(page.getByRole('button', { name: 'Resend code' })).toBeDisabled();
-  await page.getByLabel('Six-digit email code').fill('123456');
+  await page.getByLabel('Email code').fill('a1b2c3d4e5f60718293a4b5c6d7e8f90');
   await page.getByRole('button', { name: 'Verify and sign in' }).click();
   await expect(page).toHaveURL(/#\/admindashboard$/);
  });
@@ -1454,7 +1454,7 @@ for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
   await page.getByRole('button', { name: 'Forgot password', exact: true }).click();
   await page.getByLabel('Admin email address').fill('tejasvisacharya@gmail.com');
   await page.getByRole('button', { name: 'Send email code' }).click();
-  await page.getByLabel('Six-digit email code').fill('123456');
+  await page.getByLabel('Email code').fill('a1b2c3d4e5f60718293a4b5c6d7e8f90');
   await page.getByLabel('New password', { exact: true }).fill('new-fixture-password');
   await page.getByLabel('Confirm new password').fill('mismatching-password');
   await page.getByRole('button', { name: 'Reset password', exact: true }).click();
@@ -1464,7 +1464,7 @@ for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
   await page.screenshot({ path: test.info().outputPath('email-help-mobile.png'), fullPage: true });
   await page.getByRole('button', { name: 'Reset password', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('incorrect, expired');
-  await page.getByLabel('Six-digit email code').fill('654321');
+  await page.getByLabel('Email code').fill('1234567890abcdef1234567890abcdef');
   await page.getByRole('button', { name: 'Reset password', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('Password updated');
   await page.getByRole('link', { name: 'Back to password sign in' }).click();
@@ -1519,4 +1519,24 @@ for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
   await expect(page.getByText('Very weak', { exact: true })).toBeVisible();
   await page.getByLabel('New password', { exact: true }).fill('cobalt meadow lantern otter');
   await expect(page.getByText('Strong', { exact: true })).toBeVisible();
+ });
+
+ test('expired email code accompanies resend to recover an exhausted delivery budget', async ({ page }) => {
+  await mockApi(page);
+  let deliveries = 0;
+  await page.route(api + '/v1/admin/email/request', route => {
+    const body = route.request().postDataJSON();
+    expect(body.purpose).toBe('email-sign-in');
+    expect(body.previousCode).toBe(deliveries++ === 0 ? undefined : 'a1b2c3d4e5f60718293a4b5c6d7e8f90');
+    return route.fulfill({ body: 'Check your inbox.' });
+  });
+  await page.clock.install();
+  await page.goto('/#/forgotpassword');
+  await page.getByLabel('Admin email address').fill('tejasvisacharya@gmail.com');
+  await page.getByRole('button', { name: 'Send email code' }).click();
+  await expect(page.getByRole('button', { name: 'Resend code' })).toBeDisabled();
+  await page.getByLabel('Email code').fill('a1b2c3d4e5f60718293a4b5c6d7e8f90');
+  await page.clock.fastForward(301000);
+  await page.getByRole('button', { name: 'Resend code' }).click();
+  await expect.poll(() => deliveries).toBe(2);
  });

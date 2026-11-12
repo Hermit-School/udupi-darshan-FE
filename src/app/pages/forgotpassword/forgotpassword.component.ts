@@ -18,7 +18,7 @@ export class ForgotpasswordComponent implements OnDestroy {
   constructor(fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.form = fb.nonNullable.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(254)]],
-      code: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]],
+      code: ['', [Validators.required, Validators.pattern(/^(?:[0-9]{6}|[0-9a-fA-F]{32})$/)]],
       password: ['', [Validators.required, Validators.minLength(12), (control: AbstractControl) =>
         new TextEncoder().encode(control.value || '').length > 72 ? { tooLong: true } : null]],
       confirmPassword: ['', Validators.required]
@@ -35,7 +35,7 @@ export class ForgotpasswordComponent implements OnDestroy {
     this.form.controls.email.markAsTouched();
     if (this.form.controls.email.invalid) return;
     this.busy = true; this.error = ''; this.message = '';
-    this.requests.add(this.auth.requestEmailCode(this.form.getRawValue().email.trim(), this.mode)
+    this.requests.add(this.auth.requestEmailCode(this.form.getRawValue().email.trim(), this.mode, this.form.controls.code.value.trim())
       .pipe(finalize(() => this.busy = false)).subscribe({
         next: message => { this.sent = true; this.message = message; this.resendAt = Date.now() + 60000;
           if (this.cooldown) clearTimeout(this.cooldown);

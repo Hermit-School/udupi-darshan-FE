@@ -186,7 +186,11 @@ export class StorySubmissionComponent implements OnDestroy {
         this.submitting = false;
         this.busy.emit(false);
         this.error =
-          err.status === 413
+          err.status === 429
+            ? 'Too many submissions. Your draft is still here; wait before trying again.'
+            : err.status === 503
+              ? 'Story submissions are temporarily unavailable. Your draft is still here; please try again later.'
+              : err.status === 413
             ? 'These photos are too large. Use files under 5 MB each.'
             : err.status === 400
               ? err.error?.detail ||

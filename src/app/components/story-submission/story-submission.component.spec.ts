@@ -129,4 +129,22 @@ describe('Story submission validation', () => {
     request.flush({ id: 42 });
     expect(component.submitted).toBe(true);
   });
+  it.each([429, 503])('retains the draft and retry key after HTTP %s', (status) => {
+    valid();
+    const component = fixture.componentInstance;
+    const draft = component.form.getRawValue();
+    component.submit();
+    const first = http.expectOne(API_BASE_URL + '/v1/blogs/submissions');
+    const key = first.request.body.get('submissionKey');
+    first.flush({}, { status, statusText: 'Unavailable' });
+    fixture.detectChanges();
+    expect(component.form.getRawValue()).toEqual(draft);
+    expect(fixture.nativeElement.textContent).toContain('Your draft is still here');
+    component.submit();
+    const retry = http.expectOne(API_BASE_URL + '/v1/blogs/submissions');
+    expect(retry.request.body.get('submissionKey')).toBe(key);
+    retry.flush({ id: 42 });
+    expect(component.submitted).toBe(true);
+  });
+
 });
