@@ -1461,7 +1461,7 @@ for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
   await expect(page.getByText('The passwords must match.')).toBeVisible();
   expect(resetRequests).toBe(0);
   await page.getByLabel('Confirm new password').fill('new-fixture-password');
-  await page.screenshot({ path: '/private/tmp/ud-email-help-mobile.png', fullPage: true });
+  await page.screenshot({ path: test.info().outputPath('email-help-mobile.png'), fullPage: true });
   await page.getByRole('button', { name: 'Reset password', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('incorrect, expired');
   await page.getByLabel('Six-digit email code').fill('654321');
@@ -1497,7 +1497,7 @@ for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
   await page.getByRole('button', { name: 'Change password', exact: true }).click();
   await expect(page.getByText('The passwords must match.')).toBeVisible(); expect(changes).toBe(0);
   await page.getByLabel('Confirm new password').fill('cobalt meadow lantern otter');
-  await page.screenshot({ path: '/private/tmp/ud-change-password-mobile.png', fullPage: true });
+  await page.screenshot({ path: test.info().outputPath('change-password-mobile.png'), fullPage: true });
   await page.getByRole('button', { name: 'Change password', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('current password is incorrect');
   await page.getByRole('button', { name: 'Change password', exact: true }).click();
