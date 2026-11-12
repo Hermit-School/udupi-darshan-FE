@@ -37,7 +37,10 @@ export class ChangePasswordComponent implements OnDestroy {
     this.requests.add(this.auth.changePassword(value.currentPassword, value.password)
       .pipe(finalize(() => this.busy = false)).subscribe({
         next: () => { this.form.reset(); this.complete = true; },
-        error: error => this.error = error.status === 403
+        error: error => this.error = error.status === 429
+          ? 'Too many authentication requests. Wait before trying again.'
+          : error.status === 400 ? 'Choose a different, less predictable password with at least 12 characters. Avoid common passwords, repeated patterns, or sequences.'
+          : error.status === 403
           ? 'Your current password is incorrect, or password verification is temporarily locked. Try again later or use email recovery.'
           : error.status === 401 ? 'Your session expired. Sign in again before changing your password.'
           : 'Unable to change your password. Please try again later.'
