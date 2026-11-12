@@ -9,6 +9,7 @@ import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.c
 
 
 const routes: Routes = [
+  { path: 'admindashboard/change-password', loadComponent: () => import('./pages/change-password/change-password.component').then(m => m.ChangePasswordComponent), canActivate: [adminGuard], data: { title: 'Change password | Udupi Darshan', hidePublicChrome: true } },
   {path:'admindashboard/homepage',loadComponent:()=>import('./pages/homepage-editor/homepage-editor.component').then(m=>m.HomepageEditorComponent),canActivate:[adminGuard],canDeactivate:[(component: import('./pages/homepage-editor/homepage-editor.component').HomepageEditorComponent)=>!component.dirty && !component.busy || confirm('Leave the homepage editor? Unsaved changes will be lost.')],data:{hidePublicChrome:true,title:'Design homepage | Udupi Darshan'}},
   { path: ROUTES.HOME.path, component: LandingPageComponent, data: { title: ROUTES.HOME.title, metaDescription: ROUTES.HOME.metaDescription } },
   { path: ROUTES.NATURE.path, loadComponent: () => import('./pages/nature/nature.component').then(m => m.NatureComponent), data: { title: ROUTES.NATURE.title, metaDescription: ROUTES.NATURE.metaDescription } },
@@ -31,7 +32,7 @@ const routes: Routes = [
   { path: 'admindashboard/stories', loadComponent: () => import('./pages/story-review/story-review.component').then(m => m.StoryReviewComponent), canActivate: [adminGuard], data: {title: 'Story submissions | Udupi Darshan', hidePublicChrome: true} },
   { path: 'dashboard', redirectTo: ROUTES.ADMIN_DASHBOARD.path, pathMatch: 'full' },
   { path: ROUTES.NOT_FOUND.path, component: PagenotfoundComponent, data: { title: ROUTES.NOT_FOUND.title, metaDescription: ROUTES.NOT_FOUND.metaDescription } },
-  { path: ROUTES.FORGOT_PASSWORD.path, component: ForgotpasswordComponent },
+  { path: ROUTES.FORGOT_PASSWORD.path, component: ForgotpasswordComponent, data: { title: 'Help signing in | Udupi Darshan', hidePublicChrome: true } },
   { path: ROUTES.ADMIN_DASHBOARD.path, loadComponent: () => import('./pages/admindashboard/admindashboard.component').then(m => m.AdmindashboardComponent), canActivate: [adminGuard], data: { title: 'Admin dashboard | Udupi Darshan', hidePublicChrome: true } },
   { path: ROUTES.BLOG_DETAILS.path, loadComponent: () => import('./components/blog-details/blog-details.component').then(m => m.BlogDetailsComponent) },
   { path: ROUTES.STORY_DETAILS.path, loadComponent: () => import('./pages/story-details/story-details.component').then(m => m.StoryDetailsComponent) },

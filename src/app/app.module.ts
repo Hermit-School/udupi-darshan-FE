@@ -1,3 +1,4 @@
+import { PasswordStrengthComponent } from './components/password-strength/password-strength.component';
 import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 import { HomepageViewComponent } from './components/homepage-view/homepage-view.component';
 import { RouteRecoveryComponent } from './components/route-recovery/route-recovery.component';
@@ -52,6 +53,7 @@ import { CacheInterceptor } from './services/Interceptor/CacheInterceptor';
   ],
   imports: [
     BrowserModule,
+    PasswordStrengthComponent,
     SearchComponent,
     HomepageViewComponent,
     RouteRecoveryComponent,
