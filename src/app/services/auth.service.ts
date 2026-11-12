@@ -28,8 +28,8 @@ export class AuthService {
       { userName: username, password }, { responseType: 'text' }), username);
   }
 
-  requestEmailCode(email: string, purpose: 'email-sign-in' | 'password-reset'): Observable<string> {
-    return this.http.post(`${API_BASE_URL}/v1/admin/email/request`, { email, purpose }, { responseType: 'text' });
+  requestEmailCode(email: string, purpose: 'email-sign-in' | 'password-reset', previousCode?: string): Observable<string> {
+    return this.http.post(`${API_BASE_URL}/v1/admin/email/request`, { email, purpose, ...(/^[0-9a-fA-F]{32}$/.test(previousCode || '') ? { previousCode } : {}) }, { responseType: 'text' });
   }
 
   signInWithEmail(email: string, code: string): Observable<string> {
