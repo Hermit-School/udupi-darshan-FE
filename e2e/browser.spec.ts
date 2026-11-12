@@ -14,6 +14,18 @@ const token = [
   'fixture-signature',
 ].join('.');
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as any).__cspViolations = [];
+    document.addEventListener('securitypolicyviolation', event => {
+      (window as any).__cspViolations.push({ directive: event.effectiveDirective, blocked: event.blockedURI });
+    });
+  });
+});
+test.afterEach(async ({ page }) => {
+  if (!page.isClosed()) expect(await page.evaluate(() => (window as any).__cspViolations ?? [])).toEqual([]);
+});
+
 async function mockApi(page: Page, allowAdmin = true) {
   const calls: string[] = [];
   await page.route(api + '/**', async (route) => {
