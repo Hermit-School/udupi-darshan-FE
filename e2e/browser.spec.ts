@@ -1416,3 +1416,107 @@ for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
   }finally{await context.close();}
  });
 }
+
+ test('email help signs in with an OTP and preserves the password option', async ({ page }) => {
+  await mockApi(page);
+  await page.route(api + '/v1/admin/email/request', route => {
+    expect(route.request().postDataJSON()).toEqual({ email: 'tejasvisacharya@gmail.com', purpose: 'email-sign-in' });
+    return route.fulfill({ body: 'If this email belongs to an eligible administrator, a code has been sent.' });
+  });
+  await page.route(api + '/v1/admin/email/sign-in', route => {
+    expect(route.request().postDataJSON()).toEqual({ email: 'tejasvisacharya@gmail.com', code: '123456' });
+    return route.fulfill({ body: token });
+  });
+  await page.goto('/#/admin');
+  await page.getByRole('link', { name: 'Need help signing in?' }).click();
+  await expect(page.getByRole('heading', { name: 'Help signing in' })).toBeVisible();
+  await page.getByLabel('Admin email address').fill('tejasvisacharya@gmail.com');
+  await page.getByRole('button', { name: 'Send email code' }).click();
+  await expect(page.getByRole('button', { name: 'Resend code' })).toBeDisabled();
+  await page.getByLabel('Six-digit email code').fill('123456');
+  await page.getByRole('button', { name: 'Verify and sign in' }).click();
+  await expect(page).toHaveURL(/#\/admindashboard$/);
+ });
+
+ test('mobile email recovery validates passwords and allows correction after a bad code', async ({ page }) => {
+  await mockApi(page);
+  let resetRequests = 0;
+  await page.route(api + '/v1/admin/email/request', route => {
+    expect(route.request().postDataJSON().purpose).toBe('password-reset');
+    return route.fulfill({ body: 'If this email belongs to an eligible administrator, a code has been sent.' });
+  });
+  await page.route(api + '/v1/admin/email/reset-password', route => {
+    resetRequests++;
+    return route.fulfill(resetRequests === 1 ? { status: 401, body: '{}' } : { body: 'Password updated' });
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/#/forgotpassword');
+  await page.getByRole('button', { name: 'Forgot password', exact: true }).click();
+  await page.getByLabel('Admin email address').fill('tejasvisacharya@gmail.com');
+  await page.getByRole('button', { name: 'Send email code' }).click();
+  await page.getByLabel('Six-digit email code').fill('123456');
+  await page.getByLabel('New password', { exact: true }).fill('new-fixture-password');
+  await page.getByLabel('Confirm new password').fill('mismatching-password');
+  await page.getByRole('button', { name: 'Reset password', exact: true }).click();
+  await expect(page.getByText('The passwords must match.')).toBeVisible();
+  expect(resetRequests).toBe(0);
+  await page.getByLabel('Confirm new password').fill('new-fixture-password');
+  await page.screenshot({ path: test.info().outputPath('email-help-mobile.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Reset password', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('incorrect, expired');
+  await page.getByLabel('Six-digit email code').fill('654321');
+  await page.getByRole('button', { name: 'Reset password', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('Password updated');
+  await page.getByRole('link', { name: 'Back to password sign in' }).click();
+  await expect(page.getByLabel('Username')).toBeVisible();
+  expect(resetRequests).toBe(2);
+ });
+
+ test('admin can change password with live strength guidance and signs out afterward', async ({ page }) => {
+  await mockApi(page);
+  let changes = 0;
+  await page.route(api + '/v1/admin/password/change', route => {
+    changes++;
+    expect(route.request().headers()['authorization']).toBe('Bearer ' + token);
+    expect(route.request().postDataJSON()).toEqual({ currentPassword: 'fixture-password', password: 'cobalt meadow lantern otter' });
+    return route.fulfill(changes === 1 ? { status: 403, body: '{}' } : { body: 'Password changed' });
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/#/admin'); await signIn(page);
+  await page.getByRole('link', { name: 'Change password', exact: true }).click();
+  await expect(page).toHaveURL(/#\/admindashboard\/change-password$/);
+  await page.getByLabel('Current password', { exact: true }).fill('fixture-password');
+  await page.getByLabel('New password', { exact: true }).fill('Password123456!');
+  await expect(page.getByText('Very weak', { exact: true })).toBeVisible();
+  await page.getByLabel('New password', { exact: true }).fill('cobalt meadow lantern otter');
+  await expect(page.getByText('Strong', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Show new password', exact: true }).click();
+  await expect(page.getByLabel('New password', { exact: true })).toHaveAttribute('type', 'text');
+  await page.getByRole('button', { name: 'Hide new password', exact: true }).click();
+  await page.getByLabel('Confirm new password').fill('different-password');
+  await page.getByRole('button', { name: 'Change password', exact: true }).click();
+  await expect(page.getByText('The passwords must match.')).toBeVisible(); expect(changes).toBe(0);
+  await page.getByLabel('Confirm new password').fill('cobalt meadow lantern otter');
+  await page.screenshot({ path: test.info().outputPath('change-password-mobile.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Change password', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('current password is incorrect');
+  await page.getByRole('button', { name: 'Change password', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('All sessions have been signed out');
+  await page.getByRole('link', { name: 'Sign in with your new password' }).click();
+  await expect(page.getByLabel('Username')).toBeVisible();
+  await page.goto('/#/admindashboard/change-password');
+  await expect(page).toHaveURL(/#\/admin\?access=required$/);
+ });
+
+ test('email recovery shows password strength while choosing a replacement password', async ({ page }) => {
+  await mockApi(page);
+  await page.route(api + '/v1/admin/email/request', route => route.fulfill({ body: 'Code sent' }));
+  await page.goto('/#/forgotpassword');
+  await page.getByRole('button', { name: 'Forgot password', exact: true }).click();
+  await page.getByLabel('Admin email address').fill('tejasvisacharya@gmail.com');
+  await page.getByRole('button', { name: 'Send email code' }).click();
+  await page.getByLabel('New password', { exact: true }).fill('111111111111111111');
+  await expect(page.getByText('Very weak', { exact: true })).toBeVisible();
+  await page.getByLabel('New password', { exact: true }).fill('cobalt meadow lantern otter');
+  await expect(page.getByText('Strong', { exact: true })).toBeVisible();
+ });

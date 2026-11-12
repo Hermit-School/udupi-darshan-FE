@@ -44,6 +44,57 @@ describe('Admin authentication contract', () => {
     access.flush({});
   }
 
+  it('changes the current admin password with its bearer token and clears the local session', () => {
+    const token = signIn();
+    auth.changePassword('old-password', 'new-fixture-password').subscribe();
+    const request = http.expectOne(`${API_BASE_URL}/v1/admin/password/change`);
+    expect(request.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
+    expect(request.request.body).toEqual({ currentPassword: 'old-password', password: 'new-fixture-password' });
+    request.flush('Password changed');
+    expect(auth.isAdmin).toBe(false);
+  });
+  it('keeps the session when the current password is incorrect', () => {
+    signIn();
+    auth.changePassword('wrong-password', 'new-fixture-password').subscribe({ error: () => {} });
+    http.expectOne(`${API_BASE_URL}/v1/admin/password/change`).flush('', { status: 403, statusText: 'Forbidden' });
+    expect(auth.isAdmin).toBe(true);
+  });
+
+  it('opens an email OTP session only after the backend admin check', () => {
+    const token = tokenFor('email-admin');
+    auth.signInWithEmail('tejasvisacharya@gmail.com', '123456').subscribe();
+    const request = http.expectOne(`${API_BASE_URL}/v1/admin/email/sign-in`);
+    expect(request.request.body).toEqual({ email: 'tejasvisacharya@gmail.com', code: '123456' });
+    expect(request.request.headers.has('Authorization')).toBe(false);
+    request.flush(token);
+    approveAccess(token);
+    expect(auth.isAdmin).toBe(true);
+  });
+  it('does not send an existing bearer token to recovery endpoints or end that session on a bad code', () => {
+    signIn();
+    auth.requestEmailCode('tejasvisacharya@gmail.com', 'password-reset').subscribe();
+    const request = http.expectOne(`${API_BASE_URL}/v1/admin/email/request`);
+    expect(request.request.headers.has('Authorization')).toBe(false); request.flush('Code sent');
+    auth.resetPassword('tejasvisacharya@gmail.com', '000000', 'new-test-password').subscribe({ error: () => {} });
+    const reset = http.expectOne(`${API_BASE_URL}/v1/admin/email/reset-password`);
+    expect(reset.request.headers.has('Authorization')).toBe(false);
+    reset.flush('', { status: 401, statusText: 'Unauthorized' });
+    expect(auth.isAdmin).toBe(true);
+  });
+  it('clears the old local session after a successful password reset', () => {
+    signIn();
+    auth.resetPassword('tejasvisacharya@gmail.com', '123456', 'new-test-password').subscribe();
+    http.expectOne(`${API_BASE_URL}/v1/admin/email/reset-password`).flush('Password updated');
+    expect(auth.token).toBeNull(); expect(auth.isAdmin).toBe(false);
+  });
+  it('cannot restore an email OTP session after logout', () => {
+    auth.signInWithEmail('tejasvisacharya@gmail.com', '123456').subscribe({ error: () => {} });
+    auth.logout().subscribe();
+    http.expectOne(`${API_BASE_URL}/v1/admin/email/sign-in`).flush(tokenFor('admin'));
+    http.expectNone(`${API_BASE_URL}/actuator/info`);
+    expect(auth.isAdmin).toBe(false);
+  });
+
   it('rejects non-admin accounts without opening a session', () => {
     let failed = false;
     auth.signIn('user', 'test-password').subscribe({ error: () => failed = true });

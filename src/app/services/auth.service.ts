@@ -24,33 +24,54 @@ export class AuthService {
   get isAdmin(): boolean { return !!this.token && this.admin; }
 
   signIn(username: string, password: string): Observable<string> {
+    return this.startSession(() => this.http.post(`${API_BASE_URL}/v1/admin/sign-in`,
+      { userName: username, password }, { responseType: 'text' }), username);
+  }
+
+  requestEmailCode(email: string, purpose: 'email-sign-in' | 'password-reset'): Observable<string> {
+    return this.http.post(`${API_BASE_URL}/v1/admin/email/request`, { email, purpose }, { responseType: 'text' });
+  }
+
+  signInWithEmail(email: string, code: string): Observable<string> {
+    return this.startSession(() => this.http.post(`${API_BASE_URL}/v1/admin/email/sign-in`,
+      { email, code }, { responseType: 'text' }));
+  }
+
+  changePassword(currentPassword: string, password: string): Observable<string> {
+    return this.http.post(`${API_BASE_URL}/v1/admin/password/change`, { currentPassword, password }, { responseType: 'text' })
+      .pipe(map(message => { this.clearSession(); return message; }));
+  }
+
+  resetPassword(email: string, code: string, password: string): Observable<string> {
+    return this.http.post(`${API_BASE_URL}/v1/admin/email/reset-password`, { email, code, password }, { responseType: 'text' })
+      .pipe(map(message => { this.clearSession(); return message; }));
+  }
+
+  private startSession(request: () => Observable<string>, username?: string): Observable<string> {
     return defer(() => {
       this.clearSession();
       const version = this.sessionVersion;
-      return this.http.post(`${API_BASE_URL}/v1/admin/sign-in`, { userName: username, password }, { responseType: 'text' }).pipe(
-        switchMap(token => {
+      return request().pipe(switchMap(token => {
+        this.requireCurrent(version);
+        const claims = this.sessionClaims(token, username);
+        // Only the server's admin check establishes authorization.
+        return this.http.get(`${API_BASE_URL}/actuator/info`, {
+          headers: new HttpHeaders({ Authorization: `Bearer ${token}` })
+        }).pipe(map(() => {
           this.requireCurrent(version);
-          const claims = this.sessionClaims(token, username);
-          // The backend verifies the signature, audience, revocation, active account and current admin role.
-          // Decoding JWT claims in the browser alone cannot establish authorization.
-          return this.http.get(`${API_BASE_URL}/actuator/info`, {
-            headers: new HttpHeaders({ Authorization: `Bearer ${token}` })
-          }).pipe(map(() => {
-            this.requireCurrent(version);
-            if (claims.exp * 1000 <= Date.now()) throw new Error('The session expired. Sign in again.');
-            this.tokenValue = token;
-            this.expiresAt = claims.exp * 1000;
-            this.admin = true;
-            if (this.expiryTimer) clearTimeout(this.expiryTimer);
-            this.expiryTimer = setTimeout(() => this.expireSession(), this.expiresAt - Date.now());
-            return token;
-          }));
-        })
-      );
+          if (claims.exp * 1000 <= Date.now()) throw new Error('The session expired. Sign in again.');
+          this.tokenValue = token;
+          this.expiresAt = claims.exp * 1000;
+          this.admin = true;
+          if (this.expiryTimer) clearTimeout(this.expiryTimer);
+          this.expiryTimer = setTimeout(() => this.expireSession(), this.expiresAt - Date.now());
+          return token;
+        }));
+      }));
     });
   }
 
-  private sessionClaims(token: string, username: string): SessionClaims {
+  private sessionClaims(token: string, username?: string): SessionClaims {
     try {
       const parts = token.split('.');
       if (parts.length !== 3 || parts.some(part => !part)) throw new Error();
@@ -63,7 +84,7 @@ export class AuthService {
       const claims: SessionClaims = decode(parts[1]);
       const audience = typeof claims.aud === 'string' ? [claims.aud] : claims.aud;
       if (header.alg !== 'HS256' || claims.iss !== 'udupi-darshan' || !Array.isArray(audience)
-          || !audience.includes('udupi-darshan-api') || claims.sub !== username
+          || !audience.includes('udupi-darshan-api') || typeof claims.sub !== 'string' || !claims.sub.trim() || (username !== undefined && claims.sub !== username)
           || typeof claims.exp !== 'number' || !Number.isFinite(claims.exp)
           || claims.exp * 1000 <= Date.now() || claims.exp * 1000 - Date.now() > 2_147_483_647) throw new Error();
       return claims;

@@ -10,7 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private auth: AuthService) {}
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const api = req.url.startsWith(`${API_BASE_URL}/v1/`) || req.url.startsWith(`${API_BASE_URL}/actuator/`);
-    const authEndpoint = /\/v1\/(?:admin\/sign-in|login|generateOTP|verifyOTP|jwt\/generate|jwt\/validate)(?:\?|$)/.test(req.url);
+    const authEndpoint = /\/v1\/(?:admin\/(?:sign-in|email\/(?:request|sign-in|reset-password))|login|generateOTP|verifyOTP|jwt\/generate|jwt\/validate)(?:\?|$)/.test(req.url);
     // Public reads must keep working if a session expires. Never send credentials to other hosts/assets.
     const publicHealth = req.method === 'GET' && /\/actuator\/health(?:[/?]|$)/.test(req.url);
     const publicSubmission = req.method === 'POST' && req.url === `${API_BASE_URL}/v1/blogs/submissions`;
