@@ -63,6 +63,7 @@ export class ForgotpasswordComponent implements OnDestroy {
     }));
   }
   private failure(error: { status?: number }): string {
+    if (error.status === 400) return 'Choose a less predictable password: use at least 12 characters and avoid common passwords, repeated patterns, or sequences.';
     if (error.status === 429) return 'Too many requests. Wait a few minutes before trying again.';
     if (error.status === 401) return 'The code is incorrect, expired, or already used. Request a new code.';
     return 'Unable to complete this request. Please try again later.';

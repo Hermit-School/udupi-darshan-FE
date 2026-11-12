@@ -34,6 +34,7 @@ export class AdminComponent implements OnDestroy {
     if (!(error instanceof HttpErrorResponse)) return error instanceof Error ? error.message : 'Unable to sign in.';
     switch (error.status) {
       case 401: return 'Incorrect username or password, or the account is temporarily locked.';
+      case 429: return 'Too many sign-in requests. Wait before trying again.';
       case 403: return 'This account does not have administrator access.';
       case 0: return 'Unable to reach the server. Please check your connection and try again.';
       default: return 'Sign-in is temporarily unavailable. Please try again later.';
