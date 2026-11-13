@@ -1552,3 +1552,59 @@ for(const timezoneId of ['America/Los_Angeles','Asia/Tokyo']){
   await page.getByRole('button', { name: 'Resend code' }).click();
   await expect.poll(() => deliveries).toBe(2);
  });
+
+for (const category of ['nature','culture','food']) {
+ test(`information links require a genuine external value in ${category}`, async ({page}) => {
+  await mockApi(page);
+  const values=[null,'','   ','https://udupi-darshan.web.app/#/food/example','https://example.invalid/visitor-info'];
+  await page.route(new RegExp('/v1/'+category+'/[0-9]+$'), route => {
+    const index=Number(new URL(route.request().url()).pathname.split('/').pop())-700;
+    return route.fulfill({json:{id:700+index,name:'Information test',category,label:category,descr:'A local destination.',images:[],dontMissThese:[],keyPoints:[],discover:[],impInfo:[],howToVisit:null,link:values[index]}});
+  });
+  for (let index=0;index<values.length;index++) {
+    await page.goto('/#/details/'+category+'/'+(700+index));
+    await expect(page.getByRole('heading',{level:1,name:'Information test',exact:true})).toBeVisible();
+    const link=page.getByRole('link',{name:'More information ↗',exact:true});
+    if(index===values.length-1) await expect(link).toHaveAttribute('href','https://example.invalid/visitor-info');
+    else await expect(link).toHaveCount(0);
+  }
+ });
+}
+
+test('event website follows the same optional external information rule',async({page})=>{
+ await mockApi(page);
+ let link='https://udupi-darshan.web.app/#/events/700';
+ await page.route(api+'/v1/events/700',route=>route.fulfill({json:{id:700,details:{article:{name:'Local event',descr:'Community gathering',link,images:[]},startsOn:null,endsOn:null}}}));
+ await page.goto('/#/events/700');await expect(page.getByRole('heading',{name:'Local event',exact:true})).toBeVisible();
+ await expect(page.getByRole('link',{name:'Event website ↗'})).toHaveCount(0);
+ link='https://example.invalid/event';await page.reload();
+ await expect(page.getByRole('link',{name:'Event website ↗'})).toHaveAttribute('href',link);
+});
+
+test('food formatting is safe and legacy recommendations become distinct venues with working detail links',async({page})=>{
+ await mockApi(page);await page.setViewportSize({width:1440,height:1100});
+ const original={id:4,name:'Woodlands Restaurant',label:'Local food',category:'Food',location:'Udupi',descr:'A <b>traditional</b> restaurant with <i>freshly prepared</i> dishes.',images:[],keyPoints:['<strong>Cuisines</strong>: South Indian'],discover:['Try <em>filter coffee</em>.'],impInfo:['<b>Price range</b>: local menu','<script>window.foodInjected=true</script><b>Safe emphasis</b>'],howToVisit:{byCar:'Follow the <b>main road</b>.'},link:'https://udupi-darshan.web.app/#/food/woodlands',dontMissThese:[{name:'Copied feature',description:'Copied from another venue',imageUrl:'assets/images/h1.jpeg',link:'/woodlands-coffee'},{name:'Another copied feature',description:'Unrelated description',imageUrl:'assets/images/h1.jpeg',link:'/woodlands-snacks'}]};
+ const food=(id:number,name:string,images:string[]=[])=>({...original,id,name,descr:'Visit '+name+' for a local food experience.',images,dontMissThese:[],keyPoints:[],discover:[],impInfo:[],link:'/food/'+id});
+ const foods=[original,food(20,'Woodlands Restaurant'),food(5,'Cafe 7 Bees'),food(23,'Café 7 Bees'),food(10,'Ice Cream Parlour',['assets/images/Ideal_Ice_Cream.jpg']),food(11,'Coastal Kitchen')];
+ await page.route(api+'/v1/food/getFood',route=>route.fulfill({json:foods}));
+ await page.route(api+'/v1/destination-search',route=>route.fulfill({json:foods}));
+ await page.route(/\/v1\/food\/[0-9]+$/,route=>route.fulfill({json:foods.find(item=>item.id===Number(new URL(route.request().url()).pathname.split('/').pop()))}));
+ const images:string[]=[];page.on('request',request=>{if(request.resourceType()==='image')images.push(request.url());});
+ await page.goto('/#/details/food/4');
+ await expect(page.locator('.long-copy b')).toHaveText('traditional');await expect(page.locator('.long-copy i')).toHaveText('freshly prepared');
+ await expect(page.locator('.destination-copy li strong')).toHaveText('Cuisines');
+ await expect(page.locator('.destination-copy li em')).toHaveText('filter coffee');
+ await expect(page.locator('.destination-copy script')).toHaveCount(0);await expect(page.locator('.destination-copy [onclick]')).toHaveCount(0);
+ expect(await page.evaluate(()=>(window as any).foodInjected)).toBeUndefined();
+ await expect(page.getByRole('link',{name:'More information ↗'})).toHaveCount(0);
+ const cards=page.locator('section.ud-section').filter({has:page.getByRole('heading',{name:'Don’t miss these.',exact:true})});
+ await expect(cards.getByRole('heading',{level:3})).toHaveText(['Cafe 7 Bees','Ice Cream Parlour','Coastal Kitchen']);
+ await expect(cards.getByRole('link',{name:'View details',exact:true})).toHaveCount(3);
+ await expect(cards.getByRole('img')).toHaveCount(1);await expect(cards.getByRole('img',{name:'Ice Cream Parlour',exact:true})).toHaveAttribute('src','assets/images/Ideal_Ice_Cream.jpg');
+ await expect(cards).not.toContainText('Copied from another venue');expect(images.some(url=>url.includes('h1.jpeg'))).toBe(false);
+ await cards.screenshot({path:test.info().outputPath('food-recommendations-desktop.png')});
+ await page.setViewportSize({width:390,height:844});await cards.screenshot({path:test.info().outputPath('food-recommendations-mobile.png')});
+ await expect(cards.getByRole('link',{name:'View details'}).first()).toBeVisible();
+ await cards.getByRole('article').filter({has:page.getByRole('heading',{name:'Ice Cream Parlour',exact:true})}).getByRole('link',{name:'View details',exact:true}).click();
+ await expect(page).toHaveURL(/#\/details\/food\/10$/);await expect(page.getByRole('heading',{level:1,name:'Ice Cream Parlour',exact:true})).toBeVisible();
+});
