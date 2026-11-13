@@ -1,3 +1,4 @@
+import { informationUrl } from '../../util/information-url';
 import { IstDatePipe } from '../../util/ist-date.pipe';
 import { ChoukhatEventsComponent } from '../../components/choukhat-events/choukhat-events.component';
 import { Component, DestroyRef, inject } from "@angular/core";
@@ -73,21 +74,7 @@ export class EventsComponent {
       });
   }
   get informationUrl(): string | null {
-    try {
-      const url = new URL(this.selected?.details.article?.link || "");
-      return ["https:", "http:"].includes(url.protocol) &&
-        !url.username &&
-        !url.password &&
-        ![
-          "udupi-darshan.web.app",
-          "udupi-darshan.firebaseapp.com",
-          location.hostname,
-        ].includes(url.hostname)
-        ? url.href
-        : null;
-    } catch {
-      return null;
-    }
+    return informationUrl(this.selected?.details.article?.link);
   }
   get upcoming() {
     return this.items

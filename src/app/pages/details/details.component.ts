@@ -1,3 +1,5 @@
+import { informationUrl } from '../../util/information-url';
+import { FoodRecommendationsService } from '../../services/food-recommendations.service';
 import { RelatedPhotosService } from 'src/app/services/related-photos.service';
 import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { Component, Input, OnInit, OnDestroy } from "@angular/core";
@@ -25,6 +27,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   error = "";
   private routeSubscription?: Subscription;
   private requestSubscription?: Subscription;
+  private relatedSubscription?: Subscription;
+  relatedCards: Details["dontMissThese"] = [];
   @Input() description: string | undefined;
   card: Details | null = null;
   currentSlideIndex: number = 0;
@@ -38,6 +42,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private foodService: FoodService,
     private shared: SharedService,
     readonly relatedPhotos: RelatedPhotosService,
+    private foodRecommendations: FoodRecommendationsService,
   ) {}
   ngOnInit(): void {
     this.routeSubscription = this.route.params.subscribe((params) => {
@@ -53,6 +58,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   fetchData(category: string, id: number): void {
     this.requestSubscription?.unsubscribe();
+    this.relatedSubscription?.unsubscribe();
+    this.relatedCards = [];
     this.card = null;
     this.error = "";
     this.currentSlideIndex = 0;
@@ -75,8 +82,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       next: (card) => {
         this.card = card;
         this.loading = false;
-        this.shared.resolveRelatedLinks(card.dontMissThese);
-        this.relatedPhotos.prepare(card.dontMissThese);
+        this.prepareRelated(card, section);
       },
       error: () => {
         this.loading = false;
@@ -87,6 +93,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   private fetchLegacy(section: string, slug: string): void {
     this.requestSubscription?.unsubscribe();
+    this.relatedSubscription?.unsubscribe();
+    this.relatedCards = [];
     this.card = null;
     this.error = "";
     this.currentSlideIndex = 0;
@@ -119,8 +127,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               : "Destination not found.";
           this.loading = false;
           if (card) {
-            this.shared.resolveRelatedLinks(card.dontMissThese);
-            this.relatedPhotos.prepare(card.dontMissThese);
+            this.prepareRelated(card, section);
           }
         },
         error: () => {
@@ -141,12 +148,19 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
   get informationUrl(): string | null {
-    try {
-      const url = new URL(this.card?.link || "");
-      return ["http:", "https:"].includes(url.protocol) ? url.href : null;
-    } catch {
-      return null;
-    }
+    return informationUrl(this.card?.link);
+  }
+
+  private prepareRelated(card: Details, section: string): void {
+    this.relatedCards = card.dontMissThese ?? [];
+    const update = (items: Details['dontMissThese']) => {
+      if (this.card !== card) return;
+      this.relatedCards = items;
+      this.shared.resolveRelatedLinks(items);
+      this.relatedPhotos.prepare(items);
+    };
+    update(this.relatedCards);
+    if (section === 'food') this.relatedSubscription = this.foodRecommendations.forDestination(card).subscribe(update);
   }
 
   relatedLink(link?: string): string | string[] | null {
@@ -154,6 +168,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.relatedSubscription?.unsubscribe();
     this.routeSubscription?.unsubscribe();
     this.requestSubscription?.unsubscribe();
   }

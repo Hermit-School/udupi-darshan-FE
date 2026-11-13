@@ -48,4 +48,12 @@ describe('RelatedPhotosService', () => {
     http.expectOne(bundled).flush([]);http.expectOne(managed).flush([{imageUrl:items[0].imageUrl}]);
     expect(service.imageUrl(items[0].imageUrl)).toBeNull();
   });
+  it('hides legacy placeholders and repeated photos without hiding recommendation links', () => {
+    service.prepare([{imageUrl:'assets/images/reused.jpg'},{imageUrl:'https://udupi-darshan.web.app/assets/images/reused.jpg?v=2'},{imageUrl:'assets/images/h1.jpeg'}]);
+    http.expectOne(bundled).flush([]);http.expectOne(managed).flush([]);
+    expect(service.imageUrl('assets/images/reused.jpg')).toBeNull();expect(service.imageUrl('assets/images/h1.jpeg')).toBeNull();
+    service.prepare([{imageUrl:'assets/images/genuine.jpg'}]);
+    expect(service.imageUrl('assets/images/genuine.jpg')).toBe('assets/images/genuine.jpg');
+  });
+
 });

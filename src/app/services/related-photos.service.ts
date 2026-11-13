@@ -9,12 +9,19 @@ import { BACKGROUND_REQUEST } from './background-request';
 export class RelatedPhotosService {
   private readonly ready = signal(false);
   private blocked = new Set<string>();
+  private readonly duplicates = signal(new Set<string>());
   private pending = false;
   private loadedAt = 0;
 
   constructor(private readonly http: HttpClient) {}
 
   prepare(items?: {imageUrl?: string}[]): void {
+    const counts = new Map<string,number>();
+    for (const item of items ?? []) {
+      const key = this.key(item.imageUrl);
+      if (key) counts.set(key,(counts.get(key) ?? 0)+1);
+    }
+    this.duplicates.set(new Set([...counts].filter(([,count]) => count > 1).map(([key]) => key)));
     if (!items?.some(item => !!item.imageUrl) || this.pending ||
         (this.loadedAt && Date.now() - this.loadedAt < 60000)) return;
     this.pending = true;
@@ -41,7 +48,7 @@ export class RelatedPhotosService {
   imageUrl(image?: string): string | null {
     if (!image || !this.ready()) return null;
     const key = this.key(image);
-    if (!key || /(?:^|\/)ads[0-9]*\.(?:png|jpe?g|webp|gif|svg)$/i.test(key) || this.blocked.has(key)) return null;
+    if (!key || this.duplicates().has(key) || /(?:^|\/)(?:ads[0-9]*\.(?:png|jpe?g|webp|gif|svg)|h1\.jpe?g)$/i.test(key) || this.blocked.has(key)) return null;
     return image;
   }
 

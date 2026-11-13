@@ -24,4 +24,14 @@ describe('DetailsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('renders saved emphasis while Angular removes executable markup', () => {
+    component.card={id:1,name:'Restaurant',category:'Food',label:'Local food',images:[],descr:'A <b>bold</b> and <i>italic</i> overview.',keyPoints:['<strong>Signature dish</strong>'],discover:['<em>Discover</em>'],impInfo:['<script>window.bad=true</script><b onclick="window.bad=true">Price</b>'],howToVisit:{byCar:'<b>Road</b>',byBike:'',byPublic:''},dontMissThese:[],link:'',timings:'',createdAt:'',location:''};
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.long-copy b').textContent).toBe('bold');
+    expect(fixture.nativeElement.querySelector('.long-copy i').textContent).toBe('italic');
+    expect(fixture.nativeElement.querySelector('li strong').textContent).toBe('Signature dish');
+    expect(fixture.nativeElement.querySelector('script')).toBeNull();expect(fixture.nativeElement.querySelector('[onclick]')).toBeNull();
+    expect(fixture.nativeElement.textContent).not.toContain('<b>');
+  });
+
 });

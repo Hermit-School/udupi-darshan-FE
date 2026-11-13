@@ -91,14 +91,14 @@
           <section>
             <p class="ud-eyebrow">Get to know the place</p>
             <h2>Overview</h2>
-            <p class="long-copy">{{ card.descr }}</p>
+            <div class="long-copy" [innerHTML]="card.descr"></div>
           </section>
           @if (card.discover && card.discover.length) {
             <section>
               <h2>What to discover</h2>
               <ul>
                 @for (item of card.discover; track $index) {
-                  <li>{{ item }}</li>
+                  <li [innerHTML]="item"></li>
                 }
               </ul>
             </section>
@@ -108,7 +108,7 @@
               <h2>Good to know</h2>
               <ul>
                 @for (item of card.keyPoints; track $index) {
-                  <li>{{ item }}</li>
+                  <li [innerHTML]="item"></li>
                 }
               </ul>
             </section>
@@ -118,7 +118,7 @@
               <h2>Before you go</h2>
               <ul>
                 @for (item of card.impInfo; track $index) {
-                  <li>{{ item }}</li>
+                  <li [innerHTML]="item"></li>
                 }
               </ul>
             </section>
@@ -133,19 +133,19 @@
               @if (card.howToVisit?.byCar) {
                 <details open>
                   <summary>By car</summary>
-                  <p>{{ card.howToVisit?.byCar }}</p>
+                  <p [innerHTML]="card.howToVisit?.byCar"></p>
                 </details>
               }
               @if (card.howToVisit?.byPublic) {
                 <details>
                   <summary>By public transport</summary>
-                  <p>{{ card.howToVisit?.byPublic }}</p>
+                  <p [innerHTML]="card.howToVisit?.byPublic"></p>
                 </details>
               }
               @if (card.howToVisit?.byBike) {
                 <details>
                   <summary>By bike</summary>
-                  <p>{{ card.howToVisit?.byBike }}</p>
+                  <p [innerHTML]="card.howToVisit?.byBike"></p>
                 </details>
               }
             </section>
@@ -180,7 +180,7 @@
           }
         </aside>
       </div>
-      @if (card.dontMissThese && card.dontMissThese.length) {
+      @if (relatedCards.length) {
         <section class="ud-section">
           <div class="ud-section-head">
             <div>
@@ -189,7 +189,7 @@
             </div>
           </div>
           <div class="ud-grid">
-            @for (item of card.dontMissThese; track $index) {
+            @for (item of relatedCards; track $index) {
               <article class="ud-card">
                 @if (relatedPhotos.imageUrl(item.imageUrl); as image) {
                   <div class="ud-card-image">
@@ -204,7 +204,7 @@
                 }
                 <div class="ud-card-body">
                   <h3>{{ item.name }}</h3>
-                  <p>{{ item.description }}</p>
+                  <p [innerHTML]="item.description"></p>
                   @if (relatedLink(item.link); as destination) {
                     @if (typeof destination === "string") {
                       <a class="ud-link" [href]="destination">View details</a>
