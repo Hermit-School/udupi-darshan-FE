@@ -26,3 +26,8 @@ The current layout uses administrator choices: Large = 12/12, Medium = 6/12, Sma
 ## Compact homepage sponsored cards
 
 Dashboard → Customize homepage includes Advertisements per row (1–5, default 3). This setting belongs to the homepage draft/published JSON as `sponsorsPerRow`, independently of Support local's manual sizes. The Sponsored section accepts up to 30 ads, wraps in saved order, and centers each incomplete row. Photos use contain and compact heights; tablet previews use up to two columns and phones stack. Save draft does not change the public homepage; Publish homepage publishes both selection and row count. Backend accepts missing settings for older clients/layouts and defaults to 3. No migration or production content write is required. Deploy backend before frontend.
+
+
+### Dynamic homepage card shapes
+
+The selected homepage row count also controls each card body's aspect ratio: 1 → 4:1 horizontal banner (image and copy side by side), 2 → 16:10 landscape, 3 → 4:3 balanced, 4 → 1:1 square, 5 → 3:4 portrait. Both preview and public homepage use the same styles. Images remain contained, titles clamp to two lines, and incomplete rows stay centered. At phone-sized container widths, cards stack with a readable 4:3 body. Image height scales with the selected shape rather than staying capped at 180px.
