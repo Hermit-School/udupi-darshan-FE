@@ -1,0 +1,19 @@
+<main class="layout-editor">
+ <a routerLink="/admindashboard">← Admin dashboard</a>
+ <header><div><p class="eyebrow">SUPPORT LOCAL</p><h1>Advertisement layout</h1><p>Drag cards into order, then choose how much space each business gets. Image resolution does not affect size.</p></div><a routerLink="/new-entry/ads" class="button">Add advertisement</a></header>
+ <section class="toolbar" aria-label="Layout actions"><div><b>{{items.length}} advertisements</b><span>{{dirty?'Unsaved changes':'All changes saved'}}</span></div><div class="actions"><a routerLink="/advertisements" target="_blank" rel="noopener">View public page ↗</a><button (click)="reload()" [disabled]="busy||loading">Reload</button><button (click)="reset()" [disabled]="busy||loading||!dirty">Discard changes</button><button class="primary" (click)="save()" [disabled]="busy||loading||!dirty">{{busy?'Saving…':'Save layout'}}</button></div></section>
+ <ul class="size-guide" aria-label="Desktop sizes">@for(size of sizes;track size.id){<li><b>{{size.name}}</b> {{size.range}} · {{12/size.span}} per row</li>}</ul>
+ <p class="hint">The canvas previews the desktop layout. Cards wrap in the order shown; on phones they stack. Use Move up and Move down to arrange cards without dragging.</p>
+ @if(loading){<p role="status">Loading advertisements…</p>}
+ @if(error){<p role="alert" class="error">{{error}}</p>}
+ <p role="status" class="notice">{{notice}}</p>
+ @if(!loading&&!items.length&&!error){<section class="empty"><h2>Add your first advertisement</h2><p>Once saved, it will appear here to arrange and resize.</p><a routerLink="/new-entry/ads">Add advertisement</a></section>}
+ @if(!loading&&items.length){<section class="canvas" aria-label="Advertisement layout preview">
+ @for(item of items;track item.id;let i=$index){<article [attr.data-id]="item.id" [attr.data-size]="item.size" [style.--span]="span(item.size)" [class.drop-target]="over===i" [class.dragging]="dragging===i" (dragover)="dragover($event,i)" (drop)="drop($event,i)">
+ <div class="card-bar"><span [draggable]="!busy" (dragstart)="start($event,i)" (dragend)="end()" class="drag-handle" title="Drag to move" aria-hidden="true">⠿</span><span>Position {{i+1}}</span><a [routerLink]="['/edit-entry/ads',item.id]">Edit content</a></div>
+ <div class="photo" [class.feature]="item.size==='large'">@if(!broken.has(item.id)){<img [src]="ads.get(item.id)?.imageUrl" [alt]="ads.get(item.id)?.title" (error)="broken.add(item.id)" referrerpolicy="no-referrer" draggable="false"/>}@else{<span>Image unavailable</span>}</div>
+ <div class="copy"><h2>{{ads.get(item.id)?.title}}</h2><label>Card size<select [ngModel]="item.size" (ngModelChange)="size(item,$event)" [disabled]="busy" [attr.aria-label]="'Size for '+ads.get(item.id)?.title">@for(size of sizes;track size.id){<option [value]="size.id">{{size.name}} — {{size.range}}</option>}</select></label>
+ <div class="moves"><button (click)="move(i,i-1)" [disabled]="i===0||busy" [attr.aria-label]="'Move '+ads.get(item.id)?.title+' up'">↑ Move up</button><button (click)="move(i,i+1)" [disabled]="i===items.length-1||busy" [attr.aria-label]="'Move '+ads.get(item.id)?.title+' down'">↓ Move down</button></div></div>
+ </article>}
+ </section>}
+</main>

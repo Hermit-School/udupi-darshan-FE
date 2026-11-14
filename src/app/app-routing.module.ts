@@ -9,6 +9,7 @@ import { ForgotpasswordComponent } from './pages/forgotpassword/forgotpassword.c
 
 
 const routes: Routes = [
+  {path:'admindashboard/advertisements',loadComponent:()=>import('./pages/advertisement-layout/advertisement-layout.component').then(m=>m.AdvertisementLayoutComponent),canActivate:[adminGuard],canDeactivate:[(component: import('./pages/advertisement-layout/advertisement-layout.component').AdvertisementLayoutComponent)=>!component.dirty && !component.busy || confirm('Leave the advertisement layout editor? Unsaved changes will be lost.')],data:{hidePublicChrome:true,title:'Support local layout | Udupi Darshan'}},
   { path: 'admindashboard/change-password', loadComponent: () => import('./pages/change-password/change-password.component').then(m => m.ChangePasswordComponent), canActivate: [adminGuard], data: { title: 'Change password | Udupi Darshan', hidePublicChrome: true } },
   {path:'admindashboard/homepage',loadComponent:()=>import('./pages/homepage-editor/homepage-editor.component').then(m=>m.HomepageEditorComponent),canActivate:[adminGuard],canDeactivate:[(component: import('./pages/homepage-editor/homepage-editor.component').HomepageEditorComponent)=>!component.dirty && !component.busy || confirm('Leave the homepage editor? Unsaved changes will be lost.')],data:{hidePublicChrome:true,title:'Design homepage | Udupi Darshan'}},
   { path: ROUTES.HOME.path, component: LandingPageComponent, data: { title: ROUTES.HOME.title, metaDescription: ROUTES.HOME.metaDescription } },

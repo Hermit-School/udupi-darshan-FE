@@ -1,4 +1,4 @@
-import {AD_TIERS,adSlug,adTier,adExternal} from "../../content/ad-tiers";
+import {adSlug,adExternal} from "../../content/ad-tiers";
 import { DeleteRecordComponent } from '../../components/delete-record/delete-record.component';
 import { ImagePickerComponent } from "../../components/image-picker/image-picker.component";
 import { EditorPhoto, existingPhoto } from "../../util/media-image";
@@ -113,7 +113,6 @@ export class ContentEditorComponent {
   private originalAdSource="";private originalAdWidth=0;private originalAdHeight=0;
   get adWidth(){const p=this.photos[0];return p?.width||(p?.source===this.originalAdSource?this.originalAdWidth:0);}
   get adHeight(){const p=this.photos[0];return p?.height||(p?.source===this.originalAdSource?this.originalAdHeight:0);}
-  get adLayout(){const tier=AD_TIERS.find(t=>t.id===adTier(this.adWidth))!;return tier.name+' · '+(12/tier.span)+' across';}
   private storyStatus = "Published";
   readonly ad = this.kind === "ads";
   readonly lists = [

@@ -16,3 +16,8 @@ The Website field takes priority. Without a valid website, cards link to `/adver
 Admins can edit a tagline, category, phone, address, hours, map URL, backdrop and offerings, plus up to five photos. The first photo drives sizing. Existing upload validation, retries and content permissions remain in place. Prices are enquiry-only; no fictional businesses or rates are published. Homepage sponsor cards keep their existing curated format.
 
 Inter is self-hosted in assets/fonts with its SIL Open Font License. No CSP relaxation or runtime third-party font request is required. Deploy backend V16 before merging/deploying this frontend.
+
+
+## Manual layout replaces image-width classification
+
+The current layout uses administrator choices: Large = 12/12, Medium = 6/12, Small = 4/12, Extra-small = 3/12. Image width/height only describe the media. Existing/new advertisements default to Small. Use Dashboard → Edit advertisement layout (`/admindashboard/advertisements`) to drag into order, change sizes and Save layout. Move up/down buttons support keyboard and touch. The public grid preserves the saved order, uses two columns on tablets and stacks on phones. Save publishes immediately; reload detects concurrent edits via a revision. Failed saves keep local work. V17 backend must deploy first. This section supersedes the original width-based sizing description above.
