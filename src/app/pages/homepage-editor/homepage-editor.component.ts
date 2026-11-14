@@ -16,7 +16,7 @@ export class HomepageEditorComponent {
  load(){
   this.loading=true;this.error='';
   forkJoin({state:this.api.state(),cards:this.api.cards()}).pipe(takeUntilDestroyed(this.destroy),finalize(()=>this.loading=false)).subscribe({
-   next:({state,cards})=>{this.cards=cards;this.layout=structuredClone(state.draft);this.version=state.version;this.published=state.published;this.dirty=false;this.conflict=false;},
+   next:({state,cards})=>{this.cards=cards;this.layout=structuredClone(state.draft);this.layout.sponsorsPerRow??=3;this.version=state.version;this.published=state.published;this.dirty=false;this.conflict=false;},
    error:()=>this.error='Unable to load the editor. Please try again.',
   });
  }
@@ -34,7 +34,7 @@ export class HomepageEditorComponent {
  get missing(){return (['hero','features','sponsors'] as Zone[]).flatMap(z=>this.refs(z)).filter(r=>!this.resolve(r)).length;}
  removeMissing(){if(!this.layout)return;this.layout.hero=this.resolve(this.layout.hero)?this.layout.hero:null;this.layout.features=this.layout.features.filter(r=>this.resolve(r));this.layout.sponsors=this.layout.sponsors.filter(r=>this.resolve(r));this.changed();}
  get preview():HomeView{
-  const l=this.layout!;return {configured:true,title:l.title,intro:l.intro,sectionTitle:l.sectionTitle,hero:this.resolve(l.hero),features:l.features.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c),sponsors:l.sponsors.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c)};
+  const l=this.layout!;return {configured:true,title:l.title,intro:l.intro,sectionTitle:l.sectionTitle,hero:this.resolve(l.hero),features:l.features.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c),sponsorsPerRow:l.sponsorsPerRow??3,sponsors:l.sponsors.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c)};
  }
  add(card:HomeCard,zone:Zone){this.place(card,zone,this.refs(zone).length);}
  private place(card:HomeCard,zone:Zone,index:number){
@@ -42,7 +42,7 @@ export class HomepageEditorComponent {
   if((zone==='sponsors')!==(card.kind==='ads')){this.error='Place advertisements in the Sponsored section, and editorial cards in the spotlight or featured section.';return;}
   const from=(['hero','features','sponsors'] as Zone[]).find(z=>this.refs(z).some(r=>this.key(r)===this.key(card)));
   const oldIndex=from?this.refs(from).findIndex(r=>this.key(r)===this.key(card)):-1;
-  if(zone!=='hero' && from!==zone && this.refs(zone).length>=(zone==='features'?12:4)){this.error='This section is full. Remove a card before adding another.';return;}
+  if(zone!=='hero' && from!==zone && this.refs(zone).length>=(zone==='features'?12:30)){this.error='This section is full. Remove a card before adding another.';return;}
   const ref=from?{...this.refs(from)[oldIndex]}:{kind:card.kind,id:card.id,imageIndex:0};
   if(from===zone && oldIndex<index)index--;
   if(from==='hero')this.layout.hero=null;
