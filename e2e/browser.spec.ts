@@ -470,7 +470,7 @@ test('redesigned pages fit narrow screens and respect reduced motion', async ({
   await page.setViewportSize({ width: 360, height: 800 });
   for (const path of ['home', 'culture', 'food', 'story', 'advertisements']) {
     await page.goto('/#/' + path);
-    await expect(page.locator('main.ud-page')).toBeVisible();
+    await expect(page.locator(path==='advertisements'?'main.support-local':'main.ud-page')).toBeVisible();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),
     ).toBe(360);
@@ -1336,10 +1336,10 @@ test('support local displays only managed ads and routes to external or internal
  await page.getByRole('link',{name:'View Community shop',exact:true}).last().click();
  await expect(page).toHaveURL(/advertisements\/community-shop$/);
  await expect(page.getByRole('heading',{level:1})).toHaveText('Community shop');
- await expect(page.locator('main img')).toHaveCount(1);
+ await expect(page.locator('main .gallery-main img')).toHaveCount(1);
  await expect(page.locator('main .ad-description')).toHaveText('Local crafts and gifts. Open daily.');
  await page.reload();await expect(page.locator('main .ad-description')).toHaveText('Local crafts and gifts. Open daily.');
- await expect(page.locator('main img')).toHaveAttribute('src','assets/images/c2.jpg');
+ await expect(page.locator('main .gallery-main img')).toHaveAttribute('src','assets/images/c2.jpg');
  await page.getByRole('link',{name:'Back to Support local',exact:false}).click();
  await expect(page.locator('main img')).toHaveCount(2);
  await expect(page.locator('footer a[href="https://www.choukhat.in"]')).toHaveText('Choukhat');
@@ -1366,7 +1366,7 @@ test('advertisement editor offers editable internal page name and persisted deta
  await page.goto('/#/admin');await signIn(page);
  await page.getByRole('link',{name:/Edit Ads/}).click();
  await page.getByRole('link',{name:'Edit Editable sponsor',exact:true}).click();
- await expect(page.getByLabel('External link (optional)',{exact:true})).toHaveValue('https://example.org/shop');
+ await expect(page.getByLabel('Website (optional)',{exact:true})).toHaveValue('https://example.org/shop');
  await expect(page.getByLabel('Internal link',{exact:true})).toHaveValue('editable-sponsor');
  await expect(page.getByLabel('Internal link',{exact:true})).toBeEditable();
  await page.getByLabel('Internal link',{exact:true}).fill('Coastal Cafe');
@@ -1375,7 +1375,7 @@ test('advertisement editor offers editable internal page name and persisted deta
  await page.getByLabel('Advertisement details',{exact:false}).fill('Fresh coffee and coastal snacks.');
  await page.getByRole('button',{name:'Save changes',exact:true}).click();
  await expect(page.getByRole('heading',{name:'Changes saved',exact:true})).toBeVisible();
- expect(saved.internalLink).toBe('Coastal Cafe');
+ expect(saved.internalLink).toBe('coastal-cafe');
  expect(saved.description).toBe('Fresh coffee and coastal snacks.');
  expect(saved.externalLink).toBe('https://example.org/shop');
 
@@ -1607,4 +1607,66 @@ test('food formatting is safe and legacy recommendations become distinct venues 
  await expect(cards.getByRole('link',{name:'View details'}).first()).toBeVisible();
  await cards.getByRole('article').filter({has:page.getByRole('heading',{name:'Ice Cream Parlour',exact:true})}).getByRole('link',{name:'View details',exact:true}).click();
  await expect(page).toHaveURL(/#\/details\/food\/10$/);await expect(page.getByRole('heading',{level:1,name:'Ice Cream Parlour',exact:true})).toBeVisible();
+});
+
+
+async function mockLocalBusinessImages(page:Page){
+ await page.route('https://example.org/ad-fixtures/**',route=>{
+  const title=new URL(route.request().url()).pathname.split('/').pop()!.replace(/\.svg$/,'');
+  return route.fulfill({contentType:'image/svg+xml',body:`<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700"><rect width="1000" height="700" fill="#4a1220"/><circle cx="500" cy="310" r="230" fill="none" stroke="#e3b75a" stroke-width="3"/><text x="500" y="320" text-anchor="middle" font-family="Arial" font-size="56" font-weight="bold" fill="#e3b75a">${title}</text><text x="500" y="390" text-anchor="middle" font-family="Arial" font-size="26" fill="#f0d9a0">Local business in Udupi</text></svg>`});
+ });
+}
+const businessAd=(id:number,width:number)=>({id,title:'Local shop '+id,imageUrl:'https://example.org/ad-fixtures/Shop-'+id+'.svg',images:['https://example.org/ad-fixtures/Shop-'+id+'.svg'],width,height:900,website:'',internalLink:'shop-'+id,description:'Traditional and contemporary local crafts, made with care in Udupi.',business:{tagline:'Made for everyday life',category:'Shopping',phone:'+91 90000 00000',address:'Udupi',openingHours:'10 am to 8 pm',mapsUrl:'https://maps.google.com/?q=Udupi',backgroundColor:'#4a1220',offerings:['Local gifts','Handmade crafts']}});
+
+test('advertisement widths produce two, three, four or six uncropped desktop cards',async({page})=>{
+ await mockApi(page);await mockLocalBusinessImages(page);await page.setViewportSize({width:1600,height:1000});
+ let ads:any[]=[];await page.route(api+'/v1/ads',r=>r.fulfill({json:ads}));
+ for(const [width,across,tier] of [[1920,2,'showcase'],[1600,3,'large'],[1000,4,'medium'],[700,6,'small']] as const){
+  ads=Array.from({length:across+1},(_,i)=>businessAd(i+1,width));await page.goto('/#/advertisements');await page.reload();
+  const tiles=page.locator('.ad-grid .ad-tile');await expect(tiles).toHaveCount(across+1);await expect(tiles.first()).toHaveAttribute('data-tier',tier);
+  const boxes=await tiles.evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y,w:b.width,h:b.height};}));
+  for(let i=1;i<across;i++){expect(Math.abs(boxes[i].y-boxes[0].y)).toBeLessThan(2);expect(boxes[i].x).toBeGreaterThan(boxes[i-1].x);}
+  expect(boxes[across].y).toBeGreaterThan(boxes[0].y);if(tier==='showcase')expect(boxes[0].h).toBe(500);
+  await expect(tiles.first().locator('img')).toHaveCSS('object-fit','contain');
+ }
+ ads=[businessAd(1,1920),businessAd(2,1600),businessAd(3,1000),businessAd(4,700),businessAd(5,700),businessAd(6,1000),businessAd(7,700),businessAd(8,700),businessAd(9,700)];await page.reload();
+ await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:test.info().outputPath('support-local-desktop.png'),fullPage:true,animations:'disabled'});
+ await page.setViewportSize({width:390,height:844});await expect(page.locator('.ad-tile').first()).toHaveCSS('grid-column-start','span 12');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+ await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:test.info().outputPath('support-local-mobile.png'),fullPage:true,animations:'disabled'});
+});
+
+test('advertisement business pages preserve galleries, contacts and route changes',async({page})=>{
+ await mockApi(page);await mockLocalBusinessImages(page);
+ const first={...businessAd(71,1920),title:'Coastal Crafts',images:['https://example.org/ad-fixtures/Coastal.svg','https://example.org/ad-fixtures/Workshop.svg'],description:'Discover <b>handmade</b> gifts.'};first.imageUrl=first.images[0];
+ const second={...businessAd(72,800),title:'Neighbourhood Store'};
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:[first,second]}));
+ await page.route(api+'/v1/ads/page/shop-71',r=>r.fulfill({json:first}));await page.route(api+'/v1/ads/page/shop-72',r=>r.fulfill({json:second}));
+ await page.goto('/#/advertisements');await page.getByRole('link',{name:'View Coastal Crafts',exact:true}).last().click();
+ await expect(page).toHaveURL(/advertisements\/shop-71$/);await expect(page.getByRole('heading',{level:1})).toHaveText('Coastal Crafts');await expect(page.locator('.ad-description b')).toHaveText('handmade');
+ await page.getByRole('button',{name:'View photo 2 of Coastal Crafts'}).click();await expect(page.locator('.gallery-main img')).toHaveAttribute('src',first.images[1]);
+ await expect(page.locator('.contact-card a').filter({hasText:'Call'})).toHaveAttribute('href','tel:+919000000000');await expect(page.getByRole('heading',{name:'What they offer'})).toBeVisible();
+ await page.setViewportSize({width:390,height:844});await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:test.info().outputPath('local-business-mobile.png'),fullPage:true,animations:'disabled'});
+ await page.getByRole('link',{name:'View Neighbourhood Store',exact:true}).last().click();await expect(page.getByRole('heading',{level:1})).toHaveText('Neighbourhood Store');await page.reload();await expect(page.getByRole('heading',{level:1})).toHaveText('Neighbourhood Store');
+});
+
+test('website takes priority and the prototype enquiry dialog remains usable on mobile',async({page})=>{
+ await mockApi(page);await mockLocalBusinessImages(page);const ad={...businessAd(80,1920),website:'https://example.org/website'};
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:[ad]}));await page.goto('/#/advertisements');
+ await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('href',ad.website);await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('target','_blank');
+ await expect(page.locator('.ad-tile').getByText('View details',{exact:true})).toHaveCount(0);
+ await page.setViewportSize({width:390,height:844});const open=page.getByRole('button',{name:'Grow with us',exact:true});await open.click();const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
+ for(const name of ['Small','Medium','Large','Showcase'])await expect(dialog.getByText(name,{exact:true})).toBeVisible();
+ await dialog.screenshot({path:test.info().outputPath('grow-with-us-mobile.png')});await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(open).toBeFocused();
+});
+
+test('advertisement editor saves business fields and gallery dimensions from the uploaded image',async({page})=>{
+ await mockApi(page);let saved:any;await page.route(api+'/v1/admin/content/ads',r=>{saved=multipartRecord(r.request()).data;return r.fulfill({json:{id:999,kind:'ads'}});});
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Ads/}).click();
+ await page.getByLabel('Title',{exact:false}).fill('Local crafts');await page.getByLabel('Internal link',{exact:true}).fill('/advertisements/local-crafts');
+ await page.getByLabel('Tagline',{exact:true}).fill('Handmade in Udupi');await page.getByLabel('Business category',{exact:true}).fill('Shopping');await page.getByLabel('Phone',{exact:true}).fill('+91 90000 00000');await page.getByLabel('Address',{exact:true}).fill('Car Street, Udupi');await page.getByLabel('Opening hours',{exact:true}).fill('10 am to 8 pm');await page.getByLabel('What they offer',{exact:true}).fill('Local gifts\nRepairs');
+ const png=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=1800;c.height=900;c.getContext('2d')!.fillRect(0,0,1800,900);return c.toDataURL('image/png').split(',')[1];});
+ await page.getByLabel('Ad image',{exact:true}).setInputFiles([{name:'wide.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')},photoFile('second.png')]);await expect(page.getByRole('status').filter({hasText:'Main image:'})).toContainText('1800 × 900');
+ await page.getByRole('button',{name:'Publish Ad',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully',exact:true})).toBeVisible();
+ expect(saved.internalLink).toBe('local-crafts');expect(saved.images).toHaveLength(2);expect(saved.width).toBe(1800);expect(saved.business.tagline).toBe('Handmade in Udupi');expect(saved.business.offerings).toEqual(['Local gifts','Repairs']);
 });

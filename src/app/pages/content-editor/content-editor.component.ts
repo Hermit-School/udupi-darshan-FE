@@ -1,3 +1,4 @@
+import {AD_TIERS,adSlug,adTier,adExternal} from "../../content/ad-tiers";
 import { DeleteRecordComponent } from '../../components/delete-record/delete-record.component';
 import { ImagePickerComponent } from "../../components/image-picker/image-picker.component";
 import { EditorPhoto, existingPhoto } from "../../util/media-image";
@@ -82,14 +83,14 @@ export class ContentEditorComponent {
     return this.pickers?.some((picker) => picker.validating) || false;
   }
   get adPagePath() {
-    const slug=this.form.controls.internalLink.value.trim().toLowerCase().replace(/\s+/g,'-');
+    const slug=adSlug(this.form.controls.internalLink.value);
     return slug ? '/#/advertisements/' + slug : '';
   }
   get remainingUploads() {
     return 5 - this.allPhotos().filter((photo) => photo.file).length;
   }
   get photoLimit() {
-    return this.ad ? 1 : this.event ? 5 : 20;
+    return this.ad || this.event ? 5 : 20;
   }
   relatedPhotos(group: AbstractControl) {
     return this.relatedPhotoMap.get(group) || [];
@@ -109,6 +110,10 @@ export class ContentEditorComponent {
       .forEach((photo) => URL.revokeObjectURL(photo.preview));
   }
 
+  private originalAdSource="";private originalAdWidth=0;private originalAdHeight=0;
+  get adWidth(){const p=this.photos[0];return p?.width||(p?.source===this.originalAdSource?this.originalAdWidth:0);}
+  get adHeight(){const p=this.photos[0];return p?.height||(p?.source===this.originalAdSource?this.originalAdHeight:0);}
+  get adLayout(){const tier=AD_TIERS.find(t=>t.id===adTier(this.adWidth))!;return tier.name+' · '+(12/tier.span)+' across';}
   private storyStatus = "Published";
   readonly ad = this.kind === "ads";
   readonly lists = [
@@ -123,7 +128,12 @@ export class ContentEditorComponent {
     title: ["", [required, Validators.maxLength(255)]],
     label: ["", this.destination ? [required] : []],
     location: ["", this.event ? [required, Validators.maxLength(255)] : [Validators.maxLength(255)]],
-    internalLink: ["", [Validators.maxLength(100), Validators.pattern(/^[a-zA-Z][a-zA-Z0-9]*(?:[ -][a-zA-Z0-9]+)*$/)]],
+    internalLink: ["", [Validators.maxLength(116), Validators.pattern(/^(?:\/?advertisements\/|\/)?[a-zA-Z][a-zA-Z0-9]*(?:[ -][a-zA-Z0-9]+)*$/)]],
+    adTagline:["",Validators.maxLength(255)],adCategory:["",Validators.maxLength(80)],
+    adPhone:["",[Validators.maxLength(30),Validators.pattern(/^(?=(?:\D*\d){5})[+0-9() .-]{5,30}$/)]],
+    adAddress:["",Validators.maxLength(255)],adOpeningHours:["",Validators.maxLength(255)],
+    adMapsUrl:["",Validators.maxLength(255)],adBackground:["#ece3d6",Validators.pattern(/^#[0-9a-fA-F]{6}$/)],
+    adOfferings:[""],
     description: [
       "",
       this.story
@@ -194,7 +204,10 @@ export class ContentEditorComponent {
             internalLink: value.internalLink || (this.ad ? "ad-" + this.editId : ""),
             author: value.submittedBy || "",
             email: response.email || "",
-            link: this.ad ? (value.externalLink ?? value.link ?? "") : value.link || "",
+            link: this.ad ? (value.website ?? value.externalLink ?? value.link ?? "") : value.link || "",
+            adTagline:value.business?.tagline||"",adCategory:value.business?.category||"",adPhone:value.business?.phone||"",
+            adAddress:value.business?.address||"",adOpeningHours:value.business?.openingHours||"",adMapsUrl:value.business?.mapsUrl||"",
+            adBackground:value.business?.backgroundColor||"#ece3d6",adOfferings:(value.business?.offerings||[]).join("\n"),
             timings: value.timings || "",
             keyPoints: (value.keyPoints || []).join("\n"),
             discover: (value.discover || []).join("\n"),
@@ -210,11 +223,10 @@ export class ContentEditorComponent {
           this.relatedPhotoMap.clear();
           this.photos = (
             this.ad
-              ? value.imageUrl
-                ? [value.imageUrl]
-                : []
+              ? value.images?.length ? value.images : value.imageUrl ? [value.imageUrl] : []
               : value.images || []
           ).map(existingPhoto);
+          if(this.ad){this.originalAdSource=this.photos[0]?.source||"";this.originalAdWidth=value.width||0;this.originalAdHeight=value.height||0;}
           this.form.controls.trending.setValue(response.details?.featured === true);
           this.storyStatus = value.status || "Published";
           this.related.clear();
@@ -284,6 +296,12 @@ export class ContentEditorComponent {
       this.error =
         "Check the required fields and character limits before saving.";
       return;
+    }
+    if(this.ad){
+      if(this.form.controls.link.value.trim()&&!adExternal(this.form.controls.link.value)||this.form.controls.adMapsUrl.value.trim()&&!adExternal(this.form.controls.adMapsUrl.value)){
+        this.error="Use a full HTTPS URL for the website and map links.";return;
+      }
+      const offers=lines(this.form.controls.adOfferings.value);if(offers.length>20||offers.some(v=>v.length>255)){this.error="Add up to 20 offerings, at most 255 characters each.";return;}
     }
     if (this.ad && !this.form.controls.link.value.trim() && !this.form.controls.internalLink.value.trim()) {
       this.error = "Enter an internal link for this advertisement, or provide an external website.";
@@ -363,7 +381,8 @@ export class ContentEditorComponent {
               dontMissThese,
               ...(this.editId ? { status: this.storyStatus } : {}),
             }
-          : { title, imageUrl: images[0] || "", externalLink: link, internalLink: v.internalLink.trim(), description: v.description.trim() };
+           : { title, imageUrl: images[0] || "", images,website:link,externalLink: link, internalLink: adSlug(v.internalLink)||"", description: v.description.trim(),width:this.adWidth,height:this.adHeight,
+              business:{tagline:v.adTagline.trim(),category:v.adCategory.trim(),phone:v.adPhone.trim(),address:v.adAddress.trim(),openingHours:v.adOpeningHours.trim(),mapsUrl:v.adMapsUrl.trim(),backgroundColor:v.adBackground,offerings:lines(v.adOfferings)} };
     const data = new FormData();
     data.append("data", JSON.stringify(payload));
     data.append("requestKey", this.requestKey);

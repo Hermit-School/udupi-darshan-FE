@@ -1,0 +1,8 @@
+
+      <a class="tile-image" [style.background]="tint(ad)" [href]="external(ad)||'#'+internal(ad)" [attr.target]="external(ad)?'_blank':null" rel="noopener noreferrer" [attr.aria-label]="'View '+ad.title">@if(!broken.has(ad.imageUrl)){<img [src]="ad.imageUrl" [style.max-width.px]="maxWidth()" [style.max-height.px]="maxHeight()" [alt]="ad.title" loading="lazy" referrerpolicy="no-referrer" (load)="loaded(ad,$event)" (error)="broken.add(ad.imageUrl)" />}@else{<span class="image-missing">Image unavailable</span>}</a>
+      <div class="tile-copy">@if(ad.business?.category){<span class="category">{{ad.business?.category}}</span>}<h3>{{ad.title}}</h3>@if(ad.business?.tagline){<p class="tagline">{{ad.business?.tagline}}</p>}@if(ad.description){<p class="tile-description">{{summary(ad)}}</p>}
+       <div class="tile-actions">@if(phone(ad)){<a class="tile-button" [href]="phone(ad)">Call</a>}@if((tier(ad)==='large'||tier(ad)==='showcase')&&mapUrl(ad.business?.mapsUrl)){<a class="tile-button" [href]="mapUrl(ad.business?.mapsUrl)" target="_blank" rel="noopener noreferrer">Directions</a>}
+        @if(external(ad)){<a class="tile-button" [href]="external(ad)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Visit '+ad.title">Website</a>}@else{<a class="tile-button primary" [routerLink]="internal(ad)" [attr.aria-label]="'View '+ad.title">View details</a>}
+       </div>
+      </div>
+     

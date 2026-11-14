@@ -1,0 +1,6 @@
+ <dialog #growDialog id="detailsModal" class="grow-dialog" aria-labelledby="grow-title">
+  <div class="dialog-heading"><h2 id="grow-title">Grow with us</h2><button class="close-dialog" aria-label="Close" (click)="close()">×</button></div>
+  <p class="dialog-lead">Four simple ways to put your business in front of people exploring Udupi.</p>
+  @for(tier of tiers;track tier.id){<div class="tier-row"><div class="tier-diagram" aria-hidden="true">@for(cell of [1,2,3,4,5,6,7,8,9,10,11,12];track cell){<span [class.filled]="cell<=tier.span"></span>}</div><div><b>{{tier.name}}</b><p>{{tier.description}}</p><small>{{tier.range}} · {{12/tier.span}} across on desktop.</small></div><div class="price">Ask us<small>for pricing</small></div></div>}
+  <div class="dialog-footer"><div><b>Contact us</b><br/><a [href]="'mailto:'+email">{{email}}</a></div><a class="local-button" [href]="'mailto:'+email+'?subject=Advertise%20with%20Udupi%20Darshan'">Write to us</a></div>
+ </dialog>

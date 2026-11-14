@@ -3,6 +3,7 @@ export async function validateStoryPhotos(
   files: readonly File[],
   existingCount: number,
   limit=3,
+  dimensions?: (file:File,width:number,height:number)=>void,
 ): Promise<void> {
   if (existingCount + files.length > limit)
     throw new Error(
@@ -33,6 +34,7 @@ export async function validateStoryPhotos(
           image.width * image.height > 20_000_000
         )
           throw new Error('dimensions');
+        dimensions?.(file,image.width,image.height);
       } finally {
         image.close();
       }
