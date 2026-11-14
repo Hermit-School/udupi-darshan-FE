@@ -1716,7 +1716,7 @@ test('advertisement layout keeps unsaved work on conflicts, errors and cancelled
 });
 
 
-test('homepage sponsored cards fit one to five per row and center incomplete rows',async({page})=>{
+test('homepage sponsored cards change shape for one to five per row and center incomplete rows',async({page})=>{
  await mockApi(page);await page.setViewportSize({width:1600,height:1000});let columns=3;
  const sponsors=Array.from({length:7},(_,i)=>({kind:'ads',id:i+1,title:'Sponsor '+(i+1),summary:'Advertisement',images:['assets/images/ads2.png'],image:'assets/images/ads2.png',href:'/advertisements/'+(i+1)}));
  await page.route(api+'/v1/landing-layout',r=>r.fulfill({json:{configured:true,title:'Local discoveries',intro:'Explore Udupi',sectionTitle:'Featured',hero:null,features:[],sponsors,sponsorsPerRow:columns}}));
@@ -1727,17 +1727,22 @@ test('homepage sponsored cards fit one to five per row and center incomplete row
   for(let i=1;i<count;i++)expect(Math.abs(boxes[i].y-boxes[0].y)).toBeLessThan(2);
   expect(boxes[count].y).toBeGreaterThan(boxes[0].y);
   const remaining=7%count;if(remaining){const last=boxes.slice(-remaining);const center=(last[0].x+last.at(-1)!.x+last.at(-1)!.w)/2;expect(Math.abs(center-(grid!.x+grid!.width/2))).toBeLessThan(2);}
-  await expect(cards.first().locator('img')).toHaveCSS('object-fit','contain');expect(await cards.first().locator('.photo').evaluate(n=>n.getBoundingClientRect().height)).toBeLessThanOrEqual(180.1);
+  await expect(cards.first().locator('img')).toHaveCSS('object-fit','contain');
+  const body=await cards.first().locator('a').boundingBox();expect(Math.abs(body!.width/body!.height-[4,1.6,4/3,1,.75][count-1])).toBeLessThan(.02);
+  const photo=await cards.first().locator('.photo').boundingBox();const copy=await cards.first().locator('.copy').boundingBox();
+  if(count===1)expect(copy!.x).toBeGreaterThan(photo!.x);else expect(copy!.y).toBeGreaterThan(photo!.y);
+  await page.locator('.sponsors').screenshot({path:test.info().outputPath('homepage-sponsored-shape-'+count+'.png')});
  }
  await page.locator('.sponsors').screenshot({path:test.info().outputPath('homepage-sponsored-five-columns.png')});
- await page.setViewportSize({width:390,height:844});const cards=page.locator('.sponsors .home-card');const b=await cards.evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y};}));expect(b[1].y).toBeGreaterThan(b[0].y);expect(Math.abs(b[0].x-b[1].x)).toBeLessThan(1);expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+ await page.setViewportSize({width:390,height:844});const cards=page.locator('.sponsors .home-card');const b=await cards.evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y};}));expect(b[1].y).toBeGreaterThan(b[0].y);expect(Math.abs(b[0].x-b[1].x)).toBeLessThan(1);const mobileBody=await cards.first().locator('a').boundingBox();expect(Math.abs(mobileBody!.width/mobileBody!.height-4/3)).toBeLessThan(.02);expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
 test('homepage editor saves advertisement row count and publishes more than four sponsors',async({page})=>{
  const home=await mockHomepage(page,6);await page.setViewportSize({width:1900,height:1100});await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();
  const library=page.getByRole('complementary',{name:'Card library'});await library.locator('.library-card').filter({has:page.getByRole('heading',{name:'Beach spotlight',exact:true})}).getByRole('button',{name:'Set as spotlight'}).click();
  await page.getByLabel('Content type',{exact:true}).selectOption('ads');for(const button of await library.getByRole('button',{name:'Add to Sponsored',exact:true}).all())await button.click();
- await expect(page.locator('app-homepage-view .sponsors .home-card')).toHaveCount(7);await page.getByRole('combobox',{name:'Advertisements per row',exact:true}).selectOption({label:'5 cards per row'});
+ await expect(page.locator('app-homepage-view .sponsors .home-card')).toHaveCount(7);const rowCount=page.getByRole('combobox',{name:'Advertisements per row',exact:true});
+ for(const [count,ratio] of [[1,4],[2,1.6],[3,4/3],[4,1],[5,.75]]){await rowCount.selectOption({label:count+' '+(count===1?'card':'cards')+' per row'});const body=await page.locator('app-homepage-view .sponsors .home-card a').first().boundingBox();expect(Math.abs(body!.width/body!.height-ratio)).toBeLessThan(.03);}
  await page.getByRole('button',{name:'Save draft',exact:true}).click();await expect(page.getByRole('status')).toContainText('Draft saved');expect((home.state.draft as any).sponsorsPerRow).toBe(5);expect(home.state.published).toBe(false);
  await page.reload();await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();await expect(page.getByRole('combobox',{name:'Advertisements per row',exact:true})).toHaveValue('4: 5');
  await page.getByRole('button',{name:'Publish homepage',exact:true}).click();await expect(page.getByRole('status')).toContainText('Homepage published');await page.goto('/#/home');await expect(page.locator('.sponsors .home-card')).toHaveCount(7);

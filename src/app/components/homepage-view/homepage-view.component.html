@@ -4,7 +4,7 @@
  </header>
  @for(section of sections;track section.zone){
   @if(editing || cards(section.zone).length){
-   <section class="home-section" [class.spotlight]="section.zone==='hero'" [class.sponsors]="section.zone==='sponsors'" [style.--sponsor-count]="sponsorColumns" [attr.aria-label]="section.title" (dragover)="allow($event)" (drop)="drop($event,section.zone,cards(section.zone).length)">
+   <section class="home-section" [class.spotlight]="section.zone==='hero'" [class.sponsors]="section.zone==='sponsors'" [style.--sponsor-count]="sponsorColumns" [attr.data-sponsor-columns]="section.zone==='sponsors'?sponsorColumns:null" [attr.aria-label]="section.title" (dragover)="allow($event)" (drop)="drop($event,section.zone,cards(section.zone).length)">
     @if(section.zone!=='hero' || editing){<div class="section-heading"><h2>{{section.zone==='features'?view.sectionTitle:section.title}}</h2>@if(editing){<span>{{cards(section.zone).length}} / {{section.limit}}</span>}</div>}
     <div class="home-grid">
      @for(card of cards(section.zone);track card.kind+':'+card.id;let i=$index){
