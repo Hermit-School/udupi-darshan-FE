@@ -5,13 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { HomeCard, HomeView, Zone } from '../../services/homepage.service';
 import { imagePreview } from '../../util/media-image';
 export interface HomeAction {type:'remove'|'up'|'down'|'photo';zone:Zone;index:number;photo?:number;}
-@Component({selector:'app-homepage-view',standalone:true,imports:[EventBadgeComponent,FormsModule,SearchComponent],templateUrl:'./homepage-view.component.html',styleUrls:['./homepage-view.component.scss']})
+@Component({selector:'app-homepage-view',standalone:true,imports:[EventBadgeComponent,FormsModule,SearchComponent],templateUrl:'./homepage-view.component.html',styleUrls:['./homepage-view.component.scss','./homepage-sponsors.scss']})
 export class HomepageViewComponent {
  @Input({required:true}) view!:HomeView;
  @Input() editing=false;
  @Output() action=new EventEmitter<HomeAction>();
  @Output() cardDrop=new EventEmitter<{data:string;zone:Zone;index:number}>();
- readonly sections=[{zone:'hero' as Zone,title:'Main spotlight',limit:1},{zone:'features' as Zone,title:'Featured cards',limit:12},{zone:'sponsors' as Zone,title:'Sponsored',limit:4}];
+ readonly sections=[{zone:'hero' as Zone,title:'Main spotlight',limit:1},{zone:'features' as Zone,title:'Featured cards',limit:12},{zone:'sponsors' as Zone,title:'Sponsored',limit:30}];
+ get sponsorColumns(){const count=this.view.sponsorsPerRow??3;return Number.isInteger(count)&&count>=1&&count<=5?count:3;}
  image=imagePreview;
  cards(zone:Zone):HomeCard[]{return zone==='hero'?(this.view.hero?[this.view.hero]:[]):this.view[zone];}
  edit(type:HomeAction['type'],zone:Zone,index:number,photo?:number){this.action.emit({type,zone,index,photo});}

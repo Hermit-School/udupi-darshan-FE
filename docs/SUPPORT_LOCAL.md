@@ -21,3 +21,8 @@ Inter is self-hosted in assets/fonts with its SIL Open Font License. No CSP rela
 ## Manual layout replaces image-width classification
 
 The current layout uses administrator choices: Large = 12/12, Medium = 6/12, Small = 4/12, Extra-small = 3/12. Image width/height only describe the media. Existing/new advertisements default to Small. Use Dashboard → Edit advertisement layout (`/admindashboard/advertisements`) to drag into order, change sizes and Save layout. Move up/down buttons support keyboard and touch. The public grid preserves the saved order, uses two columns on tablets and stacks on phones. Save publishes immediately; reload detects concurrent edits via a revision. Failed saves keep local work. V17 backend must deploy first. This section supersedes the original width-based sizing description above.
+
+
+## Compact homepage sponsored cards
+
+Dashboard → Customize homepage includes Advertisements per row (1–5, default 3). This setting belongs to the homepage draft/published JSON as `sponsorsPerRow`, independently of Support local's manual sizes. The Sponsored section accepts up to 30 ads, wraps in saved order, and centers each incomplete row. Photos use contain and compact heights; tablet previews use up to two columns and phones stack. Save draft does not change the public homepage; Publish homepage publishes both selection and row count. Backend accepts missing settings for older clients/layouts and defaults to 3. No migration or production content write is required. Deploy backend before frontend.

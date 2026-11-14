@@ -4,14 +4,14 @@
  </header>
  @for(section of sections;track section.zone){
   @if(editing || cards(section.zone).length){
-   <section class="home-section" [class.spotlight]="section.zone==='hero'" [class.sponsors]="section.zone==='sponsors'" [attr.aria-label]="section.title" (dragover)="allow($event)" (drop)="drop($event,section.zone,cards(section.zone).length)">
+   <section class="home-section" [class.spotlight]="section.zone==='hero'" [class.sponsors]="section.zone==='sponsors'" [style.--sponsor-count]="sponsorColumns" [attr.aria-label]="section.title" (dragover)="allow($event)" (drop)="drop($event,section.zone,cards(section.zone).length)">
     @if(section.zone!=='hero' || editing){<div class="section-heading"><h2>{{section.zone==='features'?view.sectionTitle:section.title}}</h2>@if(editing){<span>{{cards(section.zone).length}} / {{section.limit}}</span>}</div>}
     <div class="home-grid">
      @for(card of cards(section.zone);track card.kind+':'+card.id;let i=$index){
       <article class="home-card" [attr.draggable]="editing" (dragstart)="drag($event,card,section.zone,i)" (dragover)="allow($event)" (drop)="drop($event,section.zone,i)">
        <a [attr.href]="editing ? null : card.href.toLowerCase().startsWith('https://') ? card.href : '#' + card.href" [attr.target]="!editing && card.href.toLowerCase().startsWith('https://') ? '_blank' : null" rel="noopener noreferrer" [attr.tabindex]="editing?-1:null">
         <div class="photo">@if(card.image){<img [src]="image(card.image)" [alt]="card.title" [attr.loading]="section.zone==='hero'?'eager':'lazy'" width="800" height="500">}@else{<span class="photo-placeholder">Udupi Darshan</span>}</div>
-        <div class="copy">@if(!editing && card.kind==='events'){<app-event-badge [date]="card.eventDate" [endDate]="card.eventEndDate"></app-event-badge>}<p class="eyebrow">{{card.kind==='ads'?'Advertisement':card.kind==='story'?'Stories':card.kind}}</p><h3>{{card.title}}</h3><p>{{card.summary}}</p>@if(!editing){<span class="read">Explore ↗</span>}</div>
+        <div class="copy">@if(!editing && card.kind==='events'){<app-event-badge [date]="card.eventDate" [endDate]="card.eventEndDate"></app-event-badge>}<p class="eyebrow">{{card.kind==='ads'?'Advertisement':card.kind==='story'?'Stories':card.kind}}</p><h3>{{card.title}}</h3>@if(card.kind!=='ads'){<p>{{card.summary}}</p>}@if(!editing){<span class="read">Explore ↗</span>}</div>
        </a>
        @if(editing){<div class="card-tools"><span class="drag-hint" aria-hidden="true">⠿ Drag to arrange</span>
         @if(section.zone!=='hero'){<button type="button" [disabled]="i===0" [attr.aria-label]="'Move '+card.title+' up'" (click)="edit('up',section.zone,i)">↑</button><button type="button" [disabled]="i===cards(section.zone).length-1" [attr.aria-label]="'Move '+card.title+' down'" (click)="edit('down',section.zone,i)">↓</button>}

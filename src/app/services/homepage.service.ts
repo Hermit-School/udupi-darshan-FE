@@ -9,9 +9,9 @@ export type HomeKind = 'nature'|'culture'|'food'|'story'|'events'|'ads';
 export type Zone = 'hero'|'features'|'sponsors';
 export interface HomeRef {kind:HomeKind;id:number;imageIndex:number;}
 export interface HomeCard {kind:HomeKind;id:number;title:string;summary:string;images:string[];href:string;image:string|null;eventDate?:string|null;eventEndDate?:string|null;}
-export interface HomeLayout {title:string;intro:string;sectionTitle:string;hero:HomeRef|null;features:HomeRef[];sponsors:HomeRef[];}
+export interface HomeLayout {title:string;intro:string;sectionTitle:string;hero:HomeRef|null;features:HomeRef[];sponsors:HomeRef[];sponsorsPerRow?:number;}
 export interface HomeState {version:number;draft:HomeLayout;published:boolean;}
-export interface HomeView {configured:boolean;title:string;intro:string;sectionTitle:string;hero:HomeCard|null;features:HomeCard[];sponsors:HomeCard[];}
+export interface HomeView {configured:boolean;title:string;intro:string;sectionTitle:string;hero:HomeCard|null;features:HomeCard[];sponsors:HomeCard[];sponsorsPerRow?:number;}
 @Injectable({providedIn:'root'})
 export class HomepageService {
  private http=inject(HttpClient);private url=API_BASE_URL+'/v1/admin/landing-layout';

@@ -1143,9 +1143,10 @@ test('a stalled content request does not block navigation to another section', a
 });
 
 
-async function mockHomepage(page:Page){
+async function mockHomepage(page:Page,extraSponsors=0){
  await mockApi(page);
  const cards=['nature','culture','food','story','events','ads'].map((kind,i)=>({kind,id:i+1,title:['Beach spotlight','Heritage temple','Local lunch','Coastal memory','Community festival','Local sponsor'][i],summary:'A carefully chosen local experience.',images:['assets/images/a6.jpg','assets/images/c2.jpg'],image:'assets/images/a6.jpg',href:kind==='ads'?'/advertisements':kind==='story'?'/story/'+(i+1):kind==='events'?'/events/'+(i+1):'/details/'+kind+'/'+(i+1)}));
+ for(let i=0;i<extraSponsors;i++)cards.push({kind:'ads',id:100+i,title:'Sponsor '+(i+2),summary:'Advertisement',images:['assets/images/ads2.png'],image:'assets/images/ads2.png',href:'/advertisements/'+(100+i)});
  let state={version:0,published:false,draft:{title:'Owner’s Udupi',intro:'Handpicked places and stories.',sectionTitle:'Our favourites',hero:null as any,features:[] as any[],sponsors:[] as any[]}};
  let published:any=null;let saves=0;
  const view=()=>published?{configured:true,...published,hero:resolve(published.hero),features:published.features.map(resolve),sponsors:published.sponsors.map(resolve)}:{configured:false};
@@ -1712,4 +1713,33 @@ test('advertisement layout keeps unsaved work on conflicts, errors and cancelled
  page.once('dialog',d=>d.dismiss());await page.getByRole('link',{name:'← Admin dashboard'}).click();await expect(page).toHaveURL(/admindashboard\/advertisements$/);
  conflict=false;await page.getByRole('button',{name:'Save layout',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Could not confirm');await expect(size).toHaveValue('large');
  page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Reload',exact:true}).click();await expect(size).toHaveValue('small');expect(gets).toBe(2);
+});
+
+
+test('homepage sponsored cards fit one to five per row and center incomplete rows',async({page})=>{
+ await mockApi(page);await page.setViewportSize({width:1600,height:1000});let columns=3;
+ const sponsors=Array.from({length:7},(_,i)=>({kind:'ads',id:i+1,title:'Sponsor '+(i+1),summary:'Advertisement',images:['assets/images/ads2.png'],image:'assets/images/ads2.png',href:'/advertisements/'+(i+1)}));
+ await page.route(api+'/v1/landing-layout',r=>r.fulfill({json:{configured:true,title:'Local discoveries',intro:'Explore Udupi',sectionTitle:'Featured',hero:null,features:[],sponsors,sponsorsPerRow:columns}}));
+ for(const count of [1,2,3,4,5]){
+  columns=count;await page.goto('/#/home');await page.reload();const cards=page.locator('.sponsors .home-card');await expect(cards).toHaveCount(7);
+  const boxes=await cards.evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y,w:b.width,h:b.height};}));
+  const grid=await page.locator('.sponsors .home-grid').boundingBox();expect(grid).not.toBeNull();
+  for(let i=1;i<count;i++)expect(Math.abs(boxes[i].y-boxes[0].y)).toBeLessThan(2);
+  expect(boxes[count].y).toBeGreaterThan(boxes[0].y);
+  const remaining=7%count;if(remaining){const last=boxes.slice(-remaining);const center=(last[0].x+last.at(-1)!.x+last.at(-1)!.w)/2;expect(Math.abs(center-(grid!.x+grid!.width/2))).toBeLessThan(2);}
+  await expect(cards.first().locator('img')).toHaveCSS('object-fit','contain');expect(await cards.first().locator('.photo').evaluate(n=>n.getBoundingClientRect().height)).toBeLessThanOrEqual(180.1);
+ }
+ await page.locator('.sponsors').screenshot({path:test.info().outputPath('homepage-sponsored-five-columns.png')});
+ await page.setViewportSize({width:390,height:844});const cards=page.locator('.sponsors .home-card');const b=await cards.evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y};}));expect(b[1].y).toBeGreaterThan(b[0].y);expect(Math.abs(b[0].x-b[1].x)).toBeLessThan(1);expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
+test('homepage editor saves advertisement row count and publishes more than four sponsors',async({page})=>{
+ const home=await mockHomepage(page,6);await page.setViewportSize({width:1900,height:1100});await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();
+ const library=page.getByRole('complementary',{name:'Card library'});await library.locator('.library-card').filter({has:page.getByRole('heading',{name:'Beach spotlight',exact:true})}).getByRole('button',{name:'Set as spotlight'}).click();
+ await page.getByLabel('Content type',{exact:true}).selectOption('ads');for(const button of await library.getByRole('button',{name:'Add to Sponsored',exact:true}).all())await button.click();
+ await expect(page.locator('app-homepage-view .sponsors .home-card')).toHaveCount(7);await page.getByRole('combobox',{name:'Advertisements per row',exact:true}).selectOption({label:'5 cards per row'});
+ await page.getByRole('button',{name:'Save draft',exact:true}).click();await expect(page.getByRole('status')).toContainText('Draft saved');expect((home.state.draft as any).sponsorsPerRow).toBe(5);expect(home.state.published).toBe(false);
+ await page.reload();await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();await expect(page.getByRole('combobox',{name:'Advertisements per row',exact:true})).toHaveValue('4: 5');
+ await page.getByRole('button',{name:'Publish homepage',exact:true}).click();await expect(page.getByRole('status')).toContainText('Homepage published');await page.goto('/#/home');await expect(page.locator('.sponsors .home-card')).toHaveCount(7);
+ const b=await page.locator('.sponsors .home-card').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(Math.abs(b[4]-b[0])).toBeLessThan(2);expect(b[5]).toBeGreaterThan(b[0]);
 });
