@@ -141,7 +141,7 @@
               >{{
                 destination
                   ? "Website or map link *"
-                  : ad ? "External link (optional)" : "Destination link (optional)"
+                  : ad ? "Website (optional)" : "Destination link (optional)"
               }}
               <input
                 formControlName="link"
@@ -153,13 +153,24 @@
             </label>
             @if (ad) {
               <label class="wide">Internal link
-                <input formControlName="internalLink" aria-label="Internal link" maxlength="100" placeholder="e.g. coastal-cafe" aria-describedby="ad-internal-help" />
+                <input formControlName="internalLink" aria-label="Internal link" maxlength="116" placeholder="e.g. /advertisements/coastal-cafe" aria-describedby="ad-internal-help" />
                 <small id="ad-internal-help">Start with a letter; use a unique name with letters, numbers, spaces or hyphens. Opens when no external website is provided.</small>
                 @if (adPagePath) { <small>Page address: {{ adPagePath }}</small> }
               </label>
             }
+            @if(ad){
+              <label>Tagline<input formControlName="adTagline" maxlength="255" placeholder="One line about the business" /></label>
+              <label>Business category<input formControlName="adCategory" maxlength="80" placeholder="e.g. Jewellery, Food, Stay" /></label>
+              <label>Phone<input formControlName="adPhone" maxlength="30" type="tel" /></label>
+              <label>Address<input formControlName="adAddress" maxlength="255" /></label>
+              <label>Opening hours<input formControlName="adOpeningHours" maxlength="255" /></label>
+              <label>Google Maps link<input formControlName="adMapsUrl" maxlength="255" inputmode="url" placeholder="https://…" /></label>
+              <label>Image backdrop colour<input type="color" formControlName="adBackground" /></label>
+              <label class="wide">What they offer<textarea formControlName="adOfferings" rows="4" placeholder="One offering per line, up to 20"></textarea></label>
+            }
             <div class="wide">
-              <h2>{{ ad ? "Advertisement image" : "Photos" }}</h2>
+              <h2>{{ ad ? "Advertisement photos" : "Photos" }}</h2>
+              @if(ad){<p class="hint">The first photo is the card image. Its original width sets the desktop layout automatically: below 800 px → 6 across; 800–1199 → 4 across; 1200–1600 → 3 across; above 1600 → 2 across. All photos stay uncropped.</p>@if(adWidth){<p class="hint" role="status">Main image: {{adWidth}} × {{adHeight}} px. {{adLayout}} on desktop.</p>}}
               <app-image-picker
                 [items]="photos"
                 (itemsChange)="photos = $event"

@@ -4,6 +4,8 @@ export interface EditorPhoto {
   source: string;
   preview: string;
   file?: File;
+  width?: number;
+  height?: number;
 }
 export function imagePreview(path: string): string {
   return /^\/v1\/(media|blogs\/photos|events\/photos)\/[0-9a-f-]{36}$/.test(

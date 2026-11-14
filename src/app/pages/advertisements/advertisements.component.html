@@ -1,135 +1,41 @@
-<main class="ud-page" udMotion>
-  <div class="ud-wrap">
-    <header class="ud-intro ud-enter">
-      <p class="ud-eyebrow">Around the neighbourhood</p>
-      <h1>{{ detailId && publishedAds.length ? publishedAds[0].title : 'Local connections.' }}</h1>
-      <p class="ud-lead">
-        Discover businesses and advertisements from the community.
-      </p>
-      <button
-        class="ud-button"
-        data-bs-toggle="modal"
-        data-bs-target="#detailsModal"
-      >
-        Grow with us
-      </button>
-    </header>
-    @if (publishedAds.length) {
-      <section class="container py-4" aria-labelledby="published-ads">
-        <h2 id="published-ads">Local advertisements</h2>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
-          @for (ad of publishedAds; track ad.id) {
-            <article class="col">
-              <div class="card h-100">
-                <a [href]="external(ad) ? external(ad) : '#' + internal(ad)" [attr.target]="external(ad) ? '_blank' : null" rel="noopener noreferrer" [attr.aria-label]="'View ' + ad.title"><img
-                  [src]="ad.imageUrl"
-                  alt=""
-                  class="card-img-top" [style.object-fit]="detailId ? 'contain' : 'cover'"
-                  loading="lazy"
-                  referrerpolicy="no-referrer"
-                /></a>
-                <div class="card-body">
-                  <h3 class="h5">{{ ad.title }}</h3>
-                  @if (detailId && ad.description) { <p class="ad-description" style="white-space: pre-wrap">{{ ad.description }}</p> }
-                  @if (external(ad)) {
-                    <a
-                      [href]="external(ad)"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >Visit {{ ad.title }}</a
-                    >
-                  } @else if (!detailId) {
-                    <a [routerLink]="internal(ad)">View {{ ad.title }}</a>
-                  }
-                </div>
-              </div>
-            </article>
-          }
-        </div>
-      </section>
-    }
-    @if (loading) { <p role="status">Loading advertisements…</p> }
-    @if (error) { <p role="alert">{{ error }}</p> }
-    @if (!loading && !error && !publishedAds.length) { <p>New local businesses will appear here soon.</p> }
-    @if (detailId) { <a routerLink="/advertisements">← Back to Support local</a> }
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="detailsModal"
-      tabindex="-1"
-      aria-labelledby="detailsModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="detailsModalLabel">
-              Advertisement Details
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <table class="table">
-              <thead>
-                <tr>
-                  <td class="bold-text">Advertisement Types</td>
-                  <td class="bold-text">Price</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Banner: 468 x 60</td>
-                  <td>Rs 25500/page/yr</td>
-                </tr>
-                <tr>
-                  <td>Leaderboard: 728 x 90</td>
-                  <td>Rs 15500/page/yr</td>
-                </tr>
-                <tr>
-                  <td>Half Page: 300 x 600</td>
-                  <td>Rs 10500/page/yr</td>
-                </tr>
-                <tr>
-                  <td>Large Rectangle: 336 x 280</td>
-                  <td>Rs 5500/page/yr</td>
-                </tr>
-                <tr>
-                  <td>Medium Rectangle: 300 x 250</td>
-                  <td>Rs 4500/page/yr</td>
-                </tr>
-                <tr>
-                  <td>Square Pop-Up: 250 x 250</td>
-                  <td>Rs 2500/page/yr</td>
-                </tr>
-                <tr>
-                  <td>Vertical Banner: 120 x 240</td>
-                  <td>Rs 1500/page/yr</td>
-                </tr>
-                <tr>
-                  <td>Wide Skyscraper: 160X600</td>
-                  <td>Rs 500/page/yr</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="contact-text">
-              <span class="bold-text contact">Contact Us</span><br />
-              <span class="bold-text">Email:</span> {{ this.email }}<br />
-              <span class="bold-text">Phone number:</span> 8888881818818,
-              1234567890
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn1" data-bs-dismiss="modal">
-              Exit
-            </button>
-          </div>
-        </div>
-      </div>
+<main class="support-local">
+ <div class="local-wrap">
+  @if (!detailId) {
+   <header class="local-intro ud-enter"><p class="eyebrow">Around the neighbourhood</p><h1>Local connections.</h1><p class="lead">Discover local businesses, shops and services around Udupi.</p><button class="local-button" (click)="openGrow()">Grow with us</button></header>
+  } @else {<a class="back" routerLink="/advertisements">← Back to Support local</a>}
+  @if (loading) {<p class="page-status" role="status">Loading advertisements…</p>}
+  @if (error) {<div class="page-status" role="alert"><p>{{error}}</p><button class="outline-button" (click)="retry()">Try again</button></div>}
+  @if (!loading && !error && !detailId && !publishedAds.length) {<p class="page-status">New local businesses will appear here soon.</p>}
+  @if (current; as ad) {
+   <header class="business-intro"><p class="eyebrow">{{ad.business?.category || 'Local business'}}</p><h1>{{ad.title}}</h1>@if(ad.business?.address){<p class="location">{{ad.business?.address}}</p>}</header>
+   <div class="business-layout">
+    <div>
+     <div class="gallery-main" [style.background]="tint(ad)">
+      @if(activePhoto && !broken.has(activePhoto)){<img [src]="activePhoto" [alt]="ad.title" (error)="broken.add(activePhoto)" referrerpolicy="no-referrer" />}@else{<span class="image-missing">Image unavailable</span>}
+     </div>
+     @if(photos.length>1){<div class="gallery-thumbs" aria-label="Business photos">@for(photo of photos;track photo;let i=$index){<button [class.selected]="i===selectedPhoto" [attr.aria-pressed]="i===selectedPhoto" [attr.aria-label]="'View photo '+(i+1)+' of '+ad.title" (click)="selectedPhoto=i">@if(!broken.has(photo)){<img [src]="photo" alt="" loading="lazy" (error)="broken.add(photo)" referrerpolicy="no-referrer" />}</button>}</div>}
+     @if(ad.description){<h2>About</h2><div class="ad-description business-copy" [innerHTML]="ad.description"></div>}
+     @if(ad.business?.offerings?.length){<h2>What they offer</h2><ul class="offerings">@for(offer of ad.business?.offerings;track $index){<li>{{offer}}</li>}</ul>}
     </div>
-  </div>
+    <aside class="contact-card"><h3>Get in touch</h3>
+     @if(ad.business?.phone){<b>Phone</b><p>{{ad.business?.phone}}</p>}
+     @if(ad.business?.address){<b>Address</b><p>{{ad.business?.address}}</p>}
+     @if(ad.business?.openingHours){<b>Opening hours</b><p>{{ad.business?.openingHours}}</p>}
+     @if(phone(ad)){<a class="local-button" [href]="phone(ad)">Call</a>}
+     @if(mapUrl(ad.business?.mapsUrl)){<a class="outline-button" [href]="mapUrl(ad.business?.mapsUrl)" target="_blank" rel="noopener noreferrer">Find on Google Maps</a>}
+     @if(external(ad)){<a class="outline-button" [href]="external(ad)" target="_blank" rel="noopener noreferrer">Visit their website</a><p class="fine-print">Prices and offers change often. Their website always has the latest.</p>}
+     @if(!ad.business?.phone && !ad.business?.address && !ad.business?.openingHours && !external(ad) && !mapUrl(ad.business?.mapsUrl)){<p>Contact details will be added soon.</p>}
+    </aside>
+   </div>
+  }
+  @if(!loading && !error && (detailId ? related.length : publishedAds.length)) {
+   @if(detailId){<h2 class="more-title">More local businesses</h2>}
+   <section class="ad-grid" aria-label="Local advertisements">
+    @for(ad of detailId ? related : publishedAds;track ad.id){
+     <app-advertisement-tile [ad]="ad" [viewportWidth]="viewportWidth" [viewportHeight]="viewportHeight" />
+    }
+   </section>
+  }
+ </div>
+ <app-advertisement-enquiry #enquiry />
 </main>

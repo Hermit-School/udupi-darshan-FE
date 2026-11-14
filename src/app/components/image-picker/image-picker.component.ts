@@ -34,10 +34,12 @@ export class ImagePickerComponent {
         throw new Error(
           "Upload up to 5 new photos per save, including related-place photos.",
         );
+      const dimensions=new Map<File,{width:number;height:number}>();
       await validateStoryPhotos(
         files,
         replacing ? 0 : this.items.length,
         this.limit,
+        (file,width,height)=>dimensions.set(file,{width,height}),
       );
       const added: EditorPhoto[] = files.map((file) => {
         const id = crypto.randomUUID();
@@ -46,6 +48,7 @@ export class ImagePickerComponent {
           source: "upload:" + id,
           preview: URL.createObjectURL(file),
           file,
+          ...dimensions.get(file),
         };
       });
       if (replacing)
