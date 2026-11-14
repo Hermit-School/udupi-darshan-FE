@@ -1618,15 +1618,15 @@ async function mockLocalBusinessImages(page:Page){
 }
 const businessAd=(id:number,width:number)=>({id,title:'Local shop '+id,imageUrl:'https://example.org/ad-fixtures/Shop-'+id+'.svg',images:['https://example.org/ad-fixtures/Shop-'+id+'.svg'],width,height:900,website:'',internalLink:'shop-'+id,description:'Traditional and contemporary local crafts, made with care in Udupi.',business:{tagline:'Made for everyday life',category:'Shopping',phone:'+91 90000 00000',address:'Udupi',openingHours:'10 am to 8 pm',mapsUrl:'https://maps.google.com/?q=Udupi',backgroundColor:'#4a1220',offerings:['Local gifts','Handmade crafts']}});
 
-test('advertisement widths produce two, three, four or six uncropped desktop cards',async({page})=>{
+test('manual advertisement sizes produce full, half, third and quarter width cards regardless of image dimensions',async({page})=>{
  await mockApi(page);await mockLocalBusinessImages(page);await page.setViewportSize({width:1600,height:1000});
  let ads:any[]=[];await page.route(api+'/v1/ads',r=>r.fulfill({json:ads}));
- for(const [width,across,tier] of [[1920,2,'showcase'],[1600,3,'large'],[1000,4,'medium'],[700,6,'small']] as const){
-  ads=Array.from({length:across+1},(_,i)=>businessAd(i+1,width));await page.goto('/#/advertisements');await page.reload();
+ for(const [width,across,tier] of [[400,1,'large'],[1900,2,'medium'],[700,3,'small'],[2000,4,'xs']] as const){
+  ads=Array.from({length:across+1},(_,i)=>({...businessAd(i+1,width),layoutSize:tier}));await page.goto('/#/advertisements');await page.reload();
   const tiles=page.locator('.ad-grid .ad-tile');await expect(tiles).toHaveCount(across+1);await expect(tiles.first()).toHaveAttribute('data-tier',tier);
   const boxes=await tiles.evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y,w:b.width,h:b.height};}));
   for(let i=1;i<across;i++){expect(Math.abs(boxes[i].y-boxes[0].y)).toBeLessThan(2);expect(boxes[i].x).toBeGreaterThan(boxes[i-1].x);}
-  expect(boxes[across].y).toBeGreaterThan(boxes[0].y);if(tier==='showcase')expect(boxes[0].h).toBe(500);
+  expect(boxes[across].y).toBeGreaterThan(boxes[0].y);if(tier==='large')expect(boxes[0].h).toBe(720);
   await expect(tiles.first().locator('img')).toHaveCSS('object-fit','contain');
  }
  ads=[businessAd(1,1920),businessAd(2,1600),businessAd(3,1000),businessAd(4,700),businessAd(5,700),businessAd(6,1000),businessAd(7,700),businessAd(8,700),businessAd(9,700)];await page.reload();
@@ -1656,7 +1656,7 @@ test('website takes priority and the prototype enquiry dialog remains usable on 
  await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('href',ad.website);await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('target','_blank');
  await expect(page.locator('.ad-tile').getByText('View details',{exact:true})).toHaveCount(0);
  await page.setViewportSize({width:390,height:844});const open=page.getByRole('button',{name:'Grow with us',exact:true});await open.click();const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
- for(const name of ['Small','Medium','Large','Showcase'])await expect(dialog.getByText(name,{exact:true})).toBeVisible();
+ for(const name of ['Small','Medium','Large','Extra-small'])await expect(dialog.getByText(name,{exact:true})).toBeVisible();
  await dialog.screenshot({path:test.info().outputPath('grow-with-us-mobile.png')});await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(open).toBeFocused();
 });
 
@@ -1669,4 +1669,47 @@ test('advertisement editor saves business fields and gallery dimensions from the
  await page.getByLabel('Ad image',{exact:true}).setInputFiles([{name:'wide.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')},photoFile('second.png')]);await expect(page.getByRole('status').filter({hasText:'Main image:'})).toContainText('1800 × 900');
  await page.getByRole('button',{name:'Publish Ad',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully',exact:true})).toBeVisible();
  expect(saved.internalLink).toBe('local-crafts');expect(saved.images).toHaveLength(2);expect(saved.width).toBe(1800);expect(saved.business.tagline).toBe('Handmade in Udupi');expect(saved.business.offerings).toEqual(['Local gifts','Repairs']);
+});
+
+
+test('dashboard advertisement layout drag, resize, discard and save persist on the public page',async({page})=>{
+ await mockApi(page);await mockLocalBusinessImages(page);await page.setViewportSize({width:1500,height:1000});
+ const ads=[businessAd(1,400),businessAd(2,1900),businessAd(3,800),businessAd(4,2100)];
+ let state={revision:'original',items:ads.map(ad=>({id:ad.id,size:'small'}))};let saves=0;
+ await page.route(api+'/v1/admin/advertisement-layout',r=>{
+  expect(r.request().headers()['authorization']).toBe('Bearer '+token);
+  if(r.request().method()==='PUT'){const body=r.request().postDataJSON();expect(body.revision).toBe(state.revision);state={revision:'saved-'+(++saves),items:body.items};}
+  return r.fulfill({json:state});
+ });
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:state.items.map(item=>({...ads.find(ad=>ad.id===item.id),layoutSize:item.size}))}));
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:'Edit advertisement layout'}).click();
+ const cards=page.locator('.canvas article');await expect(cards).toHaveCount(4);await expect(page.getByRole('button',{name:'Save layout',exact:true})).toBeDisabled();
+ await page.getByRole('combobox',{name:'Size for Local shop 1'}).selectOption('large');await page.getByRole('combobox',{name:'Size for Local shop 2'}).selectOption('medium');
+ await page.getByRole('combobox',{name:'Size for Local shop 3'}).selectOption('xs');
+ const drag=await page.evaluateHandle(()=>new DataTransfer());
+ await cards.nth(3).locator('.drag-handle').dispatchEvent('dragstart',{dataTransfer:drag});await cards.nth(0).dispatchEvent('dragover',{dataTransfer:drag});await cards.nth(0).dispatchEvent('drop',{dataTransfer:drag});
+ await expect(cards.first()).toHaveAttribute('data-id','4');await expect(page.getByText('Unsaved changes',{exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Save layout',exact:true}).click();await expect(page.getByRole('status')).toContainText('Layout saved');expect(saves).toBe(1);
+ expect(state.items).toEqual([{id:4,size:'small'},{id:1,size:'large'},{id:2,size:'medium'},{id:3,size:'xs'}]);
+ await page.getByRole('button',{name:'Move Local shop 1 up',exact:true}).click();await page.getByRole('button',{name:'Discard changes'}).click();await expect(cards.first()).toHaveAttribute('data-id','4');
+ await page.screenshot({path:test.info().outputPath('advertisement-layout-desktop.png'),fullPage:true});
+ await page.reload();await signIn(page);await page.getByRole('link',{name:'Edit advertisement layout'}).click();await expect(cards.first()).toHaveAttribute('data-id','4');await expect(page.getByRole('combobox',{name:'Size for Local shop 1'})).toHaveValue('large');
+ await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+ await page.getByRole('button',{name:'Move Local shop 1 up',exact:true}).click();await page.getByRole('button',{name:'Save layout',exact:true}).click();await expect(page.getByRole('status')).toContainText('Layout saved');
+ await page.screenshot({path:test.info().outputPath('advertisement-layout-mobile.png'),fullPage:true});
+ await page.goto('/#/advertisements');await expect(page.locator('.ad-tile').first()).toHaveAttribute('data-id','1');await expect(page.locator('.ad-tile').first()).toHaveAttribute('data-tier','large');
+});
+
+test('advertisement layout keeps unsaved work on conflicts, errors and cancelled navigation',async({page})=>{
+ await mockApi(page);await mockLocalBusinessImages(page);let gets=0;let conflict=true;
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:[businessAd(1,1900)]}));
+ await page.route(api+'/v1/admin/advertisement-layout',r=>{
+  if(r.request().method()==='PUT')return r.fulfill({status:conflict?409:503,json:{detail:'Failed'}});
+  gets++;return r.fulfill({json:{revision:'r1',items:[{id:1,size:'small'}]}});
+ });
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:'Edit advertisement layout'}).click();
+ const size=page.getByRole('combobox',{name:'Size for Local shop 1'});await size.selectOption('large');await page.getByRole('button',{name:'Save layout',exact:true}).click();await expect(page.getByRole('alert')).toContainText('changed since');await expect(size).toHaveValue('large');
+ page.once('dialog',d=>d.dismiss());await page.getByRole('link',{name:'← Admin dashboard'}).click();await expect(page).toHaveURL(/admindashboard\/advertisements$/);
+ conflict=false;await page.getByRole('button',{name:'Save layout',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Could not confirm');await expect(size).toHaveValue('large');
+ page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Reload',exact:true}).click();await expect(size).toHaveValue('small');expect(gets).toBe(2);
 });

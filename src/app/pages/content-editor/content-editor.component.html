@@ -170,7 +170,7 @@
             }
             <div class="wide">
               <h2>{{ ad ? "Advertisement photos" : "Photos" }}</h2>
-              @if(ad){<p class="hint">The first photo is the card image. Its original width sets the desktop layout automatically: below 800 px → 6 across; 800–1199 → 4 across; 1200–1600 → 3 across; above 1600 → 2 across. All photos stay uncropped.</p>@if(adWidth){<p class="hint" role="status">Main image: {{adWidth}} × {{adHeight}} px. {{adLayout}} on desktop.</p>}}
+              @if(ad){<p class="hint">The first photo is the card image. Set its size and position in the dashboard’s Support local layout editor. Image resolution does not control card size. All photos stay uncropped.</p>@if(adWidth){<p class="hint" role="status">Main image: {{adWidth}} × {{adHeight}} px.</p>}}
               <app-image-picker
                 [items]="photos"
                 (itemsChange)="photos = $event"
