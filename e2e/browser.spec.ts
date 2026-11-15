@@ -1332,7 +1332,7 @@ test('support local displays only managed ads and routes to external or internal
  await page.route(api+'/v1/ads',r=>r.fulfill({json:ads}));
  await page.route(api+'/v1/ads/page/community-shop',r=>r.fulfill({json:ads[1]}));
  await page.goto('/#/advertisements');
- await expect(page.getByRole('link',{name:'Visit Local cafe',exact:true})).toHaveAttribute('href','https://example.org/cafe');
+ await expect(page.getByRole('link',{name:'View Local cafe',exact:true}).first()).toHaveAttribute('href','#/advertisements/local-cafe');
  await expect(page.locator('main img')).toHaveCount(2);
  await expect(page.getByRole('link',{name:'View Community shop',exact:true}).last()).toHaveAttribute('target','_blank');await page.goto('/#/advertisements/community-shop');
  await expect(page).toHaveURL(/advertisements\/community-shop$/);
@@ -1651,11 +1651,11 @@ test('advertisement business pages preserve galleries, contacts and route change
  await expect(page.getByRole('link',{name:'View Neighbourhood Store',exact:true}).last()).toHaveAttribute('target','_blank');await page.goto('/#/advertisements/shop-72');await expect(page.getByRole('heading',{level:1})).toHaveText('Neighbourhood Store');await page.reload();await expect(page.getByRole('heading',{level:1})).toHaveText('Neighbourhood Store');
 });
 
-test('website takes priority and the prototype enquiry dialog remains usable on mobile',async({page})=>{
- await mockApi(page);await mockLocalBusinessImages(page);const ad={...businessAd(80,1920),website:'https://example.org/website'};
+test('website-only advertisements and the prototype enquiry dialog remain usable on mobile',async({page})=>{
+ await mockApi(page);await mockLocalBusinessImages(page);const ad={...businessAd(80,1920),internalLink:'',website:'https://example.org/website'};
  await page.route(api+'/v1/ads',r=>r.fulfill({json:[ad]}));await page.goto('/#/advertisements');
  await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('href',ad.website);await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('target','_blank');
- await expect(page.locator('.ad-tile').getByText('View details',{exact:true})).toHaveCount(1);
+ await expect(page.locator('.ad-tile').getByText('View details',{exact:true})).toHaveCount(0);
  await page.setViewportSize({width:390,height:844});const open=page.getByRole('button',{name:'Grow with us',exact:true});await open.click();const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
  for(const name of ['Small','Medium','Large','Extra-small'])await expect(dialog.getByText(name,{exact:true})).toBeVisible();
  await dialog.screenshot({path:test.info().outputPath('grow-with-us-mobile.png')});await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(open).toBeFocused();
@@ -1753,11 +1753,12 @@ test('homepage editor saves advertisement row count and publishes more than four
 test('optional advertisement destinations open new tabs and display-only ads have no links',async({page,context})=>{
  await mockApi(page);await mockLocalBusinessImages(page);
  const ads=[{...businessAd(1,1000),internalLink:'shop-1',website:''},{...businessAd(2,1000),internalLink:'',website:'https://example.org/business'},{...businessAd(3,1000),internalLink:'',website:''},{...businessAd(4,1000),internalLink:'shop-4',website:'https://example.org/business'}];
- await page.route(api+'/v1/ads',r=>r.fulfill({json:ads}));await context.route(api+'/v1/ads',r=>r.fulfill({json:ads}));await context.route(api+'/v1/ads/page/shop-1',r=>r.fulfill({json:ads[0]}));
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:ads}));await context.route(api+'/v1/ads',r=>r.fulfill({json:ads}));await context.route(api+'/v1/ads/page/shop-1',r=>r.fulfill({json:ads[0]}));await context.route(api+'/v1/ads/page/shop-4',r=>r.fulfill({json:ads[3]}));
  await context.route('https://example.org/business',r=>r.fulfill({contentType:'text/html',body:'<h1>Business website</h1>'}));
  await page.goto('/#/advertisements');await expect(page.locator('.ad-tile')).toHaveCount(4);const card=(id:number)=>page.locator('.ad-tile[data-id="'+id+'"]');
- await expect(card(3).locator('a[href]')).toHaveCount(0);await expect(card(3)).not.toContainText('View details');await expect(card(4).getByText('View details',{exact:true})).toBeVisible();await expect(card(4).getByText('Website',{exact:true})).toBeVisible();
+ await expect(card(3).locator('a[href]')).toHaveCount(0);await expect(card(3)).not.toContainText('View details');await expect(card(4).getByText('View details',{exact:true})).toBeVisible();await expect(card(4).getByText('Website',{exact:true})).toHaveCount(0);await expect(card(4).locator('.tile-image')).toHaveAttribute('href','#/advertisements/shop-4');
  const internalPromise=page.waitForEvent('popup');await card(1).getByText('View details',{exact:true}).click();const internal=await internalPromise;await expect(internal).toHaveURL(/advertisements\/shop-1$/);await expect(internal.getByRole('heading',{level:1})).toHaveText('Local shop 1');await expect(page).toHaveURL(/#\/advertisements$/);await internal.close();
+ const bothPromise=page.waitForEvent('popup');await card(4).locator('.tile-image').click();const both=await bothPromise;await expect(both).toHaveURL(/advertisements\/shop-4$/);await expect(both.getByRole('link',{name:'Visit their website',exact:true})).toHaveAttribute('href','https://example.org/business');const websitePromise=both.waitForEvent('popup');await both.getByRole('link',{name:'Visit their website',exact:true}).click();const website=await websitePromise;await expect(website).toHaveURL('https://example.org/business');await expect(both).toHaveURL(/advertisements\/shop-4$/);await website.close();await both.close();
  const externalPromise=page.waitForEvent('popup');await card(2).getByText('Website',{exact:true}).click();const external=await externalPromise;await expect(external).toHaveURL('https://example.org/business');await expect(page).toHaveURL(/#\/advertisements$/);await external.close();
 });
 

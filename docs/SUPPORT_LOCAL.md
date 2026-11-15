@@ -36,3 +36,8 @@ The selected homepage row count also controls each card body's aspect ratio: 1 â
 ## Optional links and new tabs
 
 Website and internal link are independently optional in Add/Edit ads. Both buttons appear when both are supplied; each opens a new tab safely. The image uses the website first, otherwise the internal page. With neither link, an ad has no navigable image or action links. The backend no longer generates slugs for link-free ads; explicitly blanking an internal link removes it. Homepage sponsored cards also support absent destinations and new tabs. Deploy backend V18 before frontend. Add/edit success pages link Back to records without a duplicate Return to dashboard action.
+
+
+### Internal page takes priority
+
+When an ad has both destinations, its image and View details open the internal business page in a new tab. Website is offered inside that page, rather than as a direct card action. External-only cards open the website directly; ads without either link remain non-clickable. The homepage catalog also prefers internal addresses when both are configured.
