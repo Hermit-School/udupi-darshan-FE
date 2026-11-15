@@ -202,7 +202,7 @@ test('admin publishes each content type using uploaded images instead of URLs',a
   expect(await page.locator('.panel input:visible, .panel select:visible, .panel textarea:visible').evaluateAll(nodes=>nodes.map(node=>{const field=node.getBoundingClientRect(),panel=node.closest('.panel')!.getBoundingClientRect();return {name:node.getAttribute('aria-label')||node.getAttribute('formcontrolname'),left:field.left,right:field.right,panelLeft:panel.left,panelRight:panel.right};}).filter(field=>field.left<field.panelLeft-1||field.right>field.panelRight+1))).toEqual([]);
   if(kind==='nature'){await page.getByText('Related places',{exact:false}).first().click();await page.getByRole('button',{name:'Add a related place'}).click();await page.getByRole('group',{name:'Related place 1',exact:true}).getByLabel('Name').fill('Nearby beach');await page.getByLabel('Related place 1 image',{exact:true}).setInputFiles(photoFile('related.png'));}
   if(kind==='ads')await page.getByLabel('Internal link',{exact:true}).fill('new-local-sponsor');
-  await publish.click();await expect(page.getByRole('heading',{name:'Published successfully',exact:true})).toBeVisible();await page.getByRole('link',{name:'Return to dashboard'}).click();
+  await publish.click();await expect(page.getByRole('heading',{name:'Published successfully',exact:true})).toBeVisible();await page.getByRole('link',{name:'Dashboard',exact:true}).click();
  }
  expect(requests.map(r=>r.kind)).toEqual(['nature','culture','food','story','ads']);
  expect(requests[0].data.images[0]).toMatch(/^upload:/);expect(requests[0].data.dontMissThese[0].imageUrl).toMatch(/^upload:/);
@@ -892,7 +892,7 @@ test('dashboard edit cards open prefilled forms and save all five existing recor
   const title=page.getByLabel(kind==='story'||kind==='ads'?'Title':'Place name');await expect(title).toHaveValue(recordName);await title.fill('Updated '+kind);
   if(kind==='story'){await expect(page.getByLabel('Contact email')).toHaveValue('author@example.invalid');await expect(page.getByLabel('Author name')).toHaveValue('Original author');}
   if(!['story','ads'].includes(kind)){await expect(page.getByLabel('Section')).toHaveValue('Legacy section');await expect(page.getByRole('group',{name:'Record photos gallery',exact:true}).locator('figure')).toHaveCount(1);}
-  await page.getByRole('button',{name:'Save changes',exact:true}).click();await expect(page.getByRole('heading',{name:'Changes saved',exact:true})).toBeVisible();await page.getByRole('link',{name:'Return to dashboard'}).click();
+  await page.getByRole('button',{name:'Save changes',exact:true}).click();await expect(page.getByRole('heading',{name:'Changes saved',exact:true})).toBeVisible();await page.getByRole('link',{name:'Dashboard',exact:true}).click();
  }
  expect(saves).toHaveLength(5);expect(saves[0].body).toMatchObject({name:'Updated nature',keyPoints:['Existing highlight'],images:['/assets/original.jpg'],dontMissThese:[{name:'Related place'}]});expect(saves[3].body).toMatchObject({title:'Updated story',status:'Published',email:'author@example.invalid',images:['/assets/story.jpg']});expect(saves[4].body).toMatchObject({title:'Updated ads',imageUrl:'https://example.invalid/ad.jpg'});
 });
@@ -1334,7 +1334,7 @@ test('support local displays only managed ads and routes to external or internal
  await page.goto('/#/advertisements');
  await expect(page.getByRole('link',{name:'Visit Local cafe',exact:true})).toHaveAttribute('href','https://example.org/cafe');
  await expect(page.locator('main img')).toHaveCount(2);
- await page.getByRole('link',{name:'View Community shop',exact:true}).last().click();
+ await expect(page.getByRole('link',{name:'View Community shop',exact:true}).last()).toHaveAttribute('target','_blank');await page.goto('/#/advertisements/community-shop');
  await expect(page).toHaveURL(/advertisements\/community-shop$/);
  await expect(page.getByRole('heading',{level:1})).toHaveText('Community shop');
  await expect(page.locator('main .gallery-main img')).toHaveCount(1);
@@ -1643,19 +1643,19 @@ test('advertisement business pages preserve galleries, contacts and route change
  const second={...businessAd(72,800),title:'Neighbourhood Store'};
  await page.route(api+'/v1/ads',r=>r.fulfill({json:[first,second]}));
  await page.route(api+'/v1/ads/page/shop-71',r=>r.fulfill({json:first}));await page.route(api+'/v1/ads/page/shop-72',r=>r.fulfill({json:second}));
- await page.goto('/#/advertisements');await page.getByRole('link',{name:'View Coastal Crafts',exact:true}).last().click();
+ await page.goto('/#/advertisements');await expect(page.getByRole('link',{name:'View Coastal Crafts',exact:true}).last()).toHaveAttribute('target','_blank');await page.goto('/#/advertisements/shop-71');
  await expect(page).toHaveURL(/advertisements\/shop-71$/);await expect(page.getByRole('heading',{level:1})).toHaveText('Coastal Crafts');await expect(page.locator('.ad-description b')).toHaveText('handmade');
  await page.getByRole('button',{name:'View photo 2 of Coastal Crafts'}).click();await expect(page.locator('.gallery-main img')).toHaveAttribute('src',first.images[1]);
  await expect(page.locator('.contact-card a').filter({hasText:'Call'})).toHaveAttribute('href','tel:+919000000000');await expect(page.getByRole('heading',{name:'What they offer'})).toBeVisible();
  await page.setViewportSize({width:390,height:844});await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:test.info().outputPath('local-business-mobile.png'),fullPage:true,animations:'disabled'});
- await page.getByRole('link',{name:'View Neighbourhood Store',exact:true}).last().click();await expect(page.getByRole('heading',{level:1})).toHaveText('Neighbourhood Store');await page.reload();await expect(page.getByRole('heading',{level:1})).toHaveText('Neighbourhood Store');
+ await expect(page.getByRole('link',{name:'View Neighbourhood Store',exact:true}).last()).toHaveAttribute('target','_blank');await page.goto('/#/advertisements/shop-72');await expect(page.getByRole('heading',{level:1})).toHaveText('Neighbourhood Store');await page.reload();await expect(page.getByRole('heading',{level:1})).toHaveText('Neighbourhood Store');
 });
 
 test('website takes priority and the prototype enquiry dialog remains usable on mobile',async({page})=>{
  await mockApi(page);await mockLocalBusinessImages(page);const ad={...businessAd(80,1920),website:'https://example.org/website'};
  await page.route(api+'/v1/ads',r=>r.fulfill({json:[ad]}));await page.goto('/#/advertisements');
  await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('href',ad.website);await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('target','_blank');
- await expect(page.locator('.ad-tile').getByText('View details',{exact:true})).toHaveCount(0);
+ await expect(page.locator('.ad-tile').getByText('View details',{exact:true})).toHaveCount(1);
  await page.setViewportSize({width:390,height:844});const open=page.getByRole('button',{name:'Grow with us',exact:true});await open.click();const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
  for(const name of ['Small','Medium','Large','Extra-small'])await expect(dialog.getByText(name,{exact:true})).toBeVisible();
  await dialog.screenshot({path:test.info().outputPath('grow-with-us-mobile.png')});await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(open).toBeFocused();
@@ -1747,4 +1747,23 @@ test('homepage editor saves advertisement row count and publishes more than four
  await page.reload();await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();await expect(page.getByRole('combobox',{name:'Advertisements per row',exact:true})).toHaveValue('4: 5');
  await page.getByRole('button',{name:'Publish homepage',exact:true}).click();await expect(page.getByRole('status')).toContainText('Homepage published');await page.goto('/#/home');await expect(page.locator('.sponsors .home-card')).toHaveCount(7);
  const b=await page.locator('.sponsors .home-card').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(Math.abs(b[4]-b[0])).toBeLessThan(2);expect(b[5]).toBeGreaterThan(b[0]);
+});
+
+
+test('optional advertisement destinations open new tabs and display-only ads have no links',async({page,context})=>{
+ await mockApi(page);await mockLocalBusinessImages(page);
+ const ads=[{...businessAd(1,1000),internalLink:'shop-1',website:''},{...businessAd(2,1000),internalLink:'',website:'https://example.org/business'},{...businessAd(3,1000),internalLink:'',website:''},{...businessAd(4,1000),internalLink:'shop-4',website:'https://example.org/business'}];
+ await page.route(api+'/v1/ads',r=>r.fulfill({json:ads}));await context.route(api+'/v1/ads',r=>r.fulfill({json:ads}));await context.route(api+'/v1/ads/page/shop-1',r=>r.fulfill({json:ads[0]}));
+ await context.route('https://example.org/business',r=>r.fulfill({contentType:'text/html',body:'<h1>Business website</h1>'}));
+ await page.goto('/#/advertisements');await expect(page.locator('.ad-tile')).toHaveCount(4);const card=(id:number)=>page.locator('.ad-tile[data-id="'+id+'"]');
+ await expect(card(3).locator('a[href]')).toHaveCount(0);await expect(card(3)).not.toContainText('View details');await expect(card(4).getByText('View details',{exact:true})).toBeVisible();await expect(card(4).getByText('Website',{exact:true})).toBeVisible();
+ const internalPromise=page.waitForEvent('popup');await card(1).getByText('View details',{exact:true}).click();const internal=await internalPromise;await expect(internal).toHaveURL(/advertisements\/shop-1$/);await expect(internal.getByRole('heading',{level:1})).toHaveText('Local shop 1');await expect(page).toHaveURL(/#\/advertisements$/);await internal.close();
+ const externalPromise=page.waitForEvent('popup');await card(2).getByText('Website',{exact:true}).click();const external=await externalPromise;await expect(external).toHaveURL('https://example.org/business');await expect(page).toHaveURL(/#\/advertisements$/);await external.close();
+});
+
+test('advertisement add and edit accept blank links without redundant dashboard return',async({page})=>{
+ await mockApi(page);let saved:any;await page.route(api+'/v1/admin/content/ads',r=>{saved=multipartRecord(r.request()).data;return r.fulfill({json:{id:90,kind:'ads'}});});
+ await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Ads/}).click();await page.getByLabel('Title',{exact:false}).fill('Display only');await page.getByLabel('Ad image',{exact:true}).setInputFiles(photoFile());
+ await page.getByRole('button',{name:'Publish Ad',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully',exact:true})).toBeVisible();expect(saved.internalLink).toBe('');expect(saved.website).toBe('');await expect(page.getByRole('link',{name:'Return to dashboard',exact:true})).toHaveCount(0);await expect(page.getByRole('link',{name:'Back to records',exact:true})).toBeVisible();
+ await page.route(api+'/v1/ads/90',r=>r.fulfill({json:{id:90,title:'Display only',imageUrl:'assets/images/ads2.png',internalLink:null,website:''}}));await page.goto('/#/edit-entry/ads/90');await expect(page.getByLabel('Internal link',{exact:true})).toHaveValue('');
 });

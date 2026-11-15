@@ -1,7 +1,6 @@
 import {Component,Input,HostBinding} from '@angular/core';
-import {RouterLink} from '@angular/router';
 import {AD_TIERS,LocalAdvertisement,adTier,adWebsite,adPath,adExternal} from '../../content/ad-tiers';
-@Component({standalone:true,imports:[RouterLink],selector:'app-advertisement-tile',templateUrl:'./advertisement-tile.component.html',styleUrls:['./advertisement-tile.component.scss'],host:{role:'article'}})
+@Component({standalone:true,imports:[],selector:'app-advertisement-tile',templateUrl:'./advertisement-tile.component.html',styleUrls:['./advertisement-tile.component.scss'],host:{role:'article'}})
 export class AdvertisementTileComponent {
  @Input({required:true}) ad!:LocalAdvertisement;@Input() viewportWidth=1280;@Input() viewportHeight=900;
  private measured=0;private measuredHeight=0;readonly broken=new Set<string>();external=adWebsite;internal=adPath;mapUrl=adExternal;

@@ -31,3 +31,8 @@ Dashboard → Customize homepage includes Advertisements per row (1–5, default
 ### Dynamic homepage card shapes
 
 The selected homepage row count also controls each card body's aspect ratio: 1 → 4:1 horizontal banner (image and copy side by side), 2 → 16:10 landscape, 3 → 4:3 balanced, 4 → 1:1 square, 5 → 3:4 portrait. Both preview and public homepage use the same styles. Images remain contained, titles clamp to two lines, and incomplete rows stay centered. At phone-sized container widths, cards stack with a readable 4:3 body. Image height scales with the selected shape rather than staying capped at 180px.
+
+
+## Optional links and new tabs
+
+Website and internal link are independently optional in Add/Edit ads. Both buttons appear when both are supplied; each opens a new tab safely. The image uses the website first, otherwise the internal page. With neither link, an ad has no navigable image or action links. The backend no longer generates slugs for link-free ads; explicitly blanking an internal link removes it. Homepage sponsored cards also support absent destinations and new tabs. Deploy backend V18 before frontend. Add/edit success pages link Back to records without a duplicate Return to dashboard action.

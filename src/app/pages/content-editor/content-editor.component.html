@@ -26,10 +26,7 @@
     <section class="panel success" role="status">
       <h2>{{ editId ? "Changes saved" : "Published successfully" }}</h2>
       <p>{{ published }} has been saved.</p>
-      <a routerLink="/admindashboard">Return to dashboard</a>
-      @if (editId) {
-        <a [routerLink]="['/admindashboard/content', kind]">Back to records</a>
-      }
+      <a [routerLink]="['/admindashboard/content', kind]">Back to records</a>
     </section>
   } @else {
     <form
@@ -152,9 +149,9 @@
               />
             </label>
             @if (ad) {
-              <label class="wide">Internal link
+              <label class="wide">Internal link (optional)
                 <input formControlName="internalLink" aria-label="Internal link" maxlength="116" placeholder="e.g. /advertisements/coastal-cafe" aria-describedby="ad-internal-help" />
-                <small id="ad-internal-help">Start with a letter; use a unique name with letters, numbers, spaces or hyphens. Opens when no external website is provided.</small>
+                <small id="ad-internal-help">Optional. Start with a letter; use a unique name with letters, numbers, spaces or hyphens. View details opens this page in a new tab. Leave both links empty for a non-clickable advertisement.</small>
                 @if (adPagePath) { <small>Page address: {{ adPagePath }}</small> }
               </label>
             }

@@ -200,7 +200,7 @@ export class ContentEditorComponent {
             label: value.label || "",
             location: value.location || "",
             description: value.description || value.descr || value.content || "",
-            internalLink: value.internalLink || (this.ad ? "ad-" + this.editId : ""),
+            internalLink: value.internalLink || "",
             author: value.submittedBy || "",
             email: response.email || "",
             link: this.ad ? (value.website ?? value.externalLink ?? value.link ?? "") : value.link || "",
@@ -301,10 +301,6 @@ export class ContentEditorComponent {
         this.error="Use a full HTTPS URL for the website and map links.";return;
       }
       const offers=lines(this.form.controls.adOfferings.value);if(offers.length>20||offers.some(v=>v.length>255)){this.error="Add up to 20 offerings, at most 255 characters each.";return;}
-    }
-    if (this.ad && !this.form.controls.link.value.trim() && !this.form.controls.internalLink.value.trim()) {
-      this.error = "Enter an internal link for this advertisement, or provide an external website.";
-      return;
     }
     if (this.ad && !this.photos.length) {
       this.error = "Choose an image for this advertisement.";

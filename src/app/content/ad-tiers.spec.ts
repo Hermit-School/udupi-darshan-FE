@@ -10,6 +10,7 @@ describe('advertisement sizing and destinations',()=>{
  it('normalizes relative paths within the advertisement namespace without allowing traversal',()=>{
   for(const p of ['Coastal Cafe','/coastal-cafe','/advertisements/coastal-cafe','advertisements/coastal-cafe'])expect(adSlug(p)).toBe('coastal-cafe');
   for(const p of ['../admin','//evil.invalid','https://evil.invalid','coastal-cafe?next=admin'])expect(adSlug(p)).toBeNull();
+  expect(adPath({id:5,title:'Shop',imageUrl:'image.jpg'})).toBeNull();
   expect(adPath({id:5,title:'Shop',imageUrl:'image.jpg',internalLink:'/advertisements/coastal-cafe'})).toBe('/advertisements/coastal-cafe');
  });
 });
