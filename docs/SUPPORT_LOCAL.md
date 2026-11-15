@@ -41,3 +41,8 @@ Website and internal link are independently optional in Add/Edit ads. Both butto
 ### Internal page takes priority
 
 When an ad has both destinations, its image and View details open the internal business page in a new tab. Website is offered inside that page, rather than as a direct card action. External-only cards open the website directly; ads without either link remain non-clickable. The homepage catalog also prefers internal addresses when both are configured.
+
+
+## Explicit destination buttons on both pages
+
+Support local and homepage advertisement cards show View details for a configured internal page and View website for a configured external website. Both buttons appear when both destinations exist. Each opens a new tab safely, while the card image continues to prefer the internal page. Neither button appears for destination-free cards. The internal business page also labels its external action View website. Homepage API cards now carry internalHref and website independently of the preferred href, and the editor preview displays the same button labels without navigation. Deploy backend before frontend so both destinations reach the homepage.

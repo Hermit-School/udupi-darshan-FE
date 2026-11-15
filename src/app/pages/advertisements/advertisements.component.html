@@ -23,7 +23,7 @@
      @if(ad.business?.openingHours){<b>Opening hours</b><p>{{ad.business?.openingHours}}</p>}
      @if(phone(ad)){<a class="local-button" [href]="phone(ad)">Call</a>}
      @if(mapUrl(ad.business?.mapsUrl)){<a class="outline-button" [href]="mapUrl(ad.business?.mapsUrl)" target="_blank" rel="noopener noreferrer">Find on Google Maps</a>}
-     @if(external(ad)){<a class="outline-button" [href]="external(ad)" target="_blank" rel="noopener noreferrer">Visit their website</a><p class="fine-print">Prices and offers change often. Their website always has the latest.</p>}
+     @if(external(ad)){<a class="outline-button" [href]="external(ad)" target="_blank" rel="noopener noreferrer">View website</a><p class="fine-print">Prices and offers change often. Their website always has the latest.</p>}
      @if(!ad.business?.phone && !ad.business?.address && !ad.business?.openingHours && !external(ad) && !mapUrl(ad.business?.mapsUrl)){<p>Contact details will be added soon.</p>}
     </aside>
    </div>
