@@ -1,3 +1,6 @@
+import {normalizeAdPricing} from '../../content/ad-pricing';
+import {AD_TIERS} from '../../content/ad-tiers';
+import {AdvertisementEnquiryComponent} from '../advertisements/advertisement-enquiry.component';
 import { Component, DestroyRef, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -6,17 +9,18 @@ import { forkJoin, finalize, switchMap } from 'rxjs';
 import { HomepageService, HomeCard, HomeLayout, HomeRef, HomeView, Zone } from '../../services/homepage.service';
 import { HomepageViewComponent, HomeAction } from '../../components/homepage-view/homepage-view.component';
 import { imagePreview } from '../../util/media-image';
-@Component({standalone:true,selector:'app-homepage-editor',imports:[FormsModule,RouterLink,HomepageViewComponent],templateUrl:'./homepage-editor.component.html',styleUrls:['./homepage-editor.component.scss']})
+@Component({standalone:true,selector:'app-homepage-editor',imports:[FormsModule,RouterLink,HomepageViewComponent,AdvertisementEnquiryComponent],templateUrl:'./homepage-editor.component.html',styleUrls:['./homepage-editor.component.scss']})
 export class HomepageEditorComponent {
  private api=inject(HomepageService);private destroy=inject(DestroyRef);
  cards:HomeCard[]=[];layout:HomeLayout|null=null;version=0;published=false;loading=true;busy=false;dirty=false;
  query='';kind='all';notice='';error='';conflict=false;mobile=false;
+ readonly adSizes=AD_TIERS;
  readonly kinds=['all','nature','culture','food','story','events','ads'];image=imagePreview;
  constructor(){this.load();}
  load(){
   this.loading=true;this.error='';
   forkJoin({state:this.api.state(),cards:this.api.cards()}).pipe(takeUntilDestroyed(this.destroy),finalize(()=>this.loading=false)).subscribe({
-   next:({state,cards})=>{this.cards=cards;this.layout=structuredClone(state.draft);this.layout.sponsorsPerRow??=3;this.layout.sponsorsTitle??='Featured Partner';this.version=state.version;this.published=state.published;this.dirty=false;this.conflict=false;},
+   next:({state,cards})=>{this.cards=cards;this.layout=structuredClone(state.draft);this.layout.sponsorsPerRow??=3;this.layout.sponsorsTitle??='Featured Partner';this.layout.adPricing=normalizeAdPricing(this.layout.adPricing);this.version=state.version;this.published=state.published;this.dirty=false;this.conflict=false;},
    error:()=>this.error='Unable to load the editor. Please try again.',
   });
  }
@@ -34,7 +38,7 @@ export class HomepageEditorComponent {
  get missing(){return (['hero','features','sponsors'] as Zone[]).flatMap(z=>this.refs(z)).filter(r=>!this.resolve(r)).length;}
  removeMissing(){if(!this.layout)return;this.layout.hero=this.resolve(this.layout.hero)?this.layout.hero:null;this.layout.features=this.layout.features.filter(r=>this.resolve(r));this.layout.sponsors=this.layout.sponsors.filter(r=>this.resolve(r));this.changed();}
  get preview():HomeView{
-  const l=this.layout!;return {configured:true,title:l.title,intro:l.intro,sectionTitle:l.sectionTitle,hero:this.resolve(l.hero),features:l.features.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c),sponsorsPerRow:l.sponsorsPerRow??3,sponsorsTitle:l.sponsorsTitle??'Featured Partner',sponsors:l.sponsors.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c)};
+  const l=this.layout!;return {configured:true,title:l.title,intro:l.intro,sectionTitle:l.sectionTitle,hero:this.resolve(l.hero),features:l.features.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c),sponsorsPerRow:l.sponsorsPerRow??3,sponsorsTitle:l.sponsorsTitle??'Featured Partner',adPricing:l.adPricing,sponsors:l.sponsors.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c)};
  }
  add(card:HomeCard,zone:Zone){this.place(card,zone,this.refs(zone).length);}
  private place(card:HomeCard,zone:Zone,index:number){
@@ -65,6 +69,7 @@ export class HomepageEditorComponent {
  save(publish=false){
   if(!this.layout || this.busy || this.conflict)return;
   if(!this.layout.sponsorsTitle?.trim()){this.error='Enter a partner section heading.';return;}
+  if(!this.layout.adPricing||this.adSizes.some(({id})=>!this.layout!.adPricing![id].price.trim()||this.layout!.adPricing![id].price.trim().length>40||this.layout!.adPricing![id].note.trim().length>80)){this.error='Enter a price for every ad size (up to 40 characters), with optional notes up to 80 characters.';return;}
   this.busy=true;this.error='';this.notice='';
   this.api.save(this.version,this.layout).pipe(switchMap(state=>{this.version=state.version;this.dirty=false;return publish?this.api.publish(state.version):[state];}),takeUntilDestroyed(this.destroy),finalize(()=>this.busy=false)).subscribe({
    next:state=>{this.version=state.version;this.published=state.published;this.notice=publish?'Homepage published. Visitors will see this layout on their next visit.':'Draft saved. The public homepage has not changed.';},
