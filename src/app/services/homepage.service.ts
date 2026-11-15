@@ -1,3 +1,4 @@
+import {AdPricing,normalizeAdPricing} from '../content/ad-pricing';
 import { of, switchMap, map, catchError, timeout } from 'rxjs';
 import { CommunityEvent } from './events.service';
 import { istDay } from '../util/ist-date';
@@ -9,9 +10,9 @@ export type HomeKind = 'nature'|'culture'|'food'|'story'|'events'|'ads';
 export type Zone = 'hero'|'features'|'sponsors';
 export interface HomeRef {kind:HomeKind;id:number;imageIndex:number;}
 export interface HomeCard {kind:HomeKind;id:number;title:string;summary:string;images:string[];href:string|null;internalHref?:string|null;website?:string|null;image:string|null;eventDate?:string|null;eventEndDate?:string|null;}
-export interface HomeLayout {title:string;intro:string;sectionTitle:string;hero:HomeRef|null;features:HomeRef[];sponsors:HomeRef[];sponsorsPerRow?:number;sponsorsTitle?:string;}
+export interface HomeLayout {title:string;intro:string;sectionTitle:string;hero:HomeRef|null;features:HomeRef[];sponsors:HomeRef[];sponsorsPerRow?:number;sponsorsTitle?:string;adPricing?:AdPricing;}
 export interface HomeState {version:number;draft:HomeLayout;published:boolean;}
-export interface HomeView {configured:boolean;title:string;intro:string;sectionTitle:string;hero:HomeCard|null;features:HomeCard[];sponsors:HomeCard[];sponsorsPerRow?:number;sponsorsTitle?:string;}
+export interface HomeView {configured:boolean;title:string;intro:string;sectionTitle:string;hero:HomeCard|null;features:HomeCard[];sponsors:HomeCard[];sponsorsPerRow?:number;sponsorsTitle?:string;adPricing?:AdPricing;}
 @Injectable({providedIn:'root'})
 export class HomepageService {
  private http=inject(HttpClient);private url=API_BASE_URL+'/v1/admin/landing-layout';
@@ -19,6 +20,7 @@ export class HomepageService {
  cards(){return this.http.get<HomeCard[]>(this.url+'/cards');}
  save(version:number,layout:HomeLayout){return this.http.put<HomeState>(this.url+'/draft',{version,layout});}
  publish(version:number){return this.http.post<HomeState>(this.url+'/publish',{version});}
+ pricing(){return this.http.get<HomeView>(API_BASE_URL+'/v1/landing-layout',{context:new HttpContext().set(BACKGROUND_REQUEST,true)}).pipe(map(view=>normalizeAdPricing(view?.adPricing)));}
  publicLayout(){
   const options={context:new HttpContext().set(BACKGROUND_REQUEST,true)};
   return this.http.get<HomeView>(API_BASE_URL+'/v1/landing-layout',options).pipe(switchMap(view=>{

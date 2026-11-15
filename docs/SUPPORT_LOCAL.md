@@ -51,3 +51,8 @@ Support local and homepage advertisement cards show View details for a configure
 ## Editable homepage partner heading
 
 Dashboard → Customize homepage includes Partner section heading (1–100 characters). The preview and accessible section name update immediately. The setting is stored as `sponsorsTitle` in the existing homepage draft/published JSON; older layouts default to Featured Partner. Save draft preserves the public heading, and Publish homepage applies the saved custom heading. Backend validation rejects blank/overlong headings. Deploy backend before frontend.
+
+
+## Editable Grow with us pricing
+
+Dashboard → Customize homepage includes Grow with us pricing for Large, Medium, Small and Extra-small. Each has a required price label (up to 40 characters, including currency) and optional note (up to 80 characters, such as per month). Preview Grow with us shows draft values. Save draft keeps prices private; Publish homepage applies them to the public dialog. Public pricing loads the published homepage snapshot on open and falls back to Ask us / for pricing when unavailable or unconfigured. The contact address and Write to us draft link use udupidarshan88@gmail.com. Backend stores adPricing in existing homepage JSON; deploy backend before frontend.
