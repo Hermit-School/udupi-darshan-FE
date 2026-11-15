@@ -1639,11 +1639,13 @@ test('manual advertisement sizes produce full, half, third and quarter width car
 
 test('advertisement business pages preserve galleries, contacts and route changes',async({page})=>{
  await mockApi(page);await mockLocalBusinessImages(page);
- const first={...businessAd(71,1920),title:'Coastal Crafts',images:['https://example.org/ad-fixtures/Coastal.svg','https://example.org/ad-fixtures/Workshop.svg'],description:'Discover <b>handmade</b> gifts.'};first.imageUrl=first.images[0];
- const second={...businessAd(72,800),title:'Neighbourhood Store'};
+ const first={...businessAd(71,1920),title:'Coastal Crafts',website:'https://example.org/crafts',images:['https://example.org/ad-fixtures/Coastal.svg','https://example.org/ad-fixtures/Workshop.svg'],description:'Discover <b>handmade</b> gifts.'};first.imageUrl=first.images[0];
+ const second={...businessAd(72,800),title:'Neighbourhood Store',business:{...businessAd(72,800).business,tagline:''}};
  await page.route(api+'/v1/ads',r=>r.fulfill({json:[first,second]}));
  await page.route(api+'/v1/ads/page/shop-71',r=>r.fulfill({json:first}));await page.route(api+'/v1/ads/page/shop-72',r=>r.fulfill({json:second}));
- await page.goto('/#/advertisements');await expect(page.getByRole('link',{name:'View Coastal Crafts',exact:true}).last()).toHaveAttribute('target','_blank');await page.goto('/#/advertisements/shop-71');
+ await page.goto('/#/advertisements');
+ const tile=page.locator('.ad-tile[data-id="71"]');await expect(tile).not.toContainText('handmade');await expect(tile.locator('.tagline')).toHaveText('Made for everyday life');await expect(tile.locator('.category')).toHaveText('Shopping');await expect(tile.getByRole('link',{name:'Call',exact:true})).toBeVisible();await expect(tile.getByText('View website',{exact:true})).toBeVisible();await expect(tile.getByText('View details',{exact:true})).toBeVisible();await expect(page.locator('.ad-tile[data-id="72"] .tagline')).toHaveCount(0);
+ await expect(page.getByRole('link',{name:'View Coastal Crafts',exact:true}).last()).toHaveAttribute('target','_blank');await page.goto('/#/advertisements/shop-71');
  await expect(page).toHaveURL(/advertisements\/shop-71$/);await expect(page.getByRole('heading',{level:1})).toHaveText('Coastal Crafts');await expect(page.locator('.ad-description b')).toHaveText('handmade');
  await page.getByRole('button',{name:'View photo 2 of Coastal Crafts'}).click();await expect(page.locator('.gallery-main img')).toHaveAttribute('src',first.images[1]);
  await expect(page.locator('.contact-card a').filter({hasText:'Call'})).toHaveAttribute('href','tel:+919000000000');await expect(page.getByRole('heading',{name:'What they offer'})).toBeVisible();
