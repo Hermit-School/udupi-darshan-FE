@@ -13,6 +13,8 @@ export class HomepageViewComponent {
  @Output() cardDrop=new EventEmitter<{data:string;zone:Zone;index:number}>();
  readonly sections=[{zone:'hero' as Zone,title:'Main spotlight',limit:1},{zone:'features' as Zone,title:'Featured cards',limit:12},{zone:'sponsors' as Zone,title:'Sponsored',limit:30}];
  get sponsorColumns(){const count=this.view.sponsorsPerRow??3;return Number.isInteger(count)&&count>=1&&count<=5?count:3;}
+ href(card:HomeCard){if(this.editing||!card.href)return null;return card.href.toLowerCase().startsWith('https://')?card.href:'#'+card.href;}
+ newTab(card:HomeCard){const href=this.href(card);return !!href&&(card.kind==='ads'||href.toLowerCase().startsWith('https://'));}
  image=imagePreview;
  cards(zone:Zone):HomeCard[]{return zone==='hero'?(this.view.hero?[this.view.hero]:[]):this.view[zone];}
  edit(type:HomeAction['type'],zone:Zone,index:number,photo?:number){this.action.emit({type,zone,index,photo});}
