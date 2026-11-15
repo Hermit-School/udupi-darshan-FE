@@ -11,7 +11,7 @@
       <article class="home-card" [attr.draggable]="editing" (dragstart)="drag($event,card,section.zone,i)" (dragover)="allow($event)" (drop)="drop($event,section.zone,i)">
        <a [attr.href]="href(card)" [attr.target]="newTab(card)?'_blank':null" rel="noopener noreferrer" [attr.tabindex]="editing||!card.href?-1:null">
         <div class="photo">@if(card.image){<img [src]="image(card.image)" [alt]="card.title" [attr.loading]="section.zone==='hero'?'eager':'lazy'" width="800" height="500">}@else{<span class="photo-placeholder">Udupi Darshan</span>}</div>
-        <div class="copy">@if(!editing && card.kind==='events'){<app-event-badge [date]="card.eventDate" [endDate]="card.eventEndDate"></app-event-badge>}<p class="eyebrow">{{card.kind==='ads'?'Advertisement':card.kind==='story'?'Stories':card.kind}}</p><h3>{{card.title}}</h3>@if(card.kind!=='ads'){<p>{{card.summary}}</p>}@if(!editing&&card.href&&card.kind!=='ads'){<span class="read">Explore ↗</span>}</div>
+        <div class="copy">@if(!editing && card.kind==='events'){<app-event-badge [date]="card.eventDate" [endDate]="card.eventEndDate"></app-event-badge>}<p class="eyebrow">{{card.kind==='ads'?'Local Partner':card.kind==='story'?'Stories':card.kind}}</p><h3>{{card.title}}</h3>@if(card.kind!=='ads'){<p>{{card.summary}}</p>}@if(!editing&&card.href&&card.kind!=='ads'){<span class="read">Explore ↗</span>}</div>
        </a>
        @if(card.kind==='ads'&&(internal(card)||website(card))){<div class="sponsor-actions">
         @if(internal(card)){@if(editing){<span class="sponsor-button" aria-disabled="true">View details</span>}@else{<a class="sponsor-button" [href]="'#'+internal(card)" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'View details for '+card.title">View details</a>}}

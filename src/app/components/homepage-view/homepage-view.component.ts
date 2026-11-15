@@ -12,7 +12,7 @@ export class HomepageViewComponent {
  @Input() editing=false;
  @Output() action=new EventEmitter<HomeAction>();
  @Output() cardDrop=new EventEmitter<{data:string;zone:Zone;index:number}>();
- readonly sections=[{zone:'hero' as Zone,title:'Main spotlight',limit:1},{zone:'features' as Zone,title:'Featured cards',limit:12},{zone:'sponsors' as Zone,title:'Sponsored',limit:30}];
+ readonly sections=[{zone:'hero' as Zone,title:'Main spotlight',limit:1},{zone:'features' as Zone,title:'Featured cards',limit:12},{zone:'sponsors' as Zone,title:'Featured Partner',limit:30}];
  get sponsorColumns(){const count=this.view.sponsorsPerRow??3;return Number.isInteger(count)&&count>=1&&count<=5?count:3;}
  internal(card:HomeCard){const path=card.internalHref??card.href;return path&&/^\/advertisements(?:\/(?:[a-z][a-z0-9-]{0,99}|[1-9][0-9]*))?$/.test(path)?path:null;}
  website(card:HomeCard){return adExternal(card.website??card.href);}
