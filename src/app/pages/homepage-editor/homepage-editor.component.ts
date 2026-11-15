@@ -16,7 +16,7 @@ export class HomepageEditorComponent {
  load(){
   this.loading=true;this.error='';
   forkJoin({state:this.api.state(),cards:this.api.cards()}).pipe(takeUntilDestroyed(this.destroy),finalize(()=>this.loading=false)).subscribe({
-   next:({state,cards})=>{this.cards=cards;this.layout=structuredClone(state.draft);this.layout.sponsorsPerRow??=3;this.version=state.version;this.published=state.published;this.dirty=false;this.conflict=false;},
+   next:({state,cards})=>{this.cards=cards;this.layout=structuredClone(state.draft);this.layout.sponsorsPerRow??=3;this.layout.sponsorsTitle??='Featured Partner';this.version=state.version;this.published=state.published;this.dirty=false;this.conflict=false;},
    error:()=>this.error='Unable to load the editor. Please try again.',
   });
  }
@@ -34,7 +34,7 @@ export class HomepageEditorComponent {
  get missing(){return (['hero','features','sponsors'] as Zone[]).flatMap(z=>this.refs(z)).filter(r=>!this.resolve(r)).length;}
  removeMissing(){if(!this.layout)return;this.layout.hero=this.resolve(this.layout.hero)?this.layout.hero:null;this.layout.features=this.layout.features.filter(r=>this.resolve(r));this.layout.sponsors=this.layout.sponsors.filter(r=>this.resolve(r));this.changed();}
  get preview():HomeView{
-  const l=this.layout!;return {configured:true,title:l.title,intro:l.intro,sectionTitle:l.sectionTitle,hero:this.resolve(l.hero),features:l.features.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c),sponsorsPerRow:l.sponsorsPerRow??3,sponsors:l.sponsors.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c)};
+  const l=this.layout!;return {configured:true,title:l.title,intro:l.intro,sectionTitle:l.sectionTitle,hero:this.resolve(l.hero),features:l.features.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c),sponsorsPerRow:l.sponsorsPerRow??3,sponsorsTitle:l.sponsorsTitle??'Featured Partner',sponsors:l.sponsors.map(r=>this.resolve(r)).filter((c):c is HomeCard=>!!c)};
  }
  add(card:HomeCard,zone:Zone){this.place(card,zone,this.refs(zone).length);}
  private place(card:HomeCard,zone:Zone,index:number){
@@ -64,6 +64,7 @@ export class HomepageEditorComponent {
  }
  save(publish=false){
   if(!this.layout || this.busy || this.conflict)return;
+  if(!this.layout.sponsorsTitle?.trim()){this.error='Enter a partner section heading.';return;}
   this.busy=true;this.error='';this.notice='';
   this.api.save(this.version,this.layout).pipe(switchMap(state=>{this.version=state.version;this.dirty=false;return publish?this.api.publish(state.version):[state];}),takeUntilDestroyed(this.destroy),finalize(()=>this.busy=false)).subscribe({
    next:state=>{this.version=state.version;this.published=state.published;this.notice=publish?'Homepage published. Visitors will see this layout on their next visit.':'Draft saved. The public homepage has not changed.';},
