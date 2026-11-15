@@ -1,3 +1,4 @@
+import {adExternal} from '../../content/ad-tiers';
 import { EventBadgeComponent } from '../event-badge/event-badge.component';
 import { SearchComponent } from '../search/search.component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
@@ -13,7 +14,9 @@ export class HomepageViewComponent {
  @Output() cardDrop=new EventEmitter<{data:string;zone:Zone;index:number}>();
  readonly sections=[{zone:'hero' as Zone,title:'Main spotlight',limit:1},{zone:'features' as Zone,title:'Featured cards',limit:12},{zone:'sponsors' as Zone,title:'Sponsored',limit:30}];
  get sponsorColumns(){const count=this.view.sponsorsPerRow??3;return Number.isInteger(count)&&count>=1&&count<=5?count:3;}
- href(card:HomeCard){if(this.editing||!card.href)return null;return card.href.toLowerCase().startsWith('https://')?card.href:'#'+card.href;}
+ internal(card:HomeCard){const path=card.internalHref??card.href;return path&&/^\/advertisements(?:\/(?:[a-z][a-z0-9-]{0,99}|[1-9][0-9]*))?$/.test(path)?path:null;}
+ website(card:HomeCard){return adExternal(card.website??card.href);}
+ href(card:HomeCard){if(this.editing)return null;if(card.kind==='ads'){const path=this.internal(card);return path?'#'+path:this.website(card);}return !card.href?null:card.href.toLowerCase().startsWith('https://')?card.href:'#'+card.href;}
  newTab(card:HomeCard){const href=this.href(card);return !!href&&(card.kind==='ads'||href.toLowerCase().startsWith('https://'));}
  image=imagePreview;
  cards(zone:Zone):HomeCard[]{return zone==='hero'?(this.view.hero?[this.view.hero]:[]):this.view[zone];}

@@ -1388,7 +1388,7 @@ test('homepage sponsor cards preserve external websites and internal detail page
  await page.route(api+'/v1/landing-layout',r=>r.fulfill({json:{configured:true,title:'Discover Udupi',intro:'Local discoveries',sectionTitle:'Featured',hero:null,features:[],sponsors:[card(1,'External sponsor','HTTPS://example.org/shop'),card(2,'Internal sponsor','/advertisements/2')]}}));
  await page.goto('/#/home');
  const external=page.getByRole('link').filter({has:page.getByRole('heading',{name:'External sponsor',exact:true})});
- await expect(external).toHaveAttribute('href','HTTPS://example.org/shop');
+ await expect(external).toHaveAttribute('href','https://example.org/shop');
  await expect(external).toHaveAttribute('target','_blank');
  await expect(external).toHaveAttribute('rel','noopener noreferrer');
  await expect(page.getByRole('link').filter({has:page.getByRole('heading',{name:'Internal sponsor',exact:true})})).toHaveAttribute('href','#/advertisements/2');
@@ -1654,7 +1654,7 @@ test('advertisement business pages preserve galleries, contacts and route change
 test('website-only advertisements and the prototype enquiry dialog remain usable on mobile',async({page})=>{
  await mockApi(page);await mockLocalBusinessImages(page);const ad={...businessAd(80,1920),internalLink:'',website:'https://example.org/website'};
  await page.route(api+'/v1/ads',r=>r.fulfill({json:[ad]}));await page.goto('/#/advertisements');
- await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('href',ad.website);await expect(page.getByRole('link',{name:'Visit Local shop 80',exact:true})).toHaveAttribute('target','_blank');
+ await expect(page.getByRole('link',{name:'View website for Local shop 80',exact:true})).toHaveAttribute('href',ad.website);await expect(page.getByRole('link',{name:'View website for Local shop 80',exact:true})).toHaveAttribute('target','_blank');
  await expect(page.locator('.ad-tile').getByText('View details',{exact:true})).toHaveCount(0);
  await page.setViewportSize({width:390,height:844});const open=page.getByRole('button',{name:'Grow with us',exact:true});await open.click();const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
  for(const name of ['Small','Medium','Large','Extra-small'])await expect(dialog.getByText(name,{exact:true})).toBeVisible();
@@ -1728,13 +1728,13 @@ test('homepage sponsored cards change shape for one to five per row and center i
   expect(boxes[count].y).toBeGreaterThan(boxes[0].y);
   const remaining=7%count;if(remaining){const last=boxes.slice(-remaining);const center=(last[0].x+last.at(-1)!.x+last.at(-1)!.w)/2;expect(Math.abs(center-(grid!.x+grid!.width/2))).toBeLessThan(2);}
   await expect(cards.first().locator('img')).toHaveCSS('object-fit','contain');
-  const body=await cards.first().locator('a').boundingBox();expect(Math.abs(body!.width/body!.height-[4,1.6,4/3,1,.75][count-1])).toBeLessThan(.02);
+  const body=await cards.first().locator(':scope > a').boundingBox();expect(Math.abs(body!.width/body!.height-[4,1.6,4/3,1,.75][count-1])).toBeLessThan(.02);
   const photo=await cards.first().locator('.photo').boundingBox();const copy=await cards.first().locator('.copy').boundingBox();
   if(count===1)expect(copy!.x).toBeGreaterThan(photo!.x);else expect(copy!.y).toBeGreaterThan(photo!.y);
   await page.locator('.sponsors').screenshot({path:test.info().outputPath('homepage-sponsored-shape-'+count+'.png')});
  }
  await page.locator('.sponsors').screenshot({path:test.info().outputPath('homepage-sponsored-five-columns.png')});
- await page.setViewportSize({width:390,height:844});const cards=page.locator('.sponsors .home-card');const b=await cards.evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y};}));expect(b[1].y).toBeGreaterThan(b[0].y);expect(Math.abs(b[0].x-b[1].x)).toBeLessThan(1);const mobileBody=await cards.first().locator('a').boundingBox();expect(Math.abs(mobileBody!.width/mobileBody!.height-4/3)).toBeLessThan(.02);expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+ await page.setViewportSize({width:390,height:844});const cards=page.locator('.sponsors .home-card');const b=await cards.evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y};}));expect(b[1].y).toBeGreaterThan(b[0].y);expect(Math.abs(b[0].x-b[1].x)).toBeLessThan(1);const mobileBody=await cards.first().locator(':scope > a').boundingBox();expect(Math.abs(mobileBody!.width/mobileBody!.height-4/3)).toBeLessThan(.02);expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
 test('homepage editor saves advertisement row count and publishes more than four sponsors',async({page})=>{
@@ -1756,10 +1756,10 @@ test('optional advertisement destinations open new tabs and display-only ads hav
  await page.route(api+'/v1/ads',r=>r.fulfill({json:ads}));await context.route(api+'/v1/ads',r=>r.fulfill({json:ads}));await context.route(api+'/v1/ads/page/shop-1',r=>r.fulfill({json:ads[0]}));await context.route(api+'/v1/ads/page/shop-4',r=>r.fulfill({json:ads[3]}));
  await context.route('https://example.org/business',r=>r.fulfill({contentType:'text/html',body:'<h1>Business website</h1>'}));
  await page.goto('/#/advertisements');await expect(page.locator('.ad-tile')).toHaveCount(4);const card=(id:number)=>page.locator('.ad-tile[data-id="'+id+'"]');
- await expect(card(3).locator('a[href]')).toHaveCount(0);await expect(card(3)).not.toContainText('View details');await expect(card(4).getByText('View details',{exact:true})).toBeVisible();await expect(card(4).getByText('Website',{exact:true})).toHaveCount(0);await expect(card(4).locator('.tile-image')).toHaveAttribute('href','#/advertisements/shop-4');
+ await expect(card(3).locator('a[href]')).toHaveCount(0);await expect(card(3)).not.toContainText('View details');await expect(card(4).getByText('View details',{exact:true})).toBeVisible();await expect(card(4).getByText('View website',{exact:true})).toBeVisible();await expect(card(4).locator('.tile-image')).toHaveAttribute('href','#/advertisements/shop-4');
  const internalPromise=page.waitForEvent('popup');await card(1).getByText('View details',{exact:true}).click();const internal=await internalPromise;await expect(internal).toHaveURL(/advertisements\/shop-1$/);await expect(internal.getByRole('heading',{level:1})).toHaveText('Local shop 1');await expect(page).toHaveURL(/#\/advertisements$/);await internal.close();
- const bothPromise=page.waitForEvent('popup');await card(4).locator('.tile-image').click();const both=await bothPromise;await expect(both).toHaveURL(/advertisements\/shop-4$/);await expect(both.getByRole('link',{name:'Visit their website',exact:true})).toHaveAttribute('href','https://example.org/business');const websitePromise=both.waitForEvent('popup');await both.getByRole('link',{name:'Visit their website',exact:true}).click();const website=await websitePromise;await expect(website).toHaveURL('https://example.org/business');await expect(both).toHaveURL(/advertisements\/shop-4$/);await website.close();await both.close();
- const externalPromise=page.waitForEvent('popup');await card(2).getByText('Website',{exact:true}).click();const external=await externalPromise;await expect(external).toHaveURL('https://example.org/business');await expect(page).toHaveURL(/#\/advertisements$/);await external.close();
+ const bothPromise=page.waitForEvent('popup');await card(4).locator('.tile-image').click();const both=await bothPromise;await expect(both).toHaveURL(/advertisements\/shop-4$/);await expect(both.getByRole('link',{name:'View website',exact:true})).toHaveAttribute('href','https://example.org/business');const websitePromise=both.waitForEvent('popup');await both.getByRole('link',{name:'View website',exact:true}).click();const website=await websitePromise;await expect(website).toHaveURL('https://example.org/business');await expect(both).toHaveURL(/advertisements\/shop-4$/);await website.close();await both.close();
+ const externalPromise=page.waitForEvent('popup');await card(2).getByText('View website',{exact:true}).click();const external=await externalPromise;await expect(external).toHaveURL('https://example.org/business');await expect(page).toHaveURL(/#\/advertisements$/);await external.close();
 });
 
 test('advertisement add and edit accept blank links without redundant dashboard return',async({page})=>{
@@ -1767,4 +1767,18 @@ test('advertisement add and edit accept blank links without redundant dashboard 
  await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:/Add Ads/}).click();await page.getByLabel('Title',{exact:false}).fill('Display only');await page.getByLabel('Ad image',{exact:true}).setInputFiles(photoFile());
  await page.getByRole('button',{name:'Publish Ad',exact:true}).click();await expect(page.getByRole('heading',{name:'Published successfully',exact:true})).toBeVisible();expect(saved.internalLink).toBe('');expect(saved.website).toBe('');await expect(page.getByRole('link',{name:'Return to dashboard',exact:true})).toHaveCount(0);await expect(page.getByRole('link',{name:'Back to records',exact:true})).toBeVisible();
  await page.route(api+'/v1/ads/90',r=>r.fulfill({json:{id:90,title:'Display only',imageUrl:'assets/images/ads2.png',internalLink:null,website:''}}));await page.goto('/#/edit-entry/ads/90');await expect(page.getByLabel('Internal link',{exact:true})).toHaveValue('');
+});
+
+
+test('homepage ad cards show both destination buttons or just the available destination',async({page})=>{
+ await mockApi(page);
+ const card=(id:number,internalHref:string|null,website:string|null)=>({kind:'ads',id,title:'Homepage sponsor '+id,summary:'Advertisement',images:['assets/images/ads2.png'],image:'assets/images/ads2.png',href:internalHref||website,internalHref,website});
+ const sponsors=[card(1,'/advertisements/shop-1','https://example.org/shop-1'),card(2,null,'https://example.org/shop-2'),card(3,'/advertisements/shop-3',null),card(4,null,null)];
+ await page.route(api+'/v1/landing-layout',r=>r.fulfill({json:{configured:true,title:'Discover local',intro:'Udupi businesses',sectionTitle:'Featured',hero:null,features:[],sponsors,sponsorsPerRow:4}}));
+ await page.goto('/#/home');const cards=page.locator('.sponsors .home-card');await expect(cards).toHaveCount(4);
+ await expect(cards.nth(0).getByRole('link',{name:'View details for Homepage sponsor 1'})).toHaveAttribute('href','#/advertisements/shop-1');await expect(cards.nth(0).getByRole('link',{name:'View website for Homepage sponsor 1'})).toHaveAttribute('href','https://example.org/shop-1');
+ await expect(cards.nth(0).locator('a').first()).toHaveAttribute('href','#/advertisements/shop-1');
+ await expect(cards.nth(1).getByText('View details',{exact:true})).toHaveCount(0);await expect(cards.nth(1).getByText('View website',{exact:true})).toBeVisible();await expect(cards.nth(2).getByText('View website',{exact:true})).toHaveCount(0);await expect(cards.nth(2).getByText('View details',{exact:true})).toBeVisible();await expect(cards.nth(3).locator('a[href]')).toHaveCount(0);
+ for(const link of await page.locator('.sponsor-actions a').all()){await expect(link).toHaveAttribute('target','_blank');await expect(link).toHaveAttribute('rel','noopener noreferrer');}
+ await page.setViewportSize({width:390,height:844});await expect(cards.nth(0).getByText('View website',{exact:true})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
