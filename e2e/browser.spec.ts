@@ -1741,13 +1741,14 @@ test('homepage sponsored cards change shape for one to five per row and center i
 
 test('homepage editor saves advertisement row count and publishes more than four sponsors',async({page})=>{
  const home=await mockHomepage(page,6);await page.setViewportSize({width:1900,height:1100});await page.goto('/#/admin');await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();
+ await page.getByLabel('Partner section heading',{exact:true}).fill('Our neighbourhood partners');await expect(page.locator('app-homepage-view .sponsors h2')).toHaveText('Our neighbourhood partners');
  const library=page.getByRole('complementary',{name:'Card library'});await library.locator('.library-card').filter({has:page.getByRole('heading',{name:'Beach spotlight',exact:true})}).getByRole('button',{name:'Set as spotlight'}).click();
  await page.getByLabel('Content type',{exact:true}).selectOption('ads');for(const button of await library.getByRole('button',{name:'Add to Sponsored',exact:true}).all())await button.click();
  await expect(page.locator('app-homepage-view .sponsors .home-card')).toHaveCount(7);const rowCount=page.getByRole('combobox',{name:'Advertisements per row',exact:true});
  for(const [count,ratio] of [[1,4],[2,1.6],[3,4/3],[4,1],[5,.75]]){await rowCount.selectOption({label:count+' '+(count===1?'card':'cards')+' per row'});const body=await page.locator('app-homepage-view .sponsors .home-card a').first().boundingBox();expect(Math.abs(body!.width/body!.height-ratio)).toBeLessThan(.03);}
- await page.getByRole('button',{name:'Save draft',exact:true}).click();await expect(page.getByRole('status')).toContainText('Draft saved');expect((home.state.draft as any).sponsorsPerRow).toBe(5);expect(home.state.published).toBe(false);
- await page.reload();await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();await expect(page.getByRole('combobox',{name:'Advertisements per row',exact:true})).toHaveValue('4: 5');
- await page.getByRole('button',{name:'Publish homepage',exact:true}).click();await expect(page.getByRole('status')).toContainText('Homepage published');await page.goto('/#/home');await expect(page.locator('.sponsors .home-card')).toHaveCount(7);
+ await page.getByRole('button',{name:'Save draft',exact:true}).click();await expect(page.getByRole('status')).toContainText('Draft saved');expect((home.state.draft as any).sponsorsPerRow).toBe(5);expect(home.state.published).toBe(false);expect((home.state.draft as any).sponsorsTitle).toBe('Our neighbourhood partners');
+ await page.reload();await signIn(page);await page.getByRole('link',{name:'Customize homepage',exact:false}).click();await expect(page.getByRole('combobox',{name:'Advertisements per row',exact:true})).toHaveValue('4: 5');await expect(page.getByLabel('Partner section heading',{exact:true})).toHaveValue('Our neighbourhood partners');
+ await page.getByRole('button',{name:'Publish homepage',exact:true}).click();await expect(page.getByRole('status')).toContainText('Homepage published');await page.goto('/#/home');await expect(page.locator('.sponsors h2')).toHaveText('Our neighbourhood partners');await expect(page.getByRole('region',{name:'Our neighbourhood partners',exact:true})).toBeVisible();await expect(page.locator('.sponsors .home-card')).toHaveCount(7);
  const b=await page.locator('.sponsors .home-card').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(Math.abs(b[4]-b[0])).toBeLessThan(2);expect(b[5]).toBeGreaterThan(b[0]);
 });
 

@@ -46,3 +46,8 @@ When an ad has both destinations, its image and View details open the internal b
 ## Explicit destination buttons on both pages
 
 Support local and homepage advertisement cards show View details for a configured internal page and View website for a configured external website. Both buttons appear when both destinations exist. Each opens a new tab safely, while the card image continues to prefer the internal page. Neither button appears for destination-free cards. The internal business page also labels its external action View website. Homepage API cards now carry internalHref and website independently of the preferred href, and the editor preview displays the same button labels without navigation. Deploy backend before frontend so both destinations reach the homepage.
+
+
+## Editable homepage partner heading
+
+Dashboard → Customize homepage includes Partner section heading (1–100 characters). The preview and accessible section name update immediately. The setting is stored as `sponsorsTitle` in the existing homepage draft/published JSON; older layouts default to Featured Partner. Save draft preserves the public heading, and Publish homepage applies the saved custom heading. Backend validation rejects blank/overlong headings. Deploy backend before frontend.
