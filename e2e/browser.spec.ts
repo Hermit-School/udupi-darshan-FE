@@ -331,6 +331,12 @@ test('search loads one compact index on demand and legacy links stay in the same
   await expect(page.getByText('Scenic shore')).toBeVisible();
   await page.reload();
   await expect(page.getByText('Scenic shore')).toBeVisible();
+  await page.goto('about:blank');
+  const readsBeforeBookmark = indexReads;
+  await page.goto('/#/details/nature/43');
+  await expect(page).toHaveURL(/#\/nature\/other-lake$/);
+  await expect(page.getByRole('heading', { name: 'Other Lake' })).toBeVisible();
+  expect(indexReads).toBe(readsBeforeBookmark);
   await page.goto('/#/dashboard');
   await expect(page).toHaveURL(/#\/admin\?access=required$/);
   await expect(
@@ -401,6 +407,11 @@ test('collections support live search, filters, empty states and photo controls'
   await page.route(api + '/v1/nature/getNature', (route) =>
     route.fulfill({ json: entries }),
   );
+  await page.route(api + '/v1/destination-search', (route) =>
+    route.fulfill({
+      json: entries.map(({ id, name }) => ({ id, name, category: 'Nature' })),
+    }),
+  );
   await page.route(api + '/v1/nature/42', (route) =>
     route.fulfill({
       json: {
@@ -445,6 +456,7 @@ test('collections support live search, filters, empty states and photo controls'
     .getByRole('searchbox', { name: 'Search nature', exact: true })
     .fill('malpe');
   await page.getByRole('link', { name: /Coastal escape/ }).click();
+  await expect(page).toHaveURL(/#\/nature\/coastal-escape$/);
   const mainImage = page.locator('.gallery-main');
   await expect(mainImage).toHaveAttribute('src', photo);
   await page.getByRole('button', { name: 'Next photo' }).click();

@@ -56,7 +56,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
         params["category"] ?? this.route.snapshot.data["legacyCategory"];
       this.currentCategory = category;
       if (this.route.snapshot.data["legacyCategory"] && !/^\d+$/.test(rawId)) {
-        const redirect = this.router.currentNavigation()?.extras.info;
+        const navigation = this.router.currentNavigation() ?? this.router.lastSuccessfulNavigation();
+        const redirect = navigation?.extras.info;
         if (category === 'nature' && redirect instanceof NatureRouteRedirect) {
           this.showCard(redirect.card, category);
         } else {
