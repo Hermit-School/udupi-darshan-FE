@@ -137,3 +137,30 @@ details p {
     opacity: 1;
   }
 }
+
+.story-invitation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.4rem;
+  padding: 1rem 1.4rem;
+  border-radius: 1.25rem;
+  background: #ebe2d6;
+}
+.story-invitation h2 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+.story-invitation p {
+  margin: .15rem 0 0;
+}
+.story-invitation .ud-button {
+  background: var(--ud-accent);
+  border-color: var(--ud-accent);
+}
+.story-invitation .ud-button:hover {
+  background: #7e2d00;
+  border-color: #7e2d00;
+}

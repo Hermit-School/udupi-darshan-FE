@@ -1,9 +1,10 @@
 import { destinationRoute, namedRecord, nameSlug } from '../../util/destination-route';
 import { informationUrl } from '../../util/information-url';
 import { FoodRecommendationsService } from '../../services/food-recommendations.service';
+import { StoryFormService } from '../../services/story-form.service';
 import { RelatedPhotosService } from 'src/app/services/related-photos.service';
 import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
-import { Component, Input, OnInit, OnDestroy } from "@angular/core";
+import { Component, Input, OnInit, OnDestroy, inject } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { natureServiceService } from "src/app/services/nature.service";
@@ -28,6 +29,7 @@ class DestinationRouteRedirect {
   styleUrls: ["./details.component.scss"],
 })
 export class DetailsComponent implements OnInit, OnDestroy {
+  readonly storyForm = inject(StoryFormService);
   loading = false;
   error = "";
   private routeSubscription?: Subscription;
