@@ -4,7 +4,8 @@ import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Story } from 'src/app/models/story';
 import { StoryService } from 'src/app/services/story.service';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { storyRoute } from '../../util/destination-route';
 
 @Component({ standalone: true, imports: [CommonModule, RouterLink, VisitorMotionDirective],
   selector: 'app-story',
@@ -12,6 +13,7 @@ import { Router, RouterLink } from '@angular/router';
   styleUrls: ['./story.component.scss']
 })
 export class StoryComponent implements OnInit {
+  readonly storyRoute = storyRoute;
   stories: Story[] = [];
   chunkedStories: Story[][] = [];
 
@@ -19,15 +21,11 @@ export class StoryComponent implements OnInit {
   loading = true;
   failed = false;
 
-  constructor(private router: Router, private storyService: StoryService) { }
+  constructor(private storyService: StoryService) { }
 
   ngOnInit(): void {
     this.fetchStories();
   }
-  viewDetails(storyId: number): void {
-    this.router.navigate(['/story', storyId]);
-  }
-
   fetchStories(): void {
     this.storyService.getAllStories().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: data => { this.stories = data; this.chunkStories(); this.loading = false; },
