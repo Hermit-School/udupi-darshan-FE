@@ -53,7 +53,7 @@
           <h2>Keep exploring.</h2>
           <div class="ud-grid">
             @for (item of story.dontMissThese; track $index) {
-              <article class="ud-card">
+              <article class="ud-card ud-related-card">
                 @if (relatedPhotos.imageUrl(item.imageUrl); as image) {
                   <div class="ud-card-image">
                     <img

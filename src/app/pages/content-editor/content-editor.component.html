@@ -217,9 +217,52 @@
         @if (!ad) {
           <details class="panel" formArrayName="related">
             <summary>Related places <small>Optional</small></summary>
+            @if (editId && (destination || story)) {
+              <div class="fields">
+                <label>
+                  Section
+                  <select #section aria-label="Related place section" (change)="selectRelatedSection(section.value)" [disabled]="related.length >= 50">
+                    <option value="">Choose a section</option>
+                    @for (option of relatedSections; track option.value) {
+                      <option [value]="option.value">{{ option.label }}</option>
+                    }
+                  </select>
+                </label>
+                <label>
+                  Item
+                  <select
+                    #relatedItem
+                    aria-label="Related place item"
+                    (change)="addRelatedItem(relatedItem.value); relatedItem.value = ''"
+                    [disabled]="!relatedOptions.length || related.length >= 50"
+                  >
+                    <option value="">Choose an item</option>
+                    @for (option of relatedOptions; track option.id) {
+                      <option [value]="option.id">{{ relatedOptionLabel(option) }}</option>
+                    }
+                  </select>
+                </label>
+                @if (relatedCatalogLoading) {
+                  <p class="hint wide" role="status">Loading related places…</p>
+                } @else if (relatedSection && relatedCatalogError) {
+                  <div class="wide">
+                    <p class="error" role="alert">The related items could not load.</p>
+                    <button class="secondary" type="button" (click)="selectRelatedSection(relatedSection)">Try again</button>
+                  </div>
+                } @else if (relatedSection && !relatedOptions.length) {
+                  <p class="hint wide" role="status">No additional items in this section.</p>
+                }
+              </div>
+            }
             @for (item of related.controls; track item; let i = $index) {
               <fieldset class="fields related" [formGroupName]="i">
                 <legend>Related place {{ i + 1 }}</legend>
+                @if (relatedItemRoute(item.controls.link.value); as route) {
+                  <a class="related-preview wide" [routerLink]="route" target="_blank" rel="noopener">
+                    <strong>{{ item.controls.name.value }}</strong>
+                    <span>{{ item.controls.description.value }}</span>
+                  </a>
+                }
                 <label
                   >Name *<input formControlName="name" maxlength="255" required
                 /></label>

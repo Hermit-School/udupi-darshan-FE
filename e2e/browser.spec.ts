@@ -195,7 +195,7 @@ test('admin publishes each content type using uploaded images instead of URLs',a
   const publish=page.getByRole('button',{name:'Publish '+name,exact:true});
   if(kind==='nature'){await publish.click();await expect(page.getByRole('alert')).toContainText('required fields');expect(requests).toHaveLength(0);}
   await page.getByLabel(kind==='story'||kind==='ads'?'Title':'Place name',{exact:false}).fill('New '+kind);
-  if(['nature','culture','food'].includes(kind)){await page.getByLabel('Section').selectOption({index:1});await page.getByLabel('Website or map link').fill('https://example.invalid/place');}
+  if(['nature','culture','food'].includes(kind)){await page.locator('select[formcontrolname="label"]').selectOption({index:1});await page.getByLabel('Website or map link').fill('https://example.invalid/place');}
   if(kind==='story'){await page.getByLabel('Author name').fill('Editor');await page.getByLabel('Contact email').fill('editor@example.invalid');await page.getByLabel('Story text').fill('A walk through Udupi.');}
   await page.getByLabel(kind==='ads'?'Ad image':'Record photos',{exact:true}).setInputFiles(photoFile());
   await expect(page.getByRole('group',{name:(kind==='ads'?'Ad image':'Record photos')+' gallery',exact:true}).locator('figure')).toHaveCount(1);
@@ -947,10 +947,74 @@ test('dashboard edit cards open prefilled forms and save all five existing recor
   await page.getByRole('link',{name:'Edit '+recordName,exact:true}).click();
   const title=page.getByLabel(kind==='story'||kind==='ads'?'Title':'Place name');await expect(title).toHaveValue(recordName);await title.fill('Updated '+kind);
   if(kind==='story'){await expect(page.getByLabel('Contact email')).toHaveValue('author@example.invalid');await expect(page.getByLabel('Author name')).toHaveValue('Original author');}
-  if(!['story','ads'].includes(kind)){await expect(page.getByLabel('Section')).toHaveValue('Legacy section');await expect(page.getByRole('group',{name:'Record photos gallery',exact:true}).locator('figure')).toHaveCount(1);}
+  if(!['story','ads'].includes(kind)){await expect(page.locator('select[formcontrolname="label"]')).toHaveValue('Legacy section');await expect(page.getByRole('group',{name:'Record photos gallery',exact:true}).locator('figure')).toHaveCount(1);}
   await page.getByRole('button',{name:'Save changes',exact:true}).click();await expect(page.getByRole('heading',{name:'Changes saved',exact:true})).toBeVisible();await page.getByRole('link',{name:'Dashboard',exact:true}).click();
  }
  expect(saves).toHaveLength(5);expect(saves[0].body).toMatchObject({name:'Updated nature',keyPoints:['Existing highlight'],images:['/assets/original.jpg'],dontMissThese:[{name:'Related place'}]});expect(saves[3].body).toMatchObject({title:'Updated story',status:'Published',email:'author@example.invalid',images:['/assets/story.jpg']});expect(saves[4].body).toMatchObject({title:'Updated ads',imageUrl:'https://example.invalid/ad.jpg'});
+});
+
+test('editors pick related records by section and visitors can click the full card', async ({ page }) => {
+  await mockApi(page);
+  const source = { id: 41, name: 'Forest Trail', category: 'Nature', label: 'Activities',
+    link: '/forest-trail', images: [], dontMissThese: [] };
+  const food = { id: 52, name: 'Coastal Cafe', category: 'Food', images: [], dontMissThese: [] };
+  const foodLink = { name: food.name, description: 'Local food', link: '/details/food/52', imageUrl: '' };
+  const story = { id: 63, title: 'By the Sea', submittedBy: 'Visitor', content: 'A coastal memory.',
+    images: [], dontMissThese: [foodLink] };
+  const cards = [
+    { kind: 'nature', id: 41, title: source.name, href: '/details/nature/41' },
+    { kind: 'nature', id: 42, title: 'Nearby Lake', href: '/details/nature/42' },
+    { kind: 'culture', id: 43, title: 'Heritage Temple', href: '/details/culture/43' },
+    { kind: 'food', id: 52, title: food.name, href: '/details/food/52' },
+    { kind: 'story', id: 63, title: story.title, href: '/story/63' },
+    { kind: 'ads', id: 64, title: 'Sponsor', href: '/advertisements/64' },
+  ].map(card => ({ ...card, summary: 'Explore ' + card.title }));
+  await page.route(api + '/v1/admin/landing-layout/cards', route => {
+    expect(route.request().headers()['authorization']).toBe('Bearer ' + token);
+    return route.fulfill({ json: cards });
+  });
+  let saved = source;
+  await page.route(api + '/v1/nature/41', route => route.fulfill({ json: saved }));
+  await page.route(api + '/v1/admin/content/nature/41', route => {
+    saved = { ...source, ...multipartRecord(route.request()).data };
+    return route.fulfill({ json: { id: 41 } });
+  });
+  await page.route(api + '/v1/destination-search', route => route.fulfill({ json: [source, food] }));
+  await page.route(api + '/v1/food/52', route => route.fulfill({ json: food }));
+  await page.route(api + '/v1/blogs/getBlogs', route => route.fulfill({ json: [story] }));
+  await page.route(api + '/v1/blogs/getBlogs/63', route => route.fulfill({ json: story }));
+
+  await page.goto('/#/admin');
+  await signIn(page);
+  await expect(page.getByRole('heading', { name: 'Admin dashboard' })).toBeVisible();
+  await page.goto('/#/edit-entry/nature/41');
+  await expect(page.getByLabel('Place name')).toHaveValue(source.name);
+  await page.locator('summary').filter({ hasText: 'Related places' }).click();
+  const section = page.getByRole('combobox', { name: 'Related place section' });
+  const item = page.getByRole('combobox', { name: 'Related place item' });
+  await expect(section.locator('option')).toHaveText(['Choose a section', 'Nature', 'Culture', 'Food', 'Stories']);
+  await expect(item).toBeDisabled();
+  for (const [value, title] of [['nature', 'Nearby Lake'], ['culture', 'Heritage Temple'], ['food', food.name], ['story', story.title]]) {
+    await section.selectOption(value);
+    await expect(item.locator('option')).toHaveText(['Choose an item', title]);
+    await item.selectOption({ label: title });
+    await expect(page.getByRole('link', { name: new RegExp(title) })).toBeVisible();
+    await expect(item).toBeDisabled();
+  }
+  await page.getByRole('button', { name: 'Save changes', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Changes saved' })).toBeVisible();
+  expect(saved.dontMissThese).toEqual(cards.slice(1, 5).map(card => ({
+    name: card.title, description: card.summary, link: card.href, imageUrl: '',
+  })));
+
+  await page.goto('/#/nature/forest-trail');
+  const storyCard = page.locator('.ud-related-card').filter({ hasText: story.title });
+  await storyCard.getByRole('heading', { name: story.title }).click({ force: true });
+  await expect(page).toHaveURL(/#\/story\/by-the-sea$/);
+  const foodCard = page.locator('.ud-related-card').filter({ hasText: food.name });
+  await foodCard.getByRole('heading', { name: food.name }).click({ force: true });
+  await expect(page).toHaveURL(/#\/food\/coastal-cafe$/);
+  await expect(page.getByRole('heading', { level: 1, name: food.name })).toBeVisible();
 });
 
 test('visitors browse upcoming and past events without changing the home page',async({page})=>{
@@ -1114,17 +1178,17 @@ test('admin offers the current Nature and Culture categories and preserves legac
  await page.goto('/#/admin');await signIn(page);
  await expect(page.getByRole('heading',{name:'Admin dashboard',exact:true})).toBeVisible();
  await page.getByRole('link',{name:/Add Nature/}).click();
- await expect(page.getByLabel('Section')).toHaveCount(1);
- await expect(page.getByLabel('Section').locator('option')).toHaveText(['Choose a section','Parks','Hills','Lakes','Rivers','Beaches','Waterfalls','Wildlife','Activities','Islands']);
+ await expect(page.locator('select[formcontrolname="label"]')).toHaveCount(1);
+ await expect(page.locator('select[formcontrolname="label"]').locator('option')).toHaveText(['Choose a section','Parks','Hills','Lakes','Rivers','Beaches','Waterfalls','Wildlife','Activities','Islands']);
  await page.goto('/#/admindashboard');
  await page.getByRole('link',{name:/Add Culture/}).click();
- await expect(page.getByLabel('Section').locator('option')).toHaveText(['Choose a section','Temples','Mosques','Churches','Religious Architecture','Native Art','Historical Places','Traditions','Festivals']);
+ await expect(page.locator('select[formcontrolname="label"]').locator('option')).toHaveText(['Choose a section','Temples','Mosques','Churches','Religious Architecture','Native Art','Historical Places','Traditions','Festivals']);
  await page.route(api+'/v1/culture/98',r=>r.fulfill({json:{id:98,name:'Existing temple',label:'Mathas',link:'/temple',images:[]}}));
  await page.goto('/#/admindashboard');
  await expect(page.getByRole('heading',{name:'Admin dashboard',exact:true})).toBeVisible();
  await page.goto('/#/edit-entry/culture/98');
- await expect(page.getByLabel('Section')).toHaveValue('Mathas');
- await expect(page.getByLabel('Section').getByRole('option',{name:'Temples',exact:true})).toHaveCount(1);
+ await expect(page.locator('select[formcontrolname="label"]')).toHaveValue('Mathas');
+ await expect(page.locator('select[formcontrolname="label"]').getByRole('option',{name:'Temples',exact:true})).toHaveCount(1);
 });
 
 test('admin requires an allowed Udupi taluk and venue before saving an event', async ({page}) => {
