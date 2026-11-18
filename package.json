@@ -11,7 +11,8 @@
     "test:auth": "ng test --watch=false --include=src/app/auth/auth-flow.spec.ts",
     "audit:production": "npm audit --omit=dev --audit-level=low",
     "audit": "npm audit --audit-level=low",
-    "verify": "npm run audit && npm test -- --watch=false && npm run build"
+    "audit:ci": "node scripts/ci-audit.mjs",
+    "verify": "npm run audit:ci && npm test -- --watch=false && npm run build"
   },
   "private": true,
   "dependencies": {
