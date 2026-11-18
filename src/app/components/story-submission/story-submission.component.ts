@@ -13,7 +13,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, timeout } from 'rxjs';
 import { StorySubmissionsService } from 'src/app/services/story-submissions.service';
 
 type StoryField = 'title' | 'name' | 'email' | 'message';
@@ -176,7 +176,7 @@ export class StorySubmissionComponent implements OnDestroy {
     for (const photo of this.photos) body.append('photos', photo.file);
     this.submitting = true;
     this.busy.emit(true);
-    this.request = this.stories.submit(body).subscribe({
+    this.request = this.stories.submit(body).pipe(timeout(90000)).subscribe({
       next: () => {
         this.submitting = false;
         this.busy.emit(false);

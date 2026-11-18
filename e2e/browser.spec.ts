@@ -395,6 +395,36 @@ test('culture, food and stories use shareable names and preserve legacy bookmark
   await expect(page).toHaveURL(/#\/story\/a-day-by-the-sea$/);
 });
 
+test('detail pages retry temporary errors and distinguish missing records', async ({ page }) => {
+  await mockApi(page);
+  const destination = { id: 41, name: 'Forest Trail', category: 'Nature', images: [], dontMissThese: [] };
+  const story = { id: 51, title: 'Coastal Story', images: [], dontMissThese: [] };
+  let destinationReads = 0;
+  let storyReads = 0;
+  await page.route(api + '/v1/destination-search', r => r.fulfill({ json: [destination] }));
+  await page.route(api + '/v1/nature/41', r => ++destinationReads === 1
+    ? r.fulfill({ status: 503, json: {} }) : r.fulfill({ json: destination }));
+  await page.route(api + '/v1/nature/42', r => r.fulfill({ status: 404, json: {} }));
+  await page.route(api + '/v1/blogs/getBlogs', r => ++storyReads === 1
+    ? r.fulfill({ status: 503, json: {} }) : r.fulfill({ json: [story] }));
+
+  await page.goto('/#/nature/forest-trail');
+  await expect(page.getByRole('alert')).toContainText('Unable to load this destination.');
+  await page.getByRole('button', { name: 'Try again' }).click();
+  await expect(page.getByRole('heading', { name: destination.name, exact: true })).toBeVisible();
+  await page.goto('/#/details/nature/42');
+  await expect(page.getByRole('alert')).toContainText('Destination not found.');
+  await expect(page.getByRole('button', { name: 'Try again' })).toHaveCount(0);
+
+  await page.goto('/#/story/coastal-story');
+  await expect(page.getByRole('alert')).toContainText('This story could not load.');
+  await page.getByRole('button', { name: 'Try again' }).click();
+  await expect(page.getByRole('heading', { name: story.title, exact: true })).toBeVisible();
+  await page.goto('/#/story/missing-story');
+  await expect(page.getByRole('alert')).toContainText('Story not found.');
+  await expect(page.getByRole('button', { name: 'Try again' })).toHaveCount(0);
+});
+
 test('search falls back only on demand when the backend has no index yet', async ({
   page,
 }) => {
@@ -979,9 +1009,13 @@ test('editors pick related records by section and visitors can click the full ca
     { kind: 'story', id: 63, title: story.title, href: '/story/63' },
     { kind: 'ads', id: 64, title: 'Sponsor', href: '/advertisements/64' },
   ].map(card => ({ ...card, summary: 'Explore ' + card.title }));
+  let catalogAttempts = 0;
   await page.route(api + '/v1/admin/landing-layout/cards', route => {
     expect(route.request().headers()['authorization']).toBe('Bearer ' + token);
-    return route.fulfill({ json: cards });
+    catalogAttempts++;
+    if (catalogAttempts === 1) return route.fulfill({ status: 503, json: {} });
+    if (catalogAttempts === 2) return route.fulfill({ json: { cards } });
+    return route.fulfill({ json: [null, ...cards, { ...cards[1], id: 99, href: '/story/99' }] });
   });
   let saved = source;
   await page.route(api + '/v1/nature/41', route => route.fulfill({ json: saved }));
@@ -1004,6 +1038,13 @@ test('editors pick related records by section and visitors can click the full ca
   const item = page.getByRole('combobox', { name: 'Related place item' });
   await expect(section.locator('option')).toHaveText(['Choose a section', 'Nature', 'Culture', 'Food', 'Stories']);
   await expect(item).toBeDisabled();
+  await section.selectOption('nature');
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await expect(page.getByRole('alert')).toContainText('The related items could not load.');
+    await expect(item).toBeDisabled();
+    await page.getByRole('button', { name: 'Try again' }).click();
+  }
+  await expect(item.locator('option')).toHaveText(['Choose an item', 'Nearby Lake']);
   for (const [value, title] of [['nature', 'Nearby Lake'], ['culture', 'Heritage Temple'], ['food', food.name], ['story', story.title]]) {
     await section.selectOption(value);
     await expect(item.locator('option')).toHaveText(['Choose an item', title]);

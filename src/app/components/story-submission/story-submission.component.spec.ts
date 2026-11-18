@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
@@ -30,6 +30,30 @@ describe('Story submission validation', () => {
       message: 'A walk along the coast.',
     });
   }
+  it('unlocks a stalled submission and retries the same draft with the same key', async () => {
+    vi.useFakeTimers();
+    try {
+      valid();
+      const component = fixture.componentInstance;
+      const endpoint = API_BASE_URL + '/v1/blogs/submissions';
+      component.submit();
+      const first = http.expectOne(endpoint);
+      await vi.advanceTimersByTimeAsync(90000);
+      expect(first.cancelled).toBe(true);
+      expect(component.submitting).toBe(false);
+      expect(component.error).toContain('Your draft is still here');
+      expect(component.form.controls.title.value).toBe('A day in Udupi');
+
+      component.submit();
+      const retry = http.expectOne(endpoint);
+      expect(retry.request.body.get('submissionKey')).toBe(first.request.body.get('submissionKey'));
+      retry.flush({ id: 1, message: 'Accepted' });
+      expect(component.submitted).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('shows field errors on submit, focuses the first invalid input and sends no request', () => {
     expect(fixture.nativeElement.querySelector('.field-error')).toBeNull();
     fixture.componentInstance.submit();

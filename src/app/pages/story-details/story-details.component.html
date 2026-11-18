@@ -5,8 +5,11 @@
     }
     @if (failed) {
       <div class="ud-status" role="alert">
-        <p>This story could not load.</p>
-        <a routerLink="/story" class="ud-button">Back to stories</a>
+        <p>{{ retryable ? 'This story could not load. Please try again.' : 'Story not found.' }}</p>
+        @if (retryable) {
+          <button class="ud-button" type="button" (click)="retry()">Try again</button>
+        }
+        <a routerLink="/story" class="ud-button secondary">Back to stories</a>
       </div>
     }
     @if (story) {

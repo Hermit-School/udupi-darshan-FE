@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { RelatedPhotosService } from 'src/app/services/related-photos.service';
 import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { CommonModule } from "@angular/common";
@@ -7,7 +8,7 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { StoryService } from "src/app/services/story.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Story } from "src/app/models/story";
-import { Observable, catchError, map, of, switchMap } from 'rxjs';
+import { Observable, Subject, catchError, map, merge, of, switchMap } from 'rxjs';
 import { namedRecord, nameSlug, storyNames, storyRoute } from '../../util/destination-route';
 
 class StoryRouteRedirect {
@@ -25,6 +26,8 @@ export class StoryDetailsComponent implements OnInit {
   story?: Story;
   loading = true;
   failed = false;
+  retryable = false;
+  private readonly retryRequests = new Subject<void>();
   private readonly destroyRef = inject(DestroyRef);
   selectedIndex: number = 0;
 
@@ -37,19 +40,26 @@ export class StoryDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(
-      switchMap(params => {
+    merge(
+      this.route.paramMap.pipe(map(params => ({ params, useRedirect: true }))),
+      this.retryRequests.pipe(map(() => ({ params: this.route.snapshot.paramMap, useRedirect: false }))),
+    ).pipe(
+      switchMap(({ params, useRedirect }) => {
         this.loading = true;
         this.failed = false;
+        this.retryable = false;
         this.story = undefined;
         this.selectedIndex = 0;
         const segment = params.get('id') ?? '';
         const navigation = this.router.currentNavigation() ?? this.router.lastSuccessfulNavigation();
         const redirect = navigation?.extras.info;
-        if (redirect instanceof StoryRouteRedirect && redirect.segment === segment) {
+        if (useRedirect && redirect instanceof StoryRouteRedirect && redirect.segment === segment) {
           return of({ story: redirect.story, route: null });
         }
-        return this.loadStory(segment).pipe(catchError(() => of({ story: undefined, route: null })));
+        return this.loadStory(segment).pipe(catchError(error => {
+          this.retryable = !(error instanceof HttpErrorResponse && error.status === 404);
+          return of({ story: undefined, route: null });
+        }));
       }),
       takeUntilDestroyed(this.destroyRef),
     ).subscribe(({ story, route }) => {
@@ -89,6 +99,10 @@ export class StoryDetailsComponent implements OnInit {
       const match = namedRecord(segment, storyNames(catalog));
       return { story: catalog.find(story => story.id === match?.id), route: null };
     }));
+  }
+
+  retry(): void {
+    this.retryRequests.next();
   }
 
   onImageClick(index: number): void {

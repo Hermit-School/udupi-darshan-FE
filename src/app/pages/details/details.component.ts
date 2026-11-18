@@ -5,7 +5,8 @@ import { StoryFormService } from '../../services/story-form.service';
 import { RelatedPhotosService } from 'src/app/services/related-photos.service';
 import { VisitorMotionDirective } from 'src/app/directives/visitor-motion.directive';
 import { Component, Input, OnInit, OnDestroy, inject } from "@angular/core";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ActivatedRoute, Params, Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { natureServiceService } from "src/app/services/nature.service";
 import { CultureService } from "src/app/services/culture.service";
@@ -32,6 +33,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   readonly storyForm = inject(StoryFormService);
   loading = false;
   error = "";
+  retryable = false;
   private routeSubscription?: Subscription;
   private requestSubscription?: Subscription;
   private relatedSubscription?: Subscription;
@@ -52,23 +54,28 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private foodRecommendations: FoodRecommendationsService,
   ) {}
   ngOnInit(): void {
-    this.routeSubscription = this.route.params.subscribe((params) => {
-      const rawId = params["id"];
-      const category =
-        params["category"] ?? this.route.snapshot.data["legacyCategory"];
-      this.currentCategory = category;
-      if (this.route.snapshot.data["legacyCategory"] && !/^\d+$/.test(rawId)) {
-        const navigation = this.router.currentNavigation() ?? this.router.lastSuccessfulNavigation();
-        const redirect = navigation?.extras.info;
-        if (redirect instanceof DestinationRouteRedirect && redirect.section === category && redirect.segment === rawId) {
-          this.showCard(redirect.card, category);
-        } else {
-          this.fetchLegacy(category, rawId);
-        }
-      } else {
-        this.fetchData(category, Number(rawId), true);
-      }
-    });
+    this.routeSubscription = this.route.params.subscribe(params => this.loadRoute(params));
+  }
+
+  retry(): void {
+    this.loadRoute(this.route.snapshot.params, false);
+  }
+
+  private loadRoute(params: Params, useRedirect = true): void {
+    const rawId = params["id"];
+    const category = params["category"] ?? this.route.snapshot.data["legacyCategory"];
+    this.currentCategory = category;
+    if (!this.route.snapshot.data["legacyCategory"] || /^\d+$/.test(rawId)) {
+      this.fetchData(category, Number(rawId), true);
+      return;
+    }
+    const navigation = this.router.currentNavigation() ?? this.router.lastSuccessfulNavigation();
+    const redirect = navigation?.extras.info;
+    if (useRedirect && redirect instanceof DestinationRouteRedirect && redirect.section === category && redirect.segment === rawId) {
+      this.showCard(redirect.card, category);
+    } else {
+      this.fetchLegacy(category, rawId);
+    }
   }
 
   fetchData(category: string, id: number, redirectToName = false): void {
@@ -77,6 +84,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.relatedCards = [];
     this.card = null;
     this.error = "";
+    this.retryable = false;
     this.currentSlideIndex = 0;
     const section = (category || "").toLowerCase().split("-")[0];
     const service =
@@ -96,7 +104,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.requestSubscription = service(id).pipe(
       switchMap(card => redirectToName && nameSlug(card.name)
         ? this.shared.loadIndex().pipe(map(items => ({
-            card, route: destinationRoute(section, card, items.filter(item => item.category.toLowerCase() === section)),
+            card, route: this.shared.indexError() ? null :
+              destinationRoute(section, card, items.filter(item => item.category.toLowerCase() === section)),
           })))
         : of({ card, route: null })),
     ).subscribe({
@@ -111,10 +120,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
           });
         }
       },
-      error: () => {
-        this.loading = false;
-        this.error = "Unable to load this destination. Please try again.";
-      },
+      error: error => this.fail(error),
+
     });
   }
 
@@ -130,6 +137,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.relatedCards = [];
     this.card = null;
     this.error = "";
+    this.retryable = false;
     this.currentSlideIndex = 0;
     this.loading = true;
     this.requestSubscription = this.shared
@@ -150,22 +158,20 @@ export class DetailsComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (card) => {
-          this.card = card;
-          this.error = card
-            ? ""
-            : this.shared.indexError()
-              ? "Unable to load this destination. Please try again."
-              : "Destination not found.";
-          this.loading = false;
           if (card) {
-            this.prepareRelated(card, section);
+            this.showCard(card, section);
+          } else {
+            this.fail(undefined, !this.shared.indexError());
           }
         },
-        error: () => {
-          this.loading = false;
-          this.error = "Unable to load this destination. Please try again.";
-        },
+        error: error => this.fail(error),
       });
+  }
+
+  private fail(error?: unknown, missing = false): void {
+    this.loading = false;
+    this.retryable = !missing && !(error instanceof HttpErrorResponse && error.status === 404);
+    this.error = this.retryable ? "Unable to load this destination. Please try again." : "Destination not found.";
   }
 
   get mapUrl(): string {

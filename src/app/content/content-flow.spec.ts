@@ -77,7 +77,7 @@ describe('Public content rendering regressions', () => {
     const fixture=TestBed.createComponent(DetailsComponent); fixture.detectChanges(); fixture.componentInstance.fetchData('food',42);
     const http=TestBed.inject(HttpTestingController);
     http.expectOne(`${API_BASE_URL}/v1/food/42`).flush('',{status:404,statusText:'Not Found'});
-    fixture.detectChanges(); expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain('Unable to load');
+    fixture.detectChanges(); expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain('Destination not found.');
     http.verify(); fixture.destroy();
   });
   it('renders returned stories instead of replacing the response with an empty array', () => {

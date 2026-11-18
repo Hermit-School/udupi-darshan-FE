@@ -7,7 +7,10 @@
       <div class="ud-status" role="alert">
         <h1>Something’s missing.</h1>
         <p>{{ error }}</p>
-        <a class="ud-button" routerLink="/home">Back to exploring</a>
+        @if (retryable) {
+          <button class="ud-button" type="button" (click)="retry()">Try again</button>
+        }
+        <a class="ud-button secondary" routerLink="/home">Back to exploring</a>
       </div>
     }
     @if (card) {
