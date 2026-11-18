@@ -18,7 +18,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { finalize, timeout } from "rxjs";
+import { finalize, map, timeout } from "rxjs";
 import { HomeCard, HomepageService } from "../../services/homepage.service";
 import { API_BASE_URL } from "src/constants/routes";
 
@@ -199,7 +199,16 @@ export class ContentEditorComponent {
     if (!section || this.relatedCatalog || this.relatedCatalogLoading) return;
     this.relatedCatalogLoading = true;
     this.relatedCatalogError = false;
-    this.homepage.cards().pipe(timeout(10000), takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.homepage.cards().pipe(
+      timeout(10000),
+      map(cards => {
+        if (!Array.isArray(cards)) throw new Error('Invalid related-place catalog');
+        return cards.filter(card => card && this.relatedSections.some(section => section.value === card.kind) &&
+          Number.isSafeInteger(card.id) && card.id > 0 && typeof card.title === 'string' && !!card.title.trim() &&
+          card.href === (card.kind === 'story' ? '/story/' : '/details/' + card.kind + '/') + card.id);
+      }),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe({
       next: cards => {
         this.relatedCatalog = cards;
         this.relatedCatalogLoading = false;
@@ -217,7 +226,7 @@ export class ContentEditorComponent {
     const group = this.relatedPlace();
     group.patchValue({
       name: card.title,
-      description: card.summary.replace(/<[^>]*>/g, '').trim(),
+      description: (typeof card.summary === 'string' ? card.summary : '').replace(/<[^>]*>/g, '').trim(),
       link: card.href,
     });
     this.related.push(group);
