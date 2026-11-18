@@ -3,6 +3,7 @@ import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http
 import { API_BASE_URL } from 'src/constants/routes';
 import { BACKGROUND_REQUEST } from './background-request';
 import { BehaviorSubject, Observable, catchError, finalize, forkJoin, map, of, shareReplay, tap, throwError } from 'rxjs';
+import { destinationRoute } from '../util/destination-route';
 import { Details } from '../models/card';
 
 export type SearchEntry = Pick<Details, 'id' | 'name' | 'category'> & Partial<Pick<Details, 'label' | 'location' | 'link'>> & { summary?: string | null };
@@ -74,7 +75,7 @@ export class SharedService {
 
     relatedRoute(slug: string): string[] | null {
         const matches = this.detailsData.filter(item => matchesDestinationSlug(item, slug));
-        return matches.length === 1 ? ['/details', matches[0].category.toLowerCase(), String(matches[0].id)] : null;
+        return matches.length === 1 ? destinationRoute(matches[0].category, matches[0]) : null;
     }
 
   relatedLink(link?: string): string | string[] | null {

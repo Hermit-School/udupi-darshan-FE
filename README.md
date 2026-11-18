@@ -11,7 +11,7 @@ npm ci
 npm run verify
 ```
 
-`verify` runs the complete dependency audit, all Vitest tests and the production build. `npm start` serves the development app at `http://localhost:4200`; its backend URL is `http://localhost:8080`. Configure that local backend to allow `http://localhost:4200` in CORS.
+`verify` runs the CI dependency audit, all Vitest tests and the production build. CI reports and temporarily allows [GHSA-fc5q-39xc-vjpf](https://github.com/advisories/GHSA-fc5q-39xc-vjpf) and its dependent findings until the lockfile can use a patched `picomatch` release. Run `npm run audit` for the strict audit. `npm start` serves the development app at `http://localhost:4200`; its backend URL is `http://localhost:8080`. Configure that local backend to allow `http://localhost:4200` in CORS.
 
 Production builds use `https://udupi-darshan-be.onrender.com`. Firebase deploys `dist/udupi-darshan-fe`; the application builder explicitly keeps the browser output at that path. Public pages use hash routes such as `/#/nature`.
 

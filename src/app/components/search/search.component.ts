@@ -5,6 +5,7 @@ import {
   Input,
   ViewChild,
 } from "@angular/core";
+import { destinationRoute } from '../../util/destination-route';
 import { Subscription } from "rxjs";
 import { Router, RouterLink } from "@angular/router";
 import { SearchEntry, SharedService } from "src/app/services/shared.service";
@@ -17,6 +18,7 @@ import { SearchEntry, SharedService } from "src/app/services/shared.service";
   styleUrls: ["./search.component.scss"],
 })
 export class SearchComponent {
+  readonly destinationRoute = destinationRoute;
   @Input() inline = false;
   toggleSearch: boolean = false;
   searchText: string = "";
@@ -65,11 +67,7 @@ export class SearchComponent {
     event.preventDefault();
     const item = this.results[0];
     this.searchClose();
-    void this.router.navigate([
-      "/details",
-      item.category.toLowerCase(),
-      item.id,
-    ]);
+    void this.router.navigate(destinationRoute(item.category, item));
   }
 
   getHighlightedText(field: string | undefined, query: string): string {
