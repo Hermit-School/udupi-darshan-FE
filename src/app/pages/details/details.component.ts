@@ -1,4 +1,4 @@
-import { destinationRoute, natureSlug } from '../../util/destination-route';
+import { destinationRoute, namedRecord, nameSlug } from '../../util/destination-route';
 import { informationUrl } from '../../util/information-url';
 import { FoodRecommendationsService } from '../../services/food-recommendations.service';
 import { RelatedPhotosService } from 'src/app/services/related-photos.service';
@@ -10,14 +10,14 @@ import { natureServiceService } from "src/app/services/nature.service";
 import { CultureService } from "src/app/services/culture.service";
 import { Details } from "src/app/models/card";
 import { FoodService } from "src/app/services/food.service";
-import { of, Subscription, switchMap } from "rxjs";
+import { map, of, Subscription, switchMap } from "rxjs";
 import {
   matchesDestinationSlug,
   SharedService,
 } from "src/app/services/shared.service";
 
-class NatureRouteRedirect {
-  constructor(readonly card: Details) {}
+class DestinationRouteRedirect {
+  constructor(readonly section: string, readonly segment: string, readonly card: Details) {}
 }
 
 @Component({
@@ -58,13 +58,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
       if (this.route.snapshot.data["legacyCategory"] && !/^\d+$/.test(rawId)) {
         const navigation = this.router.currentNavigation() ?? this.router.lastSuccessfulNavigation();
         const redirect = navigation?.extras.info;
-        if (category === 'nature' && redirect instanceof NatureRouteRedirect) {
+        if (redirect instanceof DestinationRouteRedirect && redirect.section === category && redirect.segment === rawId) {
           this.showCard(redirect.card, category);
         } else {
           this.fetchLegacy(category, rawId);
         }
       } else {
-        this.fetchData(category, Number(rawId), category === 'nature');
+        this.fetchData(category, Number(rawId), true);
       }
     });
   }
@@ -91,15 +91,21 @@ export class DetailsComponent implements OnInit, OnDestroy {
       return;
     }
     this.loading = true;
-    this.requestSubscription = service(id).subscribe({
-      next: (card) => {
+    this.requestSubscription = service(id).pipe(
+      switchMap(card => redirectToName && nameSlug(card.name)
+        ? this.shared.loadIndex().pipe(map(items => ({
+            card, route: destinationRoute(section, card, items.filter(item => item.category.toLowerCase() === section)),
+          })))
+        : of({ card, route: null })),
+    ).subscribe({
+      next: ({ card, route }) => {
         this.showCard(card, section);
-        if (redirectToName && natureSlug(card.name)) {
-          void this.router.navigate(destinationRoute(section, card), {
+        if (route) {
+          void this.router.navigate(route, {
             replaceUrl: true,
             queryParamsHandling: 'preserve',
             preserveFragment: true,
-            info: new NatureRouteRedirect(card),
+            info: new DestinationRouteRedirect(section, route[1], card),
           });
         }
       },
@@ -129,12 +135,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap((items) => {
           const categoryItems = items.filter(item => item.category.toLowerCase() === section);
-          const exact = section === 'nature'
-            ? categoryItems.filter(item => natureSlug(item.name) === slug)
-            : [];
-          const matches = exact.length ? exact : categoryItems.filter(item => matchesDestinationSlug(item, slug));
-          if (matches.length !== 1) return of(null);
-          const id = matches[0].id;
+          const exact = namedRecord(slug, categoryItems);
+          const aliases = exact ? [] : categoryItems.filter(item => matchesDestinationSlug(item, slug));
+          const id = exact?.id ?? (aliases.length === 1 ? aliases[0].id : undefined);
+          if (id === undefined) return of(null);
           return section === "nature"
             ? this.natureService.getNatureById(id)
             : section === "culture"

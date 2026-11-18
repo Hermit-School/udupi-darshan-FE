@@ -42,7 +42,7 @@
         @for (item of results; track item.category + ":" + item.id) {
           <a
             class="result"
-            [routerLink]="destinationRoute(item.category, item)"
+            [routerLink]="sharedService.destinationRoute(item)"
             (click)="searchClose()"
           >
             <strong

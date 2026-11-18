@@ -336,12 +336,53 @@ test('search loads one compact index on demand and legacy links stay in the same
   await page.goto('/#/details/nature/43');
   await expect(page).toHaveURL(/#\/nature\/other-lake$/);
   await expect(page.getByRole('heading', { name: 'Other Lake' })).toBeVisible();
-  expect(indexReads).toBe(readsBeforeBookmark);
+  expect(indexReads).toBe(readsBeforeBookmark + 1);
   await page.goto('/#/dashboard');
   await expect(page).toHaveURL(/#\/admin\?access=required$/);
   await expect(
     page.getByText('Sign in as an administrator to open this page.'),
   ).toBeVisible();
+});
+
+test('culture, food and stories use shareable names and preserve legacy bookmarks', async ({ page }) => {
+  await mockApi(page);
+  const temple = { id: 51, name: 'Heritage Temple', category: 'Culture', images: [], dontMissThese: [] };
+  const cafes = [
+    { id: 61, name: 'Coastal Cafe', category: 'Food', images: [], dontMissThese: [], descr: 'The original cafe.' },
+    { id: 62, name: 'Coastal Cafe', category: 'Food', images: [], dontMissThese: [], descr: 'The second cafe.' },
+  ];
+  const story = { id: 71, title: 'A Day by the Sea', submittedBy: 'Visitor', content: 'A coastal memory.', images: [], dontMissThese: [] };
+  await page.route(api + '/v1/destination-search', r => r.fulfill({ json: [temple, ...cafes] }));
+  await page.route(api + '/v1/culture/getCulture', r => r.fulfill({ json: [temple] }));
+  await page.route(api + '/v1/culture/51', r => r.fulfill({ json: temple }));
+  await page.route(api + '/v1/food/getFood', r => r.fulfill({ json: cafes }));
+  await page.route(api + '/v1/food/62', r => r.fulfill({ json: cafes[1] }));
+  await page.route(api + '/v1/blogs/getBlogs', r => r.fulfill({ json: [story] }));
+  await page.route(api + '/v1/blogs/getBlogs/71', r => r.fulfill({ json: story }));
+
+  await page.goto('/#/culture');
+  await page.getByRole('link', { name: /Heritage Temple/ }).click();
+  await expect(page).toHaveURL(/#\/culture\/heritage-temple$/);
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Heritage Temple', level: 1 })).toBeVisible();
+  await page.goto('/#/culture/51?from=bookmark');
+  await expect(page).toHaveURL(/#\/culture\/heritage-temple\?from=bookmark$/);
+
+  await page.goto('/#/food');
+  await expect(page.locator('a[href="#/food/coastal-cafe"]')).toHaveCount(1);
+  await page.locator('a[href="#/food/coastal-cafe--62"]').click();
+  await page.reload();
+  await expect(page.getByText('The second cafe.', { exact: true })).toBeVisible();
+  await page.goto('/#/details/food/62');
+  await expect(page).toHaveURL(/#\/food\/coastal-cafe--62$/);
+
+  await page.goto('/#/story');
+  await page.getByRole('link', { name: /A Day by the Sea/ }).click();
+  await expect(page).toHaveURL(/#\/story\/a-day-by-the-sea$/);
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'A Day by the Sea', level: 1 })).toBeVisible();
+  await page.goto('/#/story/71');
+  await expect(page).toHaveURL(/#\/story\/a-day-by-the-sea$/);
 });
 
 test('search falls back only on demand when the backend has no index yet', async ({
@@ -740,7 +781,7 @@ test('admin reviews private submissions and publishes approved stories to the pu
     page.getByText('private@example.invalid', { exact: true }),
   ).toHaveCount(0);
   await page.getByRole('link', { name: /Coastal memories/ }).click();
-  await expect(page).toHaveURL(/#\/story\/42$/);
+  await expect(page).toHaveURL(/#\/story\/coastal-memories$/);
   await expect(
     page.getByText('Full visitor story awaiting approval.', { exact: true }),
   ).toBeVisible();
@@ -827,7 +868,7 @@ test('admin adds photos to a received story, retries safely and publishes the sa
   expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);
   await review.getByRole('button',{name:'Publish story',exact:true}).click();
   await review.getByRole('link',{name:'View published story'}).click();
-  await expect(page).toHaveURL(/#\/story\/84$/);
+  await expect(page).toHaveURL(/#\/story\/received-visitor-story$/);
   await expect(page.getByRole('button',{name:/Show photo/})).toHaveCount(3);
   await expect(page.getByText('private@example.invalid',{exact:true})).toHaveCount(0);
 });
@@ -1218,8 +1259,10 @@ test('admin arranges cards and photos in a saved homepage draft, then publishes 
  await expect(page.locator('.home-section').filter({has:page.getByRole('heading',{name:'Our favourites',exact:true})}).locator('h3')).toHaveText(['Coastal memory','Heritage temple','Local lunch']);
  await expect(page.getByRole('img',{name:'Beach spotlight'})).toHaveAttribute('src','assets/images/c2.jpg');
  await expect(page.getByRole('button',{name:/Remove Beach/})).toHaveCount(0);
+ const heritage = {id:2,name:'Heritage temple',category:'Culture',images:[],dontMissThese:[]};
+ await page.route(api+'/v1/culture/2', route => route.fulfill({json:heritage}));
  await page.getByRole('link').filter({has:page.getByRole('heading',{name:'Heritage temple',exact:true})}).click();
- await expect(page).toHaveURL(/#\/details\/culture\/2$/);
+ await expect(page).toHaveURL(/#\/culture\/heritage-temple$/);
 });
 
 test('homepage editor rejects misplaced ads, filters the library and works on a phone',async({page})=>{
@@ -1622,7 +1665,7 @@ test('food formatting is safe and legacy recommendations become distinct venues 
  await page.setViewportSize({width:390,height:844});await cards.screenshot({path:test.info().outputPath('food-recommendations-mobile.png')});
  await expect(cards.getByRole('link',{name:'View details'}).first()).toBeVisible();
  await cards.getByRole('article').filter({has:page.getByRole('heading',{name:'Ice Cream Parlour',exact:true})}).getByRole('link',{name:'View details',exact:true}).click();
- await expect(page).toHaveURL(/#\/details\/food\/10$/);await expect(page.getByRole('heading',{level:1,name:'Ice Cream Parlour',exact:true})).toBeVisible();
+ await expect(page).toHaveURL(/#\/food\/ice-cream-parlour$/);await expect(page.getByRole('heading',{level:1,name:'Ice Cream Parlour',exact:true})).toBeVisible();
 });
 
 

@@ -18,7 +18,7 @@ describe('FoodRecommendationsService', () => {
     http.expectOne(list).flush([current,food(20,'Woodlands Restaurant'),food(5,'Cafe 7 Bees',['/v1/media/cafe']),food(23,'Café 7 Bees'),food(10,'Ice Cream Parlour',['assets/images/Ideal_Ice_Cream.jpg']),food(11,'Coastal Kitchen')]);
     http.expectOne(index).flush([]);
     expect(result.map(item=>item.name)).toEqual(['Cafe 7 Bees','Ice Cream Parlour','Coastal Kitchen']);
-    expect(result.map(item=>item.link)).toEqual(['/details/food/5','/details/food/10','/details/food/11']);
+    expect(result.map(item=>item.link)).toEqual(['/food/cafe-7-bees','/food/ice-cream-parlour','/food/coastal-kitchen']);
     expect(result[0].imageUrl).toBe('/v1/media/cafe');expect(result[2].imageUrl).toBe('');
     expect(result.every(item=>!item.description.includes('Wrong venue'))).toBe(true);
   });
@@ -31,7 +31,7 @@ describe('FoodRecommendationsService', () => {
   it('resolves an authored venue name and shares a cached listing', () => {
     const current={...food(4,'Restaurant'),dontMissThese:[{...legacy,name:'Cafe',link:'/old-cafe-feature'}]};let result:any[]=[];
     service.forDestination(current).subscribe(items=>result=items);http.expectOne(list).flush([current,food(5,'Cafe')]);http.expectOne(index).flush([]);
-    expect(result[0].link).toBe('/details/food/5');service.forDestination(current).subscribe();http.expectNone(list);http.expectNone(index);
+    expect(result[0].link).toBe('/food/cafe');service.forDestination(current).subscribe();http.expectNone(list);http.expectNone(index);
   });
   it('does not invent destinations when loading fails, and leaves optional recommendations empty', () => {
     service.forDestination(food(4,'Restaurant')).subscribe(items=>expect(items).toEqual([]));http.expectNone(list);
