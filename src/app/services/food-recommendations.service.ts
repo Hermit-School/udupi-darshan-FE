@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable, catchError, finalize, map, of, forkJoin, shareReplay, tap, timeout } from 'rxjs';
+import { destinationRoute } from '../util/destination-route';
 import { Details } from '../models/card';
 import { API_BASE_URL } from 'src/constants/routes';
 import { BACKGROUND_REQUEST } from './background-request';
@@ -29,19 +30,20 @@ export class FoodRecommendationsService {
         if (!broken(item)) return [item];
         const named = alternatives.filter(food => identity(food.name) === identity(item.name));
         const matches = named.length ? named : alternatives.filter(food => matchesDestinationSlug(food, item.link!.trim().replace(/^\//, '')));
-        return matches.length === 1 ? [this.card(matches[0])] : [];
+        return matches.length === 1 ? [this.card(matches[0], records)] : [];
       });
       if (resolved.length) return [...new Map(resolved.map(item => [item.link || identity(item.name),item])).values()];
       // Start after the current venue rather than repeating the same three cards on every food page.
       const next = alternatives.findIndex(item => item.id > current.id);
       const start = next < 0 ? 0 : next;
-      return [...alternatives.slice(start), ...alternatives.slice(0,start)].slice(0,3).map(item => this.card(item));
+      return [...alternatives.slice(start), ...alternatives.slice(0,start)].slice(0,3).map(item => this.card(item, records));
     }));
   }
-  private card(food: Details): Recommendation {
+  private card(food: Details, catalog: Details[]): Recommendation {
     const summary = (food.descr ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    const [section, segment] = destinationRoute('food', food, catalog);
     return {name: food.name, description: summary.length > 180 ? summary.slice(0,177).trimEnd()+'…' : summary,
-      imageUrl: food.images?.find(image => !!image?.trim()) ?? '', link: '/details/food/'+food.id};
+      imageUrl: food.images?.find(image => !!image?.trim()) ?? '', link: section + '/' + encodeURIComponent(segment)};
   }
   private foods(): Observable<Details[]> {
     if (this.pending) return this.pending;

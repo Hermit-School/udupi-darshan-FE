@@ -22,7 +22,7 @@
     }
     <div class="ud-grid">
       @for (story of stories; track story.id) {
-        <a class="ud-card" [routerLink]="['/story', story.id]">
+        <a class="ud-card" [routerLink]="storyRoute(story, stories)">
           @if (story.images && story.images[0]; as image) {
             <div class="ud-card-image">
               <img

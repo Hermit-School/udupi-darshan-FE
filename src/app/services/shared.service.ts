@@ -73,9 +73,14 @@ export class SharedService {
         }) : []);
     }
 
+    destinationRoute(item: SearchEntry): string[] {
+        const section = item.category.toLowerCase();
+        return destinationRoute(section, item, this.detailsData.filter(other => other.category.toLowerCase() === section));
+    }
+
     relatedRoute(slug: string): string[] | null {
         const matches = this.detailsData.filter(item => matchesDestinationSlug(item, slug));
-        return matches.length === 1 ? destinationRoute(matches[0].category, matches[0]) : null;
+        return matches.length === 1 ? this.destinationRoute(matches[0]) : null;
     }
 
   relatedLink(link?: string): string | string[] | null {
@@ -90,7 +95,7 @@ export class SharedService {
       if (segments.length === 3 && segments[0] === 'details' && /^(nature|culture|food)$/i.test(segments[1]) && /^[1-9]\d*$/.test(segments[2])) {
         return ['/details', segments[1].toLowerCase(), segments[2]];
       }
-      if (segments.length === 2 && /^(nature|culture|food)$/i.test(segments[0])) return ['/' + segments[0].toLowerCase(), segments[1]];
+      if (segments.length === 2 && /^(nature|culture|food|story)$/i.test(segments[0])) return ['/' + segments[0].toLowerCase(), segments[1]];
       if (segments.length === 1 && /^(home|nature|culture|food|story|advertisements)$/.test(segments[0])) return ['/' + segments[0]];
       return segments.length === 1 ? this.relatedRoute(segments[0]) : null;
     } catch { return null; }
