@@ -28,6 +28,8 @@ textarea { resize: vertical; }
 .secondary { border: 1px solid #a8a29d; background: white; color: #222831; }
 details > .secondary { margin-top: .75rem; }
 .related { border-bottom: 1px solid #e8e2de; padding-bottom: 1rem; }
+.related-preview { display: grid; gap: .3rem; padding: .8rem 1rem; border: 1px solid #e8e2de; border-radius: .55rem; }
+.related-preview span { color: #555d68; font-weight: 400; }
 legend { font-size: 1rem; font-weight: 750; }
 .error { background: #fff0ea; color: #872d20; border-radius: .55rem; padding: .75rem; }
 .success { border-left: .3rem solid #ff6000; }
