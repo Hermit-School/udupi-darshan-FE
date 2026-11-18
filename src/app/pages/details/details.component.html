@@ -190,7 +190,7 @@
           </div>
           <div class="ud-grid">
             @for (item of relatedCards; track $index) {
-              <article class="ud-card">
+              <article class="ud-card ud-related-card">
                 @if (relatedPhotos.imageUrl(item.imageUrl); as image) {
                   <div class="ud-card-image">
                     <img

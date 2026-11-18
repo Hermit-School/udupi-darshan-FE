@@ -19,6 +19,7 @@ import {
 } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { finalize, timeout } from "rxjs";
+import { HomeCard, HomepageService } from "../../services/homepage.service";
 import { API_BASE_URL } from "src/constants/routes";
 
 const TYPES = {
@@ -63,6 +64,7 @@ export class ContentEditorComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly homepage = inject(HomepageService);
   recordName = "";
   removed(){void this.router.navigate(["/admindashboard/content",this.kind]);}
   readonly kind: Kind = this.readKind();
@@ -166,6 +168,68 @@ export class ContentEditorComponent {
   busy = false;
   error = "";
   published = "";
+  readonly relatedSections = [
+    { value: 'nature', label: 'Nature' },
+    { value: 'culture', label: 'Culture' },
+    { value: 'food', label: 'Food' },
+    { value: 'story', label: 'Stories' },
+  ];
+  relatedSection = '';
+  relatedCatalogLoading = false;
+  relatedCatalogError = false;
+  private relatedCatalog?: HomeCard[];
+
+  get relatedOptions() {
+    const added = new Set(this.related.controls.map(group => group.controls.link.value.trim()));
+    return (this.relatedCatalog ?? []).filter(card =>
+      card.kind === this.relatedSection && card.href && !added.has(card.href) &&
+      (card.kind !== this.kind || card.id !== this.editId),
+    );
+  }
+
+  relatedOptionLabel(card: HomeCard) {
+    const duplicate = this.relatedCatalog?.some(other =>
+      other.kind === card.kind && other.id !== card.id && other.title === card.title,
+    );
+    return duplicate ? card.title + ' · ' + card.id : card.title;
+  }
+
+  selectRelatedSection(section: string) {
+    this.relatedSection = section;
+    if (!section || this.relatedCatalog || this.relatedCatalogLoading) return;
+    this.relatedCatalogLoading = true;
+    this.relatedCatalogError = false;
+    this.homepage.cards().pipe(timeout(10000), takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: cards => {
+        this.relatedCatalog = cards;
+        this.relatedCatalogLoading = false;
+      },
+      error: () => {
+        this.relatedCatalogError = true;
+        this.relatedCatalogLoading = false;
+      },
+    });
+  }
+
+  addRelatedItem(value: string) {
+    const card = this.relatedOptions.find(option => String(option.id) === value);
+    if (!card?.href || this.related.length >= 50) return;
+    const group = this.relatedPlace();
+    group.patchValue({
+      name: card.title,
+      description: card.summary.replace(/<[^>]*>/g, '').trim(),
+      link: card.href,
+    });
+    this.related.push(group);
+  }
+
+  relatedItemRoute(link: string): string[] | null {
+    const path = link.trim();
+    return /^\/(?:details\/(?:nature|culture|food)|story)\/[1-9]\d*$/.test(path)
+      ? [path]
+      : null;
+  }
+
   get related() {
     return this.form.controls.related;
   }
