@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { Component, DestroyRef, Input, OnInit, inject } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterLink } from "@angular/router";
+import { destinationRoute } from '../../util/destination-route';
 import { Details } from "src/app/models/card";
 import { natureServiceService } from "src/app/services/nature.service";
 import { CultureService } from "src/app/services/culture.service";
@@ -21,6 +22,7 @@ export class ExploreCollectionComponent implements OnInit {
   private readonly culture = inject(CultureService);
   private readonly food = inject(FoodService);
   private readonly destroyRef = inject(DestroyRef);
+  readonly destinationRoute = destinationRoute;
   items: Details[] = [];
   loading = true;
   failed = false;

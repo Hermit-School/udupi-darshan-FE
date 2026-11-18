@@ -42,7 +42,7 @@
         @for (item of results; track item.category + ":" + item.id) {
           <a
             class="result"
-            [routerLink]="['/details', item.category.toLowerCase(), item.id]"
+            [routerLink]="destinationRoute(item.category, item)"
             (click)="searchClose()"
           >
             <strong

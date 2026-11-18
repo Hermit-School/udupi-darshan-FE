@@ -316,7 +316,7 @@ test('search loads one compact index on demand and legacy links stay in the same
   const result = page.getByRole('link', { name: /Preview Lake/ });
   await expect(result).toBeVisible();
   await result.click();
-  await expect(page).toHaveURL(/#\/details\/nature\/42$/);
+  await expect(page).toHaveURL(/#\/nature\/preview-lake$/);
   await expect(page.locator('app-navbar app-search')).toHaveCount(0);
   await expect(page.getByText('Scenic shore')).toBeVisible();
   expect(indexReads).toBe(1);
@@ -324,9 +324,12 @@ test('search loads one compact index on demand and legacy links stay in the same
   expect(listingReads).toEqual([]);
   await expect(page.getByRole('link', { name: 'View details' })).toHaveCount(1);
   await page.getByRole('link', { name: 'View details' }).click();
-  await expect(page).toHaveURL(/#\/details\/nature\/43$/);
+  await expect(page).toHaveURL(/#\/nature\/other-lake$/);
   expect(context.pages()).toHaveLength(1);
-  await page.goto('/#/nature/preview-lake');
+  await page.goto('/#/details/nature/42');
+  await expect(page).toHaveURL(/#\/nature\/preview-lake$/);
+  await expect(page.getByText('Scenic shore')).toBeVisible();
+  await page.reload();
   await expect(page.getByText('Scenic shore')).toBeVisible();
   await page.goto('/#/dashboard');
   await expect(page).toHaveURL(/#\/admin\?access=required$/);
@@ -1275,7 +1278,7 @@ for(const width of [1280,390]){
  await expect(page.locator('app-homepage-view nav[aria-label="Explore by interest"], app-homepage-view footer.browse')).toHaveCount(0);
   await expect(page.locator('app-navbar app-search')).toHaveCount(0);
   await search.fill('Malpe');await expect(page.getByRole('link',{name:/Malpe Beach/})).toBeVisible();
-  await search.press('Enter');await expect(page).toHaveURL(/#\/details\/nature\/42$/);expect(searches).toBe(1);
+  await search.press('Enter');await expect(page).toHaveURL(/#\/nature\/malpe-beach$/);expect(searches).toBe(1);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(width);
  });
 }

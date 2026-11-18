@@ -4,6 +4,7 @@ import { SearchComponent } from '../search/search.component';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HomeCard, HomeView, Zone } from '../../services/homepage.service';
+import { natureSlug } from '../../util/destination-route';
 import { imagePreview } from '../../util/media-image';
 export interface HomeAction {type:'remove'|'up'|'down'|'photo';zone:Zone;index:number;photo?:number;}
 @Component({selector:'app-homepage-view',standalone:true,imports:[EventBadgeComponent,FormsModule,SearchComponent],templateUrl:'./homepage-view.component.html',styleUrls:['./homepage-view.component.scss','./homepage-sponsors.scss']})
@@ -17,7 +18,19 @@ export class HomepageViewComponent {
  get sponsorColumns(){const count=this.view.sponsorsPerRow??3;return Number.isInteger(count)&&count>=1&&count<=5?count:3;}
  internal(card:HomeCard){const path=card.internalHref??card.href;return path&&/^\/advertisements(?:\/(?:[a-z][a-z0-9-]{0,99}|[1-9][0-9]*))?$/.test(path)?path:null;}
  website(card:HomeCard){return adExternal(card.website??card.href);}
- href(card:HomeCard){if(this.editing)return null;if(card.kind==='ads'){const path=this.internal(card);return path?'#'+path:this.website(card);}return !card.href?null:card.href.toLowerCase().startsWith('https://')?card.href:'#'+card.href;}
+ href(card:HomeCard) {
+  if (this.editing) return null;
+  if (card.kind === 'ads') {
+   const path = this.internal(card);
+   return path ? '#' + path : this.website(card);
+  }
+  if (!card.href) return null;
+  if (card.kind === 'nature' && /^\/details\/nature\/\d+$/.test(card.href)) {
+   const slug = natureSlug(card.title);
+   if (slug) return '#/nature/' + encodeURIComponent(slug);
+  }
+  return card.href.toLowerCase().startsWith('https://') ? card.href : '#' + card.href;
+ }
  newTab(card:HomeCard){const href=this.href(card);return !!href&&(card.kind==='ads'||href.toLowerCase().startsWith('https://'));}
  image=imagePreview;
  cards(zone:Zone):HomeCard[]{return zone==='hero'?(this.view.hero?[this.view.hero]:[]):this.view[zone];}
