@@ -319,12 +319,22 @@ test('search loads one compact index on demand and legacy links stay in the same
   await expect(page).toHaveURL(/#\/nature\/preview-lake$/);
   await expect(page.locator('app-navbar app-search')).toHaveCount(0);
   await expect(page.getByText('Scenic shore')).toBeVisible();
+  await expect(page.getByText('Hand-picked to go with Preview Lake.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Keep exploring', { exact: true })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Been to Preview Lake?' })).toBeVisible();
+  const share = page.getByRole('button', { name: 'Share your story' });
+  await share.click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+
   expect(indexReads).toBe(1);
   expect(detailReads).toBe(1);
   expect(listingReads).toEqual([]);
   await expect(page.getByRole('link', { name: 'View details' })).toHaveCount(1);
   await page.getByRole('link', { name: 'View details' }).click();
   await expect(page).toHaveURL(/#\/nature\/other-lake$/);
+  await expect(page.getByRole('heading', { name: 'Been to Other Lake?' })).toBeVisible();
   expect(context.pages()).toHaveLength(1);
   await page.goto('/#/details/nature/42');
   await expect(page).toHaveURL(/#\/nature\/preview-lake$/);
@@ -335,7 +345,7 @@ test('search loads one compact index on demand and legacy links stay in the same
   const readsBeforeBookmark = indexReads;
   await page.goto('/#/details/nature/43');
   await expect(page).toHaveURL(/#\/nature\/other-lake$/);
-  await expect(page.getByRole('heading', { name: 'Other Lake' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Other Lake', exact: true })).toBeVisible();
   expect(indexReads).toBe(readsBeforeBookmark + 1);
   await page.goto('/#/dashboard');
   await expect(page).toHaveURL(/#\/admin\?access=required$/);

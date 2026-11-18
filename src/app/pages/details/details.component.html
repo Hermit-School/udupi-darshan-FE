@@ -184,8 +184,8 @@
         <section class="ud-section">
           <div class="ud-section-head">
             <div>
-              <p class="ud-eyebrow">Keep exploring</p>
               <h2>Don’t miss these.</h2>
+              <p>Hand-picked to go with {{ card.name }}.</p>
             </div>
           </div>
           <div class="ud-grid">
@@ -220,6 +220,13 @@
           </div>
         </section>
       }
+      <section class="story-invitation" aria-labelledby="story-invitation-title">
+        <div>
+          <h2 id="story-invitation-title">Been to {{ card.name }}?</h2>
+          <p>Share your visit and help the next traveller.</p>
+        </div>
+        <button class="ud-button" type="button" (click)="storyForm.open()">Share your story</button>
+      </section>
     }
   </div>
 </main>

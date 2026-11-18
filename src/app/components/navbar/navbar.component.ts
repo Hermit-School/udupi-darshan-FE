@@ -5,6 +5,8 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { StoryFormService } from '../../services/story-form.service';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -23,7 +25,10 @@ export class NavbarComponent implements OnDestroy {
   constructor(
     private router: Router,
     private dialogs: NgbModal,
-  ) {}
+    storyForm: StoryFormService,
+  ) {
+    storyForm.requested.pipe(takeUntilDestroyed()).subscribe(() => this.openStoryForm());
+  }
 
   isRouteActive(route: string): boolean {
     return this.router.url.includes(route);
