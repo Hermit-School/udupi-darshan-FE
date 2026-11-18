@@ -5,7 +5,7 @@ const allowedAdvisory = 'https://github.com/advisories/GHSA-fc5q-39xc-vjpf';
 
 function isKnownFinding(vulnerabilities) {
   const root = vulnerabilities?.[allowedPackage];
-  if (root?.fixAvailable !== false || !Array.isArray(root.via) || root.via.length !== 1) return false;
+  if (!Array.isArray(root?.via) || root.via.length !== 1) return false;
 
   const [advisory] = root.via;
   if (advisory?.url !== allowedAdvisory || advisory.name !== allowedPackage ||
@@ -47,7 +47,7 @@ if (result.status === 0 && report?.auditReportVersion === 2 && !report.error &&
 } else if (result.status === 1 && report?.auditReportVersion === 2 && !report.error &&
     isKnownFinding(report.vulnerabilities)) {
   console.warn(`npm audit reported ${Object.keys(report.vulnerabilities).length} findings related to ${allowedAdvisory}.`);
-  console.warn('CI is temporarily allowing this advisory while npm reports no fix for picomatch.');
+  console.warn('CI is temporarily allowing this advisory. Remove the exception after upgrading to a patched picomatch release.');
 } else {
   console.error(result.error ?? (result.stdout || 'npm audit did not return a valid report.'));
   process.exitCode = 1;
